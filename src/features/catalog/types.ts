@@ -40,6 +40,20 @@ export type HomepageData = {
   testimonials: Testimonial[];
 };
 
+/* ---------- Categories (view models for /categories) ---------- */
+
+/** Page header for `/categories/[slug]`. */
+export type CategoryDetail = {
+  slug: string;
+  title: string;
+  description: string;
+};
+
+/** One `/categories` tile. */
+export type CategorySummary = HomeCategory & {
+  productCount: number;
+};
+
 /* ---------- Product details (view models for /products/[slug]) ---------- */
 
 export type CategoryRef = {

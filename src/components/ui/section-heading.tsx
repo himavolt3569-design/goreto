@@ -9,6 +9,8 @@ export type SectionHeadingProps = {
   id?: string;
   /** Trailing control, e.g. a "View all" link or filter tabs. */
   action?: ReactNode;
+  /** Heading level; use "h1" when the heading is the page title. */
+  as?: "h1" | "h2";
   className?: string;
 };
 
@@ -19,6 +21,7 @@ export function SectionHeading({
   description,
   id,
   action,
+  as: Heading = "h2",
   className,
 }: SectionHeadingProps) {
   return (
@@ -32,9 +35,9 @@ export function SectionHeading({
         <p className="text-small font-semibold uppercase tracking-widest text-primary-500">
           {eyebrow}
         </p>
-        <h2 id={id} className="font-display text-h1 md:text-display-2">
+        <Heading id={id} className="font-display text-h1 md:text-display-2">
           {title}
-        </h2>
+        </Heading>
         {description ? (
           <p className="text-body md:text-body-lg text-neutral-500">{description}</p>
         ) : null}
