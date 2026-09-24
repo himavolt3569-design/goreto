@@ -10,7 +10,9 @@
  * actually shows rather than the reference screenshot's products.
  */
 import { picsumImage } from "@/lib/media/picsum";
+import type { MediaImage } from "@/components/ui/media-frame";
 import type {
+  CategoryDetail,
   HomeCategory,
   HomeCollection,
   HomeProduct,
@@ -21,24 +23,45 @@ import type {
 } from "./types";
 
 const CATEGORY_PX = 160;
+const CATEGORY_TILE_PX = 480;
 const PRODUCT_PX = 480;
 
-function categoryImage(id: number, alt: string) {
-  return { src: picsumImage(id, CATEGORY_PX, CATEGORY_PX), alt };
-}
+type SeedCategory = {
+  slug: string;
+  title: string;
+  description: string;
+  picsumId: number;
+};
 
-export const seedCategories: HomeCategory[] = [
-  { slug: "dresses", title: "Dresses", image: categoryImage(325, "") },
-  { slug: "jewelry", title: "Jewelry", image: categoryImage(628, "") },
-  { slug: "bags", title: "Bags", image: categoryImage(7, "") },
-  { slug: "shoes", title: "Shoes", image: categoryImage(21, "") },
-  { slug: "sunglasses", title: "Sunglasses", image: categoryImage(26, "") },
-  { slug: "tops", title: "Tops", image: categoryImage(836, "") },
-  { slug: "outerwear", title: "Outerwear", image: categoryImage(669, "") },
-  { slug: "hats", title: "Hats", image: categoryImage(823, "") },
-  { slug: "scarves", title: "Scarves", image: categoryImage(758, "") },
-  { slug: "boots", title: "Boots", image: categoryImage(604, "") },
+const seedCategoryList: SeedCategory[] = [
+  { slug: "dresses", title: "Dresses", description: "Dresses for everyday and occasion wear.", picsumId: 325 },
+  { slug: "jewelry", title: "Jewelry", description: "Bracelets, earrings and pieces to layer.", picsumId: 628 },
+  { slug: "bags", title: "Bags", description: "Everyday totes, handbags and weekenders.", picsumId: 7 },
+  { slug: "shoes", title: "Shoes", description: "Heels, flats and sneakers for every plan.", picsumId: 21 },
+  { slug: "sunglasses", title: "Sunglasses", description: "Classic frames with UV protection.", picsumId: 26 },
+  { slug: "tops", title: "Tops", description: "Tees, blouses and easy layers.", picsumId: 836 },
+  { slug: "outerwear", title: "Outerwear", description: "Jackets and coats for cooler days.", picsumId: 669 },
+  { slug: "hats", title: "Hats", description: "Beanies, fedoras and sun hats.", picsumId: 823 },
+  { slug: "scarves", title: "Scarves", description: "Wraps and scarves in warm tones.", picsumId: 758 },
+  { slug: "boots", title: "Boots", description: "Ankle boots and sturdy pairs for the hills.", picsumId: 604 },
 ];
+
+/** Homepage rail circles. */
+export const seedCategories: HomeCategory[] = seedCategoryList.map(({ slug, title, picsumId }) => ({
+  slug,
+  title,
+  image: { src: picsumImage(picsumId, CATEGORY_PX, CATEGORY_PX), alt: "" },
+}));
+
+/** `/categories` tiles and category page headers. */
+export const seedCategoryDetails: (CategoryDetail & { image: MediaImage })[] = seedCategoryList.map(
+  ({ slug, title, description, picsumId }) => ({
+    slug,
+    title,
+    description,
+    image: { src: picsumImage(picsumId, CATEGORY_TILE_PX, CATEGORY_TILE_PX), alt: "" },
+  }),
+);
 
 /* ---------- Products ---------- */
 
