@@ -1,16 +1,6 @@
-import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import {
-  CartButton,
-  HeartIcon,
-  ICON_SIZE,
-  ICON_WEIGHT_OUTLINE,
-  iconButtonClasses,
-  Logo,
-  NavItem,
-  SearchInput,
-  UserIcon,
-} from "@/components/ui";
+import { CartButton, Logo, NavItem, SearchInput } from "@/components/ui";
+import { HeaderAuth, HeaderWishlist } from "./header-auth";
 import { MobileNav } from "./mobile-nav";
 
 export function StoreSearchForm({ className }: { className?: string }) {
@@ -42,22 +32,10 @@ export function StoreHeader() {
 
         <div className="ml-auto flex items-center gap-1 lg:ml-0">
           <StoreSearchForm className="mr-2 hidden w-56 md:block xl:w-64" />
-          <Link
-            href="/account/wishlist"
-            aria-label="Wishlist"
-            className={iconButtonClasses({ variant: "ghost", className: "hidden sm:inline-flex" })}
-          >
-            <HeartIcon aria-hidden="true" size={ICON_SIZE} weight={ICON_WEIGHT_OUTLINE} />
-          </Link>
-          <Link
-            href="/account"
-            aria-label="Account"
-            className={iconButtonClasses({ variant: "ghost", className: "hidden sm:inline-flex" })}
-          >
-            <UserIcon aria-hidden="true" size={ICON_SIZE} weight={ICON_WEIGHT_OUTLINE} />
-          </Link>
+          <HeaderWishlist className="hidden sm:inline-flex" />
           {/* No cart store yet: show the true (empty) count rather than a fake badge. */}
           <CartButton href="/cart" count={0} />
+          <HeaderAuth />
           <MobileNav links={siteConfig.mainNav}>
             <StoreSearchForm />
           </MobileNav>

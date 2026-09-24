@@ -30,6 +30,7 @@ export { InstagramLogoIcon } from "@phosphor-icons/react/dist/ssr/InstagramLogo"
 export { ListIcon } from "@phosphor-icons/react/dist/ssr/List";
 export { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass";
 export { MapPinIcon } from "@phosphor-icons/react/dist/ssr/MapPin";
+export { PackageIcon } from "@phosphor-icons/react/dist/ssr/Package";
 export { PersonArmsSpreadIcon } from "@phosphor-icons/react/dist/ssr/PersonArmsSpread";
 export { PinterestLogoIcon } from "@phosphor-icons/react/dist/ssr/PinterestLogo";
 export { PlayCircleIcon } from "@phosphor-icons/react/dist/ssr/PlayCircle";
