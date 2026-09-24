@@ -1,6 +1,7 @@
 import { siteConfig } from "@/config/site";
-import { CartButton, Logo, NavItem, SearchInput } from "@/components/ui";
+import { Logo, NavItem, SearchInput } from "@/components/ui";
 import { HeaderAuth, HeaderWishlist } from "./header-auth";
+import { HeaderCart } from "./header-cart";
 import { MobileNav } from "./mobile-nav";
 
 export function StoreSearchForm({ className }: { className?: string }) {
@@ -33,8 +34,7 @@ export function StoreHeader() {
         <div className="ml-auto flex items-center gap-1 lg:ml-0">
           <StoreSearchForm className="mr-2 hidden w-56 md:block xl:w-64" />
           <HeaderWishlist className="hidden sm:inline-flex" />
-          {/* No cart store yet: show the true (empty) count rather than a fake badge. */}
-          <CartButton href="/cart" count={0} />
+          <HeaderCart />
           <HeaderAuth />
           <MobileNav links={siteConfig.mainNav}>
             <StoreSearchForm />
