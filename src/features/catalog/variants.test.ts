@@ -59,6 +59,21 @@ describe("variant selection", () => {
     expect(selectOption(tee, blackM, "Size", "s").id).toBe("w-s");
   });
 
+  it("prefers an in-stock variant when falling back", () => {
+    const shirt: ProductDetail = {
+      ...tee,
+      variants: [
+        { id: "w-s", sku: "W-S", optionValues: { Color: "white", Size: "s" }, pricePaisa: null, stockQuantity: 0 },
+        { id: "w-l", sku: "W-L", optionValues: { Color: "white", Size: "l" }, pricePaisa: null, stockQuantity: 3 },
+        { id: "b-m", sku: "B-M", optionValues: { Color: "black", Size: "m" }, pricePaisa: null, stockQuantity: 2 },
+      ],
+    };
+    // White / M doesn't exist; White / S is sold out, White / L is in stock.
+    expect(selectOption(shirt, shirt.variants[2], "Color", "white").id).toBe("w-l");
+    // With nothing in stock for the value, it still lands on a matching variant.
+    expect(selectOption(tee, tee.variants[2], "Size", "s").id).toBe("w-s");
+  });
+
   it("flags values that lead to a sold-out variant", () => {
     const whiteM = tee.variants[1];
     expect(isOptionSoldOut(tee, whiteM, "Size", "s")).toBe(true);

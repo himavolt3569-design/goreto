@@ -2,7 +2,12 @@
 
 import { useEffect } from "react";
 import { CartButton } from "@/components/ui/cart-button";
-import { countItems, rehydrateCart, useCartStore } from "@/features/cart/store";
+import {
+  countItems,
+  rehydrateCart,
+  syncCartAcrossTabs,
+  useCartStore,
+} from "@/features/cart/store";
 
 /** Header cart link with the live item count from the persisted cart. */
 export function HeaderCart() {
@@ -10,6 +15,7 @@ export function HeaderCart() {
 
   useEffect(() => {
     rehydrateCart();
+    return syncCartAcrossTabs();
   }, []);
 
   return <CartButton href="/cart" count={count} />;

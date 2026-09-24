@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { addLine, countItems, rehydrateCart, useCartStore, type NewCartLine } from "./store";
+import {
+  addLine,
+  countItems,
+  rehydrateCart,
+  syncCartAcrossTabs,
+  useCartStore,
+  type NewCartLine,
+} from "./store";
 
 const line: NewCartLine = {
   variantId: "knit-slouch-beanie--red",
@@ -66,6 +73,26 @@ describe("useCartStore", () => {
     await useCartStore.persist.rehydrate();
     expect(useCartStore.getState().lines).toEqual([{ ...line, quantity: 3 }]);
     expect(() => rehydrateCart()).not.toThrow();
+  });
+
+  it("reloads the cart when another tab saves it, and only for the cart key", async () => {
+    const stop = syncCartAcrossTabs();
+    localStorage.setItem(
+      "goreto-cart",
+      JSON.stringify({ state: { lines: [{ ...line, quantity: 2 }] }, version: 1 }),
+    );
+    window.dispatchEvent(new StorageEvent("storage", { key: "something-else" }));
+    expect(useCartStore.getState().lines).toEqual([]);
+
+    window.dispatchEvent(new StorageEvent("storage", { key: "goreto-cart" }));
+    await Promise.resolve();
+    expect(useCartStore.getState().lines).toEqual([{ ...line, quantity: 2 }]);
+
+    stop();
+    useCartStore.setState({ lines: [] });
+    window.dispatchEvent(new StorageEvent("storage", { key: "goreto-cart" }));
+    await Promise.resolve();
+    expect(useCartStore.getState().lines).toEqual([]);
   });
 
   it("removes a line", () => {

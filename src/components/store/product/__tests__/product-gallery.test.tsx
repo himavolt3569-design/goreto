@@ -37,6 +37,13 @@ describe("ProductGallery", () => {
     expect(screen.getByRole("button", { name: "View larger image" })).toBeInTheDocument();
   });
 
+  it("renders a placeholder frame with no viewer when there are no photos", () => {
+    render(<ProductGallery media={[]} productTitle="Photo-less product" />);
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "View larger image" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Product images" })).not.toBeInTheDocument();
+  });
+
   it("offers an inert wishlist control that says it's coming soon", () => {
     render(<ProductGallery media={aviators.media} productTitle={aviators.title} />);
     expect(

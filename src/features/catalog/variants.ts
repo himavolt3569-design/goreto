@@ -33,7 +33,8 @@ export function defaultVariant(product: VariantSource): ProductVariant {
 /**
  * The variant to switch to when the shopper picks `value` for `optionName`.
  * Keeps the other current choices when that combination exists, otherwise
- * falls back to any variant with the chosen value.
+ * falls back to an in-stock variant with the chosen value, then any variant
+ * with it.
  */
 export function selectOption(
   product: VariantSource,
@@ -41,9 +42,13 @@ export function selectOption(
   optionName: string,
   value: string,
 ): ProductVariant {
+  const withValue = product.variants.filter(
+    (variant) => variant.optionValues[optionName] === value,
+  );
   return (
     findVariant(product.variants, { ...current.optionValues, [optionName]: value }) ??
-    product.variants.find((variant) => variant.optionValues[optionName] === value) ??
+    withValue.find((variant) => variant.stockQuantity > 0) ??
+    withValue[0] ??
     current
   );
 }

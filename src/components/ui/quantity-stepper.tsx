@@ -34,17 +34,24 @@ export function QuantityStepper({
 
   const clamp = (next: number) => Math.min(Math.max(next, min), Math.max(min, max));
 
+  /** Whole-number value of the typed text, or `null` for "", "2abc", "1.5", etc. */
+  function parse(text: string): number | null {
+    if (text.trim() === "") return null;
+    const parsed = Number(text);
+    return Number.isSafeInteger(parsed) ? parsed : null;
+  }
+
   function onInput(event: ChangeEvent<HTMLInputElement>) {
     const text = event.target.value;
     setDraft(text);
-    const parsed = Number.parseInt(text, 10);
-    if (Number.isSafeInteger(parsed) && parsed >= min && parsed <= max) onChange(parsed);
+    const parsed = parse(text);
+    if (parsed !== null && parsed >= min && parsed <= max) onChange(parsed);
   }
 
   function commit() {
     if (draft === null) return;
-    const parsed = Number.parseInt(draft, 10);
-    onChange(Number.isSafeInteger(parsed) ? clamp(parsed) : value);
+    const parsed = parse(draft);
+    onChange(parsed !== null ? clamp(parsed) : value);
     setDraft(null);
   }
 

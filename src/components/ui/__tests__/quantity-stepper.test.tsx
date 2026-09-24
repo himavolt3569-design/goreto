@@ -40,6 +40,16 @@ describe("QuantityStepper", () => {
     expect(input).toHaveValue(1);
   });
 
+  it("rejects partial and fractional input instead of truncating it", () => {
+    render(<Harness initial={1} />);
+    const input = screen.getByRole("spinbutton", { name: "Quantity" });
+    for (const typed of ["2abc", "2.5", "  "]) {
+      fireEvent.change(input, { target: { value: typed } });
+      fireEvent.blur(input);
+      expect(input).toHaveValue(1);
+    }
+  });
+
   it("is labelled as a group", () => {
     render(<Harness />);
     expect(screen.getByRole("group", { name: "Quantity" })).toBeInTheDocument();

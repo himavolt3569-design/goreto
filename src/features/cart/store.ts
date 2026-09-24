@@ -10,6 +10,8 @@ import type { MediaImage } from "@/components/ui/media-frame";
  * delivery fees on the server and never trusts these values.
  */
 
+const CART_STORAGE_KEY = "goreto-cart";
+
 export type CartLine = {
   variantId: string;
   productSlug: string;
@@ -78,7 +80,7 @@ export const useCartStore = create<CartState>()(
       clear: () => set({ lines: [] }),
     }),
     {
-      name: "goreto-cart",
+      name: CART_STORAGE_KEY,
       version: 1,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ lines: state.lines }),
@@ -94,4 +96,16 @@ export function rehydrateCart(): void {
   if (!useCartStore.persist.hasHydrated()) {
     void useCartStore.persist.rehydrate();
   }
+}
+
+/**
+ * Keeps this tab's cart in step with other tabs: when another tab saves the
+ * cart, reload it from storage. Returns a function that stops listening.
+ */
+export function syncCartAcrossTabs(): () => void {
+  function onStorage(event: StorageEvent) {
+    if (event.key === CART_STORAGE_KEY) void useCartStore.persist.rehydrate();
+  }
+  window.addEventListener("storage", onStorage);
+  return () => window.removeEventListener("storage", onStorage);
 }
