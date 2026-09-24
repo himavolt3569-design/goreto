@@ -6,6 +6,10 @@ import type { SiteLink } from "@/config/site";
 import { ListIcon, XIcon } from "@/components/ui/icons";
 import { ICON_SIZE, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { iconButtonClasses } from "@/components/ui/icon-button";
+import { MobileNavAuthLinks } from "./header-auth";
+
+const LINK_CLASSES =
+  "flex h-11 items-center rounded-sm px-2 text-body-lg font-medium text-neutral-900 hover:bg-neutral-100";
 
 export type MobileNavProps = {
   links: SiteLink[];
@@ -30,6 +34,13 @@ export function MobileNav({ links, children }: MobileNavProps) {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
+
+  // Auth modals open over the page: close the panel first and park focus on
+  // the toggle, so Clerk returns focus to a visible control on close.
+  function closeForModal() {
+    setOpen(false);
+    toggleRef.current?.focus();
+  }
 
   return (
     <div className="lg:hidden">
@@ -63,30 +74,17 @@ export function MobileNav({ links, children }: MobileNavProps) {
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="flex h-11 items-center rounded-sm px-2 text-body-lg font-medium text-neutral-900 hover:bg-neutral-100"
+                    className={LINK_CLASSES}
                   >
                     {link.label}
                   </Link>
                 </li>
               ))}
-              <li className="sm:hidden">
-                <Link
-                  href="/account/wishlist"
-                  onClick={() => setOpen(false)}
-                  className="flex h-11 items-center rounded-sm px-2 text-body-lg font-medium text-neutral-900 hover:bg-neutral-100"
-                >
-                  Wishlist
-                </Link>
-              </li>
-              <li className="sm:hidden">
-                <Link
-                  href="/account"
-                  onClick={() => setOpen(false)}
-                  className="flex h-11 items-center rounded-sm px-2 text-body-lg font-medium text-neutral-900 hover:bg-neutral-100"
-                >
-                  Account
-                </Link>
-              </li>
+              <MobileNavAuthLinks
+                linkClassName={LINK_CLASSES}
+                onNavigate={() => setOpen(false)}
+                onOpenModal={closeForModal}
+              />
             </ul>
           </nav>
         </div>

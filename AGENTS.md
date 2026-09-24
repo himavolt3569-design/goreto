@@ -33,6 +33,8 @@ One owner controls the store at launch. The architecture must also allow the own
 
 The storefront lets shoppers browse products, search, open a product quick view or full product page, use virtual try-on where a product supports it, add products to a cart, checkout using a Nepal delivery address, choose an available delivery/courier service, place a **Cash on Delivery** order, receive an order confirmation, and track fulfillment.
 
+Shoppers can create an account with **Clerk**. Signed-in customers get a dedicated account area with their orders, tracking history, wishlist, saved addresses, reviews, and total billed to date. More account features will be added over time. Guest checkout is still supported.
+
 The admin area lets the owner or permitted staff manage products, variants, categories, inventory, media, AR assets/capabilities, orders, customers, delivery/courier configuration, promotions, reviews, storefront content, staff access, and store settings.
 
 The application is designed for Nepal. Address handling, phone formatting, currency, delivery logic, and default time display must reflect that.
@@ -478,6 +480,33 @@ Settings must stay grouped by responsibility:
 
 Do not put secrets directly in editable browser settings. API keys remain environment secrets.
 
+## 4.9 Customer account area
+
+There is no screenshot for this area yet. Build it from the Design System and the patterns already used by the Order Confirmation / Tracking and Admin Dashboard references: KPI/stat cards, table/list cards, order summary cards, and the order progress stepper.
+
+Only a signed-in Clerk user can open it. Every query is scoped to that user's own `profiles` row, both in server code and in RLS.
+
+The area includes:
+
+- **Overview**: greeting, profile summary, and stat cards for total orders, orders in progress, and total billed to date.
+- **Orders**: a paginated list of the customer's orders with status, date, item count, and total.
+- **Order detail / tracking**: the same snapshot and shipment-event timeline as §4.5, for the customer's own orders only.
+- **Tracking history**: shipment events across the customer's recent orders, newest first.
+- **Wishlist**: saved products with current price and stock state, plus Add to Cart.
+- **Addresses**: saved Nepal addresses (§11.6) with a default address that checkout prefills.
+- **Reviews**: the customer's own reviews and their moderation status.
+- **Billing summary**: total billed to date and a per-order breakdown.
+- **Profile & security**: Clerk's `<UserProfile />` or equivalent, themed with our tokens. It covers name, email, phone, password, connected accounts, and sessions.
+
+Billing rules:
+
+- "Total billed to date" is the sum of `total_paisa` for the customer's orders with `payment_status = 'collected'`.
+- Pending COD amounts (orders not yet delivered or collected) are shown separately and never added to the billed total.
+- Canceled and refunded orders are excluded. They may be listed for transparency.
+- Totals are calculated in the database or on the server in integer paisa, never in the browser. Display them with `formatNpr`.
+
+Keep the account navigation grouped and extensible so future features (loyalty, notifications, returns, saved try-on results) can be added without rebuilding it. Each section needs empty, loading, and error states.
+
 ---
 
 # 5. Tech stack: use this
@@ -490,8 +519,9 @@ Use the existing package versions in the repository. Do not upgrade core package
 | Language | TypeScript, strict mode |
 | Styling | Tailwind CSS using the Goreto.store tokens |
 | Database | Supabase Postgres |
-| Auth | Supabase Auth |
-| Row authorization | Supabase/Postgres RLS |
+| Auth | Clerk (`@clerk/nextjs`) for customers, owner, and staff |
+| Row authorization | Supabase/Postgres RLS on the Clerk session token (Supabase third-party auth with Clerk) |
+| Auth UI | Clerk prebuilt components themed with Goreto tokens; custom flows only when a reference requires them |
 | File/media storage | Supabase Storage |
 | Server data access | Server-side Supabase client and SQL/RPC where appropriate |
 | Client data/state | React state + URL state + a small shared store only where justified |
@@ -516,7 +546,8 @@ Use installed project skills rather than guessing. Verify a skill path exists be
 Priority knowledge areas are:
 
 - Next.js App Router, Server Components, Client Components, Server Actions, route handlers, caching, metadata, and image/font behavior;
-- Supabase Auth SSR, cookie/session handling, Postgres schema design, RLS, Storage policies, generated TypeScript types, and local migrations;
+- Clerk + Next.js: `ClerkProvider`, `clerkMiddleware` in `proxy.ts`, `await auth()`, `<Show>`, prebuilt components, appearance theming, webhooks, and `@clerk/testing`;
+- Supabase third-party auth with Clerk, Postgres schema design, RLS, Storage policies, generated TypeScript types, and local migrations;
 - PostgreSQL transactions/RPC for atomic checkout/inventory updates;
 - Tailwind token-based implementation and pixel-faithful screenshot reproduction;
 - browser Camera/Geolocation permission handling;
@@ -525,6 +556,19 @@ Priority knowledge areas are:
 
 If the repo contains specific Next.js, Supabase, testing, or UI skills, read their `SKILL.md` files before implementation.
 
+For auth work, the installed Clerk skills are in `.claude/skills/` (mirrored in `.agents/skills/`):
+
+- `clerk` (router);
+- `clerk-setup`;
+- `clerk-nextjs-patterns`;
+- `clerk-custom-ui`;
+- `clerk-webhooks`;
+- `clerk-testing`;
+- `clerk-cli`;
+- `clerk-backend-api`.
+
+Use the `clerk` CLI (`clerk doctor`, `clerk env pull`, `clerk api`) instead of guessing Dashboard steps.
+
 ---
 
 # 6. Tech stack: do not use this unless the user changes the decision
@@ -532,7 +576,10 @@ If the repo contains specific Next.js, Supabase, testing, or UI skills, read the
 Do **not** add competing infrastructure without a concrete requirement.
 
 - No Firebase.
-- No Clerk, Auth0, or custom auth alongside Supabase Auth.
+- No Supabase Auth, Auth0, NextAuth/Auth.js, or custom auth alongside Clerk. Supabase is used for data, RLS, and Storage only.
+- No `@clerk/clerk-react` in the Next.js app; use `@clerk/nextjs`.
+- No Clerk Organizations for store staff. This is a single store, and staff roles and permissions live in Postgres.
+- No client-side `CLERK_SECRET_KEY`.
 - No Prisma or Drizzle by default; use Supabase SQL migrations and generated database types unless the project already chose an ORM.
 - No separate Express, NestJS, FastAPI, Laravel, or other backend framework for the MVP.
 - No GraphQL layer.
@@ -571,17 +618,20 @@ src/app/
     try-on/page.tsx                  # Optional dedicated AR hub
 
   (auth)/
-    login/page.tsx
-    sign-up/page.tsx
-    forgot-password/page.tsx
-    auth/callback/route.ts
+    sign-in/[[...sign-in]]/page.tsx  # Clerk <SignIn /> (handles reset + OAuth callbacks)
+    sign-up/[[...sign-up]]/page.tsx  # Clerk <SignUp />
 
-  (account)/
-    account/page.tsx
+  (account)/                         # Signed-in customers only (§4.9)
+    account/layout.tsx               # Grouped account navigation
+    account/page.tsx                 # Overview + stat cards
     account/orders/page.tsx
-    account/orders/[orderNumber]/page.tsx
-    account/addresses/page.tsx
+    account/orders/[orderNumber]/page.tsx   # Detail + tracking timeline
+    account/tracking/page.tsx        # Tracking history across orders
     account/wishlist/page.tsx
+    account/addresses/page.tsx
+    account/reviews/page.tsx
+    account/billing/page.tsx         # Total billed to date + breakdown
+    account/profile/[[...rest]]/page.tsx    # Clerk <UserProfile />
 
   (admin)/
     admin/layout.tsx
@@ -609,7 +659,12 @@ src/app/
     ar/photo/route.ts                # Start/check photo try-on job as needed
     geocode/reverse/route.ts         # Provider adapter; rate-limited
     courier/webhooks/[provider]/route.ts
+    webhooks/clerk/route.ts          # Verified Clerk user sync -> profiles
+
+src/proxy.ts                         # clerkMiddleware (Next 16 renamed middleware -> proxy)
 ```
+
+`src/proxy.ts` is **public-first**. It calls `auth.protect()` for `/account(.*)` and `/admin(.*)`. Storefront, search, product, cart, checkout (guest), tracking, and try-on routes stay public. Its matcher must include `'/(api|trpc)(.*)'` followed once by `'/__clerk/:path*'`. Proxy protection is authentication only. Owner/staff authorization is enforced again in server code and RLS.
 
 Do not create API routes for simple reads that Server Components can do directly.
 
@@ -624,12 +679,13 @@ Use the smallest correct state tool for each kind of state.
 | State type | Source of truth | Rule |
 |---|---|---|
 | Products, categories, orders, stock, delivery config | Supabase/Postgres | Read server-side by default |
-| Auth/session | Supabase Auth cookie/session | Resolve server-side for protected work |
+| Auth/session | Clerk session | `await auth()` / `currentUser()` on the server for protected work; `useAuth()`/`useUser()`/`<Show>` only for client UI |
 | Search/filter/sort/pagination | URL search params | Shareable and refresh-safe |
 | Local UI state | React component state | Dialogs, tabs, temporary control state |
 | Forms | React Hook Form + Zod | Complex checkout/admin forms |
 | Cart | Small Zustand store persisted locally; optionally merge with account later | Never treat local totals as trusted checkout totals |
-| Wishlist | Supabase for authenticated users; optional local optimistic state | RLS-protected |
+| Wishlist | Supabase for signed-in Clerk users; optional local optimistic state | RLS-protected |
+| Account billing totals | Server/database aggregate over the customer's orders | Never summed in the browser |
 | Checkout total | Server/database calculation | Browser display is preview only |
 | Inventory | Database | Must be checked/decremented atomically |
 | AR live session | Client-only state | Camera frames must not enter global app state |
@@ -644,21 +700,29 @@ Do not introduce React Query/TanStack Query unless there is a demonstrated need 
 
 # 9. Authentication and authorization
 
-Authentication is **Supabase Auth**.
+Authentication is **Clerk** for every user type: customers, the owner, and staff. Clerk owns identity: sign-up, sign-in, passwords, OAuth, email/phone verification, and sessions. Supabase Postgres owns roles, permissions, and all business data, and enforces them with RLS on the Clerk session token.
 
 ## 9.1 Shopper behavior
 
 Browsing, product viewing, search, cart, and virtual try-on can be public.
 
-Checkout supports **guest checkout** by default. A customer account is optional. When signed in, known contact/address data may be prefilled.
+Checkout supports **guest checkout** by default. A customer account is optional. When signed in, known contact and default-address data are prefilled.
 
-A guest order has a nullable `user_id` plus immutable contact/address snapshots. A signed-in order also references the authenticated profile.
+A guest order has a nullable `user_id` plus immutable contact/address snapshots. A signed-in order also references the customer's `profiles.id`.
+
+A customer who signs up later may claim earlier guest orders only through a trusted server path. The email must be verified by Clerk and must match the order's contact email. Never attach orders based on unverified input.
+
+Customer-facing account features are defined in §4.9.
 
 ## 9.2 Owner and staff
 
-The initial store owner is bootstrapped through a trusted migration/admin process. Never let the browser self-assign `owner` or `staff`.
+Every Clerk user gets a `profiles` row with role `customer` by default.
 
-Future staff members are invited by the owner through a server-only administrative path. Use Supabase's trusted admin functionality only on the server.
+The initial store owner is bootstrapped by a trusted migration or server-only script that sets `role = 'owner'` for a specific Clerk user id. Never let the browser self-assign `owner` or `staff`.
+
+Future staff members are invited by the owner through a server-only administrative path. That path uses a Clerk invitation from the Backend API with `CLERK_SECRET_KEY`, then the `staff` role and permission rows in Postgres once the invited user exists.
+
+The role and permissions in Postgres are the authority. The server may mirror `role` into Clerk `publicMetadata` for fast UI or proxy hints. Only server code may write it, and sensitive actions still check the database. Never read roles from `unsafeMetadata`, which users can edit.
 
 Suggested roles:
 
@@ -687,11 +751,29 @@ Suggested permission keys:
 
 Do not rely on hidden buttons for security. Enforce authorization in RLS and again in sensitive server actions/routes.
 
-## 9.3 Supabase SSR/session rules
+## 9.3 Clerk + Next.js rules
 
-Use the project's supported `@supabase/ssr` pattern. Because Next.js request/cookie APIs can change, inspect the installed Next.js and Supabase patterns before editing auth plumbing.
+- Use `@clerk/nextjs`. Server code imports from `@clerk/nextjs/server`.
+- `auth()` is async. Always `await auth()`.
+- `ClerkProvider` goes inside `<body>` in the root layout, not around `<html>`.
+- `clerkMiddleware` lives in `src/proxy.ts`. Next 16 renamed `middleware` to `proxy`; confirm against the local Next docs. Its matcher must include `'/__clerk/:path*'` after `'/(api|trpc)(.*)'`.
+- `auth.protect()` in the proxy is authentication only. Server Actions and route handlers must re-check the session and database permissions themselves.
+- Use `<Show when="signed-in" | "signed-out">` (Core 3) for auth-dependent UI. Do not use `<Show>` for authorization.
+- In-page sign-in/sign-up triggers open Clerk **modals** (`SignInButton` / `SignUpButton` with `mode="modal"`) so shoppers stay on the page. The `/sign-in` and `/sign-up` pages exist only as fallbacks for protected-route redirects, direct links, and Clerk return flows. Do not link to them from in-page UI.
+- Theme Clerk components through `appearance` using the Goreto tokens: orange primary, Inter, 12px radius, neutral borders. Keep the theme in one module and do not restyle Clerk with ad-hoc CSS overrides.
+- `CLERK_SECRET_KEY` and `CLERK_WEBHOOK_SIGNING_SECRET` are server-only. Never expose the Supabase service-role key to a browser bundle.
+- Do not read or print `.env*` files. Use `clerk env pull` to refresh keys.
 
-Never expose the service-role key to a browser bundle.
+## 9.4 Clerk ↔ Supabase
+
+- Configure Clerk as a **Supabase third-party auth provider**: the Supabase Dashboard or `supabase/config.toml` `[auth.third_party.clerk]`, plus the Clerk Supabase integration so session tokens carry `role: authenticated`. No JWT templates and no shared JWT secret.
+- Supabase clients pass the Clerk session token through the `accessToken` option:
+  - on the server, `accessToken: async () => (await auth()).getToken()`;
+  - in the browser, the `useSession()` token.
+- Do not use `@supabase/ssr` cookie sessions, because Supabase is not the auth provider.
+- In RLS, the Clerk user id is `auth.jwt()->>'sub'`. It is **text** (`user_…`), not a UUID, so never compare it to `auth.uid()`.
+- Sync `profiles` from a verified Clerk webhook (`user.created`, `user.updated`, `user.deleted`) at `api/webhooks/clerk`. Verify it with `verifyWebhook` and make it idempotent. Also lazily upsert the profile on the first authenticated server request, so a delayed webhook never blocks a new customer.
+- On `user.deleted`, detach or anonymize the profile. Keep order snapshots for accounting.
 
 ---
 
@@ -746,6 +828,10 @@ Customer location capture, address validation, delivery-rate matching, courier a
 
 The admin UI calls trusted server operations and respects role/permission boundaries. It never uses a privileged key directly in a client component.
 
+## 10.8 Customer account
+
+The account area (§4.9) is mostly server-rendered. It reads through the user-context Supabase client, which carries the Clerk token, so RLS scopes every row to the signed-in customer. It never uses the service-role key to read customer data. Account aggregates such as billed totals and order counts come from SQL, not client-side sums.
+
 ---
 
 # 11. Data model decisions
@@ -758,12 +844,18 @@ Generate TypeScript database types from Supabase after schema changes. Do not ha
 
 ### `profiles`
 
-- `id` -> Supabase Auth user id
+- `id` uuid primary key (internal; all user-owned tables reference this)
+- `clerk_user_id` text, unique, not null (the Clerk `sub`, e.g. `user_…`)
 - `full_name`
 - `email`
 - `phone_e164`
-- `role`: `customer | owner | staff`
+- `role`: `customer | owner | staff`, default `customer`
+- `deleted_at` nullable, set when the Clerk user is deleted
 - timestamps
+
+`profiles` is written by the Clerk webhook and the server-side lazy upsert. Users cannot change `role` through any user-context path; enforce this with a column-level grant or policy, not only with application code.
+
+Every `user_id` column elsewhere in this document (`orders`, `wishlist_items`, `reviews`, `customer_addresses`, `try_on_jobs`) is a foreign key to `profiles.id`. RLS resolves the current profile with a helper such as `current_profile_id()`. The helper maps `auth.jwt()->>'sub'` to `profiles.clerk_user_id`, is `security definer` with a fixed `search_path`, and is stable.
 
 ### `staff_permissions`
 
@@ -1175,15 +1267,23 @@ Do not infer a ward from GPS unless the data source can actually support that pr
 
 RLS is mandatory on user/business tables exposed through Supabase APIs.
 
+Identity in policies comes from the Clerk session token, via Supabase third-party auth (§9.4):
+
+- "the signed-in user" means the profile whose `clerk_user_id = auth.jwt()->>'sub'`;
+- signed-in requests carry the Postgres role `authenticated`;
+- guests are `anon`;
+- never use `auth.uid()`.
+
 Minimum policy intent:
 
 - active products/categories: public read;
 - draft/archived catalog: owner or permitted staff read;
 - catalog writes: owner or `catalog.write` staff;
 - inventory writes: owner or `inventory.write` staff;
-- customer profile/address/wishlist: only that authenticated user;
+- customer profile/address/wishlist: only the signed-in user's own profile; `role` is not user-writable;
 - reviews: user can create/read permitted rows; moderation by authorized staff;
-- orders: authenticated customer can read own orders; staff according to permissions;
+- orders, order items, shipments, shipment events: a signed-in customer can read their own orders only; staff according to permissions;
+- account aggregates (billed total, order counts): computed by a function/view that respects the same ownership rule;
 - guest tracking: access through a safe server/RPC path using an opaque tracking secret, not a blanket public order policy;
 - staff permissions: owner-managed only;
 - delivery configuration writes: owner or `delivery.manage` staff;
@@ -1211,6 +1311,13 @@ Commit a `.env.example` containing **names only**, never live secrets.
 Recommended variables, adjusted to the actual project:
 
 ```env
+# Clerk (written by `clerk init` / `clerk env pull`)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+CLERK_WEBHOOK_SIGNING_SECRET=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
 # Public Supabase
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
@@ -1252,9 +1359,12 @@ Do not invent credentials or commit `.env.local`.
 - Keep provider SDKs that require Node APIs in a Node runtime route, not Edge by accident.
 - Use dynamic import for camera/vision/3D client dependencies.
 
-## 18.2 Supabase Auth SSR
+## 18.2 Clerk sessions and Supabase tokens
 
-Session refresh and cookie mutation patterns are framework-version-sensitive. Follow the installed project and current Supabase SSR setup. Do not paste an old auth-helper pattern into a new app.
+- Clerk manages session cookies and refresh. Do not write Supabase session cookies or add `@supabase/ssr` auth refresh logic.
+- Get a fresh Clerk token for each Supabase client or request (`getToken()`). Do not cache or persist tokens; they are short-lived.
+- Pages that call `auth()` are dynamic. Do not cache user-specific data in shared caches. Key any per-user caching by the Clerk user id (see `clerk-nextjs-patterns` → caching).
+- Clerk SDK APIs change between major versions (Core 2 → Core 3). Check the installed `@clerk/nextjs` version and skill notes before using remembered components or props.
 
 ## 18.3 Storage uploads
 
@@ -1278,13 +1388,15 @@ Make webhooks idempotent. Store provider event ids when the provider exposes the
 
 ## 18.6 Webhooks
 
-Courier and AR provider webhooks must:
+Courier, AR provider, and Clerk webhooks must:
 
 - verify signatures/secrets;
 - be idempotent;
 - validate event shape;
 - map provider states into internal enums;
 - log safe diagnostics without leaking secrets or private photos.
+
+Clerk webhooks are verified with `verifyWebhook` from `@clerk/nextjs/webhooks` using `CLERK_WEBHOOK_SIGNING_SECRET`. The route must be public in `proxy.ts`. Use `clerk` CLI local webhook testing during development.
 
 ## 18.7 Revalidation/cache
 
@@ -1326,9 +1438,9 @@ src/
   lib/
     supabase/
       client.ts
-      server.ts
+      server.ts          # passes the Clerk session token via `accessToken`
       admin.ts           # server-only, rare privileged use
-    auth/
+    auth/                # Clerk helpers: requireProfile(), requirePermission(), appearance theme
     money/
     validation/
     search/
@@ -1442,7 +1554,11 @@ When schema or policies change, verify at least:
 - staff permitted action;
 - staff denied action without permission;
 - private try-on file/job ownership;
-- catalog write restrictions.
+- catalog write restrictions;
+- a customer cannot change their own `role`;
+- account billing aggregates only include the caller's own orders.
+
+Simulate signed-in users with Clerk-shaped JWT claims (`sub`, `role: authenticated`) against the local Supabase instance. Do not hit production Clerk from tests.
 
 Use the local Supabase environment when available. Do not test authorization only by checking whether a button is hidden.
 
@@ -1455,12 +1571,14 @@ Use Playwright for critical journeys:
 3. Variant selection -> add to cart.
 4. Guest checkout -> Nepal address -> available delivery service -> COD order.
 5. Order confirmation -> tracking page.
-6. Customer account sign-in -> own orders only.
+6. Customer sign-up/sign-in (Clerk) -> account overview -> own orders, wishlist, and billed total only.
 7. Owner/staff sign-in -> product create/edit -> storefront update.
 8. Inventory prevents oversell/concurrent invalid quantity.
 9. Courier assignment/status event -> tracking update.
 10. AR camera permission denied -> graceful fallback.
 11. AR photo upload -> job success/failure/expiry using a mocked provider in automated tests.
+
+Use `@clerk/testing` (`clerkSetup`, testing tokens, `clerk.signIn`) for authenticated Playwright journeys with dedicated test users; see the `clerk-testing` skill.
 
 Do not call a paid external AR/courier provider in normal CI.
 
@@ -1544,11 +1662,11 @@ Never trust browser prices, discounts, roles, delivery fees, order status, stock
 
 ## 26.5 Role escalation
 
-A user updating `profiles.role` must never be able to grant themselves staff or owner access.
+A user updating `profiles.role` must never be able to grant themselves staff or owner access. The same applies to Clerk metadata: only server code writes `publicMetadata`/`privateMetadata`, `unsafeMetadata` is user-editable and never used for authorization, and the database role wins over any Clerk claim.
 
 ## 26.6 Service-role leakage
 
-The Supabase service-role key is server-only. A `NEXT_PUBLIC_` service-role variable is a critical security bug.
+The Supabase service-role key and `CLERK_SECRET_KEY` are server-only. A `NEXT_PUBLIC_` service-role or Clerk secret variable is a critical security bug.
 
 ## 26.7 Public customer photos
 
@@ -1636,10 +1754,10 @@ Build to these decisions unless the user explicitly changes them:
 
 1. **Single store, not multi-vendor.**
 2. **Next.js App Router + TypeScript + Supabase.**
-3. **Supabase Auth** for customer/owner/staff authentication.
+3. **Clerk** for customer/owner/staff authentication; Supabase third-party auth passes the Clerk token to RLS.
 4. **RLS** is the authorization foundation.
 5. **One owner initially; permission-based staff later.**
-6. **Guest checkout is allowed; accounts are optional.**
+6. **Guest checkout is allowed; accounts are optional.** Signed-in customers get the account area in §4.9.
 7. **Cash on Delivery only** for the MVP.
 8. **NPR** is the store currency; trusted money uses integer paisa.
 9. **Asia/Kathmandu** is the display timezone default; database timestamps stay UTC.
@@ -1666,7 +1784,7 @@ Read before assuming. Plan before coding. Ask only when ambiguity matters. Get a
 Preserve these non-negotiables:
 
 - source-of-truth design system;
-- Supabase Auth + RLS;
+- Clerk auth + Supabase RLS;
 - server-only secrets;
 - COD-only checkout;
 - atomic order/inventory logic;
