@@ -13,6 +13,7 @@ export * from "./media-frame";
 export * from "./nav-item";
 export * from "./product-card";
 export * from "./progress-bar";
+export * from "./quantity-stepper";
 export * from "./rating";
 export * from "./resource-card";
 export * from "./search-input";

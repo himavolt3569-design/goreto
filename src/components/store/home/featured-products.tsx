@@ -5,12 +5,10 @@ import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from "rea
 import { gsap, prefersReducedMotion, useGSAP } from "@/components/motion/gsap";
 import { FEATURED_TABS, filterByTab } from "@/features/catalog/featured-tabs";
 import type { HomeProduct } from "@/features/catalog/types";
-import { HandbagIcon, HeartIcon } from "@/components/ui/icons";
-import { ICON_SIZE_SM, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
-import { iconButtonClasses } from "@/components/ui/icon-button";
 import { buttonClasses } from "@/components/ui/button";
 import { ProductCard } from "@/components/ui/product-card";
 import { cn } from "@/lib/utils/cn";
+import { ChooseOptionsLink, WishlistSoonButton } from "../product-card-actions";
 
 export type FeaturedProductsProps = {
   products: HomeProduct[];
@@ -135,28 +133,8 @@ export function FeaturedProducts({ products, heading }: FeaturedProductsProps) {
                   pricePaisa={product.pricePaisa}
                   image={product.image}
                   className="w-full"
-                  wishlistAction={
-                    // Wishlist persistence ships with accounts; the control is
-                    // present but inert and says so.
-                    <button
-                      type="button"
-                      aria-disabled="true"
-                      aria-label={`Save ${product.title} to wishlist (coming soon)`}
-                      title="Wishlist coming soon"
-                      className="flex size-9 cursor-not-allowed items-center justify-center rounded-full bg-white text-neutral-900 shadow-sm"
-                    >
-                      <HeartIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
-                    </button>
-                  }
-                  cartAction={
-                    <Link
-                      href={`/products/${product.slug}`}
-                      aria-label={`Choose options for ${product.title}`}
-                      className={iconButtonClasses({ variant: "primary", size: "sm" })}
-                    >
-                      <HandbagIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
-                    </Link>
-                  }
+                  wishlistAction={<WishlistSoonButton productTitle={product.title} />}
+                  cartAction={<ChooseOptionsLink slug={product.slug} title={product.title} />}
                 />
               </li>
             ))}
