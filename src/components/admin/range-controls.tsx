@@ -6,6 +6,7 @@ import { CalendarBlankIcon, CaretDownIcon, CheckIcon } from "@/components/ui/ico
 import { ICON_SIZE_SM, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { buttonClasses } from "@/components/ui/button";
 import { fieldControlClasses } from "@/components/ui/input";
+import { popoverItemClasses, popoverPanelClasses } from "@/components/ui/popover";
 import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/utils/cn";
 
@@ -78,7 +79,7 @@ export function DateRangePicker({
       <div
         id={panelId}
         hidden={!open}
-        className="absolute right-0 top-full z-30 mt-2 w-72 rounded-md border border-neutral-200 bg-white p-2 shadow-lg"
+        className={cn(popoverPanelClasses, "absolute right-0 top-full mt-2 w-72")}
       >
         <ul className="flex flex-col" aria-label="Preset ranges">
           {presets.map((preset) => (
@@ -87,10 +88,10 @@ export function DateRangePicker({
                 href={preset.href}
                 aria-current={preset.selected ? "true" : undefined}
                 onClick={() => setOpen(false)}
-                className="flex h-11 items-center justify-between rounded-sm px-3 text-body text-neutral-900 hover:bg-neutral-100"
+                className={cn(popoverItemClasses, "justify-between", preset.selected && "bg-primary-100 font-medium text-primary-700 hover:bg-primary-100")}
               >
                 {preset.label}
-                {preset.selected ? <CheckIcon aria-hidden="true" size={ICON_SIZE_XS} weight="bold" className="text-primary-500" /> : null}
+                {preset.selected ? <CheckIcon aria-hidden="true" size={ICON_SIZE_XS} weight="bold" className="shrink-0 text-primary-500" /> : null}
               </Link>
             </li>
           ))}
@@ -150,13 +151,7 @@ export function WindowSelect({
         <input key={key} type="hidden" name={key} value={preservedValue} />
       ))}
       <div className="w-44">
-        <Select name={name} defaultValue={value} aria-label={label} onChange={() => formRef.current?.requestSubmit()}>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+        <Select name={name} defaultValue={value} aria-label={label} options={options} onValueChange={() => formRef.current?.requestSubmit()} />
       </div>
       {scripted ? null : (
         <button type="submit" className={buttonClasses({ variant: "tertiary", size: "md" })}>

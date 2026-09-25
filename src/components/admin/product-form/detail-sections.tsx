@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type KeyboardEvent } from "react";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -11,6 +11,7 @@ import { PlusIcon, TrashIcon, XIcon } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { sanitizeSlugInput, SLUG_MAX_LENGTH, SLUG_MAX_WORDS, slugFromTitle, slugWordCount, toKey } from "@/features/admin/product-form/keys";
+import { categoryOptions } from "@/features/catalog/category-options";
 import { cn } from "@/lib/utils/cn";
 import type { ProductFormValues } from "@/features/admin/product-form/schema";
 import type { CollectionOption } from "@/features/admin/queries/product-editor";
@@ -35,10 +36,9 @@ export function BasicSection({
   onSlugModeChange: (mode: SlugMode) => void;
   onTitleBlur: () => void;
 }) {
-  const { register, setValue } = useFormContext<ProductFormValues>();
+  const { control: formControl, register, setValue } = useFormContext<ProductFormValues>();
   const categoryError = useFieldError("categoryId");
   const titleField = register("title");
-  const parents = new Map(categories.map((category) => [category.id, category.title]));
 
   return (
     <FormSection id="basic" title="Basic information" description="What shoppers see first on the product page and in search.">
@@ -64,14 +64,22 @@ export function BasicSection({
       <div className="grid gap-6 md:grid-cols-2">
         <Field label="Category" required error={categoryError}>
           {(control) => (
-            <Select {...control} {...register("categoryId")}>
-              <option value="">Choose a category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.parentId ? `${parents.get(category.parentId) ?? ""} › ${category.title}` : category.title}
-                </option>
-              ))}
-            </Select>
+            <Controller
+              control={formControl}
+              name="categoryId"
+              render={({ field }) => (
+                <Select
+                  {...control}
+                  ref={field.ref}
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  placeholder="Choose a category"
+                  options={categoryOptions(categories)}
+                />
+              )}
+            />
           )}
         </Field>
       </div>

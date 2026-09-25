@@ -225,14 +225,12 @@ function MediaItem({
             </Field>
             <Field label="Shown for" error={state && !state.ok ? state.fieldErrors?.variantId : undefined}>
               {(control) => (
-                <Select {...control} name="variantId" defaultValue={item.variantId ?? ""}>
-                  <option value="">All variants</option>
-                  {variants.map((variant) => (
-                    <option key={variant.id} value={variant.id}>
-                      {variant.label}
-                    </option>
-                  ))}
-                </Select>
+                <Select
+                  {...control}
+                  name="variantId"
+                  defaultValue={item.variantId ?? ""}
+                  options={[{ value: "", label: "All variants" }, ...variants.map((variant) => ({ value: variant.id, label: variant.label }))]}
+                />
               )}
             </Field>
           </div>

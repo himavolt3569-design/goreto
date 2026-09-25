@@ -21,6 +21,12 @@ import {
 import { cn } from "@/lib/utils/cn";
 import { ActionForm, FormDialog, SubmitButton } from "./action-forms";
 
+const TRACKING_STATUS_OPTIONS = [
+  { value: "in_transit", label: "In transit" },
+  { value: "out_for_delivery", label: "Out for delivery" },
+  { value: "exception", label: "Delivery issue" },
+];
+
 const FORWARD_HINTS: Partial<Record<OrderStatus, string>> = {
   shipped: "The parcel has left with the assigned courier.",
   delivered: "The customer has the parcel and paid cash on delivery.",
@@ -92,16 +98,14 @@ export function OrderActions({
               <>
                 <Field label="Courier" required error={state && !state.ok ? state.fieldErrors?.courierId : undefined}>
                   {(control) => (
-                    <Select {...control} name="courierId" defaultValue={currentCourierId ?? ""} required>
-                      <option value="" disabled>
-                        Choose a courier
-                      </option>
-                      {couriers.map((courier) => (
-                        <option key={courier.id} value={courier.id}>
-                          {courier.name}
-                        </option>
-                      ))}
-                    </Select>
+                    <Select
+                      {...control}
+                      name="courierId"
+                      defaultValue={currentCourierId ?? ""}
+                      required
+                      placeholder="Choose a courier"
+                      options={couriers.map((courier) => ({ value: courier.id, label: courier.name }))}
+                    />
                   )}
                 </Field>
                 <Field
@@ -129,11 +133,7 @@ export function OrderActions({
               <>
                 <Field label="Status" required>
                   {(control) => (
-                    <Select {...control} name="status" defaultValue="in_transit">
-                      <option value="in_transit">In transit</option>
-                      <option value="out_for_delivery">Out for delivery</option>
-                      <option value="exception">Delivery issue</option>
-                    </Select>
+                    <Select {...control} name="status" defaultValue="in_transit" options={TRACKING_STATUS_OPTIONS} />
                   )}
                 </Field>
                 <Field label="Message for the customer" required error={state && !state.ok ? state.fieldErrors?.message : undefined}>

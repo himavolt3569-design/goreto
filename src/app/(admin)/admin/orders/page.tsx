@@ -55,14 +55,15 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
             <Input id="order-q" type="search" name="q" defaultValue={q} placeholder="e.g. GT2609241234" maxLength={64} />
           </FilterField>
           <FilterField label="Payment" htmlFor="order-payment">
-            <Select id="order-payment" name="payment" defaultValue={payment ?? ""}>
-              <option value="">Any payment status</option>
-              {PAYMENT_STATUSES.map((value) => (
-                <option key={value} value={value}>
-                  {PAYMENT_LABELS[value]}
-                </option>
-              ))}
-            </Select>
+            <Select
+              id="order-payment"
+              name="payment"
+              defaultValue={payment ?? ""}
+              options={[
+                { value: "", label: "Any payment status" },
+                ...PAYMENT_STATUSES.map((value) => ({ value, label: PAYMENT_LABELS[value] })),
+              ]}
+            />
           </FilterField>
           <FilterField label="Placed from" htmlFor="order-from" className="md:w-44">
             <Input id="order-from" type="date" name="from" defaultValue={from} />

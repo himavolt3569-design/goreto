@@ -11,6 +11,7 @@ import { Select } from "@/components/ui/select";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { formatCount, formatDate } from "@/features/admin/format";
 import { canAccess } from "@/features/admin/nav";
+import { categoryOptions } from "@/features/catalog/category-options";
 import { fetchAdminProducts, fetchCategoryOptions, type ProductStatus } from "@/features/admin/queries/catalog";
 import { pageNumber, pickEnum } from "@/features/admin/queries/shared";
 import { sanitizeSearch } from "@/features/admin/search-input";
@@ -21,6 +22,12 @@ import { cn } from "@/lib/utils/cn";
 export const metadata: Metadata = { title: "Products" };
 
 const STATUSES: readonly ProductStatus[] = ["active", "draft", "archived"];
+const STATUS_OPTIONS = [
+  { value: "", label: "All statuses" },
+  { value: "active", label: "Active" },
+  { value: "draft", label: "Draft" },
+  { value: "archived", label: "Archived" },
+];
 
 export default async function ProductsPage({ searchParams }: PageProps<"/admin/products">) {
   const profile = await requireAdminAccess("catalog.read");
@@ -34,7 +41,6 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
 
   const products = await fetchAdminProducts({ q, status, categoryId, page });
   const canWrite = canAccess(profile, "catalog.write");
-  const parents = new Map(categories.map((category) => [category.id, category.title]));
 
   return (
     <>
@@ -63,22 +69,15 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
             <Input id="product-q" type="search" name="q" defaultValue={q} placeholder="e.g. Pearl drop earrings" maxLength={64} />
           </FilterField>
           <FilterField label="Status" htmlFor="product-status">
-            <Select id="product-status" name="status" defaultValue={status ?? ""}>
-              <option value="">All statuses</option>
-              <option value="active">Active</option>
-              <option value="draft">Draft</option>
-              <option value="archived">Archived</option>
-            </Select>
+            <Select id="product-status" name="status" defaultValue={status ?? ""} options={STATUS_OPTIONS} />
           </FilterField>
           <FilterField label="Category" htmlFor="product-category">
-            <Select id="product-category" name="category" defaultValue={categoryId ?? ""}>
-              <option value="">All categories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.parentId ? `${parents.get(category.parentId) ?? ""} › ${category.title}` : category.title}
-                </option>
-              ))}
-            </Select>
+            <Select
+              id="product-category"
+              name="category"
+              defaultValue={categoryId ?? ""}
+              options={[{ value: "", label: "All categories" }, ...categoryOptions(categories)]}
+            />
           </FilterField>
         </FilterBar>
 
