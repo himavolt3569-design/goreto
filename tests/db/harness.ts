@@ -98,6 +98,20 @@ export async function runAs(db: PGlite, session: Session, sql: string): Promise<
  * the returned list ends with that `error:<message>`.
  */
 export async function runStepsAs(db: PGlite, session: Session, steps: string[]): Promise<unknown[]> {
+  return runStepsWithSetup(db, [], session, steps);
+}
+
+/**
+ * Like `runStepsAs`, but first runs `setup` as the superuser inside the same
+ * rolled-back transaction (e.g. to create a staff member with one
+ * permission), then switches to the session's role for `steps`.
+ */
+export async function runStepsWithSetup(
+  db: PGlite,
+  setup: string[],
+  session: Session,
+  steps: string[],
+): Promise<unknown[]> {
   const claims =
     session.role === "authenticated"
       ? JSON.stringify({ sub: session.clerkUserId, role: "authenticated" })
@@ -105,6 +119,7 @@ export async function runStepsAs(db: PGlite, session: Session, steps: string[]):
   const outcomes: unknown[] = [];
   await db
     .transaction(async (tx: Transaction) => {
+      for (const sql of setup) await tx.exec(sql);
       await tx.query("select set_config('request.jwt.claims', $1, true)", [claims]);
       await tx.exec(`set local role ${session.role}`);
       for (const sql of steps) {

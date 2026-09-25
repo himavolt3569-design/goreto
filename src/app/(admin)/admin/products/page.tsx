@@ -1,0 +1,115 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { EmptyState, FilterBar, FilterField, PageHeader, Pagination, Panel, TableScroll, Thumb, tableClasses, tdClasses, thClasses, theadRowClasses } from "@/components/admin/admin-ui";
+import { ProductActionsMenu } from "@/components/admin/product-actions-menu";
+import { ProductStatusPill, productDisplayStatus } from "@/components/admin/status-pills";
+import { CubeIcon } from "@/components/ui/icons";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { requireAdminAccess } from "@/features/admin/auth";
+import { formatCount, formatDate } from "@/features/admin/format";
+import { canAccess } from "@/features/admin/nav";
+import { fetchAdminProducts, fetchCategoryOptions, type ProductStatus } from "@/features/admin/queries/catalog";
+import { pageNumber, pickEnum } from "@/features/admin/queries/shared";
+import { sanitizeSearch } from "@/features/admin/search-input";
+import { param } from "@/features/admin/url";
+import { formatNpr } from "@/lib/money/format";
+import { cn } from "@/lib/utils/cn";
+
+export const metadata: Metadata = { title: "Products" };
+
+const STATUSES: readonly ProductStatus[] = ["active", "draft", "archived"];
+
+export default async function ProductsPage({ searchParams }: PageProps<"/admin/products">) {
+  const profile = await requireAdminAccess("catalog.read");
+  const params = await searchParams;
+  const q = sanitizeSearch(params.q);
+  const status = pickEnum(params.status, STATUSES);
+  const categories = await fetchCategoryOptions();
+  const categoryParam = param(params, "category");
+  const categoryId = categories.some((category) => category.id === categoryParam) ? categoryParam! : null;
+  const page = pageNumber(params.page);
+
+  const products = await fetchAdminProducts({ q, status, categoryId, page });
+  const canWrite = canAccess(profile, "catalog.write");
+  const parents = new Map(categories.map((category) => [category.id, category.title]));
+
+  return (
+    <>
+      <PageHeader title="Products" description="Every product in the catalog, including drafts and archived items. Newest changes first." />
+
+      <Panel title={`${formatCount(products.total)} products`}>
+        <FilterBar resetHref="/admin/products" hasFilters={Boolean(q || status || categoryId)}>
+          <FilterField label="Search by name" htmlFor="product-q" className="md:w-72">
+            <Input id="product-q" type="search" name="q" defaultValue={q} placeholder="e.g. Pearl drop earrings" maxLength={64} />
+          </FilterField>
+          <FilterField label="Status" htmlFor="product-status">
+            <Select id="product-status" name="status" defaultValue={status ?? ""}>
+              <option value="">All statuses</option>
+              <option value="active">Active</option>
+              <option value="draft">Draft</option>
+              <option value="archived">Archived</option>
+            </Select>
+          </FilterField>
+          <FilterField label="Category" htmlFor="product-category">
+            <Select id="product-category" name="category" defaultValue={categoryId ?? ""}>
+              <option value="">All categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.parentId ? `${parents.get(category.parentId) ?? ""} › ${category.title}` : category.title}
+                </option>
+              ))}
+            </Select>
+          </FilterField>
+        </FilterBar>
+
+        {products.rows.length === 0 ? (
+          <EmptyState icon={CubeIcon} title="No products match" description="Try a different name, status or category." />
+        ) : (
+          <>
+            <TableScroll label="Products">
+              <table className={cn(tableClasses, "min-w-[800px]")}>
+                <thead>
+                  <tr className={theadRowClasses}>
+                    <th scope="col" className={thClasses}>Product</th>
+                    <th scope="col" className={thClasses}>Category</th>
+                    <th scope="col" className={thClasses}>Stock</th>
+                    <th scope="col" className={thClasses}>Price</th>
+                    <th scope="col" className={thClasses}>Status</th>
+                    <th scope="col" className={thClasses}>Updated</th>
+                    <th scope="col" className={cn(thClasses, "text-right")}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.rows.map((product) => (
+                    <tr key={product.id} className="hover:bg-neutral-50">
+                      <td className={tdClasses}>
+                        <Link href={`/admin/products/${product.id}`} className="group flex items-center gap-3 rounded-sm">
+                          <Thumb src={product.thumbnail} />
+                          <span className="font-medium group-hover:text-primary-600">{product.title}</span>
+                        </Link>
+                      </td>
+                      <td className={cn(tdClasses, "text-neutral-700")}>{product.categoryTitle ?? "—"}</td>
+                      <td className={cn(tdClasses, "font-medium tabular-nums", product.stockState === "in_stock" ? "text-success-700" : "text-error-700")}>
+                        {formatCount(product.totalStock)}
+                      </td>
+                      <td className={cn(tdClasses, "whitespace-nowrap tabular-nums")}>{formatNpr(product.pricePaisa)}</td>
+                      <td className={tdClasses}>
+                        <ProductStatusPill status={productDisplayStatus(product.status, product.stockState)} />
+                      </td>
+                      <td className={cn(tdClasses, "whitespace-nowrap text-neutral-500")}>{formatDate(product.updatedAt)}</td>
+                      <td className={cn(tdClasses, "text-right")}>
+                        <ProductActionsMenu product={product} canWrite={canWrite} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </TableScroll>
+            <Pagination pathname="/admin/products" params={params} page={products.page} pageCount={products.pageCount} total={products.total} noun="products" />
+          </>
+        )}
+      </Panel>
+    </>
+  );
+}

@@ -117,18 +117,21 @@
   }
 
   /*
-   * GSAP reveal targets. The inline script in the root layout adds `.js` before
-   * first paint, so animated elements start hidden only when JS will reveal
-   * them (via autoAlpha). Without JS or with reduced motion they are visible.
-   * The fail-safe animation un-hides them if GSAP has not booted (added
-   * `.motion-ready`) within 3s, e.g. a failed chunk load.
+   * GSAP reveal targets. `scripting: enabled` matches from first paint when JS
+   * is on, so animated elements start hidden only when JS will reveal them
+   * (via autoAlpha). Without JS, in browsers without the media feature, or
+   * with reduced motion they are visible. The fail-safe animation un-hides
+   * them if GSAP has not booted (added `.motion-ready`) within 3s, e.g. a
+   * failed chunk load.
    */
-  .js [data-animate] {
-    visibility: hidden;
-  }
+  @media (scripting: enabled) {
+    [data-animate] {
+      visibility: hidden;
+    }
 
-  .js:not(.motion-ready) [data-animate] {
-    animation: reveal-failsafe 0s linear 3s forwards;
+    :root:not(.motion-ready) [data-animate] {
+      animation: reveal-failsafe 0s linear 3s forwards;
+    }
   }
 
   @keyframes reveal-failsafe {
@@ -138,7 +141,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .js [data-animate] {
+    [data-animate] {
       visibility: visible;
     }
 

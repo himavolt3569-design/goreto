@@ -101,6 +101,16 @@ export async function requirePermission(permission: StaffPermission): Promise<Cu
   return profile;
 }
 
+/**
+ * For the admin area: the owner or any staff member. Customers get a 404 so
+ * the admin surface isn't revealed; each page still checks its own permission.
+ */
+export async function requireAdmin(): Promise<CurrentProfile> {
+  const profile = await requireProfile();
+  if (profile.role !== "owner" && profile.role !== "staff") notFound();
+  return profile;
+}
+
 /** For pages only the owner may open (e.g. staff management). */
 export async function requireOwner(): Promise<CurrentProfile> {
   const profile = await requireProfile();

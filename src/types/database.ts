@@ -89,6 +89,13 @@ export type Database = {
             foreignKeyName: "collection_products_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["product_id"]
+          },
+          {
+            foreignKeyName: "collection_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -654,8 +661,22 @@ export type Database = {
             foreignKeyName: "order_items_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["product_id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["variant_id"]
           },
           {
             foreignKeyName: "order_items_variant_id_fkey"
@@ -835,8 +856,22 @@ export type Database = {
             foreignKeyName: "product_ar_assets_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["product_id"]
+          },
+          {
+            foreignKeyName: "product_ar_assets_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_ar_assets_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["variant_id"]
           },
           {
             foreignKeyName: "product_ar_assets_variant_id_fkey"
@@ -883,8 +918,22 @@ export type Database = {
             foreignKeyName: "product_media_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["product_id"]
+          },
+          {
+            foreignKeyName: "product_media_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_media_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["variant_id"]
           },
           {
             foreignKeyName: "product_media_variant_id_fkey"
@@ -939,6 +988,13 @@ export type Database = {
           weight_grams?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["product_id"]
+          },
           {
             foreignKeyName: "product_variants_product_id_fkey"
             columns: ["product_id"]
@@ -1130,6 +1186,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "order_items"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["product_id"]
           },
           {
             foreignKeyName: "reviews_product_id_fkey"
@@ -1401,6 +1464,13 @@ export type Database = {
             foreignKeyName: "wishlist_items_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "admin_inventory"
+            referencedColumns: ["product_id"]
+          },
+          {
+            foreignKeyName: "wishlist_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -1415,9 +1485,141 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      admin_inventory: {
+        Row: {
+          category_title: string | null
+          low_stock_threshold: number | null
+          option_values: Json | null
+          product_id: string | null
+          product_slug: string | null
+          product_status: Database["public"]["Enums"]["product_status"] | null
+          product_title: string | null
+          sku: string | null
+          stock_quantity: number | null
+          stock_state: string | null
+          updated_at: string | null
+          variant_active: boolean | null
+          variant_id: string | null
+          variant_title: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      admin_add_shipment_event: {
+        Args: {
+          p_location: string
+          p_message: string
+          p_order_id: string
+          p_status: Database["public"]["Enums"]["shipment_status"]
+        }
+        Returns: undefined
+      }
+      admin_adjust_stock: {
+        Args: { p_delta: number; p_variant_id: string }
+        Returns: number
+      }
+      admin_analytics_breakdown: {
+        Args: { p_from: string; p_to: string }
+        Returns: Json
+      }
+      admin_assert_range: {
+        Args: { p_from: string; p_to: string }
+        Returns: undefined
+      }
+      admin_assign_courier: {
+        Args: {
+          p_courier_id: string
+          p_order_id: string
+          p_tracking_number: string
+        }
+        Returns: undefined
+      }
+      admin_attention_counts: {
+        Args: never
+        Returns: {
+          low_stock_variants: number
+          pending_orders: number
+          pending_reviews: number
+          sold_out_variants: number
+        }[]
+      }
+      admin_category_product_counts: {
+        Args: never
+        Returns: {
+          active_product_count: number
+          category_id: string
+          product_count: number
+        }[]
+      }
+      admin_customer_summaries: {
+        Args: {
+          p_limit: number
+          p_offset: number
+          p_search: string
+          p_sort: string
+        }
+        Returns: {
+          billed_paisa: number
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          last_order_at: string
+          order_count: number
+          pending_paisa: number
+          phone_e164: string
+          total_count: number
+        }[]
+      }
+      admin_dashboard_kpis: {
+        Args: {
+          p_from: string
+          p_prev_from: string
+          p_prev_to: string
+          p_to: string
+        }
+        Returns: Json
+      }
+      admin_mark_refunded: { Args: { p_order_id: string }; Returns: undefined }
+      admin_outstanding_cod: {
+        Args: never
+        Returns: {
+          order_count: number
+          total_paisa: number
+        }[]
+      }
+      admin_payment_summary: {
+        Args: { p_from: string; p_to: string }
+        Returns: {
+          order_count: number
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          total_paisa: number
+        }[]
+      }
+      admin_revenue_series: {
+        Args: { p_bucket: string; p_from: string; p_to: string }
+        Returns: {
+          bucket: string
+          orders: number
+          sales_paisa: number
+        }[]
+      }
+      admin_set_product_status: {
+        Args: {
+          p_product_id: string
+          p_status: Database["public"]["Enums"]["product_status"]
+        }
+        Returns: Database["public"]["Enums"]["product_status"]
+      }
+      admin_transition_order: {
+        Args: {
+          p_order_id: string
+          p_reason: string
+          p_status: Database["public"]["Enums"]["order_status"]
+        }
+        Returns: Database["public"]["Enums"]["order_status"]
+      }
       bootstrap_owner: {
         Args: { p_clerk_user_id: string; p_replace_existing?: boolean }
         Returns: {
@@ -1435,6 +1637,7 @@ export type Database = {
         Args: { p_clerk_user_id: string }
         Returns: undefined
       }
+      npt_day_start: { Args: { p_day: string }; Returns: string }
       product_rating_summaries: {
         Args: { product_ids: string[] }
         Returns: {
