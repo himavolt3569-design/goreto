@@ -88,25 +88,40 @@ export type Session =
  * `error:<message>`.
  */
 export async function runAs(db: PGlite, session: Session, sql: string): Promise<unknown> {
+  const [outcome] = await runStepsAs(db, session, [sql]);
+  return outcome;
+}
+
+/**
+ * Like `runAs`, but runs several statements in order in one rolled-back
+ * transaction, so later steps see earlier writes. Stops at the first error;
+ * the returned list ends with that `error:<message>`.
+ */
+export async function runStepsAs(db: PGlite, session: Session, steps: string[]): Promise<unknown[]> {
   const claims =
     session.role === "authenticated"
       ? JSON.stringify({ sub: session.clerkUserId, role: "authenticated" })
       : "";
-  let outcome: unknown;
+  const outcomes: unknown[] = [];
   await db
     .transaction(async (tx: Transaction) => {
       await tx.query("select set_config('request.jwt.claims', $1, true)", [claims]);
       await tx.exec(`set local role ${session.role}`);
-      try {
-        const result = await tx.query(sql);
-        outcome = result.rows.length
-          ? Object.values(result.rows[0] as Record<string, unknown>)[0]
-          : `affected:${result.affectedRows ?? 0}`;
-      } catch (error) {
-        outcome = `error:${(error as Error).message}`;
+      for (const sql of steps) {
+        try {
+          const result = await tx.query(sql);
+          outcomes.push(
+            result.rows.length
+              ? Object.values(result.rows[0] as Record<string, unknown>)[0]
+              : `affected:${result.affectedRows ?? 0}`,
+          );
+        } catch (error) {
+          outcomes.push(`error:${(error as Error).message}`);
+          break;
+        }
       }
       await tx.rollback();
     })
     .catch(() => undefined);
-  return outcome;
+  return outcomes;
 }

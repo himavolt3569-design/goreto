@@ -15,7 +15,8 @@
     "db:push": "node --env-file-if-exists=.env.local scripts/db/supabase.ts push",
     "db:types": "node --env-file-if-exists=.env.local scripts/db/supabase.ts types",
     "seed:load": "node --env-file-if-exists=.env.local scripts/seed/load.ts",
-    "seed:purge": "node --env-file-if-exists=.env.local scripts/seed/purge.ts"
+    "seed:purge": "node --env-file-if-exists=.env.local scripts/seed/purge.ts",
+    "owner:bootstrap": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/auth/bootstrap-owner.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.5",

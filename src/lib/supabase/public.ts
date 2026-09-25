@@ -6,8 +6,8 @@ import type { Database } from "@/types/database";
  * Anonymous Supabase client for public storefront reads (active catalog,
  * collections, delivery options, rating aggregates). It carries no session
  * and never calls Clerk `auth()`, so catalog pages stay cacheable; RLS limits
- * it to what any shopper may see. User-scoped reads need the Clerk-token
- * client (lib/supabase/server.ts, added with the account area).
+ * it to what any shopper may see. User-scoped reads use the Clerk-token
+ * client in lib/supabase/server.ts.
  */
 
 let client: SupabaseClient<Database> | null = null;

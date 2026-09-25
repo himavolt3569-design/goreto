@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -682,7 +682,7 @@ export type Database = {
           customer_note: string | null
           delivered_at: string | null
           delivery_fee_paisa: number
-          delivery_snapshot: NonNullable<Json>
+          delivery_snapshot: Json
           discount_paisa: number
           guest_tracking_hash: string | null
           id: string
@@ -693,7 +693,7 @@ export type Database = {
           payment_status: Database["public"]["Enums"]["payment_status"]
           refunded_at: string | null
           shipped_at: string | null
-          shipping_address: NonNullable<Json>
+          shipping_address: Json
           status: Database["public"]["Enums"]["order_status"]
           subtotal_paisa: number
           total_paisa: number
@@ -715,7 +715,7 @@ export type Database = {
           customer_note?: string | null
           delivered_at?: string | null
           delivery_fee_paisa?: number
-          delivery_snapshot: NonNullable<Json>
+          delivery_snapshot: Json
           discount_paisa?: number
           guest_tracking_hash?: string | null
           id?: string
@@ -726,7 +726,7 @@ export type Database = {
           payment_status?: Database["public"]["Enums"]["payment_status"]
           refunded_at?: string | null
           shipped_at?: string | null
-          shipping_address: NonNullable<Json>
+          shipping_address: Json
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_paisa: number
           total_paisa: number
@@ -748,7 +748,7 @@ export type Database = {
           customer_note?: string | null
           delivered_at?: string | null
           delivery_fee_paisa?: number
-          delivery_snapshot?: NonNullable<Json>
+          delivery_snapshot?: Json
           discount_paisa?: number
           guest_tracking_hash?: string | null
           id?: string
@@ -759,7 +759,7 @@ export type Database = {
           payment_status?: Database["public"]["Enums"]["payment_status"]
           refunded_at?: string | null
           shipped_at?: string | null
-          shipping_address?: NonNullable<Json>
+          shipping_address?: Json
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_paisa?: number
           total_paisa?: number
@@ -794,7 +794,7 @@ export type Database = {
         Row: {
           asset_format: string
           asset_path: string
-          calibration: NonNullable<Json>
+          calibration: Json
           created_at: string
           id: string
           is_active: boolean
@@ -807,7 +807,7 @@ export type Database = {
         Insert: {
           asset_format: string
           asset_path: string
-          calibration?: NonNullable<Json>
+          calibration?: Json
           created_at?: string
           id?: string
           is_active?: boolean
@@ -820,7 +820,7 @@ export type Database = {
         Update: {
           asset_format?: string
           asset_path?: string
-          calibration?: NonNullable<Json>
+          calibration?: Json
           created_at?: string
           id?: string
           is_active?: boolean
@@ -900,7 +900,7 @@ export type Database = {
           created_at: string
           id: string
           is_active: boolean
-          option_values: NonNullable<Json>
+          option_values: Json
           price_paisa: number | null
           product_id: string
           sku: string
@@ -914,7 +914,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
-          option_values?: NonNullable<Json>
+          option_values?: Json
           price_paisa?: number | null
           product_id: string
           sku: string
@@ -928,7 +928,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
-          option_values?: NonNullable<Json>
+          option_values?: Json
           price_paisa?: number | null
           product_id?: string
           sku?: string
@@ -962,12 +962,12 @@ export type Database = {
           is_featured: boolean
           is_limited_edition: boolean
           low_stock_threshold: number
-          options: NonNullable<Json>
+          options: Json
           published_at: string | null
           search_vector: unknown
           short_description: string
           slug: string
-          specs: NonNullable<Json>
+          specs: Json
           status: Database["public"]["Enums"]["product_status"]
           tags: string[]
           title: string
@@ -986,12 +986,12 @@ export type Database = {
           is_featured?: boolean
           is_limited_edition?: boolean
           low_stock_threshold?: number
-          options?: NonNullable<Json>
+          options?: Json
           published_at?: string | null
-          search_vector?: never
+          search_vector?: unknown
           short_description?: string
           slug: string
-          specs?: NonNullable<Json>
+          specs?: Json
           status?: Database["public"]["Enums"]["product_status"]
           tags?: string[]
           title: string
@@ -1010,12 +1010,12 @@ export type Database = {
           is_featured?: boolean
           is_limited_edition?: boolean
           low_stock_threshold?: number
-          options?: NonNullable<Json>
+          options?: Json
           published_at?: string | null
-          search_vector?: never
+          search_vector?: unknown
           short_description?: string
           slug?: string
-          specs?: NonNullable<Json>
+          specs?: Json
           status?: Database["public"]["Enums"]["product_status"]
           tags?: string[]
           title?: string
@@ -1033,6 +1033,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          clerk_updated_at: string | null
           clerk_user_id: string
           created_at: string
           deleted_at: string | null
@@ -1044,6 +1045,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          clerk_updated_at?: string | null
           clerk_user_id: string
           created_at?: string
           deleted_at?: string | null
@@ -1055,6 +1057,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          clerk_updated_at?: string | null
           clerk_user_id?: string
           created_at?: string
           deleted_at?: string | null
@@ -1306,13 +1309,13 @@ export type Database = {
           currency: string
           default_low_stock_threshold: number
           dispatch_municipality_code: string | null
-          feature_flags: NonNullable<Json>
+          feature_flags: Json
           id: string
           order_number_prefix: string
           phone_country_code: string
           returns_window_days: number
           singleton: boolean
-          social_links: NonNullable<Json>
+          social_links: Json
           store_name: string
           support_email: string | null
           support_phone_e164: string | null
@@ -1328,13 +1331,13 @@ export type Database = {
           currency?: string
           default_low_stock_threshold?: number
           dispatch_municipality_code?: string | null
-          feature_flags?: NonNullable<Json>
+          feature_flags?: Json
           id?: string
           order_number_prefix?: string
           phone_country_code?: string
           returns_window_days?: number
           singleton?: boolean
-          social_links?: NonNullable<Json>
+          social_links?: Json
           store_name: string
           support_email?: string | null
           support_phone_e164?: string | null
@@ -1350,13 +1353,13 @@ export type Database = {
           currency?: string
           default_low_stock_threshold?: number
           dispatch_municipality_code?: string | null
-          feature_flags?: NonNullable<Json>
+          feature_flags?: Json
           id?: string
           order_number_prefix?: string
           phone_country_code?: string
           returns_window_days?: number
           singleton?: boolean
-          social_links?: NonNullable<Json>
+          social_links?: Json
           store_name?: string
           support_email?: string | null
           support_phone_e164?: string | null
@@ -1415,12 +1418,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      current_profile_id: { Args: Record<PropertyKey, never>; Returns: string }
+      bootstrap_owner: {
+        Args: { p_clerk_user_id: string; p_replace_existing?: boolean }
+        Returns: {
+          demoted_owner_id: string
+          owner_id: string
+        }[]
+      }
+      current_profile_id: { Args: never; Returns: string }
       has_permission: {
         Args: { permission: Database["public"]["Enums"]["staff_permission"] }
         Returns: boolean
       }
-      is_owner: { Args: Record<PropertyKey, never>; Returns: boolean }
+      is_owner: { Args: never; Returns: boolean }
+      mark_clerk_profile_deleted: {
+        Args: { p_clerk_user_id: string }
+        Returns: undefined
+      }
       product_rating_summaries: {
         Args: { product_ids: string[] }
         Returns: {
@@ -1438,6 +1452,16 @@ export type Database = {
           quote: string
           review_id: string
         }[]
+      }
+      sync_clerk_profile: {
+        Args: {
+          p_clerk_updated_at: string
+          p_clerk_user_id: string
+          p_email: string
+          p_full_name: string
+          p_phone_e164: string
+        }
+        Returns: string
       }
     }
     Enums: {
@@ -1703,4 +1727,3 @@ export const Constants = {
     },
   },
 } as const
-
