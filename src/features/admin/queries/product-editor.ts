@@ -76,6 +76,14 @@ export async function fetchProductEditor(productId: string): Promise<ProductEdit
   const orderedIds = new Set<string>(ordered.data ?? []);
 
   const options = parseOptions(data.options);
+  // Inactive variants kept for order history may carry combinations the options
+  // no longer offer; leave them out so they don't block validation or the save.
+  const allowed = new Map(options.map((option) => [option.name, new Set(option.values.map((value) => value.value))]));
+  const fitsOptions = (optionValues: Record<string, string>) => {
+    const entries = Object.entries(optionValues);
+    return entries.length === allowed.size && entries.every(([name, value]) => allowed.get(name)?.has(value));
+  };
+  const variants = data.product_variants.filter((variant) => variant.is_active || fitsOptions(optionValuesOf(variant.option_values)));
   return {
     id: data.id,
     slug: data.slug,
@@ -98,7 +106,7 @@ export async function fetchProductEditor(productId: string): Promise<ProductEdit
         name: option.name,
         values: option.values.map((value) => ({ value: value.value, label: value.label, swatchHex: value.swatchHex ?? "", locked: true })),
       })),
-      variants: data.product_variants.map((variant) => ({
+      variants: variants.map((variant) => ({
         id: variant.id,
         sku: variant.sku,
         title: variant.title ?? "",

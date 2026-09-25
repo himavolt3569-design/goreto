@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useEffectEvent, useState, useTransition } from "react";
 import { FormProvider, useForm, useFormContext, useWatch, type FieldPath } from "react-hook-form";
 import { ArrowSquareOutIcon } from "@/components/ui/icons";
 import { ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
@@ -38,8 +38,8 @@ export type ProductFormProps = {
   collections: CollectionOption[] | null;
   linkedCollections: { id: string; title: string }[];
   variantInfo: Record<string, EditorVariantInfo>;
-  /** Stored slug and status when editing. */
-  saved: { slug: string; status: ProductFormStatus; updatedLabel: string } | null;
+  /** Stored slug and status when editing; `version` (updated_at) changes on every product save. */
+  saved: { slug: string; status: ProductFormStatus; version: string; updatedLabel: string } | null;
   /** Add product only: folder id for photos uploaded before the product exists. */
   stagingId?: string;
 };
@@ -59,9 +59,12 @@ export function ProductForm({ productId, defaultValues, categories, collections,
   const [photos, setPhotos] = useState<StagedPhoto[]>([]);
 
   // After a save, the page re-renders with the stored values (new variant ids, stock).
+  // Keyed on the saved version so refreshes from photo actions keep unsaved edits.
+  const savedVersion = saved?.version ?? null;
+  const resetToSaved = useEffectEvent(() => form.reset(defaultValues));
   useEffect(() => {
-    form.reset(defaultValues);
-  }, [defaultValues, form]);
+    resetToSaved();
+  }, [savedVersion]);
 
   // Warn before leaving with unsaved changes.
   useEffect(() => {
@@ -116,7 +119,7 @@ export function ProductForm({ productId, defaultValues, categories, collections,
         </div>
 
         <aside className="flex flex-col gap-6 xl:sticky xl:top-24">
-          <StatusPanel pending={pending} result={result} saved={saved} isNew={productId === null} isDirty={isDirty} />
+          <StatusPanel pending={pending} result={result} saved={saved} isNew={productId === null} canStagePhotos={Boolean(stagingId)} isDirty={isDirty} />
         </aside>
       </form>
     </FormProvider>
@@ -128,12 +131,14 @@ function StatusPanel({
   result,
   saved,
   isNew,
+  canStagePhotos,
   isDirty,
 }: {
   pending: boolean;
   result: ActionResult | null;
   saved: ProductFormProps["saved"];
   isNew: boolean;
+  canStagePhotos: boolean;
   isDirty: boolean;
 }) {
   const status = useWatch<ProductFormValues, "status">({ name: "status" });
@@ -167,7 +172,7 @@ function StatusPanel({
         <Button type="submit" size="lg" fullWidth loading={pending}>
           {isNew ? (status === "active" ? "Create and publish" : "Create product") : "Save changes"}
         </Button>
-        {isNew ? <p className="text-small text-neutral-500">You can add photos after creating the product.</p> : null}
+        {isNew && !canStagePhotos ? <p className="text-small text-neutral-500">You can add photos after creating the product.</p> : null}
         {!isNew && isDirty ? <p className="text-small text-warning-700">You have unsaved changes.</p> : null}
         <ActionMessage state={result} />
       </div>

@@ -52,7 +52,7 @@ function renderForm(values: ProductFormValues, productId: string | null = "0c6a1
       collections={[]}
       linkedCollections={[]}
       variantInfo={{ [VARIANT_ID]: { stock: 7, ordered: true } }}
-      saved={productId ? { slug: values.slug, status: "draft", updatedLabel: "Sep 25, 2026" } : null}
+      saved={productId ? { slug: values.slug, status: "draft", version: "2026-09-25T00:00:00Z", updatedLabel: "Sep 25, 2026" } : null}
       stagingId={stagingId}
     />,
   );
@@ -61,6 +61,35 @@ function renderForm(values: ProductFormValues, productId: string | null = "0c6a1
 beforeEach(() => saveProductAction.mockReset());
 
 describe("ProductForm", () => {
+  it("keeps unsaved edits when the page refreshes without a product save", () => {
+    const props = {
+      productId: "0c6a1d2e-3f4a-4b5c-8d6e-7f8a9b0c1d2e",
+      categories: [{ id: CATEGORY_ID, title: "Bags", parentId: null }],
+      collections: [],
+      linkedCollections: [],
+      variantInfo: { [VARIANT_ID]: { stock: 7, ordered: true } },
+    };
+    const saved = (version: string) => ({ slug: "canvas-tote", status: "draft" as const, version, updatedLabel: "Sep 25, 2026" });
+    const { rerender } = render(<ProductForm {...props} defaultValues={editValues()} saved={saved("v1")} />);
+    fireEvent.change(screen.getByLabelText(/Product name/), { target: { value: "Edited Tote" } });
+
+    // A photo action refreshes the page: new values object, same saved version.
+    rerender(<ProductForm {...props} defaultValues={editValues()} saved={saved("v1")} />);
+    expect(screen.getByLabelText(/Product name/)).toHaveValue("Edited Tote");
+
+    // A save bumps the version and loads the stored values.
+    rerender(<ProductForm {...props} defaultValues={{ ...editValues(), title: "Stored Tote" }} saved={saved("v2")} />);
+    expect(screen.getByLabelText(/Product name/)).toHaveValue("Stored Tote");
+  });
+
+  it("only says photos come after creating when photos can't be staged", () => {
+    const { unmount } = renderForm(emptyProductValues(5, false), null);
+    expect(screen.getByText(/add photos after creating/)).toBeInTheDocument();
+    unmount();
+    renderForm(emptyProductValues(5, false), null, STAGING_ID);
+    expect(screen.queryByText(/add photos after creating/)).not.toBeInTheDocument();
+  });
+
   it("fills the slug from the title for a new product", () => {
     renderForm(emptyProductValues(5, false), null);
     fireEvent.change(screen.getByLabelText(/Product name/), { target: { value: "Pearl Drop Earrings" } });

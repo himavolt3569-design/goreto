@@ -138,6 +138,12 @@ export function WindowSelect({
   label: string;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
+  // Set on change; the submit waits for the render that commits the new value
+  // to the Select's form mirror, or it would send the previous window.
+  const [changes, setChanges] = useState(0);
+  useEffect(() => {
+    if (changes > 0) formRef.current?.requestSubmit();
+  }, [changes]);
   // True once hydrated: the select then submits itself and the Apply button hides.
   const scripted = useSyncExternalStore(
     noopSubscribe,
@@ -151,7 +157,7 @@ export function WindowSelect({
         <input key={key} type="hidden" name={key} value={preservedValue} />
       ))}
       <div className="w-44">
-        <Select name={name} defaultValue={value} aria-label={label} options={options} onValueChange={() => formRef.current?.requestSubmit()} />
+        <Select name={name} defaultValue={value} aria-label={label} options={options} onValueChange={() => setChanges((count) => count + 1)} />
       </div>
       {scripted ? null : (
         <button type="submit" className={buttonClasses({ variant: "tertiary", size: "md" })}>

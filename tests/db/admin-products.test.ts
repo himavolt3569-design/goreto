@@ -178,13 +178,15 @@ describe("admin_save_product validation", () => {
 
   it("names the field in the error detail", async () => {
     const existingSlug = await scalar<string>("select slug from products order by slug limit 1");
+    let detail: string | undefined;
     await db.transaction(async (tx) => {
       await tx.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify({ sub: "user_seed_owner", role: "authenticated" })]);
       await tx.exec("set local role authenticated");
       const error = await tx.query(saveSql(null, product({ slug: existingSlug }), variants("TTOTE"))).catch((caught: { detail?: string }) => caught);
-      expect((error as { detail?: string }).detail).toBe("slug");
+      detail = (error as { detail?: string }).detail;
       await tx.rollback();
     }).catch(() => undefined);
+    expect(detail).toBe("slug");
   });
 });
 

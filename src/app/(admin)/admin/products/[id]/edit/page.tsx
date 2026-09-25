@@ -73,7 +73,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
         collections={collections}
         linkedCollections={product.linkedCollections}
         variantInfo={product.variantInfo}
-        saved={{ slug: product.slug, status: product.status, updatedLabel: formatDateTime(product.updatedAt) }}
+        saved={{ slug: product.slug, status: product.status, version: product.updatedAt, updatedLabel: formatDateTime(product.updatedAt) }}
       />
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:items-start">
