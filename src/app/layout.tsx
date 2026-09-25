@@ -30,18 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
-      // The inline script below adds the `js` class before hydration.
-      suppressHydrationWarning
     >
-      <head>
-        {/* Marks JS as available before first paint so GSAP reveal targets
-            ([data-animate]) start hidden only when they will be animated in. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js')",
-          }}
-        />
-      </head>
       <body className="flex min-h-full flex-col">
         <ClerkProvider appearance={clerkAppearance}>{children}</ClerkProvider>
       </body>
