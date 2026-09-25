@@ -150,7 +150,7 @@ describe("DateRangePicker", () => {
         ]}
       />,
     );
-    const trigger = screen.getByRole("button", { name: /Date range:s*Sep 1, 2026 – Sep 30, 2026/ });
+    const trigger = screen.getByRole("button", { name: /Date range:\s*Sep 1, 2026 – Sep 30, 2026/ });
     fireEvent.click(trigger);
     expect(trigger).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("link", { name: "This month" })).toHaveAttribute("aria-current", "true");

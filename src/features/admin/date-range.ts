@@ -171,6 +171,12 @@ export function resolveRange(
     prevFrom = addDays(from, -span);
     compareLabel = "vs previous period";
   }
+  // A range still in progress is compared with the same number of elapsed
+  // days of the previous period, not the whole of it.
+  if (from <= today && today < to) {
+    const elapsedEnd = addDays(prevFrom, daySpan(from, today) - 1);
+    if (elapsedEnd < prevTo) prevTo = elapsedEnd;
+  }
 
   const preset =
     RANGE_PRESETS.find(({ value }) => {

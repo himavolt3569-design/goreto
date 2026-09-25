@@ -55,7 +55,11 @@ function quickActions(profile: CurrentProfile): QuickAction[] {
 /** Admin area (AGENTS §4.6, §9.2): owner and staff only; each page checks its own permission too. */
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const profile = await requireAdmin();
-  const [attention, user] = await Promise.all([attentionItems(profile), currentUser()]);
+  const [attention, user] = await Promise.all([
+    attentionItems(profile),
+    // The avatar is optional; a Clerk API failure falls back to initials.
+    currentUser().catch(() => null),
+  ]);
 
   const allowedHrefs = ADMIN_NAV.flatMap((group) => group.items)
     .filter((item) => canAccess(profile, item.access))

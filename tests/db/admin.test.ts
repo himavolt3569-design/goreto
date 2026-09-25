@@ -142,6 +142,35 @@ describe("attention counts", () => {
   });
 });
 
+describe("admin count aggregates", () => {
+  it("sum outstanding COD in the database, gated by orders.read", async () => {
+    expect(await runAs(db, catalogStaff, "select order_count from public.admin_outstanding_cod()")).toMatch(/orders.read required/);
+    expect(await runAs(db, anon, "select order_count from public.admin_outstanding_cod()")).toMatch(/^error:permission denied/);
+    const raw = await db.query<{ order_count: number; total_paisa: string }>(
+      "select count(*)::int as order_count, coalesce(sum(total_paisa), 0)::bigint::text as total_paisa from orders where payment_status = 'pending' and status <> 'canceled'",
+    );
+    expect(await runAs(db, supportStaff, "select row_to_json(c)::text from public.admin_outstanding_cod() c")).toBe(
+      JSON.stringify({ order_count: raw.rows[0].order_count, total_paisa: Number(raw.rows[0].total_paisa) }),
+    );
+  });
+
+  it("count products per category under the caller's RLS", async () => {
+    const perCategory = `select coalesce(json_agg(json_build_array(category_id, product_count, active_product_count) order by category_id), '[]')::text
+      from public.admin_category_product_counts()`;
+    const all = await scalar<string>(
+      `select coalesce(json_agg(json_build_array(category_id, n, a) order by category_id), '[]')::text
+       from (select category_id, count(*)::int n, (count(*) filter (where status = 'active'))::int a from products group by category_id) s`,
+    );
+    const activeOnly = await scalar<string>(
+      `select coalesce(json_agg(json_build_array(category_id, n, n) order by category_id), '[]')::text
+       from (select category_id, count(*)::int n from products where status = 'active' group by category_id) s`,
+    );
+    expect(await runAs(db, owner, perCategory)).toBe(all);
+    // Customers see only active products, so drafts never reach their counts.
+    expect(await runAs(db, customer, perCategory)).toBe(activeOnly);
+  });
+});
+
 describe("order transitions", () => {
   it("runs the full fulfilment flow with shipment events and COD collection", async () => {
     const id = pendingOrderId;

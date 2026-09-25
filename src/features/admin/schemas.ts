@@ -109,7 +109,7 @@ export const nepalPhoneSchema = z
   .transform((value, context) => {
     if (value === "") return null;
     const phone = parsePhoneNumberFromString(value, "NP");
-    if (!phone?.isValid()) {
+    if (!phone?.isValid() || phone.country !== "NP") {
       context.addIssue({ code: "custom", message: "Enter a valid Nepal phone number" });
       return z.NEVER;
     }

@@ -15,7 +15,7 @@ import { fieldErrors, formValues } from "../schemas";
 type Parsed<T> = { ok: true; data: T; profileId: string } | { ok: false; result: ActionResult };
 
 export async function authorizeAndParse<Schema extends z.ZodType>(
-  access: AdminAccess,
+  access: AdminAccess | readonly AdminAccess[],
   schema: Schema,
   formData: FormData,
 ): Promise<Parsed<z.infer<Schema>>> {

@@ -28,12 +28,12 @@ describe("day arithmetic", () => {
 describe("resolveRange", () => {
   const today = "2026-09-25";
 
-  it("defaults to the current month compared with last month", () => {
+  it("defaults to the current month compared with the same days of last month", () => {
     expect(resolveRange({}, today)).toMatchObject({
       from: "2026-09-01",
       to: "2026-09-30",
       prevFrom: "2026-08-01",
-      prevTo: "2026-08-31",
+      prevTo: "2026-08-25",
       compareLabel: "vs last month",
       label: "Sep 1, 2026 – Sep 30, 2026",
       preset: "this_month",
@@ -48,10 +48,10 @@ describe("resolveRange", () => {
     });
   });
 
-  it("compares a calendar year with the previous year", () => {
+  it("compares a calendar year with the same days of the previous year", () => {
     expect(resolveRange({ from: "2026-01-01", to: "2026-12-31" }, today)).toMatchObject({
       prevFrom: "2025-01-01",
-      prevTo: "2025-12-31",
+      prevTo: "2025-09-25",
       compareLabel: "vs last year",
       preset: "this_year",
     });
@@ -63,6 +63,24 @@ describe("resolveRange", () => {
       prevTo: "2026-09-09",
       compareLabel: "vs previous period",
       preset: null,
+    });
+  });
+
+  it("caps the comparison of an in-progress range at the elapsed days", () => {
+    expect(resolveRange({ from: "2026-09-20", to: "2026-09-29" }, today)).toMatchObject({
+      prevFrom: "2026-09-10",
+      prevTo: "2026-09-15",
+      compareLabel: "vs previous period",
+    });
+    // Past the end of a shorter previous month: keep the month's end.
+    expect(resolveRange({ from: "2026-03-01", to: "2026-03-31" }, "2026-03-30")).toMatchObject({
+      prevFrom: "2026-02-01",
+      prevTo: "2026-02-28",
+    });
+    // Not yet started: the full previous period.
+    expect(resolveRange({ from: "2026-10-01", to: "2026-10-31" }, today)).toMatchObject({
+      prevFrom: "2026-09-01",
+      prevTo: "2026-09-30",
     });
   });
 

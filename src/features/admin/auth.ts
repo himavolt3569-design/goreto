@@ -18,11 +18,12 @@ export async function requireAdminAccess(access: AdminAccess): Promise<CurrentPr
   return profile;
 }
 
-/** For admin Server Actions. */
-export async function authorizeAdmin(access: AdminAccess): Promise<Authorization> {
+/** For admin Server Actions. With several accesses, any one of them is enough. */
+export async function authorizeAdmin(access: AdminAccess | readonly AdminAccess[]): Promise<Authorization> {
   const result = await authorize();
   if (!result.ok) return result;
-  if (!canAccess(result.profile, access)) return { ok: false, reason: "forbidden" };
+  const accesses: readonly AdminAccess[] = typeof access === "string" ? [access] : access;
+  if (!accesses.some((item) => canAccess(result.profile, item))) return { ok: false, reason: "forbidden" };
   return result;
 }
 

@@ -137,20 +137,14 @@ export type AdminCategory = {
 };
 
 export async function fetchAdminCategories(): Promise<AdminCategory[]> {
-  const [categories, products] = await Promise.all([
+  const [categories, productCounts] = await Promise.all([
     adminDb().from("categories").select("id, title, slug, parent_id, is_active, sort_order, image_path").order("sort_order").order("title"),
-    adminDb().from("products").select("category_id, status"),
+    adminDb().rpc("admin_category_product_counts"),
   ]);
   if (categories.error) fail("categories", categories.error);
-  if (products.error) fail("category product counts", products.error);
+  if (productCounts.error) fail("category product counts", productCounts.error);
 
-  const counts = new Map<string, { all: number; active: number }>();
-  for (const product of products.data) {
-    const entry = counts.get(product.category_id) ?? { all: 0, active: 0 };
-    entry.all += 1;
-    if (product.status === "active") entry.active += 1;
-    counts.set(product.category_id, entry);
-  }
+  const counts = new Map(productCounts.data.map((row) => [row.category_id, { all: row.product_count, active: row.active_product_count }]));
   return categories.data.map((row) => ({
     id: row.id,
     title: row.title,

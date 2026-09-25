@@ -56,7 +56,7 @@ export async function setCategoryActiveAction(_previous: ActionResult | null, fo
 }
 
 export async function adjustStockAction(_previous: ActionResult | null, formData: FormData): Promise<ActionResult> {
-  const input = await authorizeAndParse("inventory.write", stockAdjustSchema, formData);
+  const input = await authorizeAndParse(["inventory.write", "catalog.write"], stockAdjustSchema, formData);
   if (!input.ok) return input.result;
 
   const { data, error } = await adminDb().rpc("admin_adjust_stock", { p_variant_id: input.data.variantId, p_delta: input.data.delta });

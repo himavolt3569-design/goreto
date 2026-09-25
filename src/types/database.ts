@@ -1544,6 +1544,14 @@ export type Database = {
           sold_out_variants: number
         }[]
       }
+      admin_category_product_counts: {
+        Args: never
+        Returns: {
+          active_product_count: number
+          category_id: string
+          product_count: number
+        }[]
+      }
       admin_customer_summaries: {
         Args: {
           p_limit: number
@@ -1574,6 +1582,13 @@ export type Database = {
         Returns: Json
       }
       admin_mark_refunded: { Args: { p_order_id: string }; Returns: undefined }
+      admin_outstanding_cod: {
+        Args: never
+        Returns: {
+          order_count: number
+          total_paisa: number
+        }[]
+      }
       admin_payment_summary: {
         Args: { p_from: string; p_to: string }
         Returns: {

@@ -197,11 +197,7 @@ export async function fetchPaymentSummary(range: Pick<ResolvedRange, "from" | "t
 
 /** Outstanding COD across all time: live orders whose cash hasn't been collected. */
 export async function fetchOutstandingCod(): Promise<{ count: number; totalPaisa: number }> {
-  const { data, error } = await adminDb()
-    .from("orders")
-    .select("total_paisa")
-    .eq("payment_status", "pending")
-    .neq("status", "canceled");
+  const { data, error } = await adminDb().rpc("admin_outstanding_cod").single();
   if (error) fail("outstanding cod", error);
-  return { count: data.length, totalPaisa: data.reduce((sum, row) => sum + row.total_paisa, 0) };
+  return { count: data.order_count, totalPaisa: Number(data.total_paisa) };
 }

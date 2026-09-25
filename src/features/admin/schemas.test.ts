@@ -54,6 +54,12 @@ describe("storeSettingsSchema", () => {
     const paths = result.error!.issues.map((issue) => issue.path[0]);
     expect(paths).toEqual(expect.arrayContaining(["supportPhone", "supportEmail", "returnsWindowDays", "codMaxOrder"]));
   });
+
+  it("rejects valid numbers from other countries", () => {
+    const result = storeSettingsSchema.safeParse({ ...settings, supportPhone: "+14155552671" });
+    expect(result.success).toBe(false);
+    expect(result.error!.issues[0]).toMatchObject({ path: ["supportPhone"], message: "Enter a valid Nepal phone number" });
+  });
 });
 
 describe("action schemas", () => {
