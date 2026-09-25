@@ -1664,6 +1664,10 @@ export type Database = {
           owner_id: string
         }[]
       }
+      category_has_children: {
+        Args: { p_category_id: string }
+        Returns: boolean
+      }
       current_profile_id: { Args: never; Returns: string }
       has_permission: {
         Args: { permission: Database["public"]["Enums"]["staff_permission"] }

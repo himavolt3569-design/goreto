@@ -63,6 +63,11 @@ describe("two-level category tree", () => {
     expect(outcomes.at(-1)).toMatch(/has subcategories/);
   });
 
+  it("refuses a category as its own parent with a parentId error", async () => {
+    const outcome = await runAs(db, owner, `update categories set parent_id = id where id = '${subcategoryId}'`);
+    expect(outcome).toMatch(/can't be its own parent/);
+  });
+
   it("allows a top-level parent", async () => {
     const outcome = await runAs(db, owner, `insert into categories (title, slug, parent_id) values ('Child', 'test-child', '${topLevelId}')`);
     expect(outcome).toBe("affected:1");
@@ -78,6 +83,32 @@ describe("admin_delete_category", () => {
 
   it("refuses a category with subcategories", async () => {
     expect(await runAs(db, owner, `select public.admin_delete_category('${topLevelId}')`)).toMatch(/has subcategories/);
+  });
+
+  it("sees subcategories hidden from a catalog.write-only caller", async () => {
+    const outcomes = await runStepsWithSetup(
+      db,
+      [
+        "insert into profiles (clerk_user_id, role) values ('user_test_catalog_write_only', 'staff')",
+        `insert into staff_permissions (profile_id, permission_key)
+           select id, 'catalog.write'::staff_permission from profiles where clerk_user_id = 'user_test_catalog_write_only'`,
+        emptyTopLevelInsert,
+        "insert into categories (title, slug, parent_id, is_active) select 'Hidden Child', 'test-hidden-child', id, false from categories where slug = 'test-empty'",
+      ],
+      as("user_test_catalog_write_only"),
+      [
+        "select count(*)::int from categories where slug = 'test-hidden-child'",
+        "select public.admin_delete_category((select id from categories where slug = 'test-empty'))",
+      ],
+    );
+    expect(outcomes[0]).toBe(0);
+    expect(outcomes.at(-1)).toMatch(/has subcategories/);
+  });
+
+  it("keeps the subcategory check to catalog writers", async () => {
+    expect(await runAs(db, customer, `select public.category_has_children('${topLevelId}')`)).toMatch(/catalog.write required/);
+    expect(await runAs(db, anon, `select public.category_has_children('${topLevelId}')`)).toMatch(/^error:permission denied/);
+    expect(await runAs(db, owner, `select public.category_has_children('${topLevelId}')`)).toBe(true);
   });
 
   it("refuses a category with products, even draft ones", async () => {

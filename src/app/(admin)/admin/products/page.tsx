@@ -41,11 +41,13 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
   const page = pageNumber(params.page);
 
   // One round trip: both reads start together.
-  const [categories, products] = await Promise.all([
+  const [categories, filtered] = await Promise.all([
     fetchCategoryOptions(),
     fetchAdminProducts({ q, status, categoryId: requestedCategoryId, page }),
   ]);
   const categoryId = categories.some((category) => category.id === requestedCategoryId) ? requestedCategoryId : null;
+  // An unknown category id (hand-edited URL) shows every category, matching the "All categories" filter.
+  const products = requestedCategoryId && !categoryId ? await fetchAdminProducts({ q, status, categoryId: null, page }) : filtered;
   const canWrite = canAccess(profile, "catalog.write");
 
   return (
