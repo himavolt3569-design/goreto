@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
       // Hero and "how it works" stand-in photography (src/lib/media/picsum.ts).
       // Picsum redirects to its CDN; Next follows up to `maximumRedirects` (default 3).
       { protocol: "https", hostname: "picsum.photos", pathname: "/id/**" },
+      // Clerk profile photos in the admin header (User.imageUrl).
+      { protocol: "https", hostname: "img.clerk.com", pathname: "/**" },
     ],
   },
 };

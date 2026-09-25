@@ -57,6 +57,11 @@ export default async function AccountPage() {
               <dd className="break-all text-neutral-900">{profile.email ?? "No verified email yet"}</dd>
             </div>
           </dl>
+          {profile.role !== "customer" ? (
+            <Link href="/admin" className={buttonClasses({ variant: "primary", size: "md", className: "w-fit" })}>
+              Open admin
+            </Link>
+          ) : null}
         </Card>
 
         <Card className="flex flex-col items-start gap-4 p-6">
