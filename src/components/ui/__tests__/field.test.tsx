@@ -41,13 +41,17 @@ describe("Field", () => {
     render(
       <Field label="Sort by">
         {(control) => (
-          <Select {...control} defaultValue="new">
-            <option value="relevant">Most Relevant</option>
-            <option value="new">Newest</option>
-          </Select>
+          <Select
+            {...control}
+            defaultValue="new"
+            options={[
+              { value: "relevant", label: "Most Relevant" },
+              { value: "new", label: "Newest" },
+            ]}
+          />
         )}
       </Field>,
     );
-    expect(screen.getByLabelText("Sort by")).toHaveValue("new");
+    expect(screen.getByRole("combobox", { name: "Sort by" })).toHaveTextContent("Newest");
   });
 });

@@ -13,6 +13,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
+import { popoverItemClasses, popoverPanelClasses } from "@/components/ui/popover";
 import { cn } from "@/lib/utils/cn";
 
 /*
@@ -121,7 +122,8 @@ export function Menu({ trigger, triggerLabel, triggerClassName, align = "end", p
         <div
           ref={panelRef}
           className={cn(
-            "absolute top-full z-50 mt-2 min-w-56 rounded-md border border-neutral-200 bg-white p-2 shadow-lg",
+            popoverPanelClasses,
+            "absolute top-full mt-2 min-w-56",
             align === "end" ? "right-0" : "left-0",
             panelClassName,
           )}
@@ -137,8 +139,7 @@ export function Menu({ trigger, triggerLabel, triggerClassName, align = "end", p
   );
 }
 
-const itemClasses =
-  "flex min-h-11 w-full items-center gap-3 rounded-sm px-3 text-left text-body text-neutral-900 outline-none transition-colors hover:bg-neutral-100 focus-visible:bg-neutral-100 focus-visible:outline-none aria-disabled:pointer-events-none aria-disabled:text-neutral-300";
+const itemClasses = popoverItemClasses;
 
 export function MenuLink({ href, children, className }: { href: string; children: ReactNode; className?: string }) {
   const context = useContext(MenuContext);

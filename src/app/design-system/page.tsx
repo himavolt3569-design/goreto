@@ -6,6 +6,7 @@ import {
   CameraIcon,
   CaretDownIcon,
   ChatCircleDotsIcon,
+  CheckIcon,
   CubeIcon,
   EyeIcon,
   GiftIcon,
@@ -47,11 +48,14 @@ import {
   SearchInput,
   Select,
   StatusIndicator,
+  ICON_SIZE_XS,
   VideoCard,
   type BadgeTone,
   type IndicatorStatus,
   type OrderStatus,
 } from "@/components/ui";
+import { popoverItemClasses, popoverPanelClasses } from "@/components/ui/popover";
+import { categoryOptions } from "@/features/catalog/category-options";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = {
@@ -69,6 +73,24 @@ const primarySwatches = [
   { name: "Primary 200", hex: "#FED7AA", className: "bg-primary-200" },
   { name: "Primary 100", hex: "#FFF2E4", className: "bg-primary-100" },
 ];
+
+const sortOptions = [
+  { value: "relevant", label: "Most Relevant" },
+  { value: "newest", label: "Newest" },
+  { value: "price-asc", label: "Price: Low to High" },
+  { value: "price-desc", label: "Price: High to Low" },
+];
+
+const sampleCategories = categoryOptions([
+  { id: "dresses", title: "Dresses", parentId: null },
+  { id: "maxi", title: "Maxi Dresses", parentId: "dresses" },
+  { id: "midi", title: "Midi Dresses", parentId: "dresses" },
+  { id: "jewelry", title: "Jewelry", parentId: null },
+  { id: "earrings", title: "Earrings", parentId: "jewelry" },
+  { id: "necklaces", title: "Necklaces", parentId: "jewelry" },
+  { id: "rings", title: "Rings", parentId: "jewelry" },
+  { id: "sunglasses", title: "Sunglasses", parentId: null },
+]);
 
 const neutralSwatches = [
   { name: "Neutral 900", hex: "#0F172A", className: "bg-neutral-900" },
@@ -404,14 +426,18 @@ export default function DesignSystemPage() {
           </Field>
           <Field label="Select">
             {(control) => (
-              <Select {...control} defaultValue="relevant">
-                <option value="relevant">Most Relevant</option>
-                <option value="newest">Newest</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-              </Select>
+              <Select {...control} defaultValue="relevant" options={sortOptions} />
             )}
           </Field>
+          <Field label="Grouped select (categories)" hint="Subcategories sit under their parent; the field shows the parent as context.">
+            {(control) => (
+              <Select {...control} defaultValue="earrings" options={sampleCategories} />
+            )}
+          </Field>
+          <div className="flex flex-col gap-2">
+            <SubLabel>Open list</SubLabel>
+            <DropdownSample />
+          </div>
           <Field label="Phone number" error="Enter a valid Nepal mobile number." required>
             {(control) => (
               <Input {...control} inputMode="tel" defaultValue="98123" autoComplete="tel-national" />
@@ -425,6 +451,16 @@ export default function DesignSystemPage() {
               "Border: 1px solid #E2E8F0",
               "Padding: 0 16px",
               "Focus: Border color #F97316",
+            ]}
+          />
+          <SpecList
+            title="Dropdown Specs"
+            items={[
+              "Panel: white, 1px #E2E8F0, radius 12px, shadow-lg, 8px inset",
+              "Rows: 44px, radius 8px, 0 12px; nested rows indent 32px",
+              "Hover / keyboard: Neutral 100",
+              "Selected: Primary 100 + check icon, Primary 700 text",
+              "Max height 288px, scrolls; opens upward near the bottom",
             ]}
           />
         </Section>
@@ -665,6 +701,37 @@ function IconGrid({ weight }: { weight: "outline" | "filled" }) {
             aria-label={name}
             role="img"
           />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Static picture of the open Select list (the live one closes on blur). */
+function DropdownSample() {
+  const rows = [
+    { label: "Jewelry", parent: true },
+    { label: "Earrings", depth: 1, selected: true },
+    { label: "Necklaces", depth: 1, active: true },
+    { label: "Rings", depth: 1 },
+    { label: "Sunglasses" },
+  ];
+  return (
+    <ul aria-hidden="true" className={cn(popoverPanelClasses, "flex flex-col gap-0.5")}>
+      {rows.map((row) => (
+        <li
+          key={row.label}
+          className={cn(
+            popoverItemClasses,
+            "pointer-events-none",
+            row.depth === 1 && "pl-8",
+            row.parent && "font-medium",
+            row.active && "bg-neutral-100",
+            row.selected && "bg-primary-100 font-medium text-primary-700",
+          )}
+        >
+          <span className="flex-1">{row.label}</span>
+          {row.selected ? <CheckIcon size={ICON_SIZE_XS} weight="bold" className="text-primary-500" /> : null}
         </li>
       ))}
     </ul>

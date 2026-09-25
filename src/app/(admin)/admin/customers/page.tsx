@@ -36,13 +36,12 @@ export default async function CustomersPage({ searchParams }: PageProps<"/admin/
             <Input id="customer-q" type="search" name="q" defaultValue={q} maxLength={64} />
           </FilterField>
           <FilterField label="Sort" htmlFor="customer-sort">
-            <Select id="customer-sort" name="sort" defaultValue={sort}>
-              {CUSTOMER_SORTS.map((value) => (
-                <option key={value} value={value}>
-                  {SORT_LABELS[value]}
-                </option>
-              ))}
-            </Select>
+            <Select
+              id="customer-sort"
+              name="sort"
+              defaultValue={sort}
+              options={CUSTOMER_SORTS.map((value) => ({ value, label: SORT_LABELS[value] }))}
+            />
           </FilterField>
         </FilterBar>
 

@@ -38,14 +38,9 @@ export function CategorySortControl({ value }: { value: CategorySort }) {
           id={id}
           name="sort"
           defaultValue={value}
-          onChange={(event) => onChange(parseCategorySort(event.currentTarget.value))}
-        >
-          {CATEGORY_SORTS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+          options={CATEGORY_SORTS}
+          onValueChange={(next) => onChange(parseCategorySort(next))}
+        />
       </div>
       <button
         type="submit"

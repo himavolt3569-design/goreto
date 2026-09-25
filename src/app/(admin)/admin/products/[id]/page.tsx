@@ -5,7 +5,9 @@ import { ActionForm, SubmitButton, ToggleForm } from "@/components/admin/action-
 import { BackLink, PageHeader, Panel, TableScroll, Thumb, tableClasses, tdClasses, thClasses, theadRowClasses, numericClasses } from "@/components/admin/admin-ui";
 import { ActivePill, ProductStatusPill, StockPill, productDisplayStatus } from "@/components/admin/status-pills";
 import { StockAdjustForm } from "@/components/admin/stock-adjust-form";
-import { ArrowSquareOutIcon } from "@/components/ui/icons";
+import { ArrowSquareOutIcon, PencilSimpleIcon } from "@/components/ui/icons";
+import { ProductDangerZone } from "@/components/admin/product-form/delete-product";
+import { fetchProductHasOrders } from "@/features/admin/queries/product-editor";
 import { ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { buttonClasses } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,10 +30,7 @@ const STATUS_BUTTONS: { status: ProductStatus; label: string; variant: "primary"
   { status: "archived", label: "Archive", variant: "tertiary" },
 ];
 
-/**
- * Product overview for staff. Editing details, variants and media comes with
- * the product form task; this page covers status, stock and what's live.
- */
+/** Product overview for staff: status, stock and what's live. Editing happens on /edit. */
 export default async function ProductDetailPage({ params }: PageProps<"/admin/products/[id]">) {
   const profile = await requireAdminAccess("catalog.read");
   const { id } = await params;
@@ -40,6 +39,7 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
   if (!product) notFound();
 
   const canWrite = canAccess(profile, "catalog.write");
+  const hasOrders = canWrite ? await fetchProductHasOrders(product.id) : true;
   const canAdjust = canAccess(profile, "inventory.write") || canWrite;
   const activeStocks = product.product_variants.filter((variant) => variant.is_active).map((variant) => variant.stock_quantity);
   const stockState = stockStateFor(activeStocks, product.low_stock_threshold);
@@ -61,12 +61,20 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
           </div>
         }
         actions={
-          product.status === "active" ? (
-            <Link href={`/products/${product.slug}`} className={buttonClasses({ variant: "secondary", size: "md" })}>
-              View on store
-              <ArrowSquareOutIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
-            </Link>
-          ) : undefined
+          <>
+            {product.status === "active" ? (
+              <Link href={`/products/${product.slug}`} className={buttonClasses({ variant: "secondary", size: "md" })}>
+                View on store
+                <ArrowSquareOutIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
+              </Link>
+            ) : null}
+            {canWrite ? (
+              <Link href={`/admin/products/${product.id}/edit`} className={buttonClasses({ variant: "primary", size: "md" })}>
+                <PencilSimpleIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
+                Edit product
+              </Link>
+            ) : null}
+          </>
         }
       />
 
@@ -202,6 +210,8 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
               </ul>
             )}
           </Panel>
+
+          {canWrite ? <ProductDangerZone productId={product.id} title={product.title} hasOrders={hasOrders} archived={product.status === "archived"} /> : null}
         </div>
       </div>
     </>

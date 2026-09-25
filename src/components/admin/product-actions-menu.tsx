@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useActionState } from "react";
-import { ArrowSquareOutIcon, DotsThreeIcon, EyeIcon } from "@/components/ui/icons";
+import { ArrowSquareOutIcon, DotsThreeIcon, EyeIcon, PencilSimpleIcon } from "@/components/ui/icons";
 import { ICON_SIZE, ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { iconButtonClasses } from "@/components/ui/icon-button";
 import { setProductStatusAction } from "@/features/admin/actions/catalog";
@@ -47,6 +47,12 @@ export function ProductActionsMenu({
           <EyeIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} className="text-neutral-500" />
           View details
         </MenuLink>
+        {canWrite ? (
+          <MenuLink href={`/admin/products/${product.id}/edit`}>
+            <PencilSimpleIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} className="text-neutral-500" />
+            Edit
+          </MenuLink>
+        ) : null}
         {product.status === "active" ? (
           <MenuLink href={`/products/${product.slug}`}>
             <ArrowSquareOutIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} className="text-neutral-500" />
