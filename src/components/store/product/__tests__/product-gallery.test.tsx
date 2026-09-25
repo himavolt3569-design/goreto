@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { seedProducts } from "@/features/catalog/dev-seed";
+import { seedProducts } from "@/test/fixtures/catalog";
 import { ProductGallery } from "../product-gallery";
 
 const aviators = seedProducts.find((product) => product.slug === "aviator-sunglasses");

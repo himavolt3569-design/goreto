@@ -1,33 +1,39 @@
 import {
-  seedCategories,
-  seedCollections,
-  seedFeaturedProducts,
-  seedTestimonials,
-} from "./dev-seed";
+  indexCategories,
+  toHomeCategory,
+  toHomeCollection,
+  toHomeProduct,
+  toTestimonial,
+} from "./mappers";
+import {
+  fetchActiveCategories,
+  fetchLiveCollections,
+  fetchProductCards,
+  fetchTestimonials,
+} from "./queries";
 import type { HomepageData } from "./types";
 
-const EMPTY: HomepageData = {
-  categories: [],
-  featuredProducts: [],
-  collections: [],
-  testimonials: [],
-};
+/** The rail shows this many top-level categories, then "More". */
+export const CATEGORY_RAIL_LIMIT = 10;
+const TESTIMONIAL_COUNT = 3;
 
 /**
- * Data for the storefront homepage.
- *
- * Until the Supabase catalog exists this serves the development seed, and only
- * outside production — the live store renders empty states rather than fake
- * products or testimonials. Replace the body with Supabase reads; the return
- * shape is the contract the page depends on.
+ * Data for the storefront homepage, from Supabase. Sections render their
+ * empty states when the store has no data yet.
  */
 export async function getHomepageData(): Promise<HomepageData> {
-  if (process.env.NODE_ENV === "production") return EMPTY;
+  const [categoryRows, featuredRows, collectionRows, testimonialRows] = await Promise.all([
+    fetchActiveCategories(),
+    fetchProductCards({ featuredOnly: true }),
+    fetchLiveCollections(),
+    fetchTestimonials(TESTIMONIAL_COUNT),
+  ]);
+  const index = indexCategories(categoryRows);
 
   return {
-    categories: seedCategories,
-    featuredProducts: seedFeaturedProducts,
-    collections: seedCollections,
-    testimonials: seedTestimonials,
+    categories: index.topLevel.slice(0, CATEGORY_RAIL_LIMIT).map(toHomeCategory),
+    featuredProducts: featuredRows.map((row) => toHomeProduct(row, index)),
+    collections: collectionRows.flatMap((row) => toHomeCollection(row) ?? []),
+    testimonials: testimonialRows.map(toTestimonial),
   };
 }

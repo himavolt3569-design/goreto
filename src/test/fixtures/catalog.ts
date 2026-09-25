@@ -1,10 +1,10 @@
 /**
- * DEVELOPMENT SEED DATA — NOT REAL CATALOG, CUSTOMERS OR REVIEWS.
+ * TEST FIXTURES — NOT REAL CATALOG, CUSTOMERS OR REVIEWS.
  *
- * Stand-in content for building the storefront before the Supabase catalog
- * exists. `getHomepageData()` and the product-detail reads only serve it
- * outside production, so these products, ratings and testimonials can never
- * appear on the live store.
+ * View-model samples for component and unit tests. The storefront reads
+ * Supabase; nothing outside tests may import this file. The same ten products
+ * exist in supabase/seed.ndjson with identical slugs, SKUs and prices
+ * (asserted by scripts/seed/seed.test.ts).
  *
  * Photos are hand-picked Lorem Picsum IDs; names describe what each photo
  * actually shows rather than the reference screenshot's products.
@@ -20,7 +20,7 @@ import type {
   ProductOption,
   ProductSummary,
   Testimonial,
-} from "./types";
+} from "@/features/catalog/types";
 
 const CATEGORY_PX = 160;
 const CATEGORY_TILE_PX = 480;
@@ -59,6 +59,7 @@ export const seedCategoryDetails: (CategoryDetail & { image: MediaImage })[] = s
     slug,
     title,
     description,
+    parent: null,
     image: { src: picsumImage(picsumId, CATEGORY_TILE_PX, CATEGORY_TILE_PX), alt: "" },
   }),
 );

@@ -4,6 +4,9 @@ import { Breadcrumbs } from "@/components/store/product/breadcrumbs";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { getCategories } from "@/features/catalog/categories";
 
+/** Catalog data is cached and refreshed at most once a minute (ISR). */
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Categories",
   description: "Explore our curated collections designed for your everyday style.",

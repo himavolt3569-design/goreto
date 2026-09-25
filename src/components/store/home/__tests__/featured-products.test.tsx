@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { seedFeaturedProducts } from "@/features/catalog/dev-seed";
+import { seedFeaturedProducts } from "@/test/fixtures/catalog";
 import { FeaturedProducts } from "../featured-products";
 
 function renderFeatured(products = seedFeaturedProducts) {

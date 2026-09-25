@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { seedProducts } from "./dev-seed";
+import { seedProducts } from "@/test/fixtures/catalog";
 import type { ProductDetail } from "./types";
 import {
   defaultVariant,

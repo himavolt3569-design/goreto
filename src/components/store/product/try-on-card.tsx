@@ -29,13 +29,15 @@ export function TryOnCard({ productSlug, tryOn }: { productSlug: string; tryOn: 
   return (
     <Card className="flex flex-col gap-6 p-4 sm:flex-row sm:items-center md:p-6">
       <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-md bg-neutral-100 sm:w-44 md:w-48">
-        <Image
-          src={tryOn.previewImage.src}
-          alt={tryOn.previewImage.alt}
-          fill
-          sizes="(min-width: 640px) 192px, 100vw"
-          className="object-cover"
-        />
+        {tryOn.previewImage ? (
+          <Image
+            src={tryOn.previewImage.src}
+            alt={tryOn.previewImage.alt}
+            fill
+            sizes="(min-width: 640px) 192px, 100vw"
+            className="object-cover"
+          />
+        ) : null}
         {/* Camera-frame corners, as in the reference. */}
         {corners.map((corner) => (
           <span

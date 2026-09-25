@@ -6,15 +6,17 @@ import type { MediaImage } from "@/components/ui/media-frame";
 export type HomeCategory = {
   slug: string;
   title: string;
-  image: MediaImage;
+  /** Decorative; `null` until the owner uploads a category photo. */
+  image: MediaImage | null;
 };
 
 export type HomeProduct = {
   slug: string;
   title: string;
+  /** Top-level category slug (homepage tabs filter on it). */
   categorySlug: string;
   pricePaisa: number;
-  image: MediaImage;
+  image: MediaImage | null;
 };
 
 export type HomeCollection = {
@@ -30,7 +32,8 @@ export type Testimonial = {
   quote: string;
   authorName: string;
   authorLabel: string;
-  avatar: MediaImage;
+  /** Reviews carry no photo; the card shows initials when this is absent. */
+  avatar?: MediaImage;
 };
 
 export type HomepageData = {
@@ -47,6 +50,8 @@ export type CategoryDetail = {
   slug: string;
   title: string;
   description: string;
+  /** Set for subcategories, for breadcrumbs. */
+  parent: CategoryRef | null;
 };
 
 /** One `/categories` tile. */
@@ -127,8 +132,8 @@ export type TryOnPlacement =
 export type ProductTryOn = {
   modes: TryOnMode[];
   placement: TryOnPlacement;
-  /** Decorative image for the "Try It On in AR" card. */
-  previewImage: MediaImage;
+  /** Decorative image for the "Try It On in AR" card; `null` without product photos. */
+  previewImage: MediaImage | null;
 };
 
 export type ProductDetail = {

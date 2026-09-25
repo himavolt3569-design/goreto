@@ -15,6 +15,9 @@ import {
   getRelatedProducts,
 } from "@/features/catalog/product-detail";
 
+/** Catalog data is cached and refreshed at most once a minute (ISR). */
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const slugs = await getProductSlugs();
   return slugs.map((slug) => ({ slug }));
