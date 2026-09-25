@@ -4,9 +4,13 @@ import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 
 /*
- * Guards the server/client and test/app boundaries (AGENTS §26.6): the
- * service-role key is for scripts only, and fixtures never ship in the app.
+ * Guards the server/client and test/app boundaries (AGENTS §26.6): in src/
+ * the service-role key lives in one server-only module with one importer
+ * (the Clerk -> profiles sync), and fixtures never ship in the app.
  */
+
+const SERVICE_ROLE_MODULE = join("lib", "supabase", "admin.ts");
+const ADMIN_CLIENT_IMPORTERS = [join("lib", "auth", "profile-sync.ts")];
 
 const SRC = join(process.cwd(), "src");
 
@@ -24,8 +28,20 @@ const isTestCode = (path: string) =>
 const appFiles = sourceFiles(SRC).filter((path) => !isTestCode(path));
 
 describe("source boundaries", () => {
-  it("never references the service-role key from src/", () => {
+  it("references the service-role key only from lib/supabase/admin.ts", () => {
     const offenders = appFiles.filter((path) => readFileSync(path, "utf8").includes("SERVICE_ROLE"));
+    expect(offenders.map((path) => relative(SRC, path))).toEqual([SERVICE_ROLE_MODULE]);
+  });
+
+  it("imports the admin client only from the profile sync", () => {
+    const importers = appFiles.filter((path) =>
+      /from ["'](@\/lib\/supabase\/admin|\.\/admin|\.\.\/supabase\/admin)["']/.test(readFileSync(path, "utf8")),
+    );
+    expect(importers.map((path) => relative(SRC, path))).toEqual(ADMIN_CLIENT_IMPORTERS);
+  });
+
+  it("never exposes the service-role key as a public env var", () => {
+    const offenders = appFiles.filter((path) => /NEXT_PUBLIC_[A-Z_]*SERVICE/.test(readFileSync(path, "utf8")));
     expect(offenders.map((path) => relative(SRC, path))).toEqual([]);
   });
 
