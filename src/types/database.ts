@@ -1581,6 +1581,10 @@ export type Database = {
         }
         Returns: Json
       }
+      admin_delete_category: {
+        Args: { p_category_id: string }
+        Returns: string
+      }
       admin_delete_product: {
         Args: { p_product_id: string }
         Returns: string[]
@@ -1620,6 +1624,14 @@ export type Database = {
           orders: number
           sales_paisa: number
         }[]
+      }
+      admin_save_collection: {
+        Args: {
+          p_collection: Json
+          p_collection_id: string
+          p_product_ids: string[]
+        }
+        Returns: Json
       }
       admin_save_product: {
         Args: {

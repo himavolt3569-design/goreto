@@ -4,18 +4,11 @@ import { randomUUID } from "node:crypto";
 import { refresh, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { PRODUCT_MEDIA_BUCKET, productMediaUrl } from "@/lib/media/storage";
+import { PRODUCT_MEDIA_BUCKET } from "@/lib/media/storage";
 import { authorizeAdmin, databaseErrorResult, deniedResult, type ActionResult } from "../auth";
 import { canAccess } from "../nav";
-import {
-  detectImageFormat,
-  formatForContentType,
-  IMAGE_CONTENT_TYPES,
-  MAX_IMAGE_BYTES,
-  MAX_STAGED_PHOTOS,
-  SIGNATURE_BYTES,
-  type ImageFormat,
-} from "../product-form/file-signature";
+import { verifyStoredImage } from "../media-verify";
+import { formatForContentType, IMAGE_CONTENT_TYPES, MAX_IMAGE_BYTES, MAX_STAGED_PHOTOS, type ImageFormat } from "../product-form/file-signature";
 import { issuesByPath, productFormSchema, toSavePayload } from "../product-form/schema";
 import { adminDb } from "../queries/shared";
 import { authorizeAndParse, NOT_UPDATED, revalidateStorefrontCatalog } from "./helpers";
@@ -61,15 +54,6 @@ function parsePath(path: string): StoredPath | null {
   return match ? { staged: match[1] === "new-", ownerId: match[2]!, format: match[3] as ImageFormat } : null;
 }
 
-/** First bytes and total size of a stored object, via a Range request on the public bucket. */
-async function readObjectHead(path: string): Promise<{ bytes: Uint8Array; size: number } | null> {
-  const response = await fetch(productMediaUrl(path), { headers: { Range: `bytes=0-${SIGNATURE_BYTES - 1}` }, cache: "no-store" });
-  if (!response.ok) return null;
-  const bytes = new Uint8Array(await response.arrayBuffer()).subarray(0, SIGNATURE_BYTES);
-  const total = /\/(\d+)$/.exec(response.headers.get("content-range") ?? "")?.[1];
-  return { bytes, size: total ? Number(total) : bytes.length };
-}
-
 type MediaInsert = { productId: string; path: string; format: ImageFormat; altText: string; variantId: string | null; sortOrder: number };
 
 /**
@@ -83,10 +67,8 @@ async function verifyAndInsertMedia(db: ReturnType<typeof adminDb>, media: Media
     return { ok: false as const, message };
   };
 
-  const head = await readObjectHead(media.path);
-  if (!head) return { ok: false, message: "The upload didn't finish. Please try again." };
-  if (detectImageFormat(head.bytes) !== media.format) return reject("That file isn't a JPEG, PNG, WebP or AVIF image.");
-  if (head.size > MAX_IMAGE_BYTES) return reject("Use an image under 10 MB.");
+  const verified = await verifyStoredImage(db, media.path, media.format);
+  if (!verified.ok) return verified;
 
   if (media.variantId) {
     const { data: variant } = await db.from("product_variants").select("id").eq("id", media.variantId).eq("product_id", media.productId).maybeSingle();

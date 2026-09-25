@@ -13,6 +13,8 @@ vi.mock("@/features/admin/actions/products", () => ({
   deleteProductAction: vi.fn(),
 }));
 vi.mock("@/features/admin/actions/catalog", () => ({ setProductStatusAction: vi.fn() }));
+vi.mock("@/features/admin/actions/categories", () => ({ saveCategoryAction: vi.fn(), createCategoryInlineAction: vi.fn() }));
+vi.mock("@/features/admin/actions/catalog-images", () => ({ createCatalogImageUploadAction: vi.fn() }));
 
 // Uploads go to Storage from the browser; here each file "uploads" to a staged path.
 const STAGING_ID = "3a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d";
