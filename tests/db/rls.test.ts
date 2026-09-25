@@ -163,6 +163,77 @@ describe("customer", () => {
     expect(await runAs(db, users.customer, `${insert("current_profile_id()", 1)} returning 1`)).toBe(1);
   });
 
+  it("can cite an order item in a review only for their own delivered purchase of that product", async () => {
+    const reviewAs = (session: Session, from: string) =>
+      runAs(db, session, `insert into reviews (user_id, product_id, order_item_id, rating, body) ${from} returning 1`);
+    const unreviewedBy = (alias: string) => `
+      not exists (select 1 from reviews r where r.user_id = current_profile_id() and r.product_id = ${alias})`;
+
+    // Own delivered item for that product: allowed (verified purchase).
+    expect(
+      await reviewAs(users.customer, `
+        select current_profile_id(), oi.product_id, oi.id, 5, 'Great'
+        from order_items oi join orders o on o.id = oi.order_id
+        where o.user_id = current_profile_id() and o.status = 'delivered' and ${unreviewedBy("oi.product_id")}
+        limit 1`),
+    ).toBe(1);
+
+    // No order item: allowed (unverified review).
+    expect(
+      await reviewAs(users.customer, `
+        select current_profile_id(), p.id, null::uuid, 4, 'Nice'
+        from products p where p.status = 'active' and ${unreviewedBy("p.id")} limit 1`),
+    ).toBe(1);
+
+    // Own delivered item, but a different product: rejected.
+    expect(
+      isError(
+        await reviewAs(users.customer, `
+          select current_profile_id(), p.id, oi.id, 5, 'Great'
+          from order_items oi join orders o on o.id = oi.order_id, products p
+          where o.user_id = current_profile_id() and o.status = 'delivered'
+            and p.status = 'active' and p.id <> oi.product_id and ${unreviewedBy("p.id")}
+          limit 1`),
+      ),
+    ).toBe(true);
+
+    // Another customer's delivered item (ids known from outside RLS): rejected.
+    const [foreign] = (
+      await db.query<{ item: string; product: string }>(`
+        select oi.id as item, oi.product_id as product
+        from order_items oi join orders o on o.id = oi.order_id
+        where o.status = 'delivered' and o.user_id is not null and o.user_id <> '${otherCustomerId}'
+          and o.user_id <> (select id from profiles where clerk_user_id = '${(users.customer as { clerkUserId: string }).clerkUserId}')
+          and not exists (
+            select 1 from reviews r join profiles pr on pr.id = r.user_id
+            where pr.clerk_user_id = '${(users.customer as { clerkUserId: string }).clerkUserId}' and r.product_id = oi.product_id)
+        limit 1`)
+    ).rows;
+    expect(
+      isError(
+        await reviewAs(users.customer, `select current_profile_id(), '${foreign!.product}'::uuid, '${foreign!.item}'::uuid, 5, 'Great'`),
+      ),
+    ).toBe(true);
+
+    // Own item from an order that was never delivered: rejected.
+    const [undelivered] = (
+      await db.query<{ clerk: string; item: string; product: string }>(`
+        select pr.clerk_user_id as clerk, oi.id as item, oi.product_id as product
+        from order_items oi join orders o on o.id = oi.order_id join profiles pr on pr.id = o.user_id
+        where o.status <> 'delivered' and pr.deleted_at is null
+          and not exists (select 1 from reviews r where r.user_id = pr.id and r.product_id = oi.product_id)
+        limit 1`)
+    ).rows;
+    expect(
+      isError(
+        await reviewAs(
+          { role: "authenticated", clerkUserId: undelivered!.clerk },
+          `select current_profile_id(), '${undelivered!.product}'::uuid, '${undelivered!.item}'::uuid, 5, 'Great'`,
+        ),
+      ),
+    ).toBe(true);
+  });
+
   it("cannot self-publish reviews, grant permissions, see coupons or append tracking", async () => {
     expect(
       isDenied(

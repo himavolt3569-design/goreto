@@ -11,8 +11,8 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { getCategoryBySlug, getCategoryProducts } from "@/features/catalog/categories";
 import { parseCategorySort } from "@/features/catalog/category-sort";
 
-/** Catalog data is cached and refreshed at most once a minute (ISR). */
-export const revalidate = 60;
+// Renders per request (it reads searchParams); the catalog data itself is
+// cached for 60s inside getCategoryBySlug / getCategoryProducts.
 
 export async function generateMetadata({
   params,

@@ -2,6 +2,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getCategories, getCategoryBySlug, getCategoryProducts } from "./categories";
 
 vi.mock("./queries", () => import("@/test/fakes/catalog-queries"));
+// unstable_cache needs the Next.js runtime; in tests it just calls through.
+vi.mock("next/cache", () => ({
+  unstable_cache: <T extends (...args: never[]) => unknown>(fn: T) => fn,
+}));
 
 beforeEach(() => {
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://abc.supabase.co");

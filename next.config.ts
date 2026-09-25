@@ -11,8 +11,21 @@ function supabaseStoragePattern(): URL[] {
   return [new URL("/storage/v1/object/public/product-media/**", url)];
 }
 
+/**
+ * A local Supabase stack (`supabase start`) serves storage from a loopback
+ * address, which the image optimizer blocks by default (SSRF guard). Allow it
+ * only outside production and only when Supabase itself is local.
+ */
+function allowLocalSupabaseImages(): boolean {
+  if (process.env.NODE_ENV === "production") return false;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url) return false;
+  return ["localhost", "127.0.0.1", "[::1]"].includes(new URL(url).hostname);
+}
+
 const nextConfig: NextConfig = {
   images: {
+    dangerouslyAllowLocalIP: allowLocalSupabaseImages(),
     remotePatterns: [
       ...supabaseStoragePattern(),
       // Hero and "how it works" stand-in photography (src/lib/media/picsum.ts).
