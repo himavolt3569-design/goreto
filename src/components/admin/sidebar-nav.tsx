@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useId } from "react";
+import { useId, useState } from "react";
 import {
   ArticleIcon,
   ChartBarIcon,
@@ -59,10 +59,15 @@ export type SidebarNavProps = {
 export function SidebarNav({ allowedHrefs, onNavigate }: SidebarNavProps) {
   const pathname = usePathname();
   const baseId = useId();
+  const [intent, setIntent] = useState<ReadonlySet<string>>(() => new Set());
   const allowed = new Set(allowedHrefs);
   const groups = ADMIN_NAV.map((group) => ({ ...group, items: group.items.filter((item) => allowed.has(item.href)) })).filter(
     (group) => group.items.length > 0,
   );
+
+  function showIntent(href: string) {
+    setIntent((current) => (current.has(href) ? current : new Set(current).add(href)));
+  }
 
   return (
     <nav aria-label="Admin" className="flex flex-col gap-6">
@@ -79,6 +84,12 @@ export function SidebarNav({ allowedHrefs, onNavigate }: SidebarNavProps) {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    // Admin pages are dynamic, so Next skips them by default. Once the pointer or
+                    // focus reaches a link, prefetch the whole page with its data so the click is instant.
+                    prefetch={intent.has(item.href)}
+                    onMouseEnter={() => showIntent(item.href)}
+                    onFocus={() => showIntent(item.href)}
+                    onTouchStart={() => showIntent(item.href)}
                     aria-current={active ? "page" : undefined}
                     onClick={onNavigate}
                     className={cn(

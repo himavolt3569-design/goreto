@@ -35,11 +35,10 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
   const profile = await requireAdminAccess("catalog.read");
   const { id } = await params;
   if (!UUID.test(id)) notFound();
-  const product = await fetchProductDetail(id);
-  if (!product) notFound();
-
   const canWrite = canAccess(profile, "catalog.write");
-  const hasOrders = canWrite ? await fetchProductHasOrders(product.id) : true;
+  // One round trip: both reads start together.
+  const [product, hasOrders] = await Promise.all([fetchProductDetail(id), canWrite ? fetchProductHasOrders(id) : Promise.resolve(true)]);
+  if (!product) notFound();
   const canAdjust = canAccess(profile, "inventory.write") || canWrite;
   const activeStocks = product.product_variants.filter((variant) => variant.is_active).map((variant) => variant.stock_quantity);
   const stockState = stockStateFor(activeStocks, product.low_stock_threshold);

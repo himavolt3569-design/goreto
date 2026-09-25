@@ -21,7 +21,8 @@ import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = { title: "Products" };
 
-const STATUSES: readonly ProductStatus[] = ["active", "draft", "archived"];
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const STATUSES: readonly ProductStatus[] =["active", "draft", "archived"];
 const STATUS_OPTIONS = [
   { value: "", label: "All statuses" },
   { value: "active", label: "Active" },
@@ -34,12 +35,17 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
   const params = await searchParams;
   const q = sanitizeSearch(params.q);
   const status = pickEnum(params.status, STATUSES);
-  const categories = await fetchCategoryOptions();
   const categoryParam = param(params, "category");
-  const categoryId = categories.some((category) => category.id === categoryParam) ? categoryParam! : null;
+  // Only a UUID can be a category id; anything else is ignored rather than sent to Postgres.
+  const requestedCategoryId = categoryParam && UUID.test(categoryParam) ? categoryParam : null;
   const page = pageNumber(params.page);
 
-  const products = await fetchAdminProducts({ q, status, categoryId, page });
+  // One round trip: both reads start together.
+  const [categories, products] = await Promise.all([
+    fetchCategoryOptions(),
+    fetchAdminProducts({ q, status, categoryId: requestedCategoryId, page }),
+  ]);
+  const categoryId = categories.some((category) => category.id === requestedCategoryId) ? requestedCategoryId : null;
   const canWrite = canAccess(profile, "catalog.write");
 
   return (
