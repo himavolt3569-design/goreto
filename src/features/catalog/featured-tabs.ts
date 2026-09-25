@@ -18,7 +18,7 @@ export const FEATURED_TABS: readonly FeaturedTab[] = [
   {
     key: "accessories",
     label: "Accessories",
-    categorySlugs: ["sunglasses", "hats", "scarves"],
+    categorySlugs: ["sunglasses", "hats", "scarves", "watches"],
     href: "/categories",
   },
 ];

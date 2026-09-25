@@ -46,13 +46,15 @@ export function CategoryRail({ categories }: { categories: HomeCategory[] }) {
             <li key={category.slug} data-animate="reveal" className="shrink-0">
               <Link href={`/categories/${category.slug}`} className={itemClasses}>
                 <span className={circleClasses}>
-                  <Image
-                    src={category.image.src}
-                    alt={category.image.alt}
-                    fill
-                    sizes="96px"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                  {category.image ? (
+                    <Image
+                      src={category.image.src}
+                      alt={category.image.alt}
+                      fill
+                      sizes="96px"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : null}
                 </span>
                 <span className="text-body text-neutral-700 group-hover:text-neutral-900">
                   {category.title}

@@ -9,6 +9,9 @@ import { Testimonials } from "@/components/store/home/testimonials";
 import { SectionHeading } from "@/components/ui";
 import { getHomepageData } from "@/features/catalog/homepage";
 
+/** Catalog data is cached and refreshed at most once a minute (ISR). */
+export const revalidate = 60;
+
 export default async function HomePage() {
   const { categories, featuredProducts, collections, testimonials } = await getHomepageData();
 

@@ -36,14 +36,18 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
                   </blockquote>
                 </div>
                 <figcaption className="mt-auto flex items-center gap-3">
-                  <span className="relative size-12 shrink-0 overflow-hidden rounded-full bg-neutral-100">
-                    <Image
-                      src={testimonial.avatar.src}
-                      alt={testimonial.avatar.alt}
-                      fill
-                      sizes="48px"
-                      className="object-cover"
-                    />
+                  <span className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-neutral-100 text-body font-medium text-neutral-700">
+                    {testimonial.avatar ? (
+                      <Image
+                        src={testimonial.avatar.src}
+                        alt={testimonial.avatar.alt}
+                        fill
+                        sizes="48px"
+                        className="object-cover"
+                      />
+                    ) : (
+                      <span aria-hidden="true">{initials(testimonial.authorName)}</span>
+                    )}
                   </span>
                   <span className="flex flex-col">
                     <span className="text-body font-semibold text-neutral-900">
@@ -59,4 +63,15 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
       </ul>
     </section>
   );
+}
+
+/** "Priya S." -> "PS". Decorative: the name itself is read out next to it. */
+export function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .map((part) => part.replace(/[^\p{L}]/gu, "").charAt(0))
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 }

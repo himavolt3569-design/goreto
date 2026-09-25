@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { seedCollections } from "@/features/catalog/dev-seed";
+import { seedCollections } from "@/test/fixtures/catalog";
 import { CollectionCarousel } from "../collection-carousel";
 
 function activeSlideTitle() {

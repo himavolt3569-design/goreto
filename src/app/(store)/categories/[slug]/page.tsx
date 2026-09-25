@@ -11,6 +11,9 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { getCategoryBySlug, getCategoryProducts } from "@/features/catalog/categories";
 import { parseCategorySort } from "@/features/catalog/category-sort";
 
+/** Catalog data is cached and refreshed at most once a minute (ISR). */
+export const revalidate = 60;
+
 export async function generateMetadata({
   params,
 }: PageProps<"/categories/[slug]">): Promise<Metadata> {
@@ -38,6 +41,9 @@ export default async function CategoryPage({
           items={[
             { label: "Home", href: "/" },
             { label: "Categories", href: "/categories" },
+            ...(category.parent
+              ? [{ label: category.parent.title, href: `/categories/${category.parent.slug}` }]
+              : []),
             { label: category.title },
           ]}
         />

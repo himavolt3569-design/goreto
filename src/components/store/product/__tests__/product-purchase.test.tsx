@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useCartStore } from "@/features/cart/store";
-import { seedProducts } from "@/features/catalog/dev-seed";
+import { seedProducts } from "@/test/fixtures/catalog";
 import { ProductPurchase } from "../product-purchase";
 
 const push = vi.fn();

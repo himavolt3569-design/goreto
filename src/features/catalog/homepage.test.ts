@@ -1,7 +1,15 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { seedFeaturedProducts } from "@/test/fixtures/catalog";
 import { FEATURED_TABS, filterByTab } from "./featured-tabs";
 import { getHomepageData } from "./homepage";
-import { seedFeaturedProducts } from "./dev-seed";
+
+vi.mock("./queries", () => import("@/test/fakes/catalog-queries"));
+
+beforeEach(() => {
+  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://abc.supabase.co");
+  vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "sb_anon_key");
+  vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "sb_service_role_key");
+});
 
 function tab(key: string) {
   const found = FEATURED_TABS.find((t) => t.key === key);
@@ -10,30 +18,20 @@ function tab(key: string) {
 }
 
 describe("getHomepageData", () => {
-  afterEach(() => {
-    vi.unstubAllEnvs();
-  });
-
-  it("serves the development seed outside production", async () => {
-    vi.stubEnv("NODE_ENV", "development");
+  it("builds every section from the catalog queries", async () => {
     const data = await getHomepageData();
-    expect(data.featuredProducts.length).toBeGreaterThan(0);
-    expect(data.testimonials.length).toBeGreaterThan(0);
+    expect(data.categories.map((category) => category.slug)).toEqual(["jewelry", "bags", "hats"]);
+    expect(data.featuredProducts.map((product) => product.slug)).toEqual([
+      "pearl-drop-earrings",
+      "canvas-tote",
+    ]);
+    expect(data.featuredProducts[0].categorySlug).toBe("jewelry");
+    expect(data.collections.map((collection) => collection.slug)).toEqual(["autumn-styles"]);
+    expect(data.testimonials).toHaveLength(1);
   });
 
-  it("never serves seed products or testimonials in production", async () => {
-    vi.stubEnv("NODE_ENV", "production");
-    const data = await getHomepageData();
-    expect(data).toEqual({
-      categories: [],
-      featuredProducts: [],
-      collections: [],
-      testimonials: [],
-    });
-  });
-
-  it("stores seed prices as integer paisa", () => {
-    for (const product of seedFeaturedProducts) {
+  it("keeps prices as integer paisa", async () => {
+    for (const product of (await getHomepageData()).featuredProducts) {
       expect(Number.isSafeInteger(product.pricePaisa)).toBe(true);
     }
   });

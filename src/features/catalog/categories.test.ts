@@ -1,46 +1,57 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getCategories, getCategoryBySlug, getCategoryProducts } from "./categories";
-import { seedCategories } from "./dev-seed";
+
+vi.mock("./queries", () => import("@/test/fakes/catalog-queries"));
+
+beforeEach(() => {
+  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://abc.supabase.co");
+});
 
 describe("category reads", () => {
-  afterEach(() => {
-    vi.unstubAllEnvs();
-  });
-
-  it("lists every homepage category with its product count", async () => {
-    vi.stubEnv("NODE_ENV", "development");
+  it("lists top-level categories with counts that include subcategories", async () => {
     const categories = await getCategories();
-    expect(categories.map((category) => category.slug)).toEqual(
-      seedCategories.map((category) => category.slug),
-    );
-    const counts = Object.fromEntries(categories.map((c) => [c.slug, c.productCount]));
-    expect(counts.hats).toBe(2);
-    expect(counts.tops).toBe(0);
+    expect(categories.map((category) => [category.slug, category.productCount])).toEqual([
+      ["jewelry", 3],
+      ["bags", 1],
+      ["hats", 1],
+    ]);
   });
 
-  it("finds a category by slug", async () => {
-    vi.stubEnv("NODE_ENV", "development");
-    expect((await getCategoryBySlug("hats"))?.title).toBe("Hats");
+  it("finds a category by slug, with its parent for subcategories", async () => {
+    expect(await getCategoryBySlug("jewelry")).toMatchObject({ title: "Jewelry", parent: null });
+    expect((await getCategoryBySlug("earrings"))?.parent).toEqual({ slug: "jewelry", title: "Jewelry" });
     expect(await getCategoryBySlug("does-not-exist")).toBeNull();
   });
 
-  it("returns only that category's products, sorted", async () => {
-    vi.stubEnv("NODE_ENV", "development");
-    const featured = await getCategoryProducts("hats", "featured");
-    expect(featured.every((product) => product.categorySlug === "hats")).toBe(true);
-    expect(featured).toHaveLength(2);
-
-    const ascending = await getCategoryProducts("hats", "price-asc");
-    const descending = await getCategoryProducts("hats", "price-desc");
-    expect(ascending[0].pricePaisa).toBeLessThanOrEqual(ascending[1].pricePaisa);
-    expect(descending.map((p) => p.slug)).toEqual([...ascending].reverse().map((p) => p.slug));
-    expect(await getCategoryProducts("tops", "featured")).toEqual([]);
+  it("rejects malformed slugs without querying", async () => {
+    expect(await getCategoryBySlug("Jewelry")).toBeNull();
+    expect(await getCategoryBySlug("../jewelry")).toBeNull();
+    expect(await getCategoryProducts("a".repeat(121), "featured")).toEqual([]);
   });
 
-  it("never serves seed categories in production", async () => {
-    vi.stubEnv("NODE_ENV", "production");
-    expect(await getCategories()).toEqual([]);
-    expect(await getCategoryBySlug("hats")).toBeNull();
-    expect(await getCategoryProducts("hats", "featured")).toEqual([]);
+  it("includes subcategory products, sorted", async () => {
+    const featured = await getCategoryProducts("jewelry", "featured");
+    expect(featured.map((product) => product.slug).sort()).toEqual([
+      "minimal-gold-bracelet",
+      "pearl-drop-earrings",
+      "silver-jhumka",
+    ]);
+    expect(featured.every((product) => product.categorySlug === "jewelry")).toBe(true);
+
+    const ascending = await getCategoryProducts("jewelry", "price-asc");
+    expect(ascending.map((product) => product.pricePaisa)).toEqual([129900, 179900, 249900]);
+    const descending = await getCategoryProducts("jewelry", "price-desc");
+    expect(descending.map((product) => product.slug)).toEqual([...ascending].reverse().map((p) => p.slug));
+
+    expect((await getCategoryProducts("earrings", "featured")).map((p) => p.slug).sort()).toEqual([
+      "pearl-drop-earrings",
+      "silver-jhumka",
+    ]);
+    expect(await getCategoryProducts("does-not-exist", "featured")).toEqual([]);
+  });
+
+  it("attaches published ratings", async () => {
+    const [pearl] = (await getCategoryProducts("earrings", "price-desc"));
+    expect(pearl.rating).toEqual({ value: 4.8, count: 120 });
   });
 });

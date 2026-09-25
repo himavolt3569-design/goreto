@@ -1,44 +1,48 @@
 import { cache } from "react";
 import { sortProducts, type CategorySort } from "./category-sort";
-import { seedCategoryDetails, seedProductSummaries } from "./dev-seed";
+import { indexCategories, toCategoryDetail, toCategorySummary, toProductSummary } from "./mappers";
+import {
+  fetchActiveCategories,
+  fetchProductCards,
+  fetchProductCountsByCategory,
+  fetchRatings,
+} from "./queries";
+import { isValidSlug } from "./slug";
 import type { CategoryDetail, CategorySummary, ProductSummary } from "./types";
 
 /*
- * Category reads. Until the Supabase catalog exists these serve the
- * development seed, and only outside production: the live store shows empty
- * states and 404s rather than fake categories. Replace the bodies with
- * Supabase reads; the return shapes are the contract the pages depend on.
+ * Category reads from Supabase. Top-level categories are the browsing units;
+ * a category page includes its subcategories' products.
  */
 
-function seedAvailable(): boolean {
-  return process.env.NODE_ENV !== "production";
-}
-
+/** Top-level categories for `/categories`, with product counts including subcategories. */
 export async function getCategories(): Promise<CategorySummary[]> {
-  if (!seedAvailable()) return [];
-  return seedCategoryDetails.map(({ slug, title, image }) => ({
-    slug,
-    title,
-    image,
-    productCount: seedProductSummaries.filter((product) => product.categorySlug === slug).length,
-  }));
+  const [rows, counts] = await Promise.all([fetchActiveCategories(), fetchProductCountsByCategory()]);
+  const index = indexCategories(rows);
+  return index.topLevel.map((row) => toCategorySummary(row, index, counts));
 }
 
 /** Deduplicated per request, so `generateMetadata` and the page share one read. */
 export const getCategoryBySlug = cache(async (slug: string): Promise<CategoryDetail | null> => {
-  if (!seedAvailable()) return null;
-  const category = seedCategoryDetails.find((candidate) => candidate.slug === slug);
-  if (!category) return null;
-  return { slug: category.slug, title: category.title, description: category.description };
+  if (!isValidSlug(slug)) return null;
+  const index = indexCategories(await fetchActiveCategories());
+  const row = index.bySlug.get(slug);
+  return row ? toCategoryDetail(row, index) : null;
 });
 
 export async function getCategoryProducts(
   slug: string,
   sort: CategorySort,
 ): Promise<ProductSummary[]> {
-  if (!seedAvailable()) return [];
+  if (!isValidSlug(slug)) return [];
+  const index = indexCategories(await fetchActiveCategories());
+  const category = index.bySlug.get(slug);
+  if (!category) return [];
+
+  const rows = await fetchProductCards({ categoryIds: index.subtreeIds(category.id) });
+  const ratings = await fetchRatings(rows.map((row) => row.id));
   return sortProducts(
-    seedProductSummaries.filter((product) => product.categorySlug === slug),
+    rows.map((row) => toProductSummary(row, index, ratings)),
     sort,
   );
 }
