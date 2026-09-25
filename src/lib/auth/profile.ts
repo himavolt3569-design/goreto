@@ -52,14 +52,28 @@ export const getCurrentProfile = cache(async (): Promise<CurrentProfile | null> 
 
   // Null means the profile was deleted; treat the session as having no profile.
   if (!(await syncClerkProfile(parsed.input))) return null;
-  return readOwnProfile(userId);
+
+  const synced = await readOwnProfile(userId);
+  if (!synced) {
+    // The row exists but RLS can't see it: the Clerk token isn't reaching
+    // Postgres as this user (third-party auth or the role claim is missing).
+    throw new Error("Profile synced but not visible to the signed-in session; check Supabase third-party auth for Clerk.");
+  }
+  return synced;
 });
 
-/** For pages: the signed-in profile, or a redirect to sign-in. */
+/**
+ * For pages: the signed-in profile. Signed-out users go to sign-in; a
+ * signed-in user without a profile (deleted account) gets a 404 rather than
+ * a sign-in redirect that would bounce straight back.
+ */
 export async function requireProfile(): Promise<CurrentProfile> {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
   const profile = await getCurrentProfile();
-  if (profile) return profile;
-  return (await auth()).redirectToSignIn();
+  if (!profile) notFound();
+  return profile;
 }
 
 export type Authorization =

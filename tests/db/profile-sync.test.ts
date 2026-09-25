@@ -117,13 +117,15 @@ describe("mark_clerk_profile_deleted", () => {
   });
 
   it("is a no-op when repeated", async () => {
+    // now() is fixed within a transaction, so pin deleted_at to the past to
+    // tell a skipped update from a rewrite with the same timestamp.
     const outcomes = await runStepsAs(db, service, [
       `select public.mark_clerk_profile_deleted('${customerClerkId}')`,
-      profileField(customerClerkId, "deleted_at::text"),
+      `update public.profiles set deleted_at = '2020-01-01T00:00:00Z' where clerk_user_id = '${customerClerkId}'`,
       `select public.mark_clerk_profile_deleted('${customerClerkId}')`,
-      profileField(customerClerkId, "deleted_at::text"),
+      profileField(customerClerkId, "deleted_at = '2020-01-01T00:00:00Z'::timestamptz"),
     ]);
-    expect(outcomes[3]).toBe(outcomes[1]);
+    expect(outcomes[3]).toBe(true);
   });
 
   it("hides the profile from its own session afterwards", async () => {
