@@ -1581,7 +1581,15 @@ export type Database = {
         }
         Returns: Json
       }
+      admin_delete_product: {
+        Args: { p_product_id: string }
+        Returns: string[]
+      }
       admin_mark_refunded: { Args: { p_order_id: string }; Returns: undefined }
+      admin_ordered_variant_ids: {
+        Args: { p_product_id: string }
+        Returns: string[]
+      }
       admin_outstanding_cod: {
         Args: never
         Returns: {
@@ -1597,6 +1605,14 @@ export type Database = {
           total_paisa: number
         }[]
       }
+      admin_product_has_orders: {
+        Args: { p_product_id: string }
+        Returns: boolean
+      }
+      admin_reorder_product_media: {
+        Args: { p_media_ids: string[]; p_product_id: string }
+        Returns: undefined
+      }
       admin_revenue_series: {
         Args: { p_bucket: string; p_from: string; p_to: string }
         Returns: {
@@ -1604,6 +1620,15 @@ export type Database = {
           orders: number
           sales_paisa: number
         }[]
+      }
+      admin_save_product: {
+        Args: {
+          p_collection_ids: string[]
+          p_product: Json
+          p_product_id: string
+          p_variants: Json
+        }
+        Returns: Json
       }
       admin_set_product_status: {
         Args: {

@@ -3,7 +3,9 @@ import Link from "next/link";
 import { EmptyState, FilterBar, FilterField, PageHeader, Pagination, Panel, TableScroll, Thumb, tableClasses, tdClasses, thClasses, theadRowClasses } from "@/components/admin/admin-ui";
 import { ProductActionsMenu } from "@/components/admin/product-actions-menu";
 import { ProductStatusPill, productDisplayStatus } from "@/components/admin/status-pills";
-import { CubeIcon } from "@/components/ui/icons";
+import { CheckCircleIcon, CubeIcon, PlusIcon } from "@/components/ui/icons";
+import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
+import { buttonClasses } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { requireAdminAccess } from "@/features/admin/auth";
@@ -36,7 +38,24 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
 
   return (
     <>
-      <PageHeader title="Products" description="Every product in the catalog, including drafts and archived items. Newest changes first." />
+      <PageHeader
+        title="Products"
+        description="Every product in the catalog, including drafts and archived items. Newest changes first."
+        actions={
+          canWrite ? (
+            <Link href="/admin/products/new" className={buttonClasses({ variant: "primary", size: "md" })}>
+              <PlusIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+              Add product
+            </Link>
+          ) : undefined
+        }
+      />
+      {param(params, "deleted") === "1" ? (
+        <p role="status" className="flex items-center gap-2 rounded-md bg-success-100 px-4 py-3 text-body text-success-700">
+          <CheckCircleIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+          Product deleted.
+        </p>
+      ) : null}
 
       <Panel title={`${formatCount(products.total)} products`}>
         <FilterBar resetHref="/admin/products" hasFilters={Boolean(q || status || categoryId)}>
@@ -64,7 +83,18 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
         </FilterBar>
 
         {products.rows.length === 0 ? (
-          <EmptyState icon={CubeIcon} title="No products match" description="Try a different name, status or category." />
+          <EmptyState
+            icon={CubeIcon}
+            title="No products match"
+            description="Try a different name, status or category."
+            action={
+              canWrite ? (
+                <Link href="/admin/products/new" className={buttonClasses({ variant: "secondary", size: "md" })}>
+                  Add product
+                </Link>
+              ) : undefined
+            }
+          />
         ) : (
           <>
             <TableScroll label="Products">

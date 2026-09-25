@@ -5,6 +5,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import {
   BellIcon,
   CaretDownIcon,
+  CubeIcon,
   PackageIcon,
   PlusIcon,
   SignOutIcon,
@@ -91,9 +92,9 @@ export function NotificationsMenu({ items }: { items: AttentionItem[] | null }) 
   );
 }
 
-export type QuickAction = { label: string; href: string; icon: "orders" | "inventory" | "reviews" | "store" };
+export type QuickAction = { label: string; href: string; icon: "add" | "orders" | "inventory" | "reviews" | "store" };
 
-const QUICK_ACTION_ICONS = { orders: FileTextIcon, inventory: PackageIcon, reviews: StarIcon, store: StorefrontIcon } as const;
+const QUICK_ACTION_ICONS = { add: CubeIcon, orders: FileTextIcon, inventory: PackageIcon, reviews: StarIcon, store: StorefrontIcon } as const;
 
 export function QuickActionsMenu({ actions }: { actions: QuickAction[] }) {
   return (

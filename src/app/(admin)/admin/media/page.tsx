@@ -5,15 +5,17 @@ import { ImageIcon } from "@/components/ui/icons";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { formatCount } from "@/features/admin/format";
 import { countMissingAltText, fetchMedia } from "@/features/admin/queries/catalog";
+import { canAccess } from "@/features/admin/nav";
 import { pageNumber } from "@/features/admin/queries/shared";
 import { hrefWith, param } from "@/features/admin/url";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = { title: "Media" };
 
-/** Product media library. Uploads arrive with the product form task. */
+/** Product media library. Photos are uploaded and edited in each product's editor. */
 export default async function MediaPage({ searchParams }: PageProps<"/admin/media">) {
-  await requireAdminAccess("catalog.read");
+  const profile = await requireAdminAccess("catalog.read");
+  const canWrite = canAccess(profile, "catalog.write");
   const params = await searchParams;
   const missingAlt = param(params, "filter") === "missing_alt";
   const page = pageNumber(params.page);
@@ -21,7 +23,7 @@ export default async function MediaPage({ searchParams }: PageProps<"/admin/medi
 
   return (
     <>
-      <PageHeader title="Media" description="Product images in the storefront media bucket, newest first. Alt text describes each image for screen readers." />
+      <PageHeader title="Media" description="Product images in the storefront media bucket, newest first. Upload, reorder and describe photos from each product's editor." />
       <LinkTabs
         label="Media filter"
         tabs={[
@@ -45,6 +47,11 @@ export default async function MediaPage({ searchParams }: PageProps<"/admin/medi
                     {item.altText || "Missing alt text"}
                   </p>
                   {item.isVariantImage ? <p className="text-small text-neutral-500">Variant image</p> : null}
+                  {canWrite ? (
+                    <Link href={`/admin/products/${item.productId}/edit#media`} className="w-fit rounded-xs text-small font-medium text-primary-600 hover:underline">
+                      Edit photo
+                    </Link>
+                  ) : null}
                 </li>
               ))}
             </ul>
