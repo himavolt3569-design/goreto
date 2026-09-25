@@ -1581,6 +1581,10 @@ export type Database = {
         }
         Returns: Json
       }
+      admin_delete_category: {
+        Args: { p_category_id: string }
+        Returns: string
+      }
       admin_delete_product: {
         Args: { p_product_id: string }
         Returns: string[]
@@ -1621,6 +1625,14 @@ export type Database = {
           sales_paisa: number
         }[]
       }
+      admin_save_collection: {
+        Args: {
+          p_collection: Json
+          p_collection_id: string
+          p_product_ids: string[]
+        }
+        Returns: Json
+      }
       admin_save_product: {
         Args: {
           p_collection_ids: string[]
@@ -1651,6 +1663,10 @@ export type Database = {
           demoted_owner_id: string
           owner_id: string
         }[]
+      }
+      category_has_children: {
+        Args: { p_category_id: string }
+        Returns: boolean
       }
       current_profile_id: { Args: never; Returns: string }
       has_permission: {

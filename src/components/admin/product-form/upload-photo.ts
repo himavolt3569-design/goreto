@@ -1,4 +1,4 @@
-import { createProductMediaUploadAction } from "@/features/admin/actions/products";
+import { createProductMediaUploadAction, type UploadTicket } from "@/features/admin/actions/products";
 import { detectImageFormat, IMAGE_CONTENT_TYPES, MAX_IMAGE_BYTES, SIGNATURE_BYTES } from "@/features/admin/product-form/file-signature";
 
 /*
@@ -26,14 +26,22 @@ async function shortestEdge(file: File): Promise<number | null> {
   }
 }
 
-export async function uploadPhotoFile(target: UploadTarget, file: File): Promise<UploadedPhoto> {
+/** A product photo: the editor's product or the Add product staging folder. */
+export function uploadPhotoFile(target: UploadTarget, file: File): Promise<UploadedPhoto> {
+  return uploadImageFile(file, (request) => createProductMediaUploadAction({ ...target, ...request }));
+}
+
+export type TicketRequest = { contentType: string; size: number };
+
+/** Any catalog image; `requestTicket` asks the server for the signed URL (and checks permission). */
+export async function uploadImageFile(file: File, requestTicket: (request: TicketRequest) => Promise<UploadTicket>): Promise<UploadedPhoto> {
   const format = detectImageFormat(new Uint8Array(await file.slice(0, SIGNATURE_BYTES).arrayBuffer()));
   if (!format) return { ok: false, message: "Not a JPEG, PNG, WebP or AVIF image." };
   if (file.size > MAX_IMAGE_BYTES) return { ok: false, message: "Larger than 10 MB." };
   const edge = await shortestEdge(file);
 
   const contentType = IMAGE_CONTENT_TYPES[format];
-  const ticket = await createProductMediaUploadAction({ ...target, contentType, size: file.size });
+  const ticket = await requestTicket({ contentType, size: file.size });
   if (!ticket.ok) return { ok: false, message: ticket.message };
 
   const body = new FormData();

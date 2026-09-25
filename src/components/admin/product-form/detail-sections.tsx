@@ -9,18 +9,17 @@ import { ICON_SIZE_SM, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui
 import { iconButtonClasses } from "@/components/ui/icon-button";
 import { PlusIcon, TrashIcon, XIcon } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import { sanitizeSlugInput, SLUG_MAX_LENGTH, SLUG_MAX_WORDS, slugFromTitle, slugWordCount, toKey } from "@/features/admin/product-form/keys";
-import { categoryOptions } from "@/features/catalog/category-options";
-import { cn } from "@/lib/utils/cn";
+import { sanitizeSlugInput, SLUG_MAX_LENGTH, slugFromTitle, toKey } from "@/features/admin/product-form/keys";
 import type { ProductFormValues } from "@/features/admin/product-form/schema";
 import type { CollectionOption } from "@/features/admin/queries/product-editor";
 import type { CategoryOption } from "@/features/admin/queries/catalog";
+import { CategorySelect } from "../category-form";
+import { SlugHint, type SlugMode } from "../slug-field";
 import { CheckboxField, FormSection, TextAreaField, TextField, useFieldError } from "./fields";
 
 /* Basic information, pricing, specifications, inventory and merchandising (AGENTS §4.7). */
 
-export type SlugMode = "auto" | "custom";
+export type { SlugMode };
 
 export function BasicSection({
   categories,
@@ -68,15 +67,16 @@ export function BasicSection({
               control={formControl}
               name="categoryId"
               render={({ field }) => (
-                <Select
+                <CategorySelect
                   {...control}
+                  mode="category"
+                  categories={categories}
                   ref={field.ref}
                   name={field.name}
                   value={field.value}
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => field.onChange(value)}
                   onBlur={field.onBlur}
                   placeholder="Choose a category"
-                  options={categoryOptions(categories)}
                 />
               )}
             />
@@ -98,8 +98,6 @@ function SlugField({ savedSlug, mode, onModeChange }: { savedSlug: string | null
   const slug = useWatch<ProductFormValues, "slug">({ name: "slug" }) ?? "";
   const error = useFieldError("slug");
   const slugField = register("slug");
-  const words = slugWordCount(slug);
-  const tooManyWords = words > SLUG_MAX_WORDS;
 
   function generate() {
     setValue("slug", slugFromTitle(getValues("title")), { shouldDirty: true, shouldValidate: true });
@@ -111,25 +109,7 @@ function SlugField({ savedSlug, mode, onModeChange }: { savedSlug: string | null
       label="URL slug"
       required
       error={error}
-      hint={
-        <span className="flex flex-col gap-1">
-          <span className="break-all">goreto.store/products/{slug || "…"}</span>
-          <span>
-            <span className={cn(tooManyWords && "font-medium text-error-700")}>
-              {words}/{SLUG_MAX_WORDS} words
-            </span>
-            {" · "}
-            <span className={cn(slug.length > SLUG_MAX_LENGTH && "font-medium text-error-700")}>
-              {slug.length}/{SLUG_MAX_LENGTH} characters
-            </span>
-            {" · "}
-            {mode === "auto" ? "Auto from name" : "Custom"}
-          </span>
-          {savedSlug && slug !== savedSlug ? (
-            <span className="text-warning-700">Changing the slug breaks links people already shared to /products/{savedSlug}.</span>
-          ) : null}
-        </span>
-      }
+      hint={<SlugHint basePath="/products" slug={slug} mode={mode} savedSlug={savedSlug} />}
     >
       {(control) => (
         <div className="flex flex-col gap-2 sm:flex-row">

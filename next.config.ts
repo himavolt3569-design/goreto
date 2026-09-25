@@ -24,6 +24,12 @@ function allowLocalSupabaseImages(): boolean {
 }
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Admin nav links prefetch whole dynamic pages (prefetch={true}), which the
+    // client reuses for `static` seconds. 30s instead of the 5-minute default
+    // keeps order counts and stock from going stale.
+    staleTimes: { static: 30 },
+  },
   images: {
     dangerouslyAllowLocalIP: allowLocalSupabaseImages(),
     remotePatterns: [

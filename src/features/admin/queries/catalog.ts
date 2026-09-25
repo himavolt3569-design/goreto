@@ -301,3 +301,57 @@ export async function fetchMerchandisedProducts(): Promise<AdminProductRow[]> {
 }
 
 export const PRODUCT_PAGE_SIZE = PAGE_SIZE;
+
+export type CategoryFormValues = {
+  title: string;
+  slug: string;
+  parentId: string;
+  description: string;
+  imagePath: string;
+  isActive: boolean;
+  sortOrder: number;
+};
+
+export type CategoryEditorData = {
+  id: string;
+  values: CategoryFormValues;
+  imageUrl: string | null;
+  children: { id: string; title: string }[];
+  productCount: number;
+  updatedAt: string;
+};
+
+export function emptyCategoryValues(parentId: string | null): CategoryFormValues {
+  return { title: "", slug: "", parentId: parentId ?? "", description: "", imagePath: "", isActive: true, sortOrder: 0 };
+}
+
+export async function fetchCategoryEditor(id: string): Promise<CategoryEditorData | null> {
+  const db = adminDb();
+  const [category, children, products] = await Promise.all([
+    db.from("categories").select("id, title, slug, parent_id, description, image_path, is_active, sort_order, updated_at").eq("id", id).maybeSingle(),
+    db.from("categories").select("id, title").eq("parent_id", id).order("sort_order").order("title"),
+    db.from("products").select("id", { count: "exact", head: true }).eq("category_id", id),
+  ]);
+  if (category.error) fail("category editor", category.error);
+  if (children.error) fail("subcategories", children.error);
+  if (products.error) fail("category product count", products.error);
+  const row = category.data;
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    values: {
+      title: row.title,
+      slug: row.slug,
+      parentId: row.parent_id ?? "",
+      description: row.description,
+      imagePath: row.image_path ?? "",
+      isActive: row.is_active,
+      sortOrder: row.sort_order,
+    },
+    imageUrl: mediaUrl(row.image_path),
+    children: children.data,
+    productCount: products.count ?? 0,
+    updatedAt: row.updated_at,
+  };
+}
