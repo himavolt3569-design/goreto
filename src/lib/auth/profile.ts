@@ -19,6 +19,10 @@ async function readOwnProfile(clerkUserId: string): Promise<CurrentProfile | nul
     .from("profiles")
     .select("id, clerk_user_id, full_name, email, role, staff_permissions!staff_permissions_profile_id_fkey(permission_key)")
     .eq("clerk_user_id", clerkUserId)
+    // Opt out of Next's per-render fetch memoization: the read after a lazy
+    // sync is the identical GET, and would otherwise replay the empty result.
+    // getCurrentProfile is already deduplicated with React cache().
+    .abortSignal(new AbortController().signal)
     .maybeSingle();
   if (error) throw new Error(`Could not load the signed-in profile: ${error.message}`);
   if (!data) return null;

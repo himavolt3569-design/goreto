@@ -2,62 +2,27 @@ import type { Metadata } from "next";
 import { ToggleForm } from "@/components/admin/action-forms";
 import { EmptyState, PageHeader, Panel, TableScroll, tableClasses, tdClasses, thClasses, theadRowClasses } from "@/components/admin/admin-ui";
 import { Pill } from "@/components/admin/status-pills";
-import { InfoIcon, UsersIcon } from "@/components/ui/icons";
-import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
-import { Card } from "@/components/ui/card";
+import { RemoveStaffButton, RevokeInvitationButton } from "@/components/admin/staff-actions";
+import { StaffInviteForm } from "@/components/admin/staff-invite-form";
+import { EnvelopeSimpleIcon, UsersIcon } from "@/components/ui/icons";
 import { setStaffPermissionAction } from "@/features/admin/actions/system";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { formatDate } from "@/features/admin/format";
-import { fetchStaff } from "@/features/admin/queries/system";
-import type { StaffPermission } from "@/lib/auth/permissions";
+import { fetchStaff, fetchStaffInvitations } from "@/features/admin/queries/system";
+import { isInvitationExpired, PERMISSION_GROUPS, permissionLabels } from "@/features/admin/staff-permissions";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = { title: "Roles & Permissions" };
 
-const PERMISSION_GROUPS: { label: string; permissions: { key: StaffPermission; label: string }[] }[] = [
-  { label: "Overview", permissions: [{ key: "analytics.read", label: "View analytics" }] },
-  {
-    label: "Catalog",
-    permissions: [
-      { key: "catalog.read", label: "View catalog" },
-      { key: "catalog.write", label: "Edit catalog" },
-      { key: "inventory.write", label: "Adjust stock" },
-    ],
-  },
-  {
-    label: "Sales",
-    permissions: [
-      { key: "orders.read", label: "View orders" },
-      { key: "orders.write", label: "Fulfil orders" },
-      { key: "promotions.manage", label: "Manage coupons" },
-    ],
-  },
-  {
-    label: "Customers",
-    permissions: [
-      { key: "customers.read", label: "View customers" },
-      { key: "reviews.manage", label: "Moderate reviews" },
-      { key: "ar.manage", label: "Manage AR" },
-    ],
-  },
-  { label: "Content", permissions: [{ key: "content.manage", label: "Manage content" }] },
-  {
-    label: "System",
-    permissions: [
-      { key: "delivery.manage", label: "Manage delivery" },
-      { key: "settings.manage", label: "Manage settings" },
-      { key: "staff.manage", label: "Manage staff" },
-    ],
-  },
-];
-
 /**
- * Owner-only (RLS: staff_permissions is owner-managed). Roles live in
- * Postgres, never in Clerk metadata (AGENTS §9.2).
+ * Owner-only (RLS: staff_permissions and staff_invitations are
+ * owner-managed). Roles live in Postgres, never in Clerk metadata (AGENTS
+ * §9.2); a Clerk invitation only delivers the sign-up link.
  */
 export default async function StaffPage() {
   await requireAdminAccess("owner");
-  const staff = await fetchStaff();
+  const [staff, invitations] = await Promise.all([fetchStaff(), fetchStaffInvitations()]);
+  const now = new Date();
   const members = staff.filter((member) => member.role === "staff");
   const owner = staff.find((member) => member.role === "owner");
 
@@ -65,12 +30,59 @@ export default async function StaffPage() {
     <>
       <PageHeader title="Roles & Permissions" description="Grant staff only the areas they work in. Changes apply on their next page load." />
 
-      <Card className="flex items-start gap-3 p-4">
-        <InfoIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} className="mt-0.5 shrink-0 text-info-700" />
-        <p className="text-body text-neutral-700">
-          Inviting new staff and changing roles will arrive in a follow-up. For now, staff accounts are created by the store&apos;s trusted setup scripts.
-        </p>
-      </Card>
+      <Panel
+        title="Invite staff"
+        description="They become staff when they create their account with this email. If the email already has a customer account, they get staff access straight away."
+      >
+        <StaffInviteForm />
+      </Panel>
+
+      <Panel title="Pending invitations" description={`${invitations.length} ${invitations.length === 1 ? "invitation" : "invitations"}`}>
+        {invitations.length === 0 ? (
+          <EmptyState icon={EnvelopeSimpleIcon} title="No pending invitations" description="Invitations you send appear here until they're accepted." />
+        ) : (
+          <TableScroll label="Pending invitations">
+            <table className={tableClasses}>
+              <thead>
+                <tr className={theadRowClasses}>
+                  <th scope="col" className={thClasses}>Email</th>
+                  <th scope="col" className={thClasses}>Starting permissions</th>
+                  <th scope="col" className={thClasses}>Sent</th>
+                  <th scope="col" className={thClasses}>Status</th>
+                  <th scope="col" className={thClasses}>
+                    <span className="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {invitations.map((invitation) => {
+                  const labels = permissionLabels(invitation.permissions);
+                  const expired = isInvitationExpired(invitation.expiresAt, now);
+                  return (
+                    <tr key={invitation.id}>
+                      <td className={cn(tdClasses, "font-medium")}>{invitation.email}</td>
+                      <td className={cn(tdClasses, "min-w-60 text-neutral-700")}>{labels.length ? labels.join(", ") : "None yet"}</td>
+                      <td className={cn(tdClasses, "whitespace-nowrap text-neutral-700")}>{formatDate(invitation.createdAt)}</td>
+                      <td className={cn(tdClasses, "whitespace-nowrap")}>
+                        {expired ? (
+                          <Pill tone="warning">Expired</Pill>
+                        ) : (
+                          <span className="text-neutral-700">Expires {formatDate(invitation.expiresAt)}</span>
+                        )}
+                      </td>
+                      <td className={cn(tdClasses, "text-right")}>
+                        <div className="flex justify-end">
+                          <RevokeInvitationButton invitationId={invitation.id} email={invitation.email} />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </TableScroll>
+        )}
+      </Panel>
 
       {owner ? (
         <Panel title="Store owner" bodyClassName="px-6 pb-6">
@@ -86,10 +98,10 @@ export default async function StaffPage() {
 
       <Panel title="Staff" description={`${members.length} ${members.length === 1 ? "member" : "members"}`}>
         {members.length === 0 ? (
-          <EmptyState icon={UsersIcon} title="No staff yet" description="You're running the store on your own for now." />
+          <EmptyState icon={UsersIcon} title="No staff yet" description="Invite someone above, and they appear here once they've created their account." />
         ) : (
           <TableScroll label="Staff permissions">
-            <table className={cn(tableClasses, "min-w-[1400px]")}>
+            <table className={cn(tableClasses, "min-w-[1520px]")}>
               <thead>
                 <tr className={theadRowClasses}>
                   <th scope="col" rowSpan={2} className={cn(thClasses, "sticky left-0 z-10 align-bottom")}>
@@ -100,6 +112,9 @@ export default async function StaffPage() {
                       {group.label}
                     </th>
                   ))}
+                  <th scope="col" rowSpan={2} className={cn(thClasses, "align-bottom")}>
+                    <span className="sr-only">Actions</span>
+                  </th>
                 </tr>
                 <tr className={theadRowClasses}>
                   {PERMISSION_GROUPS.flatMap((group) =>
@@ -137,6 +152,11 @@ export default async function StaffPage() {
                           </td>
                         )),
                       )}
+                      <td className={cn(tdClasses, "text-right")}>
+                        <div className="flex justify-end">
+                          <RemoveStaffButton profileId={member.id} name={name} />
+                        </div>
+                      </td>
                     </tr>
                   );
                 })}

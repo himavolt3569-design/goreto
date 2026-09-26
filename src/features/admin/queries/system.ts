@@ -162,3 +162,28 @@ export async function fetchStoreSettings(): Promise<StoreSettings | null> {
   if (error) fail("store settings", error);
   return data;
 }
+
+export type StaffInvitation = {
+  id: string;
+  email: string;
+  permissions: StaffPermission[];
+  createdAt: string;
+  expiresAt: string;
+};
+
+/** Pending invitations, newest first (owner only by RLS). Expired ones stay until revoked. */
+export async function fetchStaffInvitations(): Promise<StaffInvitation[]> {
+  const { data, error } = await adminDb()
+    .from("staff_invitations")
+    .select("id, email, permissions, created_at, expires_at")
+    .eq("status", "pending")
+    .order("created_at", { ascending: false });
+  if (error) fail("staff invitations", error);
+  return data.map((row) => ({
+    id: row.id,
+    email: row.email,
+    permissions: row.permissions,
+    createdAt: row.created_at,
+    expiresAt: row.expires_at,
+  }));
+}
