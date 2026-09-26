@@ -2,7 +2,7 @@ import "server-only";
 import { revalidatePath, revalidateTag } from "next/cache";
 import type { z } from "zod";
 import { CATALOG_CACHE_TAG } from "@/features/catalog/categories";
-import { authorizeAdmin, deniedResult, type ActionResult } from "../auth";
+import { authorizeAdmin, databaseErrorResult, deniedResult, type ActionResult } from "../auth";
 import type { AdminAccess } from "../nav";
 import { fieldErrors, formValues } from "../schemas";
 
@@ -49,3 +49,25 @@ export const NOT_UPDATED: ActionResult = {
   ok: false,
   message: "Nothing was updated. The record may have been removed, or you no longer have access.",
 };
+
+type DatabaseError = { code?: string; message: string; details?: string | null };
+
+/**
+ * Save errors shown on the right field: trigger/function validation (22023,
+ * DETAIL = field name) and unique violations, matched by constraint name.
+ */
+export function saveErrorResult(
+  error: DatabaseError,
+  action: string,
+  unique: Record<string, { field: string; message: string }> = {},
+): ActionResult {
+  if (error.code === "22023" && error.details) return { ok: false, message: error.message, fieldErrors: { [error.details]: error.message } };
+  if (error.code === "23505") {
+    const match = Object.entries(unique).find(([constraint]) => error.message.includes(constraint));
+    if (match) {
+      const [, { field, message }] = match;
+      return { ok: false, message, fieldErrors: { [field]: message } };
+    }
+  }
+  return databaseErrorResult(error, action);
+}

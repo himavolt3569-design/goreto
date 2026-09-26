@@ -25,3 +25,10 @@ export function hrefWith(pathname: string, current: SearchParams, updates: Recor
   const query = next.toString();
   return query ? `${pathname}?${query}` : pathname;
 }
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Route ids are UUIDs; anything else is a 404 without a database round trip. */
+export function isUuid(value: string): boolean {
+  return UUID.test(value);
+}

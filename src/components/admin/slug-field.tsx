@@ -15,14 +15,19 @@ import { cn } from "@/lib/utils/cn";
 
 export type SlugMode = "auto" | "custom";
 
-/** Live hint under a slug field: the URL, word and character counts, and the mode. */
-export function SlugHint({ basePath, slug, mode, savedSlug }: { basePath: string; slug: string; mode: SlugMode; savedSlug: string | null }) {
+/**
+ * Live hint under a slug field: the URL, word and character counts, and the
+ * mode. Without `basePath` the slug is an internal key (no storefront page).
+ */
+export function SlugHint({ basePath, slug, mode, savedSlug }: { basePath?: string; slug: string; mode: SlugMode; savedSlug: string | null }) {
   const words = slugWordCount(slug);
   return (
     <span className="flex flex-col gap-1">
-      <span className="break-all">
-        goreto.store{basePath}/{slug || "…"}
-      </span>
+      {basePath ? (
+        <span className="break-all">
+          goreto.store{basePath}/{slug || "…"}
+        </span>
+      ) : null}
       <span>
         <span className={cn(words > SLUG_MAX_WORDS && "font-medium text-error-700")}>
           {words}/{SLUG_MAX_WORDS} words
@@ -34,7 +39,7 @@ export function SlugHint({ basePath, slug, mode, savedSlug }: { basePath: string
         {" · "}
         {mode === "auto" ? "Auto from name" : "Custom"}
       </span>
-      {savedSlug && slug !== savedSlug ? (
+      {basePath && savedSlug && slug !== savedSlug ? (
         <span className="text-warning-700">
           Changing the slug breaks links people already shared to {basePath}/{savedSlug}.
         </span>
@@ -60,8 +65,8 @@ export function NameSlugFields({
   nameLabel: string;
   namePlaceholder: string;
   nameMaxLength: number;
-  /** e.g. "/categories" */
-  basePath: string;
+  /** e.g. "/categories"; omitted for internal keys without a storefront page. */
+  basePath?: string;
   defaultTitle: string;
   defaultSlug: string;
   /** The stored slug when editing (starts in custom mode, warns on change). */

@@ -17,9 +17,9 @@ The **Design System image has the highest visual authority**. Page screenshots d
 
 # This is NOT the Next.js you know
 
-The installed Next.js version may contain APIs, conventions, defaults, runtime behavior, or file-structure changes that differ from training data. Before writing or changing Next.js code, read the relevant local documentation under `node_modules/next/dist/docs/` as resolved from the web workspace. Heed deprecation notices and prefer the installed project's conventions over remembered examples.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-If the project itself generates or maintains an agent-rules block, preserve it. Do not remove generated guidance just because it appears noisy in a diff.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
 

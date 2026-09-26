@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ToggleForm } from "@/components/admin/action-forms";
-import { EmptyState, PageHeader, Panel, TableScroll, tableClasses, tdClasses, thClasses, theadRowClasses } from "@/components/admin/admin-ui";
+import { AddLink, EditLink, EmptyState, PageHeader, Panel, SuccessNotice, TableScroll, tableClasses, tdClasses, thClasses, theadRowClasses } from "@/components/admin/admin-ui";
 import { DeliveryTabs } from "@/components/admin/delivery-tabs";
 import { ActivePill, Pill } from "@/components/admin/status-pills";
 import { TruckIcon } from "@/components/ui/icons";
@@ -8,6 +8,7 @@ import { setCourierActiveAction, setCourierServiceActiveAction } from "@/feature
 import { requireAdminAccess } from "@/features/admin/auth";
 import { humanize } from "@/features/admin/format";
 import { fetchCouriers } from "@/features/admin/queries/system";
+import { param } from "@/features/admin/url";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = { title: "Delivery & Courier" };
@@ -17,18 +18,24 @@ export const metadata: Metadata = { title: "Delivery & Courier" };
  * rate for the confirmed address's zone. Courier API keys are server secrets,
  * never stored here (AGENTS §11.7).
  */
-export default async function DeliveryPage() {
+export default async function DeliveryPage({ searchParams }: PageProps<"/admin/delivery">) {
   await requireAdminAccess("delivery.manage");
+  const deleted = param(await searchParams, "deleted") === "1";
   const couriers = await fetchCouriers();
 
   return (
     <>
-      <PageHeader title="Delivery & Courier" description="Couriers, the services customers choose at checkout, and where they deliver." />
+      <PageHeader
+        title="Delivery & Courier"
+        description="Couriers, the services customers choose at checkout, and where they deliver."
+        actions={<AddLink href="/admin/delivery/couriers/new">Add courier</AddLink>}
+      />
       <DeliveryTabs active="couriers" />
+      {deleted ? <SuccessNotice>Courier deleted.</SuccessNotice> : null}
 
       {couriers.length === 0 ? (
         <Panel title="Couriers">
-          <EmptyState icon={TruckIcon} title="No couriers yet" />
+          <EmptyState icon={TruckIcon} title="No couriers yet" description="Add a courier and its services so checkout can offer delivery." />
         </Panel>
       ) : (
         couriers.map((courier) => (
@@ -45,11 +52,12 @@ export default async function DeliveryPage() {
               <div className="flex items-center gap-3">
                 <ActivePill active={courier.isActive} />
                 <ToggleForm action={setCourierActiveAction} id={courier.id} checked={courier.isActive} label={`${courier.name} active`} />
+                <EditLink href={`/admin/delivery/couriers/${courier.id}/edit`} label={courier.name} />
               </div>
             }
           >
             {courier.services.length === 0 ? (
-              <p className="px-6 pb-6 text-body text-neutral-500">No services.</p>
+              <p className="px-6 pb-6 text-body text-neutral-500">No services. Edit the courier to add one.</p>
             ) : (
               <TableScroll label={`${courier.name} services`}>
                 <table className={cn(tableClasses, "min-w-[640px]")}>
