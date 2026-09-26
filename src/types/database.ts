@@ -1552,6 +1552,13 @@ export type Database = {
           product_count: number
         }[]
       }
+      admin_coupon_order_counts: {
+        Args: never
+        Returns: {
+          coupon_id: string
+          order_count: number
+        }[]
+      }
       admin_customer_summaries: {
         Args: {
           p_limit: number
@@ -1588,6 +1595,14 @@ export type Database = {
       admin_delete_product: {
         Args: { p_product_id: string }
         Returns: string[]
+      }
+      admin_delivery_history_counts: {
+        Args: never
+        Returns: {
+          record_id: string
+          record_type: string
+          use_count: number
+        }[]
       }
       admin_mark_refunded: { Args: { p_order_id: string }; Returns: undefined }
       admin_ordered_variant_ids: {

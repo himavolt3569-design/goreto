@@ -56,11 +56,11 @@ export function fromKathmanduInput(value: string): string | null {
 
 /* ---------- Shared field rules ---------- */
 
-const checkbox = z.preprocess((value) => value === "on" || value === "true", z.boolean());
+export const checkbox = z.preprocess((value) => value === "on" || value === "true", z.boolean());
 
-const text = (max: number) => z.string().trim().max(max, `Use at most ${max} characters`);
+export const text = (max: number) => z.string().trim().max(max, `Use at most ${max} characters`);
 
-const slug = z
+export const slug = z
   .string()
   .trim()
   .superRefine((value, context) => {
@@ -68,7 +68,7 @@ const slug = z
     if (problem) context.addIssue({ code: "custom", message: problem });
   });
 
-const sortOrder = z.coerce
+export const sortOrder = z.coerce
   .number({ error: "Enter a whole number" })
   .int("Enter a whole number")
   .min(0, "Use 0 or more")
@@ -105,7 +105,7 @@ export type CategoryFormInput = z.infer<typeof categoryFormSchema>;
 
 /* ---------- Collection ---------- */
 
-const kathmanduDateTime = z
+export const kathmanduDateTime = z
   .string()
   .trim()
   .transform((value, context) => {

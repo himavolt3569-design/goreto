@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRightIcon, CaretLeftIcon, CaretRightIcon, type Icon } from "@/components/ui/icons";
+import { ArrowRightIcon, CaretLeftIcon, CaretRightIcon, CheckCircleIcon, PencilSimpleIcon, PlusIcon, type Icon } from "@/components/ui/icons";
 import { ICON_SIZE, ICON_SIZE_SM, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { buttonClasses } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -92,7 +92,7 @@ export function ViewAllLink({ href, label = "View All" }: { href: string; label?
 /** Horizontal scroll inside the card on small screens; the page itself never scrolls sideways. */
 export function TableScroll({ children, label }: { children: ReactNode; label: string }) {
   return (
-    <div className="min-w-0 overflow-x-auto px-2 pb-2" role="region" aria-label={label} tabIndex={0}>
+    <div className="relative min-w-0 overflow-x-auto px-2 pb-2" role="region" aria-label={label} tabIndex={0}>
       {children}
     </div>
   );
@@ -103,6 +103,9 @@ export const theadRowClasses = "[&>th]:bg-neutral-50 [&>th:first-child]:rounded-
 export const thClasses = "h-10 px-4 text-small font-medium text-neutral-500 whitespace-nowrap";
 export const tdClasses = "border-b border-neutral-100 px-4 py-3 align-middle text-neutral-900";
 export const numericClasses = "text-right tabular-nums";
+
+/** Editor pages: form sections, then a sticky 20rem side card from xl up. */
+export const editorGridClasses = "grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:items-start";
 
 /** Small product/order thumbnail (decorative: the row names the item). */
 export function Thumb({ src, className, sizes = "48px" }: { src: string | null; className?: string; sizes?: string }) {
@@ -262,5 +265,35 @@ export function LinkTabs({ tabs, label }: { tabs: { href: string; label: string;
         </Link>
       ))}
     </nav>
+  );
+}
+
+/** Green confirmation banner after a redirect, e.g. "Coupon created." */
+export function SuccessNotice({ children }: { children: ReactNode }) {
+  return (
+    <p role="status" className="flex items-center gap-2 rounded-md bg-success-100 px-4 py-3 text-body text-success-700">
+      <CheckCircleIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+      {children}
+    </p>
+  );
+}
+
+/** Primary "Add …" link for a page header. */
+export function AddLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <Link href={href} className={buttonClasses({ variant: "primary", size: "md" })}>
+      <PlusIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+      {children}
+    </Link>
+  );
+}
+
+/** Row "Edit" link; `label` names the record for screen readers. */
+export function EditLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link href={href} className={buttonClasses({ variant: "tertiary", size: "md" })}>
+      <PencilSimpleIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+      Edit <span className="sr-only">{label}</span>
+    </Link>
   );
 }
