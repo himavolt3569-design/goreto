@@ -9,6 +9,7 @@ import {
   CLERK_INVITE_MESSAGES,
   classifyClerkInviteError,
   invitationIdSchema,
+  invitationSignUpUrl,
   staffInviteSchema,
   staffMemberIdSchema,
   withJoinedPermissions,
@@ -25,16 +26,16 @@ import { authorizeAndParse, NOT_UPDATED } from "./helpers";
 
 const INVITE_EXPIRY_DAYS = 7;
 
-/** Where the invitation link lands: the configured site, else this request's origin. */
+/**
+ * Where the invitation link lands. Production requires NEXT_PUBLIC_SITE_URL;
+ * elsewhere this request's Origin is a fallback for local development.
+ */
 async function signUpUrl(): Promise<string | null> {
-  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const origin = configured || (await headers()).get("origin");
-  if (!origin) return null;
-  try {
-    return new URL("/sign-up", origin).toString();
-  } catch {
-    return null;
-  }
+  const configured = process.env.NEXT_PUBLIC_SITE_URL;
+  const isProduction = process.env.NODE_ENV === "production";
+  const needsRequestOrigin = !configured?.trim() && !isProduction;
+  const requestOrigin = needsRequestOrigin ? (await headers()).get("origin") : null;
+  return invitationSignUpUrl({ configured, requestOrigin, isProduction });
 }
 
 export async function inviteStaffAction(_previous: ActionResult | null, formData: FormData): Promise<ActionResult> {
@@ -65,7 +66,7 @@ export async function inviteStaffAction(_previous: ActionResult | null, formData
 
   const redirectUrl = await signUpUrl();
   if (!redirectUrl) {
-    console.error("Staff invite: no NEXT_PUBLIC_SITE_URL and no request origin");
+    console.error("Staff invite: NEXT_PUBLIC_SITE_URL is missing or invalid (required in production)");
     return { ok: false, message: CLERK_INVITE_MESSAGES.unknown };
   }
 

@@ -47,6 +47,29 @@ export function withJoinedPermissions(formData: FormData): FormData {
   return joined;
 }
 
+/**
+ * The invitation's sign-up URL. In production only the configured site
+ * origin is trusted; the request Origin is a fallback for development only.
+ * Null when no usable origin exists.
+ */
+export function invitationSignUpUrl({
+  configured,
+  requestOrigin,
+  isProduction,
+}: {
+  configured: string | undefined;
+  requestOrigin: string | null;
+  isProduction: boolean;
+}): string | null {
+  const origin = configured?.trim() || (isProduction ? null : requestOrigin);
+  if (!origin) return null;
+  try {
+    return new URL("/sign-up", origin).toString();
+  } catch {
+    return null;
+  }
+}
+
 export type ClerkInviteFailure = "exists" | "rate_limited" | "unknown";
 
 /**

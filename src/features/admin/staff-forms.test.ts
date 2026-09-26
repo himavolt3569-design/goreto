@@ -1,6 +1,6 @@
 import { ClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { describe, expect, it } from "vitest";
-import { classifyClerkInviteError, staffInviteSchema, withJoinedPermissions } from "./staff-forms";
+import { classifyClerkInviteError, invitationSignUpUrl, staffInviteSchema, withJoinedPermissions } from "./staff-forms";
 import { isInvitationExpired, permissionLabels } from "./staff-permissions";
 
 describe("staffInviteSchema", () => {
@@ -66,5 +66,29 @@ describe("staff permission helpers", () => {
     const now = new Date("2026-09-26T12:00:00Z");
     expect(isInvitationExpired("2026-09-26T12:00:00Z", now)).toBe(true);
     expect(isInvitationExpired("2026-09-26T12:00:01Z", now)).toBe(false);
+  });
+});
+
+describe("invitationSignUpUrl", () => {
+  it("uses the configured site in every environment", () => {
+    expect(invitationSignUpUrl({ configured: " https://goreto.store ", requestOrigin: "https://evil.example", isProduction: true })).toBe(
+      "https://goreto.store/sign-up",
+    );
+    expect(invitationSignUpUrl({ configured: "https://goreto.store", requestOrigin: "http://localhost:3000", isProduction: false })).toBe(
+      "https://goreto.store/sign-up",
+    );
+  });
+
+  it("never falls back to the request Origin in production", () => {
+    expect(invitationSignUpUrl({ configured: undefined, requestOrigin: "https://evil.example", isProduction: true })).toBeNull();
+    expect(invitationSignUpUrl({ configured: "  ", requestOrigin: "https://evil.example", isProduction: true })).toBeNull();
+  });
+
+  it("falls back to the request Origin outside production", () => {
+    expect(invitationSignUpUrl({ configured: undefined, requestOrigin: "http://localhost:3000", isProduction: false })).toBe(
+      "http://localhost:3000/sign-up",
+    );
+    expect(invitationSignUpUrl({ configured: undefined, requestOrigin: null, isProduction: false })).toBeNull();
+    expect(invitationSignUpUrl({ configured: "not a url", requestOrigin: null, isProduction: false })).toBeNull();
   });
 });
