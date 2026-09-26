@@ -1324,6 +1324,66 @@ export type Database = {
           },
         ]
       }
+      staff_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_profile_id: string | null
+          clerk_invitation_id: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string | null
+          permissions: Database["public"]["Enums"]["staff_permission"][]
+          revoked_at: string | null
+          status: Database["public"]["Enums"]["staff_invitation_status"]
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_profile_id?: string | null
+          clerk_invitation_id?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          permissions?: Database["public"]["Enums"]["staff_permission"][]
+          revoked_at?: string | null
+          status?: Database["public"]["Enums"]["staff_invitation_status"]
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_profile_id?: string | null
+          clerk_invitation_id?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          permissions?: Database["public"]["Enums"]["staff_permission"][]
+          revoked_at?: string | null
+          status?: Database["public"]["Enums"]["staff_invitation_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_invitations_accepted_profile_id_fkey"
+            columns: ["accepted_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "staff_invitations_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       staff_permissions: {
         Row: {
           created_at: string
@@ -1664,6 +1724,14 @@ export type Database = {
         }
         Returns: Database["public"]["Enums"]["product_status"]
       }
+      admin_set_staff_role: {
+        Args: {
+          p_permissions?: Database["public"]["Enums"]["staff_permission"][]
+          p_profile_id: string
+          p_role: Database["public"]["Enums"]["profile_role"]
+        }
+        Returns: undefined
+      }
       admin_transition_order: {
         Args: {
           p_order_id: string
@@ -1671,6 +1739,10 @@ export type Database = {
           p_status: Database["public"]["Enums"]["order_status"]
         }
         Returns: Database["public"]["Enums"]["order_status"]
+      }
+      apply_staff_invitation: {
+        Args: { p_profile_id: string }
+        Returns: boolean
       }
       bootstrap_owner: {
         Args: { p_clerk_user_id: string; p_replace_existing?: boolean }
@@ -1772,6 +1844,7 @@ export type Database = {
         | "delivered"
         | "exception"
         | "returned"
+      staff_invitation_status: "pending" | "accepted" | "revoked"
       staff_permission:
         | "analytics.read"
         | "catalog.read"
@@ -1967,6 +2040,7 @@ export const Constants = {
         "exception",
         "returned",
       ],
+      staff_invitation_status: ["pending", "accepted", "revoked"],
       staff_permission: [
         "analytics.read",
         "catalog.read",

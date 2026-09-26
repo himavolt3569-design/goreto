@@ -301,12 +301,13 @@ The `/account` overview is only a stub. Still to build:
   - [ ] a private bucket with 24h retention;
   - [ ] `api/ar/photo` behind a provider adapter;
   - [ ] "unavailable" state when no provider is configured.
-- [ ] Admin AR asset upload (phase 4 of the admin work).
+- [ ] Admin AR asset upload (phase 4b of the admin work).
 
 ### 4.5 Admin follow-ups (phases deferred by the admin prompts)
 - [x] Phase 2: create, edit and delete for **categories** and **collections** (2026-09-25, `goreto-admin-categories-collections.md`, migration `admin_categories_collections`).
 - [x] Phase 3: create, edit and delete for **coupons**, **couriers and courier services**, **delivery zones** and **rates** (2026-09-26, `goreto-admin-coupons-delivery.md`, migration `admin_coupons_delivery`).
-- [ ] Phase 4: **staff invitations** through a Clerk Backend API invite and role changes, plus **AR asset upload**.
+- [x] Phase 4: **staff invitations** through a Clerk Backend API invite, pending list with revoke, and role changes (promote a customer, remove from staff) (2026-09-26, `goreto-admin-staff-invitations.md`, migration `admin_staff_invitations`). Also fixed new users' first protected page returning 500 (Next fetch memoization in `readOwnProfile`).
+- [ ] Phase 4b: **AR asset upload** (split from phase 4).
 - [ ] Upload on the Media page. Today it links to the product editor.
 - [ ] A cleanup job for orphaned uploads (abandoned signed uploads and abandoned staged Add product photos).
 - [ ] Optional: a "Duplicate product" action and video media.

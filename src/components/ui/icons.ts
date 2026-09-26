@@ -61,6 +61,7 @@ export { PinterestLogoIcon } from "@phosphor-icons/react/dist/ssr/PinterestLogo"
 export { PlayCircleIcon } from "@phosphor-icons/react/dist/ssr/PlayCircle";
 export { PlayIcon } from "@phosphor-icons/react/dist/ssr/Play";
 export { PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
+export { ProhibitIcon } from "@phosphor-icons/react/dist/ssr/Prohibit";
 export { QuestionIcon } from "@phosphor-icons/react/dist/ssr/Question";
 export { QuotesIcon } from "@phosphor-icons/react/dist/ssr/Quotes";
 export { ReceiptIcon } from "@phosphor-icons/react/dist/ssr/Receipt";
@@ -78,6 +79,7 @@ export { TrashIcon } from "@phosphor-icons/react/dist/ssr/Trash";
 export { TruckIcon } from "@phosphor-icons/react/dist/ssr/Truck";
 export { UploadSimpleIcon } from "@phosphor-icons/react/dist/ssr/UploadSimple";
 export { UserIcon } from "@phosphor-icons/react/dist/ssr/User";
+export { UserMinusIcon } from "@phosphor-icons/react/dist/ssr/UserMinus";
 export { UsersIcon } from "@phosphor-icons/react/dist/ssr/Users";
 export { WarningCircleIcon } from "@phosphor-icons/react/dist/ssr/WarningCircle";
 export { XIcon } from "@phosphor-icons/react/dist/ssr/X";

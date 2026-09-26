@@ -134,6 +134,7 @@ export function FormDialog({
   triggerLabel,
   triggerVariant = "tertiary",
   triggerIcon,
+  triggerContext,
   submitLabel,
   submitVariant = "primary",
   children,
@@ -145,6 +146,8 @@ export function FormDialog({
   triggerLabel: string;
   triggerVariant?: ButtonVariant;
   triggerIcon?: ReactNode;
+  /** Screen-reader-only text after the label, naming the record (e.g. an email). */
+  triggerContext?: string;
   submitLabel: string;
   submitVariant?: ButtonVariant;
   children: ReactNode | ((state: ActionResult | null) => ReactNode);
@@ -170,6 +173,7 @@ export function FormDialog({
       <button type="button" className={buttonClasses({ variant: triggerVariant, size: "md" })} onClick={() => dialogRef.current?.showModal()}>
         {triggerIcon}
         {triggerLabel}
+        {triggerContext ? <span className="sr-only"> {triggerContext}</span> : null}
       </button>
       {state?.ok ? <ActionMessage state={state} /> : null}
       <dialog
