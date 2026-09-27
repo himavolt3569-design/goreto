@@ -1763,7 +1763,32 @@ export type Database = {
         Args: { p_category_id: string }
         Returns: boolean
       }
+      checkout_price: {
+        Args: {
+          p_contact_email: string
+          p_coupon_code: string
+          p_courier_service_id: string
+          p_items: Json
+          p_municipality_code: string
+          p_profile_id: string
+        }
+        Returns: Json
+      }
+      checkout_quote: {
+        Args: {
+          p_contact_email?: string
+          p_coupon_code?: string
+          p_courier_service_id?: string
+          p_items: Json
+          p_municipality_code?: string
+        }
+        Returns: Json
+      }
       current_profile_id: { Args: never; Returns: string }
+      get_order_tracking: {
+        Args: { p_order_number: string; p_secret?: string }
+        Returns: Json
+      }
       has_permission: {
         Args: { permission: Database["public"]["Enums"]["staff_permission"] }
         Returns: boolean
@@ -1773,7 +1798,29 @@ export type Database = {
         Args: { p_clerk_user_id: string }
         Returns: undefined
       }
+      nearest_municipality: {
+        Args: { p_latitude: number; p_longitude: number }
+        Returns: {
+          distance_km: number
+          district_code: string
+          municipality_code: string
+          postal_code: string
+          province_code: string
+        }[]
+      }
       npt_day_start: { Args: { p_day: string }; Returns: string }
+      place_order: {
+        Args: {
+          p_address: Json
+          p_contact: Json
+          p_coupon_code: string
+          p_courier_service_id: string
+          p_customer_note: string
+          p_items: Json
+          p_tracking_hash: string
+        }
+        Returns: Json
+      }
       product_rating_summaries: {
         Args: { product_ids: string[] }
         Returns: {

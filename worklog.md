@@ -260,17 +260,9 @@ The two options work together: click-to-send covers the handoff now, and the por
 **Later (not now):** automatic WhatsApp intake through the WhatsApp Business Cloud API, and other social channels.
 
 ### 4.1 Core commerce
-- [ ] **Cart page** `/cart`. The store exists, but the route doesn't, and the header badge and "View cart" link go to a 404.
-- [ ] **Checkout** `/checkout` (§4.4, §12). Buy Now already navigates here.
-  - [ ] `place_order` Postgres RPC: atomic stock lock/decrement, server-side prices, coupon, delivery rate and totals in paisa.
-  - [ ] Contact form with a Nepal phone field (E.164).
-  - [ ] Nepal address cascade: Province → District → Municipality → Ward, plus a location button, a map preview, and a reverse-geocode route (`api/geocode/reverse`).
-  - [ ] Delivery service selection from the zones and rates.
-  - [ ] COD-only payment. The reference's eSewa, Khalti and card options must **not** be built.
-  - [ ] Coupon entry, validated on the server.
-  - [ ] Prefill for signed-in users from their default address.
-- [ ] **Order confirmation** `/order-confirmation/[orderNumber]` (§4.5), from `goreto-order confirm.png`.
-- [ ] **Tracking** `/track/[orderNumber]` for guests, using the hashed tracking secret through a server path. Show events only, never fake GPS.
+- [x] **Cart page** `/cart`, live re-pricing from the server (2026-09-27, `goreto-cart-checkout-confirmation.md`).
+- [x] **Checkout** `/checkout` (§4.4, §12): migration `checkout_place_order` (`checkout_quote`, atomic `place_order`, `get_order_tracking`, `nearest_municipality`); contact with +977 phone; Province → District → Municipality → Ward cascade; "Use Current Location" with a Leaflet/OpenStreetMap map and nearest-municipality suggestion (no third-party geocoder); delivery options from zones/rates; server-validated coupons; COD only; signed-in prefill from the default address.
+- [x] **Order confirmation** `/order-confirmation/[orderNumber]` and **tracking** `/track/[orderNumber]` (§4.5): guests via a hashed tracking secret in an httpOnly cookie or a tracking link; owners via their session; events only, no fake courier location.
 - [ ] Guest-order claiming after sign-up, matched on a Clerk-verified email (§9.1).
 
 ### 4.2 Discovery

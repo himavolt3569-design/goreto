@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
     // keeps order counts and stock from going stale.
     staleTimes: { static: 30 },
   },
+  // Order pages can be reached through a tracking link carrying a secret;
+  // never leak those URLs to other sites through the Referer header.
+  async headers() {
+    return ["/order-confirmation/:path*", "/track/:path*"].map((source) => ({
+      source,
+      headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
+    }));
+  },
   images: {
     dangerouslyAllowLocalIP: allowLocalSupabaseImages(),
     remotePatterns: [
