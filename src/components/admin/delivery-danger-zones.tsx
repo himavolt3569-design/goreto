@@ -14,7 +14,7 @@ import { FormDialog, type AdminAction } from "./action-forms";
  * the card says why and points to turning them off instead.
  */
 
-function DangerZone({
+export function DangerZone({
   blocked,
   summary,
   action,

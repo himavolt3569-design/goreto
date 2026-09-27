@@ -9,7 +9,9 @@ import { authorizeAdmin, databaseErrorResult, deniedResult, type ActionResult } 
 import { canAccess } from "../nav";
 import { verifyStoredImage } from "../media-verify";
 import { formatForContentType, IMAGE_CONTENT_TYPES, MAX_IMAGE_BYTES, MAX_STAGED_PHOTOS, type ImageFormat } from "../product-form/file-signature";
+import { duplicateValues } from "../product-form/duplicate";
 import { issuesByPath, productFormSchema, toSavePayload } from "../product-form/schema";
+import { fetchProductEditor } from "../queries/product-editor";
 import { adminDb } from "../queries/shared";
 import { authorizeAndParse, NOT_UPDATED, revalidateStorefrontCatalog } from "./helpers";
 
@@ -188,6 +190,88 @@ export async function deleteProductAction(_previous: ActionResult | null, formDa
 
   revalidateStorefrontCatalog(existing?.slug);
   redirect("/admin/products?deleted=1");
+}
+
+/* ---------- Duplicate ---------- */
+
+const COPYABLE_PHOTO = /\.(jpe?g|png|webp|avif)$/i;
+
+/**
+ * Copies a product into a new draft: same details, options and prices, new
+ * variants with `-COPY` SKUs and no stock, and copies of its photos as new
+ * files. AR assets and merchandising flags aren't copied. Saved through the
+ * same function and checks as Create, then opens the copy in the editor.
+ */
+export async function duplicateProductAction(_previous: ActionResult | null, formData: FormData): Promise<ActionResult> {
+  const auth = await authorizeAdmin("catalog.write");
+  if (!auth.ok) return deniedResult(auth.reason);
+  const sourceId = productId.safeParse(formData.get("productId"));
+  if (!sourceId.success) return NOT_UPDATED;
+
+  const source = await fetchProductEditor(sourceId.data);
+  if (!source) return NOT_UPDATED;
+
+  const db = adminDb();
+  const photos = await db.from("product_media").select("storage_path, alt_text").eq("product_id", source.id).eq("kind", "image").order("sort_order");
+  if (photos.error) return databaseErrorResult(photos.error, "prepare product copy");
+
+  // Look up exactly the slug and SKUs each attempt would use (never a capped
+  // pattern search), and move past any that exist until none collide.
+  const takenSlugs = new Set<string>();
+  const takenSkus = new Set<string>();
+  const linkCollections = canAccess(auth.profile, "content.manage");
+  let values = duplicateValues(source.values, { takenSlugs, takenSkus, linkCollections });
+  for (let attempt = 0; ; attempt += 1) {
+    const skuCandidates = values.variants.map((variant) => variant.sku);
+    const [slugs, skus] = await Promise.all([
+      db.from("products").select("slug").eq("slug", values.slug),
+      db.from("product_variants").select("sku").in("sku", skuCandidates),
+    ]);
+    if (slugs.error || skus.error) return databaseErrorResult((slugs.error ?? skus.error)!, "prepare product copy");
+    if (slugs.data.length === 0 && skus.data.length === 0) break;
+    if (attempt >= 20) return { ok: false, message: "Too many copies of this product already exist. Rename one and try again." };
+    for (const row of slugs.data) takenSlugs.add(row.slug);
+    for (const row of skus.data) takenSkus.add(row.sku);
+    values = duplicateValues(source.values, { takenSlugs, takenSkus, linkCollections });
+  }
+  const parsed = productFormSchema.safeParse(values);
+  if (!parsed.success) return { ok: false, message: "This product can't be copied as it is. Open it, fix the highlighted fields and save, then try again." };
+  const payload = toSavePayload(parsed.data);
+
+  const { data, error } = await db.rpc("admin_save_product", {
+    p_product_id: null as unknown as string,
+    p_product: payload.product,
+    p_variants: payload.variants,
+    p_collection_ids: payload.collectionIds as string[],
+  });
+  if (error) return saveErrorResult(error);
+  const copy = data as SaveRpcResult;
+
+  const bucket = db.storage.from(PRODUCT_MEDIA_BUCKET);
+  const rows: { product_id: string; storage_path: string; alt_text: string; sort_order: number }[] = [];
+  let skipped = 0;
+  for (const photo of photos.data) {
+    const extension = COPYABLE_PHOTO.exec(photo.storage_path)?.[1]?.toLowerCase().replace("jpeg", "jpg");
+    const target = `products/${copy.id}/${randomUUID()}.${extension}`;
+    if (!extension || (await bucket.copy(photo.storage_path, target)).error) {
+      skipped += 1;
+      continue;
+    }
+    rows.push({ product_id: copy.id, storage_path: target, alt_text: photo.alt_text, sort_order: rows.length });
+  }
+  if (rows.length > 0) {
+    const { error: mediaError } = await db.from("product_media").insert(rows);
+    if (mediaError) {
+      await bucket.remove(rows.map((row) => row.storage_path));
+      console.error(`Admin action: photos for a product copy were not attached (${mediaError.code ?? "unknown"})`);
+      skipped += rows.length;
+      rows.length = 0;
+    }
+  }
+
+  // The copy is a draft, so no storefront page changes.
+  revalidatePath("/admin/products");
+  redirect(`/admin/products/${copy.id}/edit?duplicated=1&photos=${rows.length}${skipped > 0 ? `&rejected=${skipped}` : ""}`);
 }
 
 /* ---------- Photos ---------- */

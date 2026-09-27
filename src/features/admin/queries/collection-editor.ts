@@ -2,6 +2,7 @@ import "server-only";
 import type { Database } from "@/types/database";
 import { collectionState, type CollectionState } from "../states";
 import { toKathmanduInput } from "../catalog-forms";
+import { containsPattern, sanitizeSearch } from "../search-input";
 import { adminDb, fail, mediaUrl } from "./shared";
 
 /* Reads for the collection editor (RLS: collections for content.manage; products as the caller may see them). */
@@ -20,6 +21,33 @@ type PickerRow = { id: string; title: string; status: ProductStatus; product_med
 export function mapPickerProduct(row: PickerRow): PickerProduct {
   const cover = [...row.product_media].sort((a, b) => a.sort_order - b.sort_order)[0];
   return { id: row.id, title: row.title, status: row.status, thumbnail: mediaUrl(cover?.storage_path) };
+}
+
+export type ProductSearchResult = { ok: true; products: PickerProduct[] } | { ok: false; message: string };
+
+/**
+ * Non-archived products whose name contains `query` (at most 20), for the
+ * admin product pickers. The calling action checks permission first; RLS
+ * decides which products the caller sees.
+ */
+export async function searchPickerProducts(query: unknown, what: string): Promise<ProductSearchResult> {
+  const term = sanitizeSearch(query);
+  if (term.length < 2) return { ok: true, products: [] };
+
+  const { data, error } = await adminDb()
+    .from("products")
+    .select(PICKER_PRODUCT_COLUMNS)
+    .ilike("title", containsPattern(term))
+    .neq("status", "archived")
+    .order("title")
+    .order("sort_order", { referencedTable: "product_media" })
+    .limit(1, { referencedTable: "product_media" })
+    .limit(20);
+  if (error) {
+    console.error(`Admin action failed (${what}): ${error.code ?? "unknown"}`);
+    return { ok: false, message: "Search didn't work. Please try again." };
+  }
+  return { ok: true, products: data.map(mapPickerProduct) };
 }
 
 export type CollectionFormValues = {

@@ -6,6 +6,8 @@ import { BackLink, PageHeader, Panel, TableScroll, Thumb, tableClasses, tdClasse
 import { ActivePill, ProductStatusPill, StockPill, productDisplayStatus } from "@/components/admin/status-pills";
 import { StockAdjustForm } from "@/components/admin/stock-adjust-form";
 import { ArrowSquareOutIcon, PencilSimpleIcon } from "@/components/ui/icons";
+import { DuplicateProductButton } from "@/components/admin/duplicate-product-button";
+import { ProductArPanel } from "@/components/admin/product-ar-panel";
 import { ProductDangerZone } from "@/components/admin/product-form/delete-product";
 import { fetchProductHasOrders } from "@/features/admin/queries/product-editor";
 import { ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
@@ -13,7 +15,7 @@ import { buttonClasses } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { setProductFlagAction, setProductStatusAction } from "@/features/admin/actions/catalog";
 import { requireAdminAccess } from "@/features/admin/auth";
-import { formatCount, formatDateTime, humanize } from "@/features/admin/format";
+import { formatCount, formatDateTime } from "@/features/admin/format";
 import { canAccess } from "@/features/admin/nav";
 import { fetchProductDetail, stockStateFor, type ProductStatus } from "@/features/admin/queries/catalog";
 import { mediaUrl } from "@/features/admin/queries/shared";
@@ -67,6 +69,7 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
                 <ArrowSquareOutIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
               </Link>
             ) : null}
+            {canWrite ? <DuplicateProductButton productId={product.id} /> : null}
             {canWrite ? (
               <Link href={`/admin/products/${product.id}/edit`} className={buttonClasses({ variant: "primary", size: "md" })}>
                 <PencilSimpleIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
@@ -193,22 +196,11 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
             </dl>
           </Panel>
 
-          <Panel title="AR Try-On" bodyClassName="px-6 pb-6">
-            {product.product_ar_assets.length === 0 ? (
-              <p className="text-body text-neutral-500">No AR assets. This product isn&apos;t offered for try-on.</p>
-            ) : (
-              <ul className="flex flex-col gap-3">
-                {product.product_ar_assets.map((asset) => (
-                  <li key={asset.id} className="flex items-center justify-between gap-2 text-body">
-                    <span>
-                      {humanize(asset.mode)} · {humanize(asset.placement)} · {asset.asset_format.toUpperCase()}
-                    </span>
-                    <ActivePill active={asset.is_active} />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Panel>
+          <ProductArPanel
+            productId={product.id}
+            assets={product.product_ar_assets.map((asset) => ({ id: asset.id, mode: asset.mode, placement: asset.placement, format: asset.asset_format, isActive: asset.is_active }))}
+            canManage={canAccess(profile, "ar.manage")}
+          />
 
           {canWrite ? <ProductDangerZone productId={product.id} title={product.title} hasOrders={hasOrders} archived={product.status === "archived"} /> : null}
         </div>

@@ -1669,6 +1669,14 @@ export type Database = {
         Args: { p_product_id: string }
         Returns: string[]
       }
+      admin_orphaned_storage_objects: {
+        Args: { p_bucket: string; p_older_than?: string }
+        Returns: {
+          created_at: string
+          name: string
+          size_bytes: number
+        }[]
+      }
       admin_outstanding_cod: {
         Args: never
         Returns: {
