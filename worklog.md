@@ -228,7 +228,7 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
   - [ ] The owner switches the mode in `/admin/settings` (needs `settings.manage`).
 - [ ] **Courier handoff, only after acceptance:**
   - [ ] On accept, notify the assigned courier with a safe order payload: order number, recipient, phone, address snapshot, COD amount and items.
-  - [ ] No courier APIs. Delivery channel still to be decided; see the open question below.
+  - [ ] No courier APIs. First channel: a WhatsApp click-to-send (`wa.me`) link, with the courier portal later (see below).
   - [ ] Runs from trusted server code only, and is recorded as a shipment event and in the handoff log.
   - [ ] Staff can resend the notification from the order page if it failed.
 - [ ] **Tests:**
@@ -238,14 +238,14 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
   - [ ] Server-side totals for manual orders (the browser can't set prices).
   - [ ] Accept and courier handoff are idempotent.
 
-**Courier notification: shortlisted, not final.** The client is leaning towards one or both of these free options (no paid API):
+**Courier notification: decided 2026-09-27.** Option 1 ships first and option 2 comes in a later phase. Both are free (no paid API):
 
-1. **Free WhatsApp click-to-send (`wa.me` link).**
+1. **Free WhatsApp click-to-send (`wa.me` link): ships first.**
    - After acceptance, the order page shows **"Send to courier on WhatsApp"**. It opens WhatsApp (web or phone) with a prefilled message to the courier's saved number: order number, recipient, phone, address, COD amount and items.
    - Costs nothing and needs no Meta approval. It is **not automatic**, though: a staff member taps Send in WhatsApp.
    - The app can only record that the button was clicked, not that WhatsApp delivered the message.
    - Needs: a courier WhatsApp number on `couriers`, and the button shown only after acceptance.
-2. **Courier login on the site.**
+2. **Courier login on the site: later phase.**
    - Each courier (or its dispatcher) gets a Clerk account and a small **courier portal**. It shows **only accepted orders assigned to that courier**, with the delivery details needed.
    - The portal has live notifications for new assignments. It could later let the courier post status updates (picked up, out for delivery, delivered), which would feed tracking honestly.
    - Fully in-app and automatic, but bigger:
@@ -255,7 +255,7 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
      - a courier invite flow;
      - portal pages.
 
-The two options work together. **Decided 2026-09-27: WhatsApp click-to-send (`wa.me`) ships first, and the courier portal comes in a later phase.**
+The two options work together: click-to-send covers the handoff now, and the portal can replace or add to it later.
 
 **Later (not now):** automatic WhatsApp intake through the WhatsApp Business Cloud API, and other social channels.
 
@@ -353,4 +353,5 @@ Several footer and nav links return a 404 today.
 - Swapping SKUs between two variants in a single save is refused. Save twice instead.
 - The signed-upload path with the Clerk-token client was checked manually, not in automated tests.
 - Seed product photos are repeated Picsum placeholders, so alt text won't always match the image.
+- Admin uploads can be attached for 20 hours; after that the save asks for a new upload. This keeps saves clear of the unused-upload cleanup, which only deletes files older than 24 hours.
 - Stock adjustments don't revalidate the storefront. Product pages refresh every 60 seconds, and checkout must re-check stock in the database.

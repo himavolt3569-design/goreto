@@ -9,7 +9,15 @@ import type { adminDb } from "./queries/shared";
  * category, collection and AR editors: the stored bytes must be the type the
  * server-chosen path says, and within the size limit. Rejected uploads are
  * deleted.
+ *
+ * Uploads are only usable while fresh. The unused-upload cleanup
+ * (admin_orphaned_storage_objects) deletes only files older than 24 hours, so
+ * a save never references a file the cleanup may be deleting at the same
+ * moment: the two act on disjoint age windows, with hours of margin.
  */
+
+/** A file older than this can't be attached; keep well below the cleanup's 24 hours. */
+export const UPLOAD_USABLE_HOURS = 20;
 
 /** First bytes and total size of a stored object, via a Range request on its public URL. */
 async function readObjectHead(url: string, length: number): Promise<{ bytes: Uint8Array; size: number } | null> {
@@ -42,6 +50,12 @@ async function verifyStoredObject(db: ReturnType<typeof adminDb>, path: string, 
   if (!head) return { ok: false, message: "The upload didn't finish. Please try again." };
   if (!check.matches(head.bytes)) return reject(check.wrongType);
   if (head.size > check.maxBytes) return reject(check.tooLarge);
+
+  // Storage's own created_at (database time), not anything the browser sent.
+  const { data: info, error } = await db.storage.from(check.bucket).info(path);
+  if (error || !info) return { ok: false, message: "The upload didn't finish. Please try again." };
+  const ageHours = (Date.now() - Date.parse(info.createdAt)) / 3_600_000;
+  if (!Number.isFinite(ageHours) || ageHours > UPLOAD_USABLE_HOURS) return reject("This upload is too old to use. Upload the file again.");
   return { ok: true };
 }
 

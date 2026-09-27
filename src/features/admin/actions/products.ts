@@ -212,20 +212,28 @@ export async function duplicateProductAction(_previous: ActionResult | null, for
   if (!source) return NOT_UPDATED;
 
   const db = adminDb();
-  // Slugs and SKUs only hold [a-z0-9-] / [A-Z0-9-], so they are safe inside LIKE patterns.
-  const firstWord = source.slug.split("-")[0]!;
-  const [slugs, skus, photos] = await Promise.all([
-    db.from("products").select("slug").like("slug", `${firstWord}%-copy%`),
-    db.from("product_variants").select("sku").like("sku", "%-COPY%"),
-    db.from("product_media").select("storage_path, alt_text").eq("product_id", source.id).eq("kind", "image").order("sort_order"),
-  ]);
-  if (slugs.error || skus.error || photos.error) return databaseErrorResult((slugs.error ?? skus.error ?? photos.error)!, "prepare product copy");
+  const photos = await db.from("product_media").select("storage_path, alt_text").eq("product_id", source.id).eq("kind", "image").order("sort_order");
+  if (photos.error) return databaseErrorResult(photos.error, "prepare product copy");
 
-  const values = duplicateValues(source.values, {
-    takenSlugs: new Set(slugs.data.map((row) => row.slug)),
-    takenSkus: new Set(skus.data.map((row) => row.sku)),
-    linkCollections: canAccess(auth.profile, "content.manage"),
-  });
+  // Look up exactly the slug and SKUs each attempt would use (never a capped
+  // pattern search), and move past any that exist until none collide.
+  const takenSlugs = new Set<string>();
+  const takenSkus = new Set<string>();
+  const linkCollections = canAccess(auth.profile, "content.manage");
+  let values = duplicateValues(source.values, { takenSlugs, takenSkus, linkCollections });
+  for (let attempt = 0; ; attempt += 1) {
+    const skuCandidates = values.variants.map((variant) => variant.sku);
+    const [slugs, skus] = await Promise.all([
+      db.from("products").select("slug").eq("slug", values.slug),
+      db.from("product_variants").select("sku").in("sku", skuCandidates),
+    ]);
+    if (slugs.error || skus.error) return databaseErrorResult((slugs.error ?? skus.error)!, "prepare product copy");
+    if (slugs.data.length === 0 && skus.data.length === 0) break;
+    if (attempt >= 20) return { ok: false, message: "Too many copies of this product already exist. Rename one and try again." };
+    for (const row of slugs.data) takenSlugs.add(row.slug);
+    for (const row of skus.data) takenSkus.add(row.sku);
+    values = duplicateValues(source.values, { takenSlugs, takenSkus, linkCollections });
+  }
   const parsed = productFormSchema.safeParse(values);
   if (!parsed.success) return { ok: false, message: "This product can't be copied as it is. Open it, fix the highlighted fields and save, then try again." };
   const payload = toSavePayload(parsed.data);

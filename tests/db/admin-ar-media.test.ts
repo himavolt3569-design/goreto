@@ -132,6 +132,21 @@ describe("admin_orphaned_storage_objects", () => {
     expect(outcomes[0]).toBe(1500);
   });
 
+  it("counts a missing or malformed size as 0 instead of failing", async () => {
+    const outcomes = await runStepsWithSetup(
+      db,
+      [
+        `insert into storage.objects (bucket_id, name, metadata, created_at) values
+           ('product-media', 'products/new-${UUID_B}/${UUID_B}.png', '{"size": "12.5"}', ${old}),
+           ('product-media', 'products/new-${UUID_A}/${UUID_A}.png', '{"size": "99999999999999999999999"}', ${old}),
+           ('product-media', 'collections/${UUID_A}/${UUID_A}.png', null, ${old})`,
+      ],
+      owner,
+      ["select json_agg(size_bytes order by name) from public.admin_orphaned_storage_objects('product-media')"],
+    );
+    expect(outcomes[0]).toEqual([0, 0, 0]);
+  });
+
   it("lists unreferenced AR files for ar.manage only", async () => {
     expect((await runStepsWithSetup(db, [...setupArOnly, ...seedObjects()], arOnly, [list("ar-assets")]))[0]).toEqual([`products/${UUID_A}/${UUID_B}.glb`]);
     expect((await runStepsWithSetup(db, [...setupArOnly, ...seedObjects()], arOnly, [list("product-media")]))[0]).toMatch(/catalog.write required/);

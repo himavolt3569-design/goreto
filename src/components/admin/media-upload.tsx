@@ -52,22 +52,30 @@ export function MediaUpload() {
     setBusy(true);
     setNotice(null);
     let added = 0;
-    for (const row of rows.filter((item) => item.status === "ready" || item.status === "error")) {
-      update(row.key, { status: "uploading", message: undefined });
-      const uploaded = await uploadPhotoFile({ productId: product.id }, row.file);
-      if (!uploaded.ok) {
-        update(row.key, { status: "error", message: uploaded.message });
-        continue;
+    try {
+      for (const row of rows.filter((item) => item.status === "ready" || item.status === "error")) {
+        update(row.key, { status: "uploading", message: undefined });
+        try {
+          const uploaded = await uploadPhotoFile({ productId: product.id }, row.file);
+          if (!uploaded.ok) {
+            update(row.key, { status: "error", message: uploaded.message });
+            continue;
+          }
+          const attached = await attachProductMediaAction({ productId: product.id, path: uploaded.path, altText: row.altText, variantId: null });
+          if (!attached.ok) {
+            update(row.key, { status: "error", message: attached.message });
+            continue;
+          }
+          added += 1;
+          update(row.key, { status: "done", message: uploaded.warning });
+        } catch {
+          // A dropped connection or a failed Server Action call; the row can be retried.
+          update(row.key, { status: "error", message: "The upload failed. Check your connection and try again." });
+        }
       }
-      const attached = await attachProductMediaAction({ productId: product.id, path: uploaded.path, altText: row.altText, variantId: null });
-      if (!attached.ok) {
-        update(row.key, { status: "error", message: attached.message });
-        continue;
-      }
-      added += 1;
-      update(row.key, { status: "done", message: uploaded.warning });
+    } finally {
+      setBusy(false);
     }
-    setBusy(false);
     if (added > 0) setNotice(`${added} ${added === 1 ? "photo" : "photos"} added to ${product.title}.`);
   }
 
