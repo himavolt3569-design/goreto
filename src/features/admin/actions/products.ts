@@ -9,7 +9,9 @@ import { authorizeAdmin, databaseErrorResult, deniedResult, type ActionResult } 
 import { canAccess } from "../nav";
 import { verifyStoredImage } from "../media-verify";
 import { formatForContentType, IMAGE_CONTENT_TYPES, MAX_IMAGE_BYTES, MAX_STAGED_PHOTOS, type ImageFormat } from "../product-form/file-signature";
+import { duplicateValues } from "../product-form/duplicate";
 import { issuesByPath, productFormSchema, toSavePayload } from "../product-form/schema";
+import { fetchProductEditor } from "../queries/product-editor";
 import { adminDb } from "../queries/shared";
 import { authorizeAndParse, NOT_UPDATED, revalidateStorefrontCatalog } from "./helpers";
 
@@ -188,6 +190,80 @@ export async function deleteProductAction(_previous: ActionResult | null, formDa
 
   revalidateStorefrontCatalog(existing?.slug);
   redirect("/admin/products?deleted=1");
+}
+
+/* ---------- Duplicate ---------- */
+
+const COPYABLE_PHOTO = /\.(jpe?g|png|webp|avif)$/i;
+
+/**
+ * Copies a product into a new draft: same details, options and prices, new
+ * variants with `-COPY` SKUs and no stock, and copies of its photos as new
+ * files. AR assets and merchandising flags aren't copied. Saved through the
+ * same function and checks as Create, then opens the copy in the editor.
+ */
+export async function duplicateProductAction(_previous: ActionResult | null, formData: FormData): Promise<ActionResult> {
+  const auth = await authorizeAdmin("catalog.write");
+  if (!auth.ok) return deniedResult(auth.reason);
+  const sourceId = productId.safeParse(formData.get("productId"));
+  if (!sourceId.success) return NOT_UPDATED;
+
+  const source = await fetchProductEditor(sourceId.data);
+  if (!source) return NOT_UPDATED;
+
+  const db = adminDb();
+  // Slugs and SKUs only hold [a-z0-9-] / [A-Z0-9-], so they are safe inside LIKE patterns.
+  const firstWord = source.slug.split("-")[0]!;
+  const [slugs, skus, photos] = await Promise.all([
+    db.from("products").select("slug").like("slug", `${firstWord}%-copy%`),
+    db.from("product_variants").select("sku").like("sku", "%-COPY%"),
+    db.from("product_media").select("storage_path, alt_text").eq("product_id", source.id).eq("kind", "image").order("sort_order"),
+  ]);
+  if (slugs.error || skus.error || photos.error) return databaseErrorResult((slugs.error ?? skus.error ?? photos.error)!, "prepare product copy");
+
+  const values = duplicateValues(source.values, {
+    takenSlugs: new Set(slugs.data.map((row) => row.slug)),
+    takenSkus: new Set(skus.data.map((row) => row.sku)),
+    linkCollections: canAccess(auth.profile, "content.manage"),
+  });
+  const parsed = productFormSchema.safeParse(values);
+  if (!parsed.success) return { ok: false, message: "This product can't be copied as it is. Open it, fix the highlighted fields and save, then try again." };
+  const payload = toSavePayload(parsed.data);
+
+  const { data, error } = await db.rpc("admin_save_product", {
+    p_product_id: null as unknown as string,
+    p_product: payload.product,
+    p_variants: payload.variants,
+    p_collection_ids: payload.collectionIds as string[],
+  });
+  if (error) return saveErrorResult(error);
+  const copy = data as SaveRpcResult;
+
+  const bucket = db.storage.from(PRODUCT_MEDIA_BUCKET);
+  const rows: { product_id: string; storage_path: string; alt_text: string; sort_order: number }[] = [];
+  let skipped = 0;
+  for (const photo of photos.data) {
+    const extension = COPYABLE_PHOTO.exec(photo.storage_path)?.[1]?.toLowerCase().replace("jpeg", "jpg");
+    const target = `products/${copy.id}/${randomUUID()}.${extension}`;
+    if (!extension || (await bucket.copy(photo.storage_path, target)).error) {
+      skipped += 1;
+      continue;
+    }
+    rows.push({ product_id: copy.id, storage_path: target, alt_text: photo.alt_text, sort_order: rows.length });
+  }
+  if (rows.length > 0) {
+    const { error: mediaError } = await db.from("product_media").insert(rows);
+    if (mediaError) {
+      await bucket.remove(rows.map((row) => row.storage_path));
+      console.error(`Admin action: photos for a product copy were not attached (${mediaError.code ?? "unknown"})`);
+      skipped += rows.length;
+      rows.length = 0;
+    }
+  }
+
+  // The copy is a draft, so no storefront page changes.
+  revalidatePath("/admin/products");
+  redirect(`/admin/products/${copy.id}/edit?duplicated=1&photos=${rows.length}${skipped > 0 ? `&rejected=${skipped}` : ""}`);
 }
 
 /* ---------- Photos ---------- */

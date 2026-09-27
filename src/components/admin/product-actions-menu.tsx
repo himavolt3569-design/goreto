@@ -1,10 +1,11 @@
 "use client";
 
 import { startTransition, useActionState } from "react";
-import { ArrowSquareOutIcon, DotsThreeIcon, EyeIcon, PencilSimpleIcon } from "@/components/ui/icons";
+import { ArrowSquareOutIcon, CopyIcon, DotsThreeIcon, EyeIcon, PencilSimpleIcon } from "@/components/ui/icons";
 import { ICON_SIZE, ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { iconButtonClasses } from "@/components/ui/icon-button";
 import { setProductStatusAction } from "@/features/admin/actions/catalog";
+import { duplicateProductAction } from "@/features/admin/actions/products";
 import type { ProductStatus } from "@/features/admin/queries/catalog";
 import { ActionMessage } from "./action-forms";
 import { Menu, MenuButton, MenuLink, MenuSeparator } from "./menu";
@@ -27,13 +28,22 @@ export function ProductActionsMenu({
   product: { id: string; title: string; slug: string; status: ProductStatus };
   canWrite: boolean;
 }) {
-  const [state, dispatch, pending] = useActionState(setProductStatusAction, null);
+  const [statusState, dispatch, statusPending] = useActionState(setProductStatusAction, null);
+  const [duplicateState, duplicate, duplicating] = useActionState(duplicateProductAction, null);
+  const pending = statusPending || duplicating;
+  const state = duplicateState && !duplicateState.ok ? duplicateState : statusState;
 
   function setStatus(status: ProductStatus) {
     const formData = new FormData();
     formData.set("productId", product.id);
     formData.set("status", status);
     startTransition(() => dispatch(formData));
+  }
+
+  function duplicateProduct() {
+    const formData = new FormData();
+    formData.set("productId", product.id);
+    startTransition(() => duplicate(formData));
   }
 
   return (
@@ -61,6 +71,10 @@ export function ProductActionsMenu({
         ) : null}
         {canWrite ? (
           <>
+            <MenuButton onClick={duplicateProduct} disabled={pending}>
+              <CopyIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} className="text-neutral-500" />
+              Duplicate
+            </MenuButton>
             <MenuSeparator />
             {STATUS_ACTIONS.filter((action) => action.status !== product.status).map((action) => (
               <MenuButton key={action.status} onClick={() => setStatus(action.status)} disabled={pending}>

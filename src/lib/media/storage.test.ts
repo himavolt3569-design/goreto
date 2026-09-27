@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { productMediaImage, productMediaUrl } from "./storage";
+import { arAssetUrl, productMediaImage, productMediaUrl } from "./storage";
 
 describe("productMediaUrl", () => {
   afterEach(() => {
@@ -31,5 +31,17 @@ describe("productMediaUrl", () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://abc.supabase.co");
     expect(productMediaImage(null, "x")).toBeNull();
     expect(productMediaImage("categories/bags.jpg", "")?.alt).toBe("");
+  });
+});
+
+describe("arAssetUrl", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("builds the public URL in the ar-assets bucket and rejects URLs", () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://abc.supabase.co");
+    expect(arAssetUrl("products/p/a.glb")).toBe("https://abc.supabase.co/storage/v1/object/public/ar-assets/products/p/a.glb");
+    expect(() => arAssetUrl("https://evil.example/x.glb")).toThrow(TypeError);
   });
 });

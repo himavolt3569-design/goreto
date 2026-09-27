@@ -1,6 +1,6 @@
 # Goreto.store — Work Log
 
-_Last updated: 2026-09-25 · Branch: `feat/admin-products` (clean, pushed to origin)_
+_Last updated: 2026-09-27 · Branch: `feat/admin-media-ar` (uncommitted)_
 
 Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the migrations, the code in `src/`, `scripts/` and `tests/`, and a fresh run of the checks below.
 
@@ -8,13 +8,13 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
 
 ## 1. Current state
 
-| Check | Result (run 2026-09-25) |
+| Check | Result (run 2026-09-27) |
 | --- | --- |
 | `npm run typecheck` | ✅ passes |
 | `npm run lint` | ✅ passes |
-| `npm test` (Vitest + RTL) | ✅ 39 files, 298 tests |
-| `npm run test:db` (PGlite + real migrations + seed + RLS) | ✅ 4 files, 97 tests |
-| `npm run build` | Not re-run today. The last task reported it passing. |
+| `npm test` (Vitest + RTL) | ✅ 49 files, 388 tests |
+| `npm run test:db` (PGlite + real migrations + seed + RLS) | ✅ 8 files, 176 tests |
+| `npm run build` | ✅ passes |
 
 **Stack in use:** Next.js 16.3.6 (App Router, `src/proxy.ts`), React 19.2.8, TypeScript strict, Tailwind v4 tokens, Clerk (`@clerk/nextjs` 7.9.5, Core 3), Supabase (hosted **dev** project; `@supabase/supabase-js` 2.117.1), Zustand (cart), React Hook Form + Zod, Phosphor icons, GSAP (homepage motion only), libphonenumber-js, Vitest and PGlite. npm is the package manager.
 
@@ -255,7 +255,7 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
      - a courier invite flow;
      - portal pages.
 
-The two options work together: WhatsApp click-to-send could ship first, with the courier portal added later. Needs the client's final choice before the plan is written.
+The two options work together. **Decided 2026-09-27: WhatsApp click-to-send (`wa.me`) ships first, and the courier portal comes in a later phase.**
 
 **Later (not now):** automatic WhatsApp intake through the WhatsApp Business Cloud API, and other social channels.
 
@@ -307,11 +307,12 @@ The `/account` overview is only a stub. Still to build:
 - [x] Phase 2: create, edit and delete for **categories** and **collections** (2026-09-25, `goreto-admin-categories-collections.md`, migration `admin_categories_collections`).
 - [x] Phase 3: create, edit and delete for **coupons**, **couriers and courier services**, **delivery zones** and **rates** (2026-09-26, `goreto-admin-coupons-delivery.md`, migration `admin_coupons_delivery`).
 - [x] Phase 4: **staff invitations** through a Clerk Backend API invite, pending list with revoke, and role changes (promote a customer, remove from staff) (2026-09-26, `goreto-admin-staff-invitations.md`, migration `admin_staff_invitations`). Also fixed new users' first protected page returning 500 (Next fetch memoization in `readOwnProfile`).
-- [ ] Phase 4b: **AR asset upload** (split from phase 4).
-- [ ] Upload on the Media page. Today it links to the product editor.
-- [ ] A cleanup job for orphaned uploads (abandoned signed uploads and abandoned staged Add product photos).
-- [ ] Optional: a "Duplicate product" action and video media.
-- [ ] Courier webhooks `api/courier/webhooks/[provider]`. Every courier is `manual` today.
+- [x] Phase 4b: **AR asset upload**: add, edit, replace and delete assets in a new `ar-assets` bucket, with byte-checked PNG/WebP/GLB/USDZ, mode→format rules and optional calibration (2026-09-27, `goreto-admin-media-ar.md`, migration `admin_ar_media`).
+- [x] Upload on the Media page: pick a product and upload photos to the end of its gallery (2026-09-27).
+- [x] Orphaned-upload cleanup: panels on `/admin/media` and `/admin/ar` delete unreferenced admin uploads older than 24 hours. It's a button, not a scheduled job; a cron route needs deployment first (2026-09-27).
+- [x] "Duplicate product": copies into a draft with `(copy)`, a free slug, `-COPY` SKUs, zero stock and copied photos, but no AR assets (2026-09-27).
+- [ ] Optional: video media.
+- [ ] Courier webhooks `api/courier/webhooks/[provider]`. **Not planned:** the client ruled out courier API integrations (§4.0).
 - [ ] Optional: mirror `role` into Clerk `publicMetadata`, written by the server only.
 
 ### 4.6 Content, legal and static pages
@@ -337,7 +338,8 @@ Several footer and nav links return a 404 today.
 
 ## 5. Needs your decision or action
 
-- **WhatsApp order flow (§4.0, top priority):** channels, intake, couriers and courier mode are decided. For the courier notification, the client is choosing between **free WhatsApp click-to-send**, a **courier login/portal**, or both, and hasn't made a final choice. The portal adds a new `courier` role to the auth model.
+- **WhatsApp order flow (§4.0, top priority):** everything is decided. Courier notification is `wa.me` click-to-send first, with the courier portal later (which adds a `courier` role). Ready to plan.
+- **Seed AR rows have no files:** `/admin/ar` flags them "No file uploaded", but the storefront still shows AR READY for them. Upload real files or turn those rows off before launch.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.
 - **Orange contrast:** white on `#F97316` and orange text on white measure about 2.8:1, below WCAG AA for body text. The reference colours were kept as-is. This was raised in the design-system prompt and hasn't been decided yet.

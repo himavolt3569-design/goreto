@@ -6,9 +6,8 @@ import { z } from "zod";
 import { authorizeAdmin, databaseErrorResult, type ActionResult } from "../auth";
 import { collectionFormSchema } from "../catalog-forms";
 import { removeUploadedImage, resolveImageChange } from "../catalog-images";
-import { mapPickerProduct, PICKER_PRODUCT_COLUMNS, type PickerProduct } from "../queries/collection-editor";
+import { searchPickerProducts, type ProductSearchResult } from "../queries/collection-editor";
 import { adminDb } from "../queries/shared";
-import { containsPattern, sanitizeSearch } from "../search-input";
 import { authorizeAndParse, NOT_UPDATED, revalidateStorefrontCatalog } from "./helpers";
 
 /*
@@ -96,27 +95,11 @@ export async function deleteCollectionAction(_previous: ActionResult | null, for
   redirect("/admin/promotions?deleted=1");
 }
 
-export type ProductSearchResult = { ok: true; products: PickerProduct[] } | { ok: false; message: string };
+export type { ProductSearchResult } from "../queries/collection-editor";
 
 /** Products whose name contains `query`, for the collection editor's picker (at most 20). */
 export async function searchCollectionProductsAction(query: unknown): Promise<ProductSearchResult> {
   const auth = await authorizeAdmin("content.manage");
   if (!auth.ok) return { ok: false, message: "You don't have permission to do that." };
-  const term = sanitizeSearch(query);
-  if (term.length < 2) return { ok: true, products: [] };
-
-  const { data, error } = await adminDb()
-    .from("products")
-    .select(PICKER_PRODUCT_COLUMNS)
-    .ilike("title", containsPattern(term))
-    .neq("status", "archived")
-    .order("title")
-    .order("sort_order", { referencedTable: "product_media" })
-    .limit(1, { referencedTable: "product_media" })
-    .limit(20);
-  if (error) {
-    console.error(`Admin action failed (search collection products): ${error.code ?? "unknown"}`);
-    return { ok: false, message: "Search didn't work. Please try again." };
-  }
-  return { ok: true, products: data.map(mapPickerProduct) };
+  return searchPickerProducts(query, "search collection products");
 }

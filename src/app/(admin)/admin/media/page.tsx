@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EmptyState, LinkTabs, PageHeader, Pagination, Panel, Thumb } from "@/components/admin/admin-ui";
+import { MediaUpload } from "@/components/admin/media-upload";
+import { StorageCleanup } from "@/components/admin/storage-cleanup";
 import { ImageIcon } from "@/components/ui/icons";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { formatCount } from "@/features/admin/format";
-import { countMissingAltText, fetchMedia } from "@/features/admin/queries/catalog";
+import { countMissingAltText, fetchMedia, fetchUnusedUploads } from "@/features/admin/queries/catalog";
 import { canAccess } from "@/features/admin/nav";
 import { pageNumber } from "@/features/admin/queries/shared";
 import { hrefWith, param } from "@/features/admin/url";
@@ -12,18 +14,23 @@ import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = { title: "Media" };
 
-/** Product media library. Photos are uploaded and edited in each product's editor. */
+/** Product media library. Upload to a product here; reorder and describe photos in its editor. */
 export default async function MediaPage({ searchParams }: PageProps<"/admin/media">) {
   const profile = await requireAdminAccess("catalog.read");
   const canWrite = canAccess(profile, "catalog.write");
   const params = await searchParams;
   const missingAlt = param(params, "filter") === "missing_alt";
   const page = pageNumber(params.page);
-  const [media, missingCount] = await Promise.all([fetchMedia({ missingAlt, page }), countMissingAltText()]);
+  const [media, missingCount, unused] = await Promise.all([
+    fetchMedia({ missingAlt, page }),
+    countMissingAltText(),
+    canWrite ? fetchUnusedUploads("product-media") : Promise.resolve(null),
+  ]);
 
   return (
     <>
-      <PageHeader title="Media" description="Product images in the storefront media bucket, newest first. Upload, reorder and describe photos from each product's editor." />
+      <PageHeader title="Media" description="Product images in the storefront media bucket, newest first. Reorder and describe photos from each product's editor." />
+      {canWrite ? <MediaUpload /> : null}
       <LinkTabs
         label="Media filter"
         tabs={[
@@ -59,6 +66,7 @@ export default async function MediaPage({ searchParams }: PageProps<"/admin/medi
           </>
         )}
       </Panel>
+      {unused ? <StorageCleanup bucket="product-media" count={unused.count} bytes={unused.bytes} noun="uploads" /> : null}
     </>
   );
 }

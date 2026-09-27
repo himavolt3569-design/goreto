@@ -1,5 +1,6 @@
 import "server-only";
 import type { Database } from "@/types/database";
+import { parseArAssetPath } from "../ar-forms";
 import { containsPattern, quotedFilterValue } from "../search-input";
 import { stockStateFor, type StockState } from "../states";
 
@@ -262,13 +263,15 @@ export type ArAssetRow = {
   format: string;
   isActive: boolean;
   variantSku: string | null;
+  /** False for rows (e.g. seed data) whose file was never uploaded to the ar-assets bucket. */
+  hasFile: boolean;
   updatedAt: string;
 };
 
 export async function fetchArAssets(): Promise<ArAssetRow[]> {
   const { data, error } = await adminDb()
     .from("product_ar_assets")
-    .select("id, mode, placement, asset_format, is_active, updated_at, product_id, products(title, status), product_variants(sku)")
+    .select("id, mode, placement, asset_path, asset_format, is_active, updated_at, product_id, products(title, status), product_variants(sku)")
     .order("updated_at", { ascending: false })
     .order("id");
   if (error) fail("ar assets", error);
@@ -282,6 +285,7 @@ export async function fetchArAssets(): Promise<ArAssetRow[]> {
     format: row.asset_format,
     isActive: row.is_active,
     variantSku: row.product_variants?.sku ?? null,
+    hasFile: parseArAssetPath(row.asset_path) !== null,
     updatedAt: row.updated_at,
   }));
 }
@@ -354,4 +358,13 @@ export async function fetchCategoryEditor(id: string): Promise<CategoryEditorDat
     productCount: products.count ?? 0,
     updatedAt: row.updated_at,
   };
+}
+
+export type UnusedUploads = { count: number; bytes: number };
+
+/** Uploads older than 24 hours that no record uses (admin_orphaned_storage_objects). */
+export async function fetchUnusedUploads(bucket: "product-media" | "ar-assets"): Promise<UnusedUploads> {
+  const { data, error } = await adminDb().rpc("admin_orphaned_storage_objects", { p_bucket: bucket });
+  if (error) fail("unused uploads", error);
+  return { count: data.length, bytes: data.reduce((sum, row) => sum + row.size_bytes, 0) };
 }
