@@ -121,10 +121,18 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
   }
 
   async function onPinMoved(lat: number, lng: number) {
+    const previous = { latitude: getValues("latitude"), longitude: getValues("longitude") };
     setValue("latitude", lat, { shouldDirty: true });
     setValue("longitude", lng, { shouldDirty: true });
     const suggestion = await suggestArea(lat, lng);
-    if (typeof suggestion !== "string" && suggestion.municipalityCode !== getValues("municipalityCode")) {
+    if (typeof suggestion === "string") {
+      // Keep the pin where it last matched a known area; the map follows these values.
+      setValue("latitude", previous.latitude, { shouldDirty: true });
+      setValue("longitude", previous.longitude, { shouldDirty: true });
+      setLocation({ kind: "error", message: suggestion });
+      return;
+    }
+    if (suggestion.municipalityCode !== getValues("municipalityCode")) {
       setLocation({ kind: "suggestion", suggestion });
     }
   }

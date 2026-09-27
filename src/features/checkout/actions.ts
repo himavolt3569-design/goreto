@@ -22,11 +22,18 @@ import {
  * client (anon for guests); prices never come from the browser.
  */
 
-type QuoteResult = { ok: true; quote: CheckoutQuote } | { ok: false; message: string };
+/** A cart-level issue ("Your cart is empty.") has no form field, so it becomes the message. */
+function itemsIssue(error: z.ZodError): string | undefined {
+  return error.issues.find((issue) => issue.path[0] === "items")?.message;
+}
+
+type QuoteResult ={ ok: true; quote: CheckoutQuote } | { ok: false; message: string };
 
 export async function quoteCheckoutAction(request: QuoteRequest): Promise<QuoteResult> {
   const parsed = quoteRequestSchema.safeParse(request);
-  if (!parsed.success) return { ok: false, message: "Your cart has an item we can't price. Please review your cart." };
+  if (!parsed.success) {
+    return { ok: false, message: itemsIssue(parsed.error) ?? "Your cart has an item we can't price. Please review your cart." };
+  }
   const { items, municipalityCode, courierServiceId, couponCode, email } = parsed.data;
 
   const { data, error } = await getUserSupabase().rpc("checkout_quote", {
@@ -56,7 +63,7 @@ export async function placeOrderAction(input: PlaceOrderInput): Promise<PlaceOrd
       const key = String(issue.path[0] ?? "form");
       fieldErrors[key] ??= issue.message;
     }
-    return { ok: false, message: "Please check the highlighted fields.", fieldErrors };
+    return { ok: false, message: fieldErrors.items ?? "Please check the highlighted fields.", fieldErrors };
   }
   const order = parsed.data;
 

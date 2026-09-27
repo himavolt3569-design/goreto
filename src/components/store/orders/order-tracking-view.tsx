@@ -322,8 +322,8 @@ export function OrderTrackingView({
             description="Here are the items from your order. They’ll be delivered together."
           >
             <ul className="flex flex-col divide-y divide-neutral-200">
-              {order.items.map((item) => (
-                <ItemRow key={item.sku} item={item} />
+              {order.items.map((item, index) => (
+                <ItemRow key={`${item.sku}-${index}`} item={item} />
               ))}
             </ul>
           </OrderPanel>
