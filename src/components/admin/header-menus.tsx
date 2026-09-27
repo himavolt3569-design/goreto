@@ -3,98 +3,36 @@
 import Image from "next/image";
 import { SignOutButton } from "@clerk/nextjs";
 import {
-  BellIcon,
   CaretDownIcon,
   CubeIcon,
+  FileTextIcon,
   PackageIcon,
   PlusIcon,
   SignOutIcon,
   StarIcon,
   StorefrontIcon,
   UserIcon,
-  FileTextIcon,
-  WarningCircleIcon,
+  WhatsappLogoIcon,
 } from "@/components/ui/icons";
-import { ICON_SIZE, ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
+import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { buttonClasses } from "@/components/ui/button";
-import { iconButtonClasses } from "@/components/ui/icon-button";
-import { cn } from "@/lib/utils/cn";
 import { Menu, MenuButton, MenuLink, MenuSeparator } from "./menu";
 
-/* Header menus: notifications, quick actions and the profile menu. Items arrive filtered by permission. */
+/*
+ * Header menus: quick actions and the profile menu (the notification bell is
+ * notifications-menu.tsx). Items arrive filtered by permission.
+ */
 
-export type AttentionItem = {
-  key: "orders" | "reviews" | "low_stock" | "sold_out";
-  label: string;
-  count: number;
-  href: string;
-};
+export type QuickAction = { label: string; href: string; icon: "add" | "whatsapp" | "orders" | "inventory" | "reviews" | "store" };
 
-const ATTENTION_ICONS = {
+const QUICK_ACTION_ICONS = {
+  add: CubeIcon,
+  whatsapp: WhatsappLogoIcon,
   orders: FileTextIcon,
+  inventory: PackageIcon,
   reviews: StarIcon,
-  low_stock: PackageIcon,
-  sold_out: WarningCircleIcon,
+  store: StorefrontIcon,
 } as const;
-
-/** `items` is null when the counts couldn't be loaded; the menu says so instead of showing zeros. */
-export function NotificationsMenu({ items }: { items: AttentionItem[] | null }) {
-  const total = items?.reduce((sum, item) => sum + item.count, 0) ?? 0;
-  const label =
-    items === null
-      ? "Notifications: couldn't load"
-      : total > 0
-        ? `Notifications: ${total} items need attention`
-        : "Notifications: nothing needs attention";
-
-  return (
-    <Menu
-      triggerLabel={label}
-      triggerClassName={cn(iconButtonClasses({ variant: "ghost" }), "relative")}
-      panelClassName="w-80"
-      trigger={
-        <>
-          <BellIcon aria-hidden="true" size={ICON_SIZE} weight={ICON_WEIGHT_OUTLINE} />
-          {total > 0 ? (
-            <span aria-hidden="true" className="absolute right-2 top-2 size-2.5 rounded-full border-2 border-white bg-primary-500" />
-          ) : null}
-        </>
-      }
-      header={
-        <div className="px-3 pb-2 pt-1">
-          <p className="text-body font-semibold text-neutral-900">Needs attention</p>
-          {items === null ? (
-            <p className="text-small text-error-700">Couldn&apos;t load notifications. Refresh to try again.</p>
-          ) : total === 0 ? (
-            <p className="text-small text-neutral-500">You&apos;re all caught up.</p>
-          ) : null}
-        </div>
-      }
-    >
-      {(items ?? []).map((item) => {
-        const ItemIcon = ATTENTION_ICONS[item.key];
-        return (
-          <MenuLink key={item.key} href={item.href}>
-            <ItemIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} className="text-neutral-500" />
-            <span className="flex-1">{item.label}</span>
-            <span
-              className={cn(
-                "min-w-8 rounded-full px-2 text-center text-small font-semibold",
-                item.count > 0 ? "bg-primary-100 text-primary-700" : "bg-neutral-100 text-neutral-500",
-              )}
-            >
-              {item.count}
-            </span>
-          </MenuLink>
-        );
-      })}
-    </Menu>
-  );
-}
-
-export type QuickAction = { label: string; href: string; icon: "add" | "orders" | "inventory" | "reviews" | "store" };
-
-const QUICK_ACTION_ICONS = { add: CubeIcon, orders: FileTextIcon, inventory: PackageIcon, reviews: StarIcon, store: StorefrontIcon } as const;
 
 export function QuickActionsMenu({ actions }: { actions: QuickAction[] }) {
   return (

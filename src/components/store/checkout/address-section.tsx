@@ -1,23 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
+import { NepalAddressFields } from "@/components/delivery/nepal-address-fields";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { CheckCircleIcon, MapPinIcon, NavigationArrowIcon, WarningCircleIcon, XIcon } from "@/components/ui/icons";
 import { ICON_SIZE_SM, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { LocationMap } from "@/components/store/map/location-map";
 import { SOFT_SECONDARY } from "@/components/store/product/classes";
 import type { CheckoutFormValues } from "@/features/checkout/schemas";
-import {
-  districtsIn,
-  findMunicipality,
-  municipalitiesIn,
-  wardOptions,
-  type NepalAddressData,
-} from "@/features/delivery/nepal-address";
+import { findMunicipality, type NepalAddressData } from "@/features/delivery/nepal-address";
 import { cn } from "@/lib/utils/cn";
 import { NumberedSection } from "./numbered-section";
 
@@ -60,28 +52,12 @@ function positionError(error: GeolocationPositionError): string {
 export function AddressSection({ data }: { data: NepalAddressData }) {
   const {
     control,
-    register,
     setValue,
     getValues,
-    formState: { errors, touchedFields },
+    formState: { touchedFields },
   } = useFormContext<CheckoutFormValues>();
-  const [provinceCode, districtCode, municipalityCode, latitude, longitude] = useWatch({
-    control,
-    name: ["provinceCode", "districtCode", "municipalityCode", "latitude", "longitude"],
-  });
+  const [latitude, longitude] = useWatch({ control, name: ["latitude", "longitude"] });
   const [location, setLocation] = useState<LocationState>({ kind: "idle" });
-
-  const provinceOptions = useMemo(() => data.provinces.map((province) => ({ value: province.code, label: province.name })), [data]);
-  const districtOptions = useMemo(
-    () => districtsIn(data, provinceCode).map((district) => ({ value: district.code, label: district.name })),
-    [data, provinceCode],
-  );
-  const municipalityOptions = useMemo(
-    () => municipalitiesIn(data, districtCode).map((municipality) => ({ value: municipality.code, label: municipality.name })),
-    [data, districtCode],
-  );
-  const municipality = findMunicipality(data, municipalityCode);
-  const wards = useMemo(() => wardOptions(municipality?.wardCount ?? 0), [municipality]);
 
   const validate = (field: keyof CheckoutFormValues) => ({ shouldValidate: Boolean(touchedFields[field]), shouldDirty: true });
 
@@ -223,129 +199,7 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
         ) : null}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Province" required error={errors.provinceCode?.message}>
-          {(wiring) => (
-            <Controller
-              control={control}
-              name="provinceCode"
-              render={({ field }) => (
-                <Select
-                  {...wiring}
-                  ref={field.ref}
-                  name={field.name}
-                  value={field.value}
-                  onBlur={field.onBlur}
-                  onValueChange={(value) => {
-                    if (value === field.value) return;
-                    field.onChange(value);
-                    setValue("districtCode", "", { shouldDirty: true });
-                    setValue("municipalityCode", "", { shouldDirty: true });
-                    setValue("ward", "", { shouldDirty: true });
-                  }}
-                  options={provinceOptions}
-                  placeholder="Choose a province"
-                />
-              )}
-            />
-          )}
-        </Field>
-        <Field label="District / Region" required error={errors.districtCode?.message}>
-          {(wiring) => (
-            <Controller
-              control={control}
-              name="districtCode"
-              render={({ field }) => (
-                <Select
-                  {...wiring}
-                  ref={field.ref}
-                  name={field.name}
-                  value={field.value}
-                  onBlur={field.onBlur}
-                  disabled={!provinceCode}
-                  onValueChange={(value) => {
-                    if (value === field.value) return;
-                    field.onChange(value);
-                    setValue("municipalityCode", "", { shouldDirty: true });
-                    setValue("ward", "", { shouldDirty: true });
-                  }}
-                  options={districtOptions}
-                  placeholder={provinceCode ? "Choose a district" : "Choose a province first"}
-                />
-              )}
-            />
-          )}
-        </Field>
-        <Field
-          label="Municipality / City"
-          required
-          error={errors.municipalityCode?.message}
-          hint={districtCode && municipalityOptions.length === 0 ? "We don't have municipalities for this district yet." : undefined}
-        >
-          {(wiring) => (
-            <Controller
-              control={control}
-              name="municipalityCode"
-              render={({ field }) => (
-                <Select
-                  {...wiring}
-                  ref={field.ref}
-                  name={field.name}
-                  value={field.value}
-                  onBlur={field.onBlur}
-                  disabled={!districtCode || municipalityOptions.length === 0}
-                  onValueChange={(value) => {
-                    if (value === field.value) return;
-                    field.onChange(value);
-                    setValue("ward", "", { shouldDirty: true });
-                    const next = findMunicipality(data, value);
-                    if (next?.postalCode && !getValues("postalCode")) setValue("postalCode", next.postalCode, { shouldDirty: true });
-                  }}
-                  options={municipalityOptions}
-                  placeholder={districtCode ? "Choose a municipality" : "Choose a district first"}
-                />
-              )}
-            />
-          )}
-        </Field>
-        <Field label="Ward No." required error={errors.ward?.message}>
-          {(wiring) => (
-            <Controller
-              control={control}
-              name="ward"
-              render={({ field }) => (
-                <Select
-                  {...wiring}
-                  ref={field.ref}
-                  name={field.name}
-                  value={field.value}
-                  onBlur={field.onBlur}
-                  disabled={!municipality}
-                  onValueChange={field.onChange}
-                  options={wards}
-                  placeholder={municipality ? "Choose a ward" : "Choose a municipality first"}
-                />
-              )}
-            />
-          )}
-        </Field>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_10rem]">
-        <Field label="Street / Landmark" required error={errors.streetLandmark?.message}>
-          {(wiring) => (
-            <Input
-              {...wiring}
-              {...register("streetLandmark")}
-              autoComplete="address-line1"
-              leadingIcon={<MapPinIcon {...iconProps} />}
-              placeholder="e.g. Thamel, near Garden of Dreams"
-            />
-          )}
-        </Field>
-        <Field label="Postal Code" error={errors.postalCode?.message}>
-          {(wiring) => <Input {...wiring} {...register("postalCode")} inputMode="numeric" autoComplete="postal-code" maxLength={5} placeholder="44600" />}
-        </Field>
-      </div>
+      <NepalAddressFields data={data} />
     </NumberedSection>
   );
 }

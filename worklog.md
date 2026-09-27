@@ -1,6 +1,6 @@
 # Goreto.store — Work Log
 
-_Last updated: 2026-09-27 · Branch: `feat/admin-media-ar` (uncommitted)_
+_Last updated: 2026-09-27 · Branch: `feat/whatsapp-orders` (uncommitted)_
 
 Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the migrations, the code in `src/`, `scripts/` and `tests/`, and a fresh run of the checks below.
 
@@ -12,8 +12,8 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
 | --- | --- |
 | `npm run typecheck` | ✅ passes |
 | `npm run lint` | ✅ passes |
-| `npm test` (Vitest + RTL) | ✅ 49 files, 388 tests |
-| `npm run test:db` (PGlite + real migrations + seed + RLS) | ✅ 8 files, 176 tests |
+| `npm test` (Vitest + RTL) | ✅ 62 files, 455 tests |
+| `npm run test:db` (PGlite + real migrations + seed + RLS) | ✅ 10 files, 228 tests |
 | `npm run build` | ✅ passes |
 
 **Stack in use:** Next.js 16.3.6 (App Router, `src/proxy.ts`), React 19.2.8, TypeScript strict, Tailwind v4 tokens, Clerk (`@clerk/nextjs` 7.9.5, Core 3), Supabase (hosted **dev** project; `@supabase/supabase-js` 2.117.1), Zustand (cart), React Hook Form + Zod, Phosphor icons, GSAP (homepage motion only), libphonenumber-js, Vitest and PGlite. npm is the package manager.
@@ -202,41 +202,42 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
 - Couriers can't be notified. All couriers are `integration_mode = manual`, and nothing sends them a message.
 - There's no store setting for the courier mode (auto vs manual).
 
-**To build:**
-- [ ] **Schema:**
-  - [ ] `orders.channel` enum (`website`, `whatsapp`, with room for more later).
-  - [ ] Optional WhatsApp reference (the customer's WhatsApp number or a note), plus `accepted_by` and `accepted_at`.
-  - [ ] `notifications` table, RLS-scoped to owner and permitted staff, with grants that follow `harden_grants`.
-  - [ ] Store setting `courier_assignment_mode` (`auto` | `manual`), plus the rule auto mode uses: the order's chosen delivery service → its courier, with a default courier as fallback.
-  - [ ] Courier notification contact on `couriers` (e.g. a WhatsApp/phone number for dispatch). This is a contact, not a secret.
-  - [ ] Courier handoff log: status, attempts, errors and who sent it, so each handoff runs once and retries are safe.
-- [ ] **Manual WhatsApp order entry** (`/admin/orders/new`, needs `orders.write`):
-  - [ ] Channel "WhatsApp", the customer's name, Nepal phone (E.164) and WhatsApp number, and a link to an existing customer when one exists.
-  - [ ] Products and variants, Nepal address (Province → District → Municipality → Ward), delivery service and an optional note.
-  - [ ] Prices, stock, delivery fee and totals are calculated on the server through the same `place_order` core as website checkout. The payment method is COD.
-  - [ ] The order is created as `pending_confirmation`, even when staff enter it, so the accept step always happens.
-- [ ] **Notifications:**
-  - [ ] A new pending order (WhatsApp or website) creates a notification.
-  - [ ] Live bell and feed in the admin header using Supabase Realtime, with a count, a list and a link to the order.
-  - [ ] Optional sound or browser push.
-  - [ ] Only the owner and staff with `orders.read` receive them.
-- [ ] **Accept / reject:**
-  - [ ] Accept and Reject buttons on pending orders, allowed for the owner and staff with `orders.write`, checked again in SQL. Acceptance records who and when.
-  - [ ] **Auto mode:** accepting assigns the courier by the rule above. If nothing matches, accepting asks staff to pick one.
-  - [ ] **Manual mode:** the Accept dialog requires staff to pick a courier.
-  - [ ] Reject needs a reason. It cancels the order, and the stock rules still apply.
-  - [ ] The owner switches the mode in `/admin/settings` (needs `settings.manage`).
-- [ ] **Courier handoff, only after acceptance:**
-  - [ ] On accept, notify the assigned courier with a safe order payload: order number, recipient, phone, address snapshot, COD amount and items.
-  - [ ] No courier APIs. First channel: a WhatsApp click-to-send (`wa.me`) link, with the courier portal later (see below).
-  - [ ] Runs from trusted server code only, and is recorded as a shipment event and in the handoff log.
-  - [ ] Staff can resend the notification from the order page if it failed.
-- [ ] **Tests:**
-  - [ ] RLS: a customer can't see notifications, and staff without `orders.write` can't create or accept orders.
-  - [ ] Nothing reaches the courier before acceptance.
-  - [ ] Auto and manual courier modes.
-  - [ ] Server-side totals for manual orders (the browser can't set prices).
-  - [ ] Accept and courier handoff are idempotent.
+**Built 2026-09-27** (`prompts/goreto-whatsapp-orders-courier-handoff.md`, migration `20260929090000_whatsapp_orders.sql`, applied to hosted dev):
+- [x] **Schema:**
+  - [x] `orders.channel` enum (`website`, `whatsapp`, with room for more later).
+  - [x] Optional WhatsApp reference (the customer's WhatsApp number or a note), plus `accepted_by` and `accepted_at`.
+  - [x] `notifications` table, RLS-scoped to owner and permitted staff, with grants that follow `harden_grants`.
+  - [x] Store setting `courier_assignment_mode` (`auto` | `manual`), plus the rule auto mode uses: the order's chosen delivery service → its courier, with a default courier as fallback.
+  - [x] Courier notification contact on `couriers` (e.g. a WhatsApp/phone number for dispatch). This is a contact, not a secret.
+  - [x] Courier handoff log (`courier_handoffs`): status, attempts and who sent it, so each handoff runs once and retries are safe. There's no error column, because a `wa.me` link can't report a failure. The portal phase can add one.
+- [x] **Manual WhatsApp order entry** (`/admin/orders/new`, needs `orders.write`):
+  - [x] Channel "WhatsApp", the customer's name, Nepal phone (E.164) and WhatsApp number, and a link to an existing customer when one exists.
+  - [x] Products and variants, Nepal address (Province → District → Municipality → Ward), delivery service and an optional note.
+  - [x] Prices, stock, delivery fee and totals are calculated on the server through the same `place_order` core as website checkout. The payment method is COD.
+  - [x] The order is created as `pending_confirmation`, even when staff enter it, so the accept step always happens.
+- [x] **Notifications:**
+  - [x] A new pending order (WhatsApp or website) creates a notification.
+  - [x] Live bell and feed in the admin header using Supabase Realtime, with a count, a list and a link to the order.
+  - [x] Optional sound: a Web Audio chime, off by default, toggled in the bell. Browser push is **not** built (it needs a service worker).
+  - [x] Only the owner and staff with `orders.read` receive them.
+- [x] **Accept / reject:**
+  - [x] Accept and Reject buttons on pending orders, allowed for the owner and staff with `orders.write`, checked again in SQL. Acceptance records who and when.
+  - [x] **Auto mode:** accepting assigns the courier by the rule above. If nothing matches, accepting asks staff to pick one.
+  - [x] **Manual mode:** the Accept dialog requires staff to pick a courier.
+  - [x] Reject needs a reason. It cancels the order, and the stock rules still apply.
+  - [x] The owner switches the mode in `/admin/settings` (needs `settings.manage`).
+- [x] **Courier handoff, only after acceptance:**
+  - [x] On accept, notify the assigned courier with a safe order payload: order number, recipient, phone, address snapshot, COD amount and items.
+  - [x] No courier APIs. First channel: a WhatsApp click-to-send (`wa.me`) link, with the courier portal later (see below).
+  - [x] Runs from trusted server code only, and is recorded as a shipment event and in the handoff log.
+  - [x] Staff can resend the notification from the order page if it failed.
+- [x] **Tests:**
+  - [x] RLS: a customer can't see notifications, and staff without `orders.write` can't create or accept orders.
+  - [x] Nothing reaches the courier before acceptance.
+  - [x] Auto and manual courier modes.
+  - [x] Server-side totals for manual orders (the browser can't set prices).
+  - [x] Accept and courier handoff are idempotent.
+- [x] **Auto-accept (added on plan review):** one switch per channel in `/admin/settings` (website, WhatsApp), off by default. When on, a new order is accepted in the same transaction and its courier is assigned by the automatic rule. The courier still gets it through the `wa.me` button, and the bell says "ready to send" until someone taps Send.
 
 **Courier notification: decided 2026-09-27.** Option 1 ships first and option 2 comes in a later phase. Both are free (no paid API):
 
@@ -330,7 +331,7 @@ Several footer and nav links return a 404 today.
 
 ## 5. Needs your decision or action
 
-- **WhatsApp order flow (§4.0, top priority):** everything is decided. Courier notification is `wa.me` click-to-send first, with the courier portal later (which adds a `courier` role). Ready to plan.
+- **WhatsApp order flow (§4.0):** built on `feat/whatsapp-orders`. Before relying on it: add each courier's dispatch WhatsApp number (Delivery → Couriers), choose the courier mode, default courier and auto-accept switches (Settings), and give the right staff `orders.write`. The signed-in browser pass is still to do. The courier portal (automatic handoff, adds a `courier` role) is the next phase.
 - **Seed AR rows have no files:** `/admin/ar` flags them "No file uploaded", but the storefront still shows AR READY for them. Upload real files or turn those rows off before launch.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.

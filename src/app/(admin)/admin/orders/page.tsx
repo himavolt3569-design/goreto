@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EmptyState, FilterBar, FilterField, LinkTabs, PageHeader, Pagination, Panel, TableScroll, Thumb, tableClasses, tdClasses, thClasses, theadRowClasses, numericClasses } from "@/components/admin/admin-ui";
-import { PAYMENT_LABELS, PaymentStatusPill } from "@/components/admin/status-pills";
-import { FileTextIcon } from "@/components/ui/icons";
+import { CHANNEL_LABELS, OrderChannelPill, PAYMENT_LABELS, PaymentStatusPill } from "@/components/admin/status-pills";
+import { buttonClasses } from "@/components/ui/button";
+import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
+import { FileTextIcon, WhatsappLogoIcon } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { OrderStatusPill } from "@/components/ui/status";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { isIsoDate } from "@/features/admin/date-range";
-import { formatCount, formatDateTime } from "@/features/admin/format";
-import { fetchOrders, ORDER_STATUSES, PAYMENT_STATUSES } from "@/features/admin/queries/orders";
+import { formatCount, formatDateTime, formatNepalPhone } from "@/features/admin/format";
+import { canAccess } from "@/features/admin/nav";
+import { fetchOrders, ORDER_CHANNELS, ORDER_STATUSES, PAYMENT_STATUSES } from "@/features/admin/queries/orders";
 import { pageNumber, pickEnum } from "@/features/admin/queries/shared";
 import { sanitizeSearch } from "@/features/admin/search-input";
 import { hrefWith, param } from "@/features/admin/url";
@@ -30,26 +33,38 @@ const STATUS_TABS = [
 ] as const;
 
 export default async function OrdersPage({ searchParams }: PageProps<"/admin/orders">) {
-  await requireAdminAccess("orders.read");
+  const profile = await requireAdminAccess("orders.read");
   const params = await searchParams;
   const q = sanitizeSearch(params.q);
   const status = pickEnum(params.status, ORDER_STATUSES);
   const payment = pickEnum(params.payment, PAYMENT_STATUSES);
+  const channel = pickEnum(params.channel, ORDER_CHANNELS);
   const from = isIsoDate(param(params, "from")) ? param(params, "from") : undefined;
   const to = isIsoDate(param(params, "to")) ? param(params, "to") : undefined;
   const page = pageNumber(params.page);
 
-  const orders = await fetchOrders({ q, status, payment, from, to, page });
+  const orders = await fetchOrders({ q, status, payment, channel, from, to, page });
 
   return (
     <>
-      <PageHeader title="Orders" description="All orders, newest first. Payment is Cash on Delivery; times are Kathmandu time." />
+      <PageHeader
+        title="Orders"
+        description="All orders, newest first. Payment is Cash on Delivery; times are Kathmandu time."
+        actions={
+          canAccess(profile, "orders.write") ? (
+            <Link href="/admin/orders/new" className={buttonClasses({ variant: "primary", size: "md" })}>
+              <WhatsappLogoIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+              New WhatsApp order
+            </Link>
+          ) : null
+        }
+      />
       <LinkTabs
         label="Order status"
         tabs={STATUS_TABS.map((tab) => ({ label: tab.label, href: hrefWith("/admin/orders", params, { status: tab.value }), active: status === tab.value }))}
       />
       <Panel title={`${formatCount(orders.total)} orders`}>
-        <FilterBar resetHref={hrefWith("/admin/orders", {}, { status })} hasFilters={Boolean(q || payment || from || to)}>
+        <FilterBar resetHref={hrefWith("/admin/orders", {}, { status })} hasFilters={Boolean(q || payment || channel || from || to)}>
           {status ? <input type="hidden" name="status" value={status} /> : null}
           <FilterField label="Order number, name or email" htmlFor="order-q" className="md:w-72">
             <Input id="order-q" type="search" name="q" defaultValue={q} placeholder="e.g. GT2609241234" maxLength={64} />
@@ -65,6 +80,14 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
               ]}
             />
           </FilterField>
+          <FilterField label="Channel" htmlFor="order-channel">
+            <Select
+              id="order-channel"
+              name="channel"
+              defaultValue={channel ?? ""}
+              options={[{ value: "", label: "Any channel" }, ...ORDER_CHANNELS.map((value) => ({ value, label: CHANNEL_LABELS[value] }))]}
+            />
+          </FilterField>
           <FilterField label="Placed from" htmlFor="order-from" className="md:w-44">
             <Input id="order-from" type="date" name="from" defaultValue={from} />
           </FilterField>
@@ -78,11 +101,12 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
         ) : (
           <>
             <TableScroll label="Orders">
-              <table className={cn(tableClasses, "min-w-[960px]")}>
+              <table className={cn(tableClasses, "min-w-[1080px]")}>
                 <thead>
                   <tr className={theadRowClasses}>
                     <th scope="col" className={thClasses}>Order</th>
                     <th scope="col" className={thClasses}>Customer</th>
+                    <th scope="col" className={thClasses}>Channel</th>
                     <th scope="col" className={thClasses}>Placed</th>
                     <th scope="col" className={cn(thClasses, "text-right")}>Items</th>
                     <th scope="col" className={cn(thClasses, "text-right")}>Total</th>
@@ -105,8 +129,17 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                       <td className={tdClasses}>
                         <span className="flex flex-col">
                           <span>{order.contactName}</span>
-                          <span className="text-small text-neutral-500">{order.isGuest ? "Guest checkout" : order.contactEmail}</span>
+                          <span className="text-small text-neutral-500">
+                            {order.channel === "whatsapp"
+                              ? formatNepalPhone(order.contactPhone)
+                              : order.isGuest
+                                ? "Guest checkout"
+                                : order.contactEmail}
+                          </span>
                         </span>
+                      </td>
+                      <td className={tdClasses}>
+                        <OrderChannelPill channel={order.channel} />
                       </td>
                       <td className={cn(tdClasses, "whitespace-nowrap text-neutral-700")}>{formatDateTime(order.createdAt)}</td>
                       <td className={cn(tdClasses, numericClasses)}>{formatCount(order.itemCount)}</td>

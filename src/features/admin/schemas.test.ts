@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { orderTransitionSchema, reviewModerationSchema, stockAdjustSchema, storeSettingsSchema, toggleSchema } from "./schemas";
+import { acceptOrderSchema, orderTransitionSchema, reviewModerationSchema, stockAdjustSchema, storeSettingsSchema, toggleSchema } from "./schemas";
 
 const ID = "7803b1dc-7013-5377-9807-e7a9b6e97040";
 
@@ -13,6 +13,9 @@ const settings = {
   codMaxOrder: "25,000",
   returnsWindowDays: "7",
   lowStockThreshold: "5",
+  autoAcceptWhatsappOrders: "on",
+  courierAssignmentMode: "auto",
+  defaultCourierId: "",
 };
 
 describe("storeSettingsSchema", () => {
@@ -26,7 +29,17 @@ describe("storeSettingsSchema", () => {
       codMaxOrder: 2_500_000,
       returnsWindowDays: 7,
       lowStockThreshold: 5,
+      autoAcceptWebsiteOrders: false,
+      autoAcceptWhatsappOrders: true,
+      courierAssignmentMode: "auto",
+      defaultCourierId: null,
     });
+  });
+
+  it("accepts only the two courier modes and a real default courier id", () => {
+    expect(storeSettingsSchema.safeParse({ ...settings, courierAssignmentMode: "random" }).success).toBe(false);
+    expect(storeSettingsSchema.safeParse({ ...settings, defaultCourierId: "pathao" }).success).toBe(false);
+    expect(storeSettingsSchema.parse({ ...settings, defaultCourierId: ID }).defaultCourierId).toBe(ID);
   });
 
   it("accepts a number typed with +977 and empty optional fields", () => {
@@ -64,9 +77,18 @@ describe("storeSettingsSchema", () => {
 
 describe("action schemas", () => {
   it("requires a real uuid and a known status", () => {
-    expect(orderTransitionSchema.safeParse({ orderId: "1; drop", status: "confirmed" }).success).toBe(false);
+    expect(orderTransitionSchema.safeParse({ orderId: "1; drop", status: "processing" }).success).toBe(false);
     expect(orderTransitionSchema.safeParse({ orderId: ID, status: "pending_confirmation" }).success).toBe(false);
+    // Pending orders are confirmed only by Accept.
+    expect(orderTransitionSchema.safeParse({ orderId: ID, status: "confirmed" }).success).toBe(false);
     expect(orderTransitionSchema.parse({ orderId: ID, status: "canceled", reason: "  Out of stock " }).reason).toBe("Out of stock");
+  });
+
+  it("accepts with or without a chosen courier", () => {
+    expect(acceptOrderSchema.parse({ orderId: ID }).courierId).toBeNull();
+    expect(acceptOrderSchema.parse({ orderId: ID, courierId: "" }).courierId).toBeNull();
+    expect(acceptOrderSchema.parse({ orderId: ID, courierId: ID }).courierId).toBe(ID);
+    expect(acceptOrderSchema.safeParse({ orderId: ID, courierId: "pathao" }).success).toBe(false);
   });
 
   it("rejects a zero or fractional stock change", () => {

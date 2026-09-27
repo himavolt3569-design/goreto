@@ -2,15 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BackLink, PageHeader, Panel, TableScroll, Thumb, tableClasses, tdClasses, thClasses, theadRowClasses, numericClasses } from "@/components/admin/admin-ui";
+import { CourierHandoffPanel } from "@/components/admin/courier-handoff-panel";
 import { OrderActions } from "@/components/admin/order-actions";
-import { PaymentStatusPill, SHIPMENT_LABELS, ShipmentStatusPill } from "@/components/admin/status-pills";
+import { OrderChannelPill, PaymentStatusPill, SHIPMENT_LABELS, ShipmentStatusPill } from "@/components/admin/status-pills";
 import { CheckIcon } from "@/components/ui/icons";
 import { OrderStatusPill } from "@/components/ui/status";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { formatCount, formatDate, formatDateTime, formatNepalPhone } from "@/features/admin/format";
 import { canAccess } from "@/features/admin/nav";
-import { ORDER_PROGRESS } from "@/features/admin/order-transitions";
-import { fetchActiveCouriers, fetchOrderDetail, type OrderDetail } from "@/features/admin/queries/orders";
+import { canAccept, canHandOffToCourier, ORDER_PROGRESS } from "@/features/admin/order-transitions";
+import {
+  fetchAcceptPreview,
+  fetchActiveCouriers,
+  fetchOrderDetail,
+  fetchStaffNames,
+  fetchStoreName,
+  type OrderDetail,
+} from "@/features/admin/queries/orders";
+import { buildCourierMessage, whatsappLink } from "@/features/orders/courier-handoff";
 import { formatNpr } from "@/lib/money/format";
 import { cn } from "@/lib/utils/cn";
 
@@ -23,7 +32,7 @@ const ORDER_NUMBER = /^[A-Z]{2,4}[0-9]{6,14}$/;
 
 const STEP_LABELS: Record<(typeof ORDER_PROGRESS)[number], string> = {
   pending_confirmation: "Placed",
-  confirmed: "Confirmed",
+  confirmed: "Accepted",
   processing: "Processing",
   packed: "Packed",
   shipped: "Shipped",
@@ -57,10 +66,40 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
   const [order, couriers] = await Promise.all([fetchOrderDetail(orderNumber), canWrite ? fetchActiveCouriers() : Promise.resolve([])]);
   if (!order) notFound();
 
+  const shipment = order.shipment;
+  const courier = shipment?.couriers ?? null;
+  const showHandoff = canHandOffToCourier(order.status) && courier !== null;
+  const [acceptPreview, staffNames, storeName] = await Promise.all([
+    canWrite && canAccept(order.status) ? fetchAcceptPreview(order.id) : Promise.resolve(null),
+    fetchStaffNames([order.created_by, order.accepted_by, order.canceled_by, order.handoff?.last_sent_by]),
+    showHandoff ? fetchStoreName() : Promise.resolve(""),
+  ]);
+  const staffName = (id: string | null | undefined) => (id ? (staffNames.get(id) ?? "a former staff member") : null);
+
   const canViewCustomer = canAccess(profile, "customers.read") && order.user_id !== null;
   const reachedIndex = order.status === "canceled" ? -1 : ORDER_PROGRESS.indexOf(order.status);
-  const shipment = order.shipment;
   const address = order.address;
+
+  // The courier message exists only once the order is accepted (showHandoff).
+  const courierMessage =
+    showHandoff && courier
+      ? buildCourierMessage({
+          storeName,
+          orderNumber: order.order_number,
+          recipientName: address.recipient_name ?? order.contact_name,
+          phoneE164: address.phone_e164 ?? order.contact_phone_e164,
+          address,
+          serviceName: [order.delivery.courier_name, order.delivery.service_name].filter(Boolean).join(" · ") || null,
+          codAmountPaisa: order.total_paisa,
+          items: order.items.map((item) => ({ title: item.product_title, variant: item.variant_title, quantity: item.quantity })),
+        })
+      : null;
+  const acceptance =
+    order.accepted_via === "auto"
+      ? `Accepted automatically ${formatDateTime(order.accepted_at)}`
+      : order.accepted_at
+        ? `Accepted ${formatDateTime(order.accepted_at)}${order.accepted_by ? ` by ${staffName(order.accepted_by)}` : ""}`
+        : null;
 
   return (
     <>
@@ -70,6 +109,7 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
         description={`Placed ${formatDateTime(order.created_at)} · Cash on Delivery`}
         eyebrow={
           <div className="flex flex-wrap items-center gap-2">
+            <OrderChannelPill channel={order.channel} />
             <OrderStatusPill status={order.status} />
             <PaymentStatusPill status={order.payment_status} />
             {shipment ? <ShipmentStatusPill status={shipment.status} /> : null}
@@ -82,7 +122,10 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
           <Panel title="Progress" bodyClassName="px-6 pb-6">
             {order.status === "canceled" ? (
               <div className="flex flex-col gap-1 rounded-md bg-error-100 p-4">
-                <p className="text-body font-semibold text-error-700">Canceled {formatDateTime(order.canceled_at)}</p>
+                <p className="text-body font-semibold text-error-700">
+                  {order.accepted_at ? "Canceled" : "Rejected"} {formatDateTime(order.canceled_at)}
+                  {order.canceled_by ? ` by ${staffName(order.canceled_by)}` : ""}
+                </p>
                 {order.cancellation_reason ? <p className="text-body text-error-700">{order.cancellation_reason}</p> : null}
               </div>
             ) : (
@@ -112,6 +155,7 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
                 })}
               </ol>
             )}
+            {acceptance ? <p className="mt-4 text-small text-neutral-500">{acceptance}.</p> : null}
           </Panel>
 
           <Panel title="Items" description="As purchased. Titles and prices are snapshots from the time of the order.">
@@ -203,6 +247,34 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
                 couriers={couriers}
                 currentCourierId={shipment?.couriers?.id ?? null}
                 currentTracking={shipment?.tracking_number ?? null}
+                acceptPreview={acceptPreview}
+              />
+            </Panel>
+          ) : null}
+
+          {showHandoff && courier && courierMessage ? (
+            <Panel
+              title="Courier handoff"
+              description="Send the accepted order to the courier on WhatsApp. You tap Send in WhatsApp yourself."
+              bodyClassName="px-6 pb-6"
+            >
+              <CourierHandoffPanel
+                orderId={order.id}
+                courierName={courier.name}
+                courierEditHref={canAccess(profile, "delivery.manage") ? `/admin/delivery/couriers/${courier.id}/edit` : null}
+                whatsappHref={courier.dispatch_whatsapp_e164 ? whatsappLink(courier.dispatch_whatsapp_e164, courierMessage) : null}
+                message={courierMessage}
+                handoff={
+                  order.handoff && order.handoff.courier_id === courier.id
+                    ? {
+                        attempts: order.handoff.attempts,
+                        lastSentLabel: order.handoff.last_sent_at ? formatDateTime(order.handoff.last_sent_at) : null,
+                        lastSentByName: staffName(order.handoff.last_sent_by),
+                      }
+                    : null
+                }
+                acceptedAutomatically={order.accepted_via === "auto"}
+                canSend={canWrite}
               />
             </Panel>
           ) : null}
@@ -219,13 +291,17 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
                   ) : (
                     order.contact_name
                   )}
-                  {order.user_id === null ? <span className="ml-2 text-small text-neutral-500">Guest checkout</span> : null}
+                  {order.user_id === null ? (
+                    <span className="ml-2 text-small text-neutral-500">{order.channel === "whatsapp" ? "No linked account" : "Guest checkout"}</span>
+                  ) : null}
                 </dd>
               </div>
-              <div>
-                <dt className="text-small text-neutral-500">Email</dt>
-                <dd className="break-all text-neutral-900">{order.contact_email}</dd>
-              </div>
+              {order.contact_email ? (
+                <div>
+                  <dt className="text-small text-neutral-500">Email</dt>
+                  <dd className="break-all text-neutral-900">{order.contact_email}</dd>
+                </div>
+              ) : null}
               <div>
                 <dt className="text-small text-neutral-500">Phone</dt>
                 <dd className="text-neutral-900">
@@ -234,6 +310,23 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
                   </a>
                 </dd>
               </div>
+              {order.whatsapp_e164 ? (
+                <div>
+                  <dt className="text-small text-neutral-500">WhatsApp</dt>
+                  <dd className="text-neutral-900">
+                    <a href={whatsappLink(order.whatsapp_e164)} target="_blank" rel="noopener noreferrer" className="rounded-xs hover:text-primary-600">
+                      {formatNepalPhone(order.whatsapp_e164)}
+                      <span className="sr-only"> (opens WhatsApp in a new tab)</span>
+                    </a>
+                  </dd>
+                </div>
+              ) : null}
+              {order.created_by ? (
+                <div>
+                  <dt className="text-small text-neutral-500">Entered by</dt>
+                  <dd className="text-neutral-900">{staffName(order.created_by)}</dd>
+                </div>
+              ) : null}
               {order.customer_note ? (
                 <div>
                   <dt className="text-small text-neutral-500">Order note</dt>

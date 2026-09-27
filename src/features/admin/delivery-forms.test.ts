@@ -58,10 +58,25 @@ describe("coupon form", () => {
 
 describe("courier forms", () => {
   it("stores the phone as E.164 and requires https", () => {
-    const parsed = courierFormSchema.safeParse({ title: "Nepal Express", slug: "nepal-express", supportPhone: "9801234567", websiteUrl: "https://example.com" });
-    expect(parsed.data).toMatchObject({ supportPhone: "+9779801234567", websiteUrl: "https://example.com", isActive: false });
-    const bad = courierFormSchema.safeParse({ title: "X", slug: "x", supportPhone: "12345", websiteUrl: "http://example.com" });
-    expect(errorsOf(bad)).toMatchObject({ slug: expect.any(String), supportPhone: expect.stringMatching(/Nepal/), websiteUrl: expect.stringMatching(/https/) });
+    const parsed = courierFormSchema.safeParse({
+      title: "Nepal Express",
+      slug: "nepal-express",
+      supportPhone: "9801234567",
+      dispatchWhatsapp: "",
+      websiteUrl: "https://example.com",
+    });
+    expect(parsed.data).toMatchObject({ supportPhone: "+9779801234567", dispatchWhatsapp: null, websiteUrl: "https://example.com", isActive: false });
+    expect(
+      courierFormSchema.safeParse({ title: "Nepal Express", slug: "nepal-express", supportPhone: "", dispatchWhatsapp: "+977 981-2345678", websiteUrl: "" }).data
+        ?.dispatchWhatsapp,
+    ).toBe("+9779812345678");
+    const bad = courierFormSchema.safeParse({ title: "X", slug: "x", supportPhone: "12345", dispatchWhatsapp: "555", websiteUrl: "http://example.com" });
+    expect(errorsOf(bad)).toMatchObject({
+      slug: expect.any(String),
+      supportPhone: expect.stringMatching(/Nepal/),
+      dispatchWhatsapp: expect.stringMatching(/Nepal/),
+      websiteUrl: expect.stringMatching(/https/),
+    });
   });
 
   it("upper-cases service codes and checks the day range", () => {

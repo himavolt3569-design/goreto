@@ -9,6 +9,7 @@ import { TruckIcon } from "@/components/ui/icons";
 import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { addShipmentEventAction, assignCourierAction, markRefundedAction, transitionOrderAction } from "@/features/admin/actions/orders";
 import {
+  canAccept,
   canAddTrackingEvent,
   canAssignCourier,
   canCancel,
@@ -18,7 +19,9 @@ import {
   type OrderStatus,
   type PaymentStatus,
 } from "@/features/admin/order-transitions";
+import type { AcceptPreview } from "@/features/admin/queries/orders";
 import { cn } from "@/lib/utils/cn";
+import { AcceptRejectOrder } from "./accept-order";
 import { ActionForm, FormDialog, SubmitButton } from "./action-forms";
 
 const TRACKING_STATUS_OPTIONS = [
@@ -33,8 +36,9 @@ const FORWARD_HINTS: Partial<Record<OrderStatus, string>> = {
 };
 
 /**
- * Next steps for an order. Only the transitions the state machine allows are
- * offered; the database re-validates each one.
+ * Next steps for an order. Pending orders get Accept or Reject; after that,
+ * only the transitions the state machine allows are offered. The database
+ * re-validates each one.
  */
 export function OrderActions({
   orderId,
@@ -44,6 +48,7 @@ export function OrderActions({
   couriers,
   currentCourierId,
   currentTracking,
+  acceptPreview,
 }: {
   orderId: string;
   status: OrderStatus;
@@ -52,10 +57,16 @@ export function OrderActions({
   couriers: { id: string; name: string }[];
   currentCourierId: string | null;
   currentTracking: string | null;
+  /** Loaded for pending orders only. */
+  acceptPreview: AcceptPreview | null;
 }) {
   const next = forwardTransition(status);
   const needsCourier = next === "shipped" && !hasCourier;
   const reasonId = useId();
+
+  if (canAccept(status) && acceptPreview) {
+    return <AcceptRejectOrder orderId={orderId} preview={acceptPreview} couriers={couriers} />;
+  }
 
   const nothingToDo = !next && !canCancel(status) && !canAssignCourier(status) && !canAddTrackingEvent(status) && !canRefund(status, paymentStatus);
   if (nothingToDo) {

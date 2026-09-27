@@ -175,7 +175,7 @@ describe("order transitions", () => {
   it("runs the full fulfilment flow with shipment events and COD collection", async () => {
     const id = pendingOrderId;
     const outcomes = await runStepsAs(db, fulfilmentStaff, [
-      `select public.admin_transition_order('${id}', 'confirmed', null)`,
+      `select public.admin_accept_order('${id}', '${activeCourierId}')`,
       `select public.admin_transition_order('${id}', 'processing', null)`,
       `select public.admin_transition_order('${id}', 'packed', null)`,
       `select public.admin_assign_courier('${id}', '${activeCourierId}', 'pth-123456')`,
@@ -193,7 +193,7 @@ describe("order transitions", () => {
     expect(outcomes.filter(isError)).toEqual([]);
     expect(outcomes[7]).toBe("delivered/collected/true");
     expect(outcomes[8]).toBe("delivered/PTH-123456");
-    expect(outcomes[9]).toBe("assigned,picked_up,out_for_delivery,delivered");
+    expect(outcomes[9]).toBe("assigned,assigned,picked_up,out_for_delivery,delivered");
     expect(outcomes[10]).toBe(0);
   });
 
@@ -202,15 +202,16 @@ describe("order transitions", () => {
     expect(await runAs(db, fulfilmentStaff, `select public.admin_transition_order('${id}', 'delivered', null)`)).toMatch(
       /cannot be moved to delivered/,
     );
+    expect(await runAs(db, fulfilmentStaff, `select public.admin_transition_order('${id}', 'confirmed', null)`)).toMatch(/Use Accept/);
     const noCourier = await runStepsAs(db, fulfilmentStaff, [
+      `select public.admin_accept_order('${id}', '${activeCourierId}')`,
       `update shipments set courier_id = null where order_id = '${id}'`,
-      `select public.admin_transition_order('${id}', 'confirmed', null)`,
       `select public.admin_transition_order('${id}', 'processing', null)`,
       `select public.admin_transition_order('${id}', 'packed', null)`,
       `select public.admin_transition_order('${id}', 'shipped', null)`,
     ]);
     expect(noCourier.at(-1)).toMatch(/Assign a courier/);
-    expect(await runAs(db, catalogStaff, `select public.admin_transition_order('${id}', 'confirmed', null)`)).toMatch(/orders.write required/);
+    expect(await runAs(db, catalogStaff, `select public.admin_transition_order('${id}', 'canceled', 'No')`)).toMatch(/orders.write required/);
     expect(await runAs(db, supportStaff, `select public.admin_assign_courier('${id}', '${activeCourierId}', null)`)).toMatch(/orders.write required/);
     expect(await runAs(db, fulfilmentStaff, `select public.admin_add_shipment_event('${id}', 'in_transit', 'Moving', null)`)).toMatch(
       /only while the order is shipped/,

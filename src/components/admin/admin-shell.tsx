@@ -6,12 +6,18 @@ import { MagnifyingGlassIcon } from "@/components/ui/icons";
 import { Logo } from "@/components/ui/logo";
 import { AdminMobileNav } from "./mobile-nav";
 import { HeaderSearch } from "./header-search";
-import { NotificationsMenu, ProfileMenu, QuickActionsMenu, type AttentionItem, type ProfileSummary, type QuickAction } from "./header-menus";
+import type { AttentionItem } from "@/features/admin/attention";
+import type { NotificationFeed } from "@/features/admin/notifications";
+import { ProfileMenu, QuickActionsMenu, type ProfileSummary, type QuickAction } from "./header-menus";
+import { NotificationsMenu } from "./notifications-menu";
 import { SidebarNav } from "./sidebar-nav";
 
 export type AdminShellProps = {
   allowedHrefs: readonly string[];
   attention: AttentionItem[] | null;
+  /** Order notifications: null without orders.read. */
+  notifications: NotificationFeed | null;
+  profileId: string;
   quickActions: QuickAction[];
   profile: ProfileSummary;
   children: ReactNode;
@@ -22,7 +28,7 @@ export type AdminShellProps = {
  * from `lg` up (a drawer below), header with search, notifications, quick
  * actions and profile, and the page footer.
  */
-export function AdminShell({ allowedHrefs, attention, quickActions, profile, children }: AdminShellProps) {
+export function AdminShell({ allowedHrefs, attention, notifications, profileId, quickActions, profile, children }: AdminShellProps) {
   const year = new Date().getFullYear();
 
   return (
@@ -49,7 +55,7 @@ export function AdminShell({ allowedHrefs, attention, quickActions, profile, chi
               <Link href="/admin/search" aria-label="Search" className={iconButtonClasses({ variant: "ghost", className: "md:hidden" })}>
                 <MagnifyingGlassIcon aria-hidden="true" size={ICON_SIZE} weight={ICON_WEIGHT_OUTLINE} />
               </Link>
-              <NotificationsMenu items={attention} />
+              <NotificationsMenu profileId={profileId} initialFeed={notifications} initialAttention={attention} />
               {quickActions.length > 0 ? <QuickActionsMenu actions={quickActions} /> : null}
               <ProfileMenu profile={profile} />
             </div>

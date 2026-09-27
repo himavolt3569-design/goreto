@@ -1,9 +1,10 @@
 import type { Database } from "@/types/database";
 
 /*
- * Mirror of the order state machine in admin_transition_order (migration
- * admin_operations). The database is the authority; this only decides which
- * buttons the order page offers.
+ * Mirror of the order state machine in admin_transition_order (migrations
+ * admin_operations, whatsapp_orders). The database is the authority; this
+ * only decides which buttons the order page offers. Pending orders are
+ * confirmed only by Accept (admin_accept_order), which assigns the courier.
  */
 
 export type OrderStatus = Database["public"]["Enums"]["order_status"];
@@ -11,7 +12,7 @@ export type PaymentStatus = Database["public"]["Enums"]["payment_status"];
 export type ShipmentStatus = Database["public"]["Enums"]["shipment_status"];
 
 export const NEXT_ORDER_STATUSES: Record<OrderStatus, readonly OrderStatus[]> = {
-  pending_confirmation: ["confirmed", "canceled"],
+  pending_confirmation: ["canceled"],
   confirmed: ["processing", "canceled"],
   processing: ["packed", "canceled"],
   packed: ["shipped", "canceled"],
@@ -20,8 +21,7 @@ export const NEXT_ORDER_STATUSES: Record<OrderStatus, readonly OrderStatus[]> = 
   canceled: [],
 };
 
-export const TRANSITION_LABELS: Record<Exclude<OrderStatus, "pending_confirmation">, string> = {
-  confirmed: "Confirm order",
+export const TRANSITION_LABELS: Record<Exclude<OrderStatus, "pending_confirmation" | "confirmed">, string> = {
   processing: "Start processing",
   packed: "Mark packed",
   shipped: "Mark shipped",
@@ -29,9 +29,21 @@ export const TRANSITION_LABELS: Record<Exclude<OrderStatus, "pending_confirmatio
   canceled: "Cancel order",
 };
 
-export function forwardTransition(status: OrderStatus): Exclude<OrderStatus, "pending_confirmation" | "canceled"> | null {
+type ForwardStatus = Exclude<OrderStatus, "pending_confirmation" | "confirmed" | "canceled">;
+
+export function forwardTransition(status: OrderStatus): ForwardStatus | null {
   const next = NEXT_ORDER_STATUSES[status].find((candidate) => candidate !== "canceled");
-  return (next as Exclude<OrderStatus, "pending_confirmation" | "canceled"> | undefined) ?? null;
+  return (next as ForwardStatus | undefined) ?? null;
+}
+
+/** Pending orders wait for Accept (or Reject, which is cancel with a reason). */
+export function canAccept(status: OrderStatus): boolean {
+  return status === "pending_confirmation";
+}
+
+/** The courier hears about an order only after acceptance and before it ships. */
+export function canHandOffToCourier(status: OrderStatus): boolean {
+  return status === "confirmed" || status === "processing" || status === "packed";
 }
 
 export function canCancel(status: OrderStatus): boolean {

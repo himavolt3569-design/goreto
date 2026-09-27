@@ -1,4 +1,6 @@
 import "server-only";
+import { z } from "zod";
+import type { Database } from "@/types/database";
 import type { ResolvedRange } from "../date-range";
 import type { OrderStatus, PaymentStatus, ShipmentStatus } from "../order-transitions";
 import { containsPattern, orderNumberTerm, quotedFilterValue } from "../search-input";
@@ -18,12 +20,18 @@ export const ORDER_STATUSES: readonly OrderStatus[] = [
 
 export const PAYMENT_STATUSES: readonly PaymentStatus[] = ["pending", "collected", "failed", "refunded"];
 
+export type OrderChannel = Database["public"]["Enums"]["order_channel"];
+export const ORDER_CHANNELS: readonly OrderChannel[] = ["website", "whatsapp"];
+
 export type OrderListRow = {
   id: string;
   orderNumber: string;
   createdAt: string;
   contactName: string;
-  contactEmail: string;
+  /** WhatsApp orders may have no email. */
+  contactEmail: string | null;
+  contactPhone: string;
+  channel: OrderChannel;
   isGuest: boolean;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
@@ -37,6 +45,7 @@ export type OrderFilter = {
   q: string;
   status: OrderStatus | null;
   payment: PaymentStatus | null;
+  channel?: OrderChannel | null;
   /** Kathmandu dates, inclusive. */
   from?: string;
   to?: string;
@@ -58,7 +67,7 @@ export async function fetchOrders(filter: OrderFilter): Promise<Page<OrderListRo
   let query = adminDb()
     .from("orders")
     .select(
-      "id, order_number, created_at, contact_name, contact_email, user_id, status, payment_status, total_paisa, delivery_snapshot, order_items(image_path, quantity, created_at)",
+      "id, order_number, created_at, contact_name, contact_email, contact_phone_e164, channel, user_id, status, payment_status, total_paisa, delivery_snapshot, order_items(image_path, quantity, created_at)",
       { count: "exact" },
     )
     .order("created_at", { ascending: false })
@@ -73,6 +82,7 @@ export async function fetchOrders(filter: OrderFilter): Promise<Page<OrderListRo
   }
   if (filter.status) query = query.eq("status", filter.status);
   if (filter.payment) query = query.eq("payment_status", filter.payment);
+  if (filter.channel) query = query.eq("channel", filter.channel);
   if (filter.from) query = query.gte("created_at", nptStart(filter.from));
   if (filter.to) query = query.lt("created_at", nptStart(nextDay(filter.to)));
 
@@ -87,6 +97,8 @@ export async function fetchOrders(filter: OrderFilter): Promise<Page<OrderListRo
       createdAt: row.created_at,
       contactName: row.contact_name,
       contactEmail: row.contact_email,
+      contactPhone: row.contact_phone_e164,
+      channel: row.channel,
       isGuest: row.user_id === null,
       status: row.status,
       paymentStatus: row.payment_status,
@@ -140,9 +152,11 @@ export async function fetchOrderDetail(orderNumber: string) {
        status, payment_method, payment_status, subtotal_paisa, discount_paisa, delivery_fee_paisa, total_paisa,
        delivery_snapshot, coupon_code, customer_note, confirmed_at, packed_at, shipped_at, delivered_at,
        canceled_at, cancellation_reason, payment_collected_at, refunded_at, created_at, updated_at,
+       channel, whatsapp_e164, created_by, accepted_at, accepted_by, accepted_via, canceled_by,
        order_items(id, product_id, product_title, variant_title, sku, image_path, unit_price_paisa, quantity, line_total_paisa, created_at),
+       courier_handoffs(id, courier_id, status, attempts, first_sent_at, last_sent_at, last_sent_by, created_at),
        shipments(id, status, tracking_number, estimated_delivery_from, estimated_delivery_to, assigned_at, delivered_at, created_at,
-         couriers(id, name, support_phone, website_url),
+         couriers(id, name, support_phone, website_url, dispatch_whatsapp_e164),
          courier_services(name),
          shipment_events(id, status, message, location_label, source, occurred_at, created_at))`,
     )
@@ -165,6 +179,9 @@ export async function fetchOrderDetail(orderNumber: string) {
     }))
     .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
 
+  // One live handoff at most (courier_handoffs_one_active_idx); superseded ones are history.
+  const handoff = data.courier_handoffs.find((row) => row.status !== "superseded") ?? null;
+
   return {
     ...data,
     address: data.shipping_address as AddressSnapshot,
@@ -172,10 +189,58 @@ export async function fetchOrderDetail(orderNumber: string) {
     items: data.order_items.map((item) => ({ ...item, thumbnail: mediaUrl(item.image_path) })),
     shipment,
     events,
+    handoff,
   };
 }
 
 export type OrderDetail = NonNullable<Awaited<ReturnType<typeof fetchOrderDetail>>>;
+export type CourierHandoff = NonNullable<OrderDetail["handoff"]>;
+
+const acceptPreviewSchema = z.object({
+  mode: z.enum(["auto", "manual"]),
+  courier_id: z.string().nullable(),
+  courier_name: z.string().nullable(),
+  source: z.enum(["service", "default"]).nullable(),
+});
+
+export type AcceptPreview = {
+  mode: "auto" | "manual";
+  /** What the automatic rule would pick right now; null when nothing matches. */
+  courier: { id: string; name: string; source: "service" | "default" } | null;
+};
+
+/** The store's courier mode and the courier Accept would pick for this order (orders.read). */
+export async function fetchAcceptPreview(orderId: string): Promise<AcceptPreview> {
+  const { data, error } = await adminDb().rpc("admin_accept_preview", { p_order_id: orderId });
+  if (error) fail("accept preview", error);
+  const preview = acceptPreviewSchema.parse(data);
+  return {
+    mode: preview.mode,
+    courier:
+      preview.courier_id && preview.courier_name && preview.source
+        ? { id: preview.courier_id, name: preview.courier_name, source: preview.source }
+        : null,
+  };
+}
+
+/**
+ * Names for "Entered by", "Accepted by" and "Sent by". Staff without
+ * customers.read can't read profiles, so this goes through a function that
+ * only ever names owner and staff profiles.
+ */
+export async function fetchStaffNames(ids: readonly (string | null | undefined)[]): Promise<Map<string, string>> {
+  const unique = [...new Set(ids.filter((id): id is string => Boolean(id)))];
+  if (unique.length === 0) return new Map();
+  const { data, error } = await adminDb().rpc("admin_staff_names", { p_ids: unique });
+  if (error) fail("staff names", error);
+  return new Map(data.map((row) => [row.id, row.full_name]));
+}
+
+export async function fetchStoreName(): Promise<string> {
+  const { data, error } = await adminDb().from("store_settings").select("store_name").eq("singleton", true).maybeSingle();
+  if (error) fail("store name", error);
+  return data?.store_name ?? "Goreto.store";
+}
 
 export type CourierOption = { id: string; name: string };
 
