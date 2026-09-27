@@ -1,6 +1,8 @@
-import { parsePhoneNumberFromString } from "libphonenumber-js/min";
 import { z } from "zod";
+import { nepalPhoneSchema } from "@/lib/validation/phone";
 import { MANUAL_TRACKING_STATUSES } from "./order-transitions";
+
+export { nepalPhoneSchema };
 
 /*
  * Server Action inputs for the admin panel (AGENTS §20). Every action parses
@@ -101,20 +103,6 @@ export const staffPermissionSchema = z.object({
   ]),
   value: checkbox,
 });
-
-/** Nepal numbers, typed with or without +977, stored as E.164 (AGENTS §15.3). */
-export const nepalPhoneSchema = z
-  .string()
-  .trim()
-  .transform((value, context) => {
-    if (value === "") return null;
-    const phone = parsePhoneNumberFromString(value, "NP");
-    if (!phone?.isValid() || phone.country !== "NP") {
-      context.addIssue({ code: "custom", message: "Enter a valid Nepal phone number" });
-      return z.NEVER;
-    }
-    return phone.number;
-  });
 
 const wholeRupeesToPaisa = z
   .string()

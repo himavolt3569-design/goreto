@@ -2,6 +2,9 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
   addLine,
   countItems,
+  orderableLines,
+  reconcileLines,
+  setLineQuantity,
   rehydrateCart,
   syncCartAcrossTabs,
   useCartStore,
@@ -99,5 +102,58 @@ describe("useCartStore", () => {
     useCartStore.getState().addItem(line, 1);
     useCartStore.getState().removeItem(line.variantId);
     expect(useCartStore.getState().lines).toEqual([]);
+  });
+});
+
+const uuidLine: NewCartLine = {
+  ...line,
+  variantId: "0f8fad5b-d9cb-469f-a165-70867728950e",
+  title: "Pearl Drop Earrings",
+  variantLabel: "Gold Plated",
+};
+
+describe("setLineQuantity", () => {
+  it("clamps to 1 and the line limit", () => {
+    const lines = addLine([], line, 2).lines;
+    expect(setLineQuantity(lines, line.variantId, 9)[0]!.quantity).toBe(4);
+    expect(setLineQuantity(lines, line.variantId, 0)[0]!.quantity).toBe(1);
+    expect(setLineQuantity(lines, "missing", 3)).toEqual(lines);
+  });
+});
+
+describe("reconcileLines", () => {
+  const cart = addLine([], uuidLine, 3).lines;
+
+  it("keeps the same array when nothing changed", () => {
+    const result = reconcileLines(cart, [{ variantId: uuidLine.variantId, unitPricePaisa: 99900, availableQuantity: 4 }]);
+    expect(result.lines).toBe(cart);
+    expect(result.notices).toEqual([]);
+  });
+
+  it("removes lines that can't be bought", () => {
+    const result = reconcileLines(cart, [{ variantId: uuidLine.variantId, unitPricePaisa: 99900, availableQuantity: 0 }]);
+    expect(result.lines).toEqual([]);
+    expect(result.notices[0]).toMatchObject({ kind: "removed", text: "Pearl Drop Earrings (Gold Plated) is no longer available and was removed." });
+    expect(reconcileLines(cart, []).lines).toEqual([]);
+  });
+
+  it("lowers quantity to what's available and updates the price", () => {
+    const result = reconcileLines(cart, [{ variantId: uuidLine.variantId, unitPricePaisa: 120000, availableQuantity: 1 }]);
+    expect(result.lines[0]).toMatchObject({ quantity: 1, maxQuantity: 1, unitPricePaisa: 120000 });
+    expect(result.notices.map((notice) => notice.kind)).toEqual(["reduced", "price_changed"]);
+    expect(result.notices[0]!.text).toMatch(/Only 1 of Pearl Drop Earrings \(Gold Plated\) is available/);
+  });
+
+  it("raises the line limit when more stock arrives, without a notice", () => {
+    const result = reconcileLines(cart, [{ variantId: uuidLine.variantId, unitPricePaisa: 99900, availableQuantity: 10 }]);
+    expect(result.lines[0]).toMatchObject({ quantity: 3, maxQuantity: 10 });
+    expect(result.notices).toEqual([]);
+  });
+});
+
+describe("orderableLines", () => {
+  it("skips lines saved before products had database ids", () => {
+    const lines = [...addLine([], line, 1).lines, ...addLine([], uuidLine, 1).lines];
+    expect(orderableLines(lines).map((entry) => entry.variantId)).toEqual([uuidLine.variantId]);
   });
 });
