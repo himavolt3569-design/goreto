@@ -4,9 +4,8 @@ import { notFound } from "next/navigation";
 import { productCountLabel } from "@/components/store/category/category-card";
 import { CategorySortControl } from "@/components/store/category/category-sort";
 import { Breadcrumbs } from "@/components/store/product/breadcrumbs";
-import { ChooseOptionsLink, WishlistSoonButton } from "@/components/store/product-card-actions";
+import { ProductGrid } from "@/components/store/product-grid";
 import { buttonClasses } from "@/components/ui/button";
-import { ProductCard } from "@/components/ui/product-card";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { getCategoryBySlug, getCategoryProducts } from "@/features/catalog/categories";
 import { parseCategorySort } from "@/features/catalog/category-sort";
@@ -69,22 +68,7 @@ export default async function CategoryPage({
             <CategorySortControl value={sort} />
           </div>
 
-          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {products.map((product) => (
-              <li key={product.slug} className="flex">
-                <ProductCard
-                  title={product.title}
-                  href={`/products/${product.slug}`}
-                  pricePaisa={product.pricePaisa}
-                  image={product.image}
-                  rating={product.rating ?? undefined}
-                  className="w-full"
-                  wishlistAction={<WishlistSoonButton productTitle={product.title} />}
-                  cartAction={<ChooseOptionsLink slug={product.slug} title={product.title} />}
-                />
-              </li>
-            ))}
-          </ul>
+          <ProductGrid products={products} />
         </section>
       )}
     </div>

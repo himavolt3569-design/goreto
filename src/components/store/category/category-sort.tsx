@@ -44,7 +44,7 @@ export function CategorySortControl({ value }: { value: CategorySort }) {
       </div>
       <button
         type="submit"
-        className={buttonClasses({ variant: "secondary", size: "md", className: "[.js_&]:hidden" })}
+        className={buttonClasses({ variant: "secondary", size: "md", className: "scripting:hidden" })}
       >
         Apply
       </button>

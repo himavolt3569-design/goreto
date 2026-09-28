@@ -1,22 +1,10 @@
 /*
- * Admin search text (AGENTS §13): bounded and reduced to characters that can
- * appear in names, emails, SKUs and order numbers, so nothing typed can reach
- * PostgREST filter syntax. Queries still pass it as a parameter value.
+ * Admin search helpers. The text itself is bounded by the shared
+ * sanitizeSearch (lib/validation/search.ts); these build LIKE patterns and
+ * PostgREST filter values from it.
  */
 
-export const SEARCH_MAX_LENGTH = 64;
-
-export function sanitizeSearch(raw: unknown): string {
-  const value = Array.isArray(raw) ? raw[0] : raw;
-  if (typeof value !== "string") return "";
-  return value
-    .normalize("NFKC")
-    .replace(/[^\p{L}\p{N}\s@._+'-]/gu, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, SEARCH_MAX_LENGTH)
-    .trim();
-}
+export { SEARCH_MAX_LENGTH, sanitizeSearch } from "@/lib/validation/search";
 
 /** `%term%` for ilike, with the LIKE wildcards in the term escaped. */
 export function containsPattern(term: string): string {
