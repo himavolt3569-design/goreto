@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
  */
 
 const SERVICE_ROLE_MODULE = join("lib", "supabase", "admin.ts");
+const BROWSER_CLIENT = join("lib", "supabase", "browser.ts");
 const ADMIN_CLIENT_IMPORTERS = [join("lib", "auth", "profile-sync.ts")];
 
 const SRC = join(process.cwd(), "src");
@@ -50,9 +51,18 @@ describe("source boundaries", () => {
     expect(offenders.map((path) => relative(SRC, path))).toEqual([]);
   });
 
-  it("keeps the Supabase clients server-only", () => {
-    for (const path of appFiles.filter((file) => /[\\/]lib[\\/]supabase[\\/]/.test(file))) {
+  it("keeps the Supabase clients server-only, except the one browser client", () => {
+    const clients = appFiles.filter((file) => /[\\/]lib[\\/]supabase[\\/]/.test(file) && relative(SRC, file) !== BROWSER_CLIENT);
+    for (const path of clients) {
       expect(readFileSync(path, "utf8"), relative(SRC, path)).toMatch(/^import "server-only";/);
     }
+  });
+
+  it("builds the browser client from the anon key and the Clerk session token only", () => {
+    const source = readFileSync(join(SRC, BROWSER_CLIENT), "utf8");
+    expect(source).toMatch(/^"use client";/);
+    expect(source).toContain("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+    expect(source).toContain("accessToken: async () => (await session.getToken())");
+    expect(source).not.toMatch(/SERVICE|SECRET|server-only/);
   });
 });

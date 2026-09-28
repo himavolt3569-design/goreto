@@ -7,13 +7,14 @@ import { ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { Card } from "@/components/ui/card";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { canAccess } from "@/features/admin/nav";
+import { fetchActiveCouriers } from "@/features/admin/queries/orders";
 import { fetchStoreSettings } from "@/features/admin/queries/system";
 
 export const metadata: Metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
   const profile = await requireAdminAccess("settings.manage");
-  const settings = await fetchStoreSettings();
+  const [settings, couriers] = await Promise.all([fetchStoreSettings(), fetchActiveCouriers()]);
 
   const related = [
     { label: "Delivery zones, couriers and rates", href: "/admin/delivery", show: canAccess(profile, "delivery.manage") },
@@ -23,12 +24,16 @@ export default async function SettingsPage() {
 
   return (
     <>
-      <PageHeader title="Settings" description="Store profile, Nepal defaults and checkout rules. API keys stay in the server environment and never appear here." />
+      <PageHeader
+        title="Settings"
+        description="Store profile, Nepal defaults, checkout rules and order acceptance. API keys stay in the server environment and never appear here."
+      />
       {settings ? (
         <SettingsForm
           currency={settings.currency}
           timezone={settings.timezone}
           phoneCountryCode={settings.phone_country_code}
+          couriers={couriers}
           values={{
             storeName: settings.store_name,
             tagline: settings.tagline ?? "",
@@ -38,6 +43,11 @@ export default async function SettingsPage() {
             codMaxOrderRupees: settings.cod_max_order_paisa ? String(Math.trunc(settings.cod_max_order_paisa / 100)) : "",
             returnsWindowDays: settings.returns_window_days,
             lowStockThreshold: settings.default_low_stock_threshold,
+            autoAcceptWebsiteOrders: settings.auto_accept_website_orders,
+            autoAcceptWhatsappOrders: settings.auto_accept_whatsapp_orders,
+            courierAssignmentMode: settings.courier_assignment_mode,
+            // A default that has since been turned off shows as "No default courier".
+            defaultCourierId: couriers.some((courier) => courier.id === settings.default_courier_id) ? (settings.default_courier_id ?? "") : "",
           }}
         />
       ) : (

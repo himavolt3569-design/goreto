@@ -4,7 +4,7 @@ import { areaPath, compactRupees, linePath, niceTicks, scaleLinear, seriesPoints
 import { formatNepalPhone, humanize, initials, relativeTime, shortName } from "./format";
 import { describeChange, formatChange, percentChange } from "./metrics";
 import { canAccess, isNavItemActive, visibleNav } from "./nav";
-import { canAssignCourier, canCancel, canRefund, forwardTransition } from "./order-transitions";
+import { canAccept, canAssignCourier, canCancel, canHandOffToCourier, canRefund, forwardTransition } from "./order-transitions";
 import { containsPattern, orderNumberTerm, sanitizeSearch } from "./search-input";
 
 describe("percentChange", () => {
@@ -112,11 +112,22 @@ describe("admin navigation", () => {
 
 describe("order transitions", () => {
   it("offers the next step and cancel until the end", () => {
-    expect(forwardTransition("pending_confirmation")).toBe("confirmed");
+    expect(forwardTransition("pending_confirmation")).toBeNull();
+    expect(forwardTransition("confirmed")).toBe("processing");
+    expect(canCancel("pending_confirmation")).toBe(true);
     expect(forwardTransition("shipped")).toBe("delivered");
     expect(forwardTransition("delivered")).toBeNull();
     expect(canCancel("shipped")).toBe(true);
     expect(canCancel("delivered")).toBe(false);
+  });
+
+  it("confirms pending orders only through Accept, and hands off only accepted, unshipped orders", () => {
+    expect(canAccept("pending_confirmation")).toBe(true);
+    expect(canAccept("confirmed")).toBe(false);
+    expect(canHandOffToCourier("pending_confirmation")).toBe(false);
+    expect(canHandOffToCourier("packed")).toBe(true);
+    expect(canHandOffToCourier("shipped")).toBe(false);
+    expect(canHandOffToCourier("canceled")).toBe(false);
   });
 
   it("limits courier assignment and refunds", () => {

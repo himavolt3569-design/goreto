@@ -22,10 +22,23 @@ const optionalText = (max: number) =>
     .max(max, `Use at most ${max} characters`)
     .transform((value) => (value === "" ? null : value));
 
+/** Pending orders are confirmed by Accept (acceptOrderSchema), never by a transition. */
 export const orderTransitionSchema = z.object({
   orderId: id,
-  status: z.enum(["confirmed", "processing", "packed", "shipped", "delivered", "canceled"]),
+  status: z.enum(["processing", "packed", "shipped", "delivered", "canceled"]),
   reason: optionalText(300).optional().default(null),
+});
+
+/** No courier: the store's automatic rule picks one (auto mode), or the database asks for one. */
+export const acceptOrderSchema = z.object({
+  orderId: id,
+  courierId: z
+    .string()
+    .trim()
+    .refine((value) => value === "" || z.uuid().safeParse(value).success, "Choose a courier")
+    .transform((value) => (value === "" ? null : value))
+    .optional()
+    .default(null),
 });
 
 export const assignCourierSchema = z.object({
@@ -143,6 +156,14 @@ export const storeSettingsSchema = z.object({
     .int("Enter a whole number")
     .min(0, "Use 0 or more")
     .max(10_000, "Use at most 10,000"),
+  autoAcceptWebsiteOrders: checkbox,
+  autoAcceptWhatsappOrders: checkbox,
+  courierAssignmentMode: z.enum(["auto", "manual"], { error: "Choose how couriers are picked" }),
+  defaultCourierId: z
+    .string()
+    .trim()
+    .refine((value) => value === "" || z.uuid().safeParse(value).success, "Choose a courier")
+    .transform((value) => (value === "" ? null : value)),
 });
 
 export type StoreSettingsInput = z.infer<typeof storeSettingsSchema>;

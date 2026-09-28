@@ -15,6 +15,7 @@ vi.mock("next/navigation", () => ({ usePathname: () => pathname }));
 // Server Actions are server-only; the components only need references.
 vi.mock("@/features/admin/actions/orders", () => ({
   transitionOrderAction: vi.fn(),
+  acceptOrderAction: vi.fn(),
   assignCourierAction: vi.fn(),
   addShipmentEventAction: vi.fn(),
   markRefundedAction: vi.fn(),
@@ -109,7 +110,55 @@ describe("ActionMessage", () => {
 });
 
 describe("OrderActions", () => {
-  const base = { orderId: "e63365dd-2c34-5efa-88d6-f4c99a6badf0", couriers: [{ id: "c1", name: "Pathao" }], currentCourierId: null, currentTracking: null };
+  const base = {
+    orderId: "e63365dd-2c34-5efa-88d6-f4c99a6badf0",
+    couriers: [
+      { id: "c1", name: "Pathao" },
+      { id: "c2", name: "Nepal Can Move" },
+    ],
+    currentCourierId: null,
+    currentTracking: null,
+    acceptPreview: null,
+  };
+
+  it("offers Accept and Reject for a pending order, never a direct confirm or cancel", () => {
+    render(
+      <OrderActions {...base} status="pending_confirmation" paymentStatus="pending" hasCourier={false} acceptPreview={{ mode: "manual", courier: null }} />,
+    );
+    expect(screen.getByRole("button", { name: "Accept order" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reject order" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Confirm order/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Cancel order" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Assign courier" })).not.toBeInTheDocument();
+  });
+
+  it("manual mode leaves the courier to staff", () => {
+    render(
+      <OrderActions {...base} status="pending_confirmation" paymentStatus="pending" hasCourier={false} acceptPreview={{ mode: "manual", courier: null }} />,
+    );
+    expect(screen.queryByText(/Picked automatically/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/No active courier matches/)).not.toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: /Courier/, hidden: true })).toHaveTextContent("Choose a courier");
+  });
+
+  it("auto mode preselects the rule's courier, and warns when nothing matches", () => {
+    const { rerender } = render(
+      <OrderActions
+        {...base}
+        status="pending_confirmation"
+        paymentStatus="pending"
+        hasCourier={false}
+        acceptPreview={{ mode: "auto", courier: { id: "c2", name: "Nepal Can Move", source: "service" } }}
+      />,
+    );
+    expect(screen.getByText(/Picked automatically/)).toHaveTextContent("Nepal Can Move, the courier of the customer’s delivery service");
+    expect(screen.getByRole("combobox", { name: /Courier/, hidden: true })).toHaveTextContent("Nepal Can Move");
+
+    rerender(
+      <OrderActions {...base} status="pending_confirmation" paymentStatus="pending" hasCourier={false} acceptPreview={{ mode: "auto", courier: null }} />,
+    );
+    expect(screen.getByText(/No active courier matches this order automatically/)).toBeInTheDocument();
+  });
 
   it("offers only the next step, courier assignment and cancel for a packed order", () => {
     render(<OrderActions {...base} status="packed" paymentStatus="pending" hasCourier={false} />);

@@ -35,7 +35,14 @@ export async function saveCourierAction(_previous: ActionResult | null, formData
   if (!input.ok) return input.result;
   const values = input.data;
   // integration_mode stays as stored: API integrations aren't built (worklog §4.5).
-  const row = { name: values.title, slug: values.slug, support_phone: values.supportPhone, website_url: values.websiteUrl, is_active: values.isActive };
+  const row = {
+    name: values.title,
+    slug: values.slug,
+    support_phone: values.supportPhone,
+    dispatch_whatsapp_e164: values.dispatchWhatsapp,
+    website_url: values.websiteUrl,
+    is_active: values.isActive,
+  };
   const db = adminDb();
 
   if (id === null) {

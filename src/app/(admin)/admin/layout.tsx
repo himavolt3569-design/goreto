@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { AdminShell } from "@/components/admin/admin-shell";
-import type { AttentionItem, QuickAction } from "@/components/admin/header-menus";
+import type { QuickAction } from "@/components/admin/header-menus";
+import { loadAttentionItems, loadNotificationFeed } from "@/features/admin/attention";
 import { ADMIN_NAV, canAccess } from "@/features/admin/nav";
 import { initials } from "@/features/admin/format";
-import { fetchAttentionCounts } from "@/features/admin/queries/dashboard";
 import { requireAdmin } from "@/lib/auth/profile";
 import type { CurrentProfile } from "@/lib/auth/permissions";
 
@@ -13,38 +13,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-async function attentionItems(profile: CurrentProfile): Promise<AttentionItem[] | null> {
-  let counts;
-  try {
-    counts = await fetchAttentionCounts();
-  } catch (error) {
-    console.error("Admin notifications failed to load", error instanceof Error ? error.message : error);
-    return null;
-  }
-  const candidates: [boolean, AttentionItem][] = [
-    [
-      canAccess(profile, "orders.read"),
-      { key: "orders", label: "Orders awaiting confirmation", count: counts.pendingOrders, href: "/admin/orders?status=pending_confirmation" },
-    ],
-    [
-      canAccess(profile, "reviews.manage"),
-      { key: "reviews", label: "Reviews to moderate", count: counts.pendingReviews, href: "/admin/reviews?status=pending" },
-    ],
-    [
-      canAccess(profile, "catalog.read"),
-      { key: "low_stock", label: "Variants low on stock", count: counts.lowStockVariants, href: "/admin/inventory?stock=low_stock" },
-    ],
-    [
-      canAccess(profile, "catalog.read"),
-      { key: "sold_out", label: "Variants sold out", count: counts.soldOutVariants, href: "/admin/inventory?stock=sold_out" },
-    ],
-  ];
-  return candidates.filter(([allowed]) => allowed).map(([, item]) => item);
-}
-
 function quickActions(profile: CurrentProfile): QuickAction[] {
   const candidates: [boolean, QuickAction][] = [
     [canAccess(profile, "catalog.write"), { label: "Add product", href: "/admin/products/new", icon: "add" }],
+    [canAccess(profile, "orders.write"), { label: "New WhatsApp order", href: "/admin/orders/new", icon: "whatsapp" }],
     [canAccess(profile, "orders.read"), { label: "Review pending orders", href: "/admin/orders?status=pending_confirmation", icon: "orders" }],
     [canAccess(profile, "catalog.read"), { label: "Restock low inventory", href: "/admin/inventory?stock=low_stock", icon: "inventory" }],
     [canAccess(profile, "reviews.manage"), { label: "Moderate reviews", href: "/admin/reviews?status=pending", icon: "reviews" }],
@@ -56,8 +28,9 @@ function quickActions(profile: CurrentProfile): QuickAction[] {
 /** Admin area (AGENTS §4.6, §9.2): owner and staff only; each page checks its own permission too. */
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const profile = await requireAdmin();
-  const [attention, user] = await Promise.all([
-    attentionItems(profile),
+  const [attention, notifications, user] = await Promise.all([
+    loadAttentionItems(profile),
+    loadNotificationFeed(profile),
     // The avatar is optional; a Clerk API failure falls back to initials.
     currentUser().catch(() => null),
   ]);
@@ -71,6 +44,8 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
     <AdminShell
       allowedHrefs={allowedHrefs}
       attention={attention}
+      notifications={notifications}
+      profileId={profile.id}
       quickActions={quickActions(profile)}
       profile={{
         name,

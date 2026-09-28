@@ -141,10 +141,19 @@ export function Menu({ trigger, triggerLabel, triggerClassName, align = "end", p
 
 const itemClasses = popoverItemClasses;
 
-export function MenuLink({ href, children, className }: { href: string; children: ReactNode; className?: string }) {
+export function MenuLink({ href, children, className, onSelect }: { href: string; children: ReactNode; className?: string; onSelect?: () => void }) {
   const context = useContext(MenuContext);
   return (
-    <Link href={href} role="menuitem" tabIndex={-1} className={cn(itemClasses, className)} onClick={() => context?.close(false)}>
+    <Link
+      href={href}
+      role="menuitem"
+      tabIndex={-1}
+      className={cn(itemClasses, className)}
+      onClick={() => {
+        onSelect?.();
+        context?.close(false);
+      }}
+    >
       {children}
     </Link>
   );

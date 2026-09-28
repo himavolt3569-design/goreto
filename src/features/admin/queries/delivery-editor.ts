@@ -26,9 +26,9 @@ export async function fetchDeliveryHistory(): Promise<DeliveryHistory> {
 
 /* ---------- Couriers ---------- */
 
-export type CourierFormValues = { title: string; slug: string; supportPhone: string; websiteUrl: string; isActive: boolean };
+export type CourierFormValues = { title: string; slug: string; supportPhone: string; dispatchWhatsapp: string; websiteUrl: string; isActive: boolean };
 
-export const EMPTY_COURIER_VALUES: CourierFormValues = { title: "", slug: "", supportPhone: "", websiteUrl: "", isActive: true };
+export const EMPTY_COURIER_VALUES: CourierFormValues = { title: "", slug: "", supportPhone: "", dispatchWhatsapp: "", websiteUrl: "", isActive: true };
 
 export type CourierServiceValues = {
   id: string;
@@ -58,7 +58,7 @@ export async function fetchCourierEditor(id: string): Promise<CourierEditorData 
     adminDb()
       .from("couriers")
       .select(
-        "id, name, slug, support_phone, website_url, integration_mode, is_active, updated_at, courier_services(id, name, service_code, service_level, description, estimated_min_days, estimated_max_days, is_active, delivery_rates(count))",
+        "id, name, slug, support_phone, dispatch_whatsapp_e164, website_url, integration_mode, is_active, updated_at, courier_services(id, name, service_code, service_level, description, estimated_min_days, estimated_max_days, is_active, delivery_rates(count))",
       )
       .eq("id", id)
       .order("name", { referencedTable: "courier_services" })
@@ -71,7 +71,7 @@ export async function fetchCourierEditor(id: string): Promise<CourierEditorData 
 
   return {
     id: row.id,
-    values: { title: row.name, slug: row.slug, supportPhone: row.support_phone ?? "", websiteUrl: row.website_url ?? "", isActive: row.is_active },
+    values: { title: row.name, slug: row.slug, supportPhone: row.support_phone ?? "", dispatchWhatsapp: row.dispatch_whatsapp_e164 ?? "", websiteUrl: row.website_url ?? "", isActive: row.is_active },
     integrationMode: row.integration_mode,
     services: row.courier_services.map((service) => ({
       id: service.id,

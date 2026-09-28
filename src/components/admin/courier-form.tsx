@@ -50,6 +50,15 @@ export function CourierForm({
             <Field label="Support phone" error={errors.supportPhone} hint="Nepal number, with or without +977.">
               {(control) => <Input {...control} name="supportPhone" type="tel" defaultValue={values.supportPhone} autoComplete="off" placeholder="98XXXXXXXX" />}
             </Field>
+            <Field
+              label="Dispatch WhatsApp number"
+              error={errors.dispatchWhatsapp}
+              hint="Accepted orders are sent here with “Send to courier on WhatsApp”. Nepal number, with or without +977."
+            >
+              {(control) => (
+                <Input {...control} name="dispatchWhatsapp" type="tel" defaultValue={values.dispatchWhatsapp} autoComplete="off" placeholder="98XXXXXXXX" />
+              )}
+            </Field>
             <Field label="Website" error={errors.websiteUrl} hint="Must start with https://">
               {(control) => <Input {...control} name="websiteUrl" type="url" defaultValue={values.websiteUrl} autoComplete="off" placeholder="https://" />}
             </Field>

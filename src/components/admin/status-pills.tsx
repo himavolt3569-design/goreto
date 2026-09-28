@@ -1,11 +1,14 @@
 import type { ReactNode } from "react";
+import { WhatsappLogoIcon } from "@/components/ui/icons";
+import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
+import type { PaymentStatus, ShipmentStatus } from "@/features/admin/order-transitions";
 import type { CollectionState, CouponState, StockState } from "@/features/admin/states";
+import { cn } from "@/lib/utils/cn";
 import type { Database } from "@/types/database";
 
 type ProductStatus = Database["public"]["Enums"]["product_status"];
 type ReviewStatus = Database["public"]["Enums"]["review_status"];
-import type { PaymentStatus, ShipmentStatus } from "@/features/admin/order-transitions";
-import { cn } from "@/lib/utils/cn";
+type OrderChannel = Database["public"]["Enums"]["order_channel"];
 
 /*
  * Status pills in the admin reference's style (text on a tint, 32px, 8px
@@ -136,4 +139,26 @@ export function CollectionStatePill({ state }: { state: CollectionState }) {
 
 export function ActivePill({ active, activeLabel = "Active", inactiveLabel = "Inactive" }: { active: boolean; activeLabel?: string; inactiveLabel?: string }) {
   return <Pill tone={active ? "success" : "neutral"}>{active ? activeLabel : inactiveLabel}</Pill>;
+}
+
+export const CHANNEL_LABELS: Record<OrderChannel, string> = {
+  website: "Website",
+  whatsapp: "WhatsApp",
+};
+
+/** Where an order came from; WhatsApp orders carry the logo, always with the word. */
+export function OrderChannelPill({ channel, className }: { channel: OrderChannel; className?: string }) {
+  if (channel === "whatsapp") {
+    return (
+      <Pill tone="success" className={cn("gap-1", className)}>
+        <WhatsappLogoIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+        WhatsApp
+      </Pill>
+    );
+  }
+  return (
+    <Pill tone="neutral" className={className}>
+      Website
+    </Pill>
+  );
 }

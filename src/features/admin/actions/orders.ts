@@ -1,22 +1,23 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { z } from "zod";
 import type { Database } from "@/types/database";
-import { databaseErrorResult, type ActionResult } from "../auth";
+import { authorizeAdmin, databaseErrorResult, deniedResult, type ActionResult } from "../auth";
 import { adminDb } from "../queries/shared";
-import { assignCourierSchema, orderIdSchema, orderTransitionSchema, shipmentEventSchema } from "../schemas";
-import { authorizeAndParse } from "./helpers";
+import { acceptOrderSchema, assignCourierSchema, orderIdSchema, orderTransitionSchema, shipmentEventSchema } from "../schemas";
+import { authorizeAndParse, saveErrorResult } from "./helpers";
 
 /*
- * Fulfilment actions. The SQL functions (migration admin_operations) own the
- * state machine, timestamps, shipment events, COD collection and restocking;
- * these only authorize, validate and report.
+ * Fulfilment actions. The SQL functions (migrations admin_operations,
+ * whatsapp_orders) own the state machine, acceptance, courier choice,
+ * timestamps, shipment events, COD collection and restocking; these only
+ * authorize, validate and report.
  */
 
 type Functions = Database["public"]["Functions"];
 
 const DONE_MESSAGES = {
-  confirmed: "Order confirmed.",
   processing: "Order is now processing.",
   packed: "Order marked packed.",
   shipped: "Order marked shipped.",
@@ -35,6 +36,50 @@ export async function transitionOrderAction(_previous: ActionResult | null, form
 
   refresh();
   return { ok: true, message: DONE_MESSAGES[input.data.status] };
+}
+
+const acceptedSchema = z.object({ already_accepted: z.boolean(), courier_name: z.string().optional() });
+
+/**
+ * Accept a pending order. Without a courier the store's mode decides: auto
+ * picks one by rule, manual (or no match) comes back asking for one.
+ * Accepting twice is harmless.
+ */
+export async function acceptOrderAction(_previous: ActionResult | null, formData: FormData): Promise<ActionResult> {
+  const input = await authorizeAndParse("orders.write", acceptOrderSchema, formData);
+  if (!input.ok) return input.result;
+
+  const { data, error } = await adminDb().rpc("admin_accept_order", {
+    p_order_id: input.data.orderId,
+    p_courier_id: input.data.courierId ?? undefined,
+  });
+  if (error) return saveErrorResult(error, "accept order");
+
+  refresh();
+  const result = acceptedSchema.safeParse(data);
+  if (result.success && result.data.already_accepted) return { ok: true, message: "This order was already accepted." };
+  return {
+    ok: true,
+    message: result.success && result.data.courier_name ? `Order accepted and assigned to ${result.data.courier_name}.` : "Order accepted.",
+  };
+}
+
+/**
+ * Records that staff opened the courier's WhatsApp link (the app can't know
+ * whether WhatsApp delivered it). The database refuses orders that aren't
+ * accepted or have no courier, and counts resends without new events.
+ */
+export async function recordCourierHandoffAction(orderId: string): Promise<ActionResult> {
+  const auth = await authorizeAdmin("orders.write");
+  if (!auth.ok) return deniedResult(auth.reason);
+  const parsed = orderIdSchema.safeParse({ orderId });
+  if (!parsed.success) return { ok: false, message: "That order isn't valid." };
+
+  const { error } = await adminDb().rpc("admin_record_courier_handoff", { p_order_id: parsed.data.orderId });
+  if (error) return databaseErrorResult(error, "record courier handoff");
+
+  refresh();
+  return { ok: true, message: "Marked as sent to the courier." };
 }
 
 export async function assignCourierAction(_previous: ActionResult | null, formData: FormData): Promise<ActionResult> {

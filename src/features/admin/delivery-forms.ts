@@ -133,6 +133,7 @@ export const courierFormSchema = z.object({
   title: text(80).min(1, "Enter the courier's name"),
   slug,
   supportPhone: nepalPhoneSchema,
+  dispatchWhatsapp: nepalPhoneSchema,
   websiteUrl: z
     .string()
     .trim()

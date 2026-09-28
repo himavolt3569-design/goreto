@@ -84,6 +84,10 @@ export async function updateStoreSettingsAction(_previous: ActionResult | null, 
       cod_max_order_paisa: settings.codMaxOrder,
       returns_window_days: settings.returnsWindowDays,
       default_low_stock_threshold: settings.lowStockThreshold,
+      auto_accept_website_orders: settings.autoAcceptWebsiteOrders,
+      auto_accept_whatsapp_orders: settings.autoAcceptWhatsappOrders,
+      courier_assignment_mode: settings.courierAssignmentMode,
+      default_courier_id: settings.defaultCourierId,
     })
     .eq("singleton", true)
     .select("id");
