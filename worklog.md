@@ -267,7 +267,7 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [ ] Guest-order claiming after sign-up, matched on a Clerk-verified email (§9.1).
 
 ### 4.2 Discovery
-- [ ] **Search** `/search` (§13): FTS plus `pg_trgm` ranking, with query, filter and sort in the URL. The indexes already exist. The header search form and the "New Arrivals" link already point here.
+- [x] **Search** `/search` (§13) (2026-09-28, `goreto-discovery-1-search.md`, migration `storefront_search`): `search_products` RPC (exact title → prefix → FTS + trigram typo tolerance, category words), category and price filters, sort, 24-per-page pagination, all in the URL and working without JavaScript. Header search, footer "Shop" and "New Arrivals" now land here.
 - [ ] **Product quick view** modal that keeps the canonical URL (§4.3).
 - [ ] **Collections** pages (`/collections`, `/collections/[slug]`). The carousel and nav link to them.
 - [ ] `/offers` page.

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* `scripting:hidden` hides no-JS fallbacks (e.g. a form's Apply button) when JavaScript runs. */
+@custom-variant scripting (@media (scripting: enabled));
+
 /*
  * Goreto.store design tokens — source of truth: designs/Goreto-designsystem.png
  *

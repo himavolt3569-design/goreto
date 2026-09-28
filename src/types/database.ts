@@ -2100,6 +2100,30 @@ export type Database = {
           rating_count: number
         }[]
       }
+      search_products: {
+        Args: {
+          category_slug?: string
+          max_price_paisa?: number
+          min_price_paisa?: number
+          page_limit?: number
+          page_offset?: number
+          q?: string
+          sort?: string
+        }
+        Returns: {
+          base_price_paisa: number
+          category_id: string
+          cover_alt: string
+          cover_path: string
+          id: string
+          is_bestseller: boolean
+          is_limited_edition: boolean
+          published_at: string
+          slug: string
+          title: string
+          total_count: number
+        }[]
+      }
       storefront_testimonials: {
         Args: { max_count?: number }
         Returns: {
