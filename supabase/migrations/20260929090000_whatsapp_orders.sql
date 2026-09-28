@@ -351,8 +351,9 @@ $$;
 revoke execute on function public.notify_new_order(uuid, text) from public, anon, authenticated;
 
 -- Pending notifications are done once someone accepts or rejects the order;
--- "auto-accepted, ready to send" ones are done once it's canceled (or sent,
--- in admin_record_courier_handoff).
+-- "auto-accepted, ready to send" ones are done once the order leaves the
+-- sendable states (shipped or canceled), or once it's sent, in
+-- admin_record_courier_handoff.
 create or replace function public.resolve_order_notifications()
 returns trigger
 language plpgsql
@@ -365,7 +366,8 @@ begin
     set read_at = now()
     where order_id = new.id and kind = 'order_pending' and read_at is null;
   end if;
-  if new.status = 'canceled' and old.status <> 'canceled' then
+  if old.status in ('confirmed', 'processing', 'packed')
+     and new.status not in ('confirmed', 'processing', 'packed') then
     update public.notifications
     set read_at = now()
     where order_id = new.id and kind = 'order_auto_accepted' and read_at is null;

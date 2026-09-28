@@ -145,14 +145,18 @@ export function NotificationsMenu({
   // Live signal: Realtime on this admin's notification rows, with polling as the fallback.
   useEffect(() => {
     if (!hasFeed || !supabase) return;
+    let disposed = false;
     let poll: ReturnType<typeof setInterval> | null = null;
     const startPolling = () => {
+      if (disposed) return;
       poll ??= setInterval(refetch, POLL_MS);
     };
     const channel = supabase
       .channel(`admin-notifications:${profileId}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `recipient_id=eq.${profileId}` }, refetch)
       .subscribe((status) => {
+        // removeChannel reports CLOSED after cleanup; don't start polling for a dead effect.
+        if (disposed) return;
         if (status === "SUBSCRIBED") {
           if (poll) clearInterval(poll);
           poll = null;
@@ -162,6 +166,7 @@ export function NotificationsMenu({
         }
       });
     return () => {
+      disposed = true;
       if (poll) clearInterval(poll);
       void supabase.removeChannel(channel);
     };

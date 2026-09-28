@@ -41,11 +41,17 @@ export function useManualOrderQuote(input: QuoteInput) {
     [input.items, input.municipalityCode, input.courierServiceId, input.couponCode, input.email, input.customerId],
   );
   const key = `${refreshCount}:${JSON.stringify(request)}`;
+  // The key decides when to quote; the timer reads the latest request so a new object identity alone doesn't restart it.
+  const requestRef = useRef(request);
+  useEffect(() => {
+    requestRef.current = request;
+  });
 
   useEffect(() => {
     const id = ++latest.current;
     const requestKey = key;
     const timer = window.setTimeout(async () => {
+      const request = requestRef.current;
       if (request.items.length === 0) {
         setResolved({ key: requestKey, quote: null, error: null });
         return;
@@ -60,7 +66,7 @@ export function useManualOrderQuote(input: QuoteInput) {
       );
     }, DEBOUNCE_MS);
     return () => window.clearTimeout(timer);
-  }, [key, request]);
+  }, [key]);
 
   const refresh = useCallback(() => setRefreshCount((count) => count + 1), []);
 

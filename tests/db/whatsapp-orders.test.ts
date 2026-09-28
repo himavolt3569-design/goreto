@@ -445,7 +445,7 @@ describe("auto-accept", () => {
     expect(outcomes).toEqual(["confirmed", "affected:0", "auto"]);
   });
 
-  it("clears the 'ready to send' notification on the first handoff, or on cancel", async () => {
+  it("clears the 'ready to send' notification on the first handoff, on cancel, or once shipped", async () => {
     const unread = `select count(*)::int from notifications where order_id = ${LAST_WA} and read_at is null`;
     const sent = await runStepsWithSetup(db, ["update store_settings set auto_accept_whatsapp_orders = true"], fulfilment, [
       createOrder(),
@@ -461,6 +461,16 @@ describe("auto-accept", () => {
       unread,
     ]);
     expect(canceled[3]).toBe(0);
+    const shipped = await runStepsWithSetup(db, ["update store_settings set auto_accept_whatsapp_orders = true"], fulfilment, [
+      createOrder(),
+      `select public.admin_transition_order(${LAST_WA}, 'processing', null)`,
+      `select public.admin_transition_order(${LAST_WA}, 'packed', null)`,
+      `select public.admin_transition_order(${LAST_WA}, 'shipped', null)`,
+      RESET,
+      unread,
+    ]);
+    expect(shipped.filter(isError)).toEqual([]);
+    expect(shipped[5]).toBe(0);
   });
 });
 
