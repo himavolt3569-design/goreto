@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AccountEmptyState } from "@/components/store/account/account-ui";
+import { OrderList } from "@/components/store/account/order-list";
 import { Breadcrumbs } from "@/components/store/product/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ICON_SIZE, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
-import { PackageIcon } from "@/components/ui/icons";
+import { ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
+import { ArrowRightIcon, ClockCounterClockwiseIcon, FileTextIcon, MoneyIcon, PackageIcon } from "@/components/ui/icons";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { StatCard } from "@/components/ui/stat-card";
+import { fetchAccountOrders, fetchAccountSummary } from "@/features/account/queries";
 import { requireProfile } from "@/lib/auth/profile";
 import type { ProfileRole } from "@/lib/auth/permissions";
+import { formatNpr } from "@/lib/money/format";
 
-export const metadata: Metadata = {
-  title: "Your account",
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = { title: { absolute: "Your account | Goreto.store" } };
 
 const ROLE_LABELS: Record<ProfileRole, string> = {
   customer: "Customer",
@@ -21,28 +23,74 @@ const ROLE_LABELS: Record<ProfileRole, string> = {
   owner: "Store owner",
 };
 
-/**
- * Account overview (AGENTS §4.9), first slice: who you are to the store.
- * Orders, wishlist, addresses and billing arrive with their own tasks.
- */
+const RECENT_ORDERS = 3;
+
+/** Account overview (AGENTS §4.9): who you are, your order figures and latest orders. */
 export default async function AccountPage() {
   const profile = await requireProfile();
+  const [summary, recent] = await Promise.all([fetchAccountSummary(), fetchAccountOrders(profile.id, 1, RECENT_ORDERS)]);
   const firstName = profile.fullName?.split(" ")[0];
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-16 pt-6 md:px-8">
+    <>
       <div className="flex flex-col gap-6">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Account" }]} />
         <SectionHeading
           as="h1"
           eyebrow="Your account"
           title={firstName ? `Namaste, ${firstName}` : "Namaste"}
-          description="Manage your Goreto account and orders."
+          description="Your orders, deliveries and billing in one place."
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-        <Card className="flex flex-col gap-4 p-6">
+      <section aria-label="Order summary" className="grid gap-6 sm:grid-cols-3">
+        <StatCard label="Total orders" value={summary.orderCount} icon={FileTextIcon} />
+        <StatCard
+          label="In progress"
+          value={summary.inProgressCount}
+          hint="Not yet delivered"
+          icon={ClockCounterClockwiseIcon}
+          tone="info"
+        />
+        <StatCard
+          label="Billed to date"
+          value={formatNpr(summary.billedPaisa)}
+          hint={summary.pendingPaisa > 0 ? `${formatNpr(summary.pendingPaisa)} pending on delivery` : "Cash collected on delivery"}
+          icon={MoneyIcon}
+          tone="success"
+        />
+      </section>
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <section aria-labelledby="recent-orders-title" className="flex min-w-0 flex-col gap-4">
+          <div className="flex items-center justify-between gap-4">
+            <h2 id="recent-orders-title" className="text-h2 text-neutral-900">
+              Recent orders
+            </h2>
+            {recent.total > 0 ? (
+              <Link href="/account/orders" className={buttonClasses({ variant: "text", size: "md", className: "h-8" })}>
+                View all
+                <ArrowRightIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
+              </Link>
+            ) : null}
+          </div>
+          {recent.rows.length ? (
+            <OrderList orders={recent.rows} label="Recent orders" />
+          ) : (
+            <AccountEmptyState
+              icon={PackageIcon}
+              title="You haven't placed an order yet"
+              description="When you order while signed in, it appears here with its delivery updates."
+              action={
+                <Link href="/categories" className={buttonClasses({ variant: "primary" })}>
+                  Start shopping
+                </Link>
+              }
+            />
+          )}
+        </section>
+
+        <Card className="flex h-fit flex-col gap-4 p-6">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-h2 text-neutral-900">Profile</h2>
             <Badge tone={profile.role === "customer" ? "neutral" : "new"}>{ROLE_LABELS[profile.role]}</Badge>
@@ -63,22 +111,7 @@ export default async function AccountPage() {
             </Link>
           ) : null}
         </Card>
-
-        <Card className="flex flex-col items-start gap-4 p-6">
-          <span className="flex size-12 items-center justify-center rounded-full bg-primary-100 text-primary-500">
-            <PackageIcon aria-hidden="true" size={ICON_SIZE} weight={ICON_WEIGHT_OUTLINE} />
-          </span>
-          <div className="flex flex-col gap-2">
-            <h2 className="text-h2 text-neutral-900">Orders, wishlist and addresses are coming soon</h2>
-            <p className="text-body text-neutral-500">
-              You&apos;ll be able to track orders, save favourites and keep your delivery addresses here.
-            </p>
-          </div>
-          <Link href="/categories" className={buttonClasses({ variant: "secondary" })}>
-            Continue shopping
-          </Link>
-        </Card>
       </div>
-    </div>
+    </>
   );
 }

@@ -1764,6 +1764,27 @@ export type Database = {
         }
         Returns: Json
       }
+      account_summary: {
+        Args: never
+        Returns: {
+          billed_order_count: number
+          billed_paisa: number
+          in_progress_count: number
+          order_count: number
+          pending_order_count: number
+          pending_paisa: number
+        }[]
+      }
+      account_tracking_events: {
+        Args: { p_limit?: number }
+        Returns: {
+          location_label: string
+          message: string
+          occurred_at: string
+          order_number: string
+          status: Database["public"]["Enums"]["shipment_status"]
+        }[]
+      }
       admin_accept_order: {
         Args: { p_courier_id?: string; p_order_id: string }
         Returns: Json

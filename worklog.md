@@ -274,16 +274,17 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [ ] Reviews on the product page: a list and a write form. "(N reviews)" is plain text today.
 
 ### 4.3 Customer account area (§4.9)
-The `/account` overview is only a stub. Still to build:
-- [ ] Overview stat cards: total orders, orders in progress, total billed to date.
-- [ ] `/account/orders` (paginated) and `/account/orders/[orderNumber]` (detail plus timeline).
-- [ ] `/account/tracking`: events across the customer's orders.
+Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses → 3. reviews + profile & security.
+- [x] **Phase 1** (2026-10-01, `goreto-account-1-orders-billing.md`, migration `account_reads`): grouped account nav (sidebar from `lg`, scrollable pill row below), `loading`/`error` states; overview with profile card, stat cards (total orders, in progress, billed to date with pending COD as a hint) and the latest 3 orders; `/account/orders` (10 per page); `/account/orders/[orderNumber]` reusing the tracking view without the tracking secret, so only your own signed-in orders open; `/account/tracking` (latest 50 events); `/account/billing` (billed = collected only, pending COD separate, per-order breakdown). `account_summary()` and `account_tracking_events()` filter on the caller's own profile, so owners and staff see only their personal orders.
+- [x] Overview stat cards: total orders, orders in progress, total billed to date.
+- [x] `/account/orders` (paginated) and `/account/orders/[orderNumber]` (detail plus timeline).
+- [x] `/account/tracking`: events across the customer's orders.
 - [ ] `/account/wishlist`. The wishlist heart is still an inert "coming soon" button on cards.
 - [ ] `/account/addresses`, including a default address for checkout.
 - [ ] `/account/reviews`, showing moderation status.
-- [ ] `/account/billing`: billed total = collected orders only. Pending COD is shown separately and totals are computed in SQL.
+- [x] `/account/billing`: billed total = collected orders only. Pending COD is shown separately and totals are computed in SQL.
 - [ ] `/account/profile/[[...rest]]`: Clerk `<UserProfile />`, themed.
-- [ ] Grouped account navigation, plus empty, loading and error states for each section.
+- [x] Grouped account navigation, plus empty, loading and error states (phase 1 sections; later phases add theirs).
 
 ### 4.4 AR / virtual try-on (§14)
 - [ ] `/try-on` page. The header, hero and product try-on card all link to it.
