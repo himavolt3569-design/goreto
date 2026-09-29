@@ -1,7 +1,15 @@
 import "server-only";
 import { cache } from "react";
 import { getPublicSupabase } from "@/lib/supabase/public";
-import type { CardRow, CategoryRow, CollectionRow, DetailRow, RatingRow, TestimonialRow } from "./mappers";
+import type {
+  CardRow,
+  CategoryRow,
+  CollectionLinkRow,
+  CollectionRow,
+  DetailRow,
+  RatingRow,
+  TestimonialRow,
+} from "./mappers";
 
 /*
  * Storefront catalog queries (anon client, RLS: active rows only). Each read
@@ -114,15 +122,63 @@ export async function fetchFeaturedSlugs(): Promise<string[]> {
   return data.map((row) => row.slug);
 }
 
+const COLLECTION_SELECT = "id, slug, eyebrow, title, description, hero_image_path, hero_image_alt";
+
 /** Active collections inside their schedule window (enforced by RLS). */
 export async function fetchLiveCollections(): Promise<CollectionRow[]> {
   const { data, error } = await getPublicSupabase()
     .from("collections")
-    .select("slug, eyebrow, title, description, hero_image_path, hero_image_alt")
+    .select(COLLECTION_SELECT)
     .eq("is_active", true)
     .order("sort_order");
   if (error) fail("collections", error);
   return data;
+}
+
+/** One live collection, or `null` when it is unknown, off or outside its schedule. */
+export async function fetchCollectionBySlug(slug: string): Promise<CollectionRow | null> {
+  const { data, error } = await getPublicSupabase()
+    .from("collections")
+    .select(COLLECTION_SELECT)
+    .eq("slug", slug)
+    .eq("is_active", true)
+    .maybeSingle();
+  if (error) fail("collection", error);
+  return data;
+}
+
+/** Active product count per collection id (links to draft/archived products drop out). */
+export async function fetchCollectionProductCounts(
+  collectionIds: readonly string[],
+): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  if (collectionIds.length === 0) return counts;
+  const { data, error } = await getPublicSupabase()
+    .from("collection_products")
+    .select("collection_id, products!inner(id)")
+    .in("collection_id", [...collectionIds])
+    .eq("products.status", "active");
+  if (error) fail("collection counts", error);
+  for (const { collection_id } of data) counts.set(collection_id, (counts.get(collection_id) ?? 0) + 1);
+  return counts;
+}
+
+/**
+ * A collection's active products in the curated order staff set, as card
+ * rows. Read from the link side so a large collection is still one request.
+ */
+export async function fetchCollectionProductCards(collectionId: string): Promise<CardRow[]> {
+  const { data, error } = await getPublicSupabase()
+    .from("collection_products")
+    .select(`sort_order, products!inner(${CARD_SELECT})`)
+    .eq("collection_id", collectionId)
+    .eq("products.status", "active")
+    .order("sort_order")
+    .order("product_id")
+    .order("sort_order", { referencedTable: "products.product_media" })
+    .limit(1, { referencedTable: "products.product_media" });
+  if (error) fail("collection products", error);
+  return (data satisfies CollectionLinkRow[]).map((link) => link.products);
 }
 
 export async function fetchTestimonials(count: number): Promise<TestimonialRow[]> {

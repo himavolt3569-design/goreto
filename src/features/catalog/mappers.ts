@@ -4,6 +4,8 @@ import type { Database, Json } from "@/types/database";
 import type {
   CategoryDetail,
   CategorySummary,
+  CollectionDetail,
+  CollectionSummary,
   HomeCategory,
   HomeCollection,
   HomeProduct,
@@ -68,8 +70,13 @@ export type DetailRow = Omit<CardRow, "product_media"> &
 
 export type CollectionRow = Pick<
   Tables["collections"]["Row"],
-  "slug" | "eyebrow" | "title" | "description" | "hero_image_path" | "hero_image_alt"
+  "id" | "slug" | "eyebrow" | "title" | "description" | "hero_image_path" | "hero_image_alt"
 >;
+
+/** A `collection_products` link with its (active) product embedded as a card row. */
+export type CollectionLinkRow = Pick<Tables["collection_products"]["Row"], "sort_order"> & {
+  products: CardRow;
+};
 
 export type RatingRow = Functions["product_rating_summaries"]["Returns"][number];
 export type TestimonialRow = Functions["storefront_testimonials"]["Returns"][number];
@@ -307,6 +314,26 @@ export function toHomeCollection(row: CollectionRow): HomeCollection | null {
     description: row.description,
     image,
   };
+}
+
+/* ---------- Collections (view models for /collections) ---------- */
+
+/** Unlike the carousel, listings keep photo-less collections (placeholder frame). */
+export function toCollectionDetail(row: CollectionRow): CollectionDetail {
+  return {
+    slug: row.slug,
+    eyebrow: row.eyebrow,
+    title: row.title,
+    description: row.description,
+    image: productMediaImage(row.hero_image_path, row.hero_image_alt),
+  };
+}
+
+export function toCollectionSummary(
+  row: CollectionRow,
+  productCountByCollection: ReadonlyMap<string, number>,
+): CollectionSummary {
+  return { ...toCollectionDetail(row), productCount: productCountByCollection.get(row.id) ?? 0 };
 }
 
 export function toTestimonial(row: TestimonialRow): Testimonial {

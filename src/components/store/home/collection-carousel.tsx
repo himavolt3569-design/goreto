@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "@/components/motion/gsap";
+import { CollectionBanner } from "@/components/store/collection-banner";
 import type { HomeCollection } from "@/features/catalog/types";
 import { ArrowRightIcon, CaretLeftIcon, CaretRightIcon } from "@/components/ui/icons";
 import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
@@ -61,7 +61,7 @@ export function CollectionCarousel({ collections }: { collections: HomeCollectio
         {collections.map((collection, index) => {
           const isActive = index === active;
           return (
-            <div
+            <CollectionBanner
               key={collection.slug}
               data-slide
               role="group"
@@ -69,36 +69,11 @@ export function CollectionCarousel({ collections }: { collections: HomeCollectio
               aria-label={`${index + 1} of ${count}: ${collection.title}`}
               aria-hidden={!isActive}
               inert={!isActive}
-              className={cn(
-                "relative isolate col-start-1 row-start-1 flex min-h-[420px] flex-col md:min-h-[320px] md:flex-row",
-                !isActive && "invisible",
-              )}
-            >
-              <div className="relative h-48 overflow-hidden md:absolute md:inset-y-0 md:right-0 md:h-auto md:w-3/5">
-                <div data-slide-image className="absolute inset-0">
-                  <Image
-                    src={collection.image.src}
-                    alt={collection.image.alt}
-                    fill
-                    sizes="(min-width: 768px) 60vw, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-y-0 left-0 hidden w-1/3 bg-linear-to-r from-primary-100 to-transparent md:block"
-                />
-              </div>
-
-              <div
-                data-slide-copy
-                className="relative flex flex-col items-start gap-4 p-6 pb-16 md:max-w-md md:justify-center md:p-12 md:pb-12 lg:pl-16"
-              >
-                <p className="text-small font-semibold uppercase tracking-widest text-primary-500">
-                  {collection.eyebrow}
-                </p>
-                <h3 className="font-display text-h1 md:text-display-2">{collection.title}</h3>
-                <p className="text-body-lg text-neutral-700">{collection.description}</p>
+              collection={collection}
+              headingLevel="h3"
+              controlsSpace
+              className={cn("col-start-1 row-start-1 min-h-[420px]", !isActive && "invisible")}
+              action={
                 <Link
                   href={`/collections/${collection.slug}`}
                   className={buttonClasses({ variant: "primary", className: "mt-2" })}
@@ -106,8 +81,8 @@ export function CollectionCarousel({ collections }: { collections: HomeCollectio
                   Explore the Collection
                   <ArrowRightIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
                 </Link>
-              </div>
-            </div>
+              }
+            />
           );
         })}
       </div>

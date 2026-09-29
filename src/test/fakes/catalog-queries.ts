@@ -7,6 +7,7 @@ import type { CardFilter } from "@/features/catalog/queries";
 import {
   cardRows,
   categoryRows,
+  collectionLinkRows,
   collectionRows,
   detailRow,
   ratingRows,
@@ -51,6 +52,27 @@ export async function fetchFeaturedSlugs() {
 
 export async function fetchLiveCollections() {
   return collectionRows;
+}
+
+export async function fetchCollectionBySlug(slug: string) {
+  return collectionRows.find((row) => row.slug === slug) ?? null;
+}
+
+export async function fetchCollectionProductCounts(collectionIds: readonly string[]) {
+  const counts = new Map<string, number>();
+  for (const link of collectionLinkRows) {
+    if (collectionIds.includes(link.collection_id)) {
+      counts.set(link.collection_id, (counts.get(link.collection_id) ?? 0) + 1);
+    }
+  }
+  return counts;
+}
+
+export async function fetchCollectionProductCards(collectionId: string) {
+  return collectionLinkRows
+    .filter((link) => link.collection_id === collectionId)
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .flatMap((link) => cardRows.filter((row) => row.id === link.product_id));
 }
 
 export async function fetchTestimonials(count: number) {
