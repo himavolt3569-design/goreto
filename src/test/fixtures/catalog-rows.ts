@@ -84,8 +84,15 @@ export const detailRow: DetailRow = {
 };
 
 export const collectionRows: CollectionRow[] = [
-  { slug: "autumn-styles", eyebrow: "New collection", title: "Autumn Styles", description: "Warm tones.", hero_image_path: "collections/autumn-styles.jpg", hero_image_alt: "Woven wrap" },
-  { slug: "no-photo", eyebrow: "Draft", title: "No Photo Yet", description: "", hero_image_path: null, hero_image_alt: "" },
+  { id: "k-autumn", slug: "autumn-styles", eyebrow: "New collection", title: "Autumn Styles", description: "Warm tones.", hero_image_path: "collections/autumn-styles.jpg", hero_image_alt: "Woven wrap" },
+  { id: "k-no-photo", slug: "no-photo", eyebrow: "Draft", title: "No Photo Yet", description: "", hero_image_path: null, hero_image_alt: "" },
+];
+
+/** `collection_products` links (active products only, as RLS returns them). */
+export const collectionLinkRows: { collection_id: string; product_id: string; sort_order: number }[] = [
+  { collection_id: "k-autumn", product_id: "p-jhumka", sort_order: 3 },
+  { collection_id: "k-autumn", product_id: "p-tote", sort_order: 1 },
+  { collection_id: "k-autumn", product_id: "p-pearl", sort_order: 2 },
 ];
 
 export const testimonialRows: TestimonialRow[] = [

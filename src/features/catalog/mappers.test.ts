@@ -15,6 +15,7 @@ import {
   productBadge,
   toCategoryDetail,
   toCategorySummary,
+  toCollectionSummary,
   toHomeCollection,
   toHomeProduct,
   toProductDetail,
@@ -185,6 +186,23 @@ describe("JSONB parsing", () => {
     expect(parseOptions([{ name: "Color", values: [{ value: "red" }] }])).toEqual([]);
     expect(parseSpecs("nope")).toEqual([]);
     expect(parseSpecs([{ label: "Fit", value: "Relaxed" }])).toEqual([{ label: "Fit", value: "Relaxed" }]);
+  });
+});
+
+describe("collections", () => {
+  it("keeps photo-less collections and counts only listed products", () => {
+    const counts = new Map([["k-autumn", 3]]);
+    expect(toCollectionSummary(collectionRows[0], counts)).toMatchObject({
+      slug: "autumn-styles",
+      eyebrow: "New collection",
+      image: { alt: "Woven wrap" },
+      productCount: 3,
+    });
+    expect(toCollectionSummary(collectionRows[1], counts)).toMatchObject({
+      slug: "no-photo",
+      image: null,
+      productCount: 0,
+    });
   });
 });
 

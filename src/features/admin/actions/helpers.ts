@@ -34,7 +34,7 @@ export async function authorizeAndParse<Schema extends z.ZodType>(
 }
 
 /**
- * Catalog visibility changed: the homepage, category pages and (optionally)
+ * Catalog visibility changed: the homepage, category and collection pages and (optionally)
  * one product page. `expire: 0` so a product staff just hid is never served
  * stale to the next shopper.
  */
@@ -42,6 +42,7 @@ export function revalidateStorefrontCatalog(productSlug?: string | null): void {
   revalidateTag(CATALOG_CACHE_TAG, { expire: 0 });
   revalidatePath("/");
   revalidatePath("/categories");
+  revalidatePath("/collections");
   if (productSlug) revalidatePath(`/products/${productSlug}`);
 }
 

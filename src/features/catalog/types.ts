@@ -59,6 +59,23 @@ export type CategorySummary = HomeCategory & {
   productCount: number;
 };
 
+/* ---------- Collections (view models for /collections) ---------- */
+
+/** Page header for `/collections/[slug]`. */
+export type CollectionDetail = {
+  slug: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  /** `null` until staff upload a hero photo. */
+  image: MediaImage | null;
+};
+
+/** One `/collections` card. */
+export type CollectionSummary = CollectionDetail & {
+  productCount: number;
+};
+
 /* ---------- Product details (view models for /products/[slug]) ---------- */
 
 export type CategoryRef = {
