@@ -8,7 +8,7 @@ import { productMediaUrl } from "@/lib/media/storage";
  * error boundary shows a retry state.
  */
 
-export const PAGE_SIZE = 20;
+export { DEFAULT_PAGE_SIZE as PAGE_SIZE, pageNumber, pageRange, toPage, type Page } from "@/lib/pagination/page";
 
 export function adminDb() {
   return getUserSupabase();
@@ -16,25 +16,6 @@ export function adminDb() {
 
 export function fail(what: string, error: { message: string; code?: string }): never {
   throw new Error(`Admin query failed (${what}): ${error.code ?? ""} ${error.message}`.trim());
-}
-
-/** `?page=` as a 1-based page number (invalid or missing -> 1). */
-export function pageNumber(raw: string | string[] | undefined): number {
-  const value = Number(Array.isArray(raw) ? raw[0] : raw);
-  return Number.isInteger(value) && value >= 1 && value <= 10_000 ? value : 1;
-}
-
-/** Inclusive row range for `.range()`. */
-export function pageRange(page: number, size = PAGE_SIZE): [number, number] {
-  const start = (page - 1) * size;
-  return [start, start + size - 1];
-}
-
-export type Page<T> = { rows: T[]; total: number; page: number; pageCount: number };
-
-export function toPage<T>(rows: T[], total: number | null, page: number, size = PAGE_SIZE): Page<T> {
-  const count = total ?? rows.length;
-  return { rows, total: count, page, pageCount: Math.max(1, Math.ceil(count / size)) };
 }
 
 /** One of `allowed`, or null. For enum filters from search params. */

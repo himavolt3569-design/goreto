@@ -26,7 +26,8 @@ import type { StorefrontInfo } from "@/features/checkout/store-info";
 import { deliveryEstimate } from "@/features/checkout/quote";
 import { formatCalendarRange, formatOrderDateTime } from "@/features/orders/format";
 import { buildOrderSteps } from "@/features/orders/stepper";
-import type { OrderStatus, OrderTracking, ShipmentStatus } from "@/features/orders/tracking-model";
+import { SHIPMENT_STATUS_LABELS } from "@/features/orders/shipment-labels";
+import type { OrderStatus, OrderTracking } from "@/features/orders/tracking-model";
 import { formatNpr } from "@/lib/money/format";
 import { formatNepalPhone } from "@/lib/validation/phone";
 import { cn } from "@/lib/utils/cn";
@@ -55,15 +56,12 @@ const statusBanner: Record<OrderStatus, { title: string; text: string; tone: "su
   canceled: { title: "Order Canceled", text: "This order was canceled.", tone: "error" },
 };
 
-const shipmentLabels: Record<ShipmentStatus, string> = {
-  awaiting_assignment: "Order received",
-  assigned: "Courier assigned",
-  picked_up: "Picked up",
-  in_transit: "In transit",
-  out_for_delivery: "Out for delivery",
-  delivered: "Delivered",
-  exception: "Delivery issue",
-  returned: "Returned to store",
+type Variant = "confirmation" | "tracking" | "account";
+
+const variantCopy: Record<Variant, { title: string; text: string }> = {
+  confirmation: { title: "Thank You for Your Order", text: "Here are your order details. Keep this page to follow your delivery." },
+  tracking: { title: "Track Your Order", text: "Here’s the latest update and tracking details." },
+  account: { title: "Order Details", text: "Status, delivery updates and items for this order." },
 };
 
 const paymentLabels: Record<OrderTracking["paymentStatus"], string> = {
@@ -110,8 +108,10 @@ export function OrderTrackingView({
   order: OrderTracking;
   trackingLink: string | null;
   info: StorefrontInfo;
-  variant: "confirmation" | "tracking";
+  /** "account" sits inside the account shell: smaller title, two columns from xl, back to the order list. */
+  variant: Variant;
 }) {
+  const inAccount = variant === "account";
   const banner = statusBanner[order.status];
   const steps = buildOrderSteps(order);
   const estimate =
@@ -132,14 +132,10 @@ export function OrderTrackingView({
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-display text-display-2 text-neutral-900 md:text-display-1">
-            {variant === "confirmation" ? "Thank You for Your Order" : "Track Your Order"}
+          <h1 className={cn("font-display text-display-2 text-neutral-900", !inAccount && "md:text-display-1")}>
+            {variantCopy[variant].title}
           </h1>
-          <p className="text-body-lg text-neutral-500">
-            {variant === "confirmation"
-              ? "Here are your order details. Keep this page to follow your delivery."
-              : "Here’s the latest update and tracking details."}
-          </p>
+          <p className="text-body-lg text-neutral-500">{variantCopy[variant].text}</p>
         </div>
         <div className="flex flex-col md:items-end">
           <p className="text-h3 font-semibold text-neutral-900">Order #{order.orderNumber}</p>
@@ -208,7 +204,12 @@ export function OrderTrackingView({
         </section>
       ) : null}
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
+      <div
+        className={cn(
+          "grid items-start gap-6",
+          inAccount ? "xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]" : "lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]",
+        )}
+      >
         <div className="flex min-w-0 flex-col gap-6">
           <OrderPanel icon={TruckIcon} title="Order Tracking" description="Follow your order at every step. Updates appear here as they happen.">
             <OrderStepper steps={steps} />
@@ -239,7 +240,7 @@ export function OrderTrackingView({
                 <ol className="flex flex-col gap-4 border-l-2 border-neutral-200 pl-4">
                   {order.events.map((event, index) => (
                     <li key={`${event.occurredAt}-${index}`} className="flex flex-col gap-1">
-                      <span className="text-body font-semibold text-neutral-900">{shipmentLabels[event.status]}</span>
+                      <span className="text-body font-semibold text-neutral-900">{SHIPMENT_STATUS_LABELS[event.status]}</span>
                       <span className="text-body text-neutral-700">
                         {event.message}
                         {event.locationLabel ? ` · ${event.locationLabel}` : ""}
@@ -413,9 +414,15 @@ export function OrderTrackingView({
             </div>
           </GoodHandsCard>
 
-          <Link href="/categories" className={buttonClasses({ variant: "secondary", fullWidth: true })}>
-            Continue Shopping
-          </Link>
+          {inAccount ? (
+            <Link href="/account/orders" className={buttonClasses({ variant: "secondary", fullWidth: true })}>
+              Back to Orders
+            </Link>
+          ) : (
+            <Link href="/categories" className={buttonClasses({ variant: "secondary", fullWidth: true })}>
+              Continue Shopping
+            </Link>
+          )}
         </aside>
       </div>
     </div>
