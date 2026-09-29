@@ -7,10 +7,10 @@ import { ProductPurchase } from "../product-purchase";
 const push = vi.fn();
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
 
-function renderProduct(slug: string) {
+function renderProduct(slug: string, variant?: "page" | "quick-view") {
   const product = seedProducts.find((candidate) => candidate.slug === slug);
   if (!product) throw new Error(`missing seed product ${slug}`);
-  return render(<ProductPurchase product={product} />);
+  return render(<ProductPurchase product={product} variant={variant} />);
 }
 
 function mainImage() {
@@ -98,5 +98,22 @@ describe("ProductPurchase", () => {
     expect(screen.getByText("Fees shown at checkout")).toBeInTheDocument();
     expect(screen.getByText("Cash on Delivery")).toBeInTheDocument();
     expect(screen.queryByText(/free delivery/i)).not.toBeInTheDocument();
+  });
+
+  it("renders the quick view with an h2 title and a full-page link", () => {
+    renderProduct("beaded-wrist-stack", "quick-view");
+    const title = screen.getByRole("heading", { level: 2, name: "Beaded Wrist Stack" });
+    expect(title).toHaveAttribute("id", "quick-view-title");
+    expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "View full details" })).toHaveAttribute(
+      "href",
+      "/products/beaded-wrist-stack",
+    );
+  });
+
+  it("keeps the product page's h1 and no full-page link by default", () => {
+    renderProduct("beaded-wrist-stack");
+    expect(screen.getByRole("heading", { level: 1, name: "Beaded Wrist Stack" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "View full details" })).not.toBeInTheDocument();
   });
 });

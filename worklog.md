@@ -268,7 +268,7 @@ The two options work together: click-to-send covers the handoff now, and the por
 
 ### 4.2 Discovery
 - [x] **Search** `/search` (§13) (2026-09-28, `goreto-discovery-1-search.md`, migration `storefront_search`): `search_products` RPC (exact title → prefix → FTS + trigram typo tolerance, category words), category and price filters, sort, 24-per-page pagination, all in the URL and working without JavaScript. Header search, footer "Shop" and "New Arrivals" now land here.
-- [ ] **Product quick view** modal that keeps the canonical URL (§4.3).
+- [x] **Product quick view** (§4.3) (2026-09-28, `goreto-discovery-2-quick-view.md`): intercepted `/products/[slug]` in a `@modal` slot of the store layout. Every storefront product card (and its bag icon) opens a native-`<dialog>` quick view with the variant picker, Add to Cart and Buy Now; the URL is the canonical product page, so reload/share/new tab open the full page, and Back/Forward close and reopen it. "View full details" does a full load. Data reads through `CATALOG_CACHE_TAG`, so admin edits reach it at once.
 - [ ] **Collections** pages (`/collections`, `/collections/[slug]`). The carousel and nav link to them.
 - [ ] `/offers` page.
 - [ ] Reviews on the product page: a list and a write form. "(N reviews)" is plain text today.
