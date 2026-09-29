@@ -13,6 +13,9 @@ export type NepalMunicipality = {
   name: string;
   wardCount: number;
   postalCode: string | null;
+  /** Centre point, where the map picker opens for this municipality. */
+  latitude?: number | null;
+  longitude?: number | null;
 };
 
 export type NepalAddressData = {

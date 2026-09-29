@@ -8,7 +8,8 @@ import type { HomeProduct } from "@/features/catalog/types";
 import { buttonClasses } from "@/components/ui/button";
 import { ProductCard } from "@/components/ui/product-card";
 import { cn } from "@/lib/utils/cn";
-import { ChooseOptionsLink, WishlistSoonButton } from "../product-card-actions";
+import { ChooseOptionsLink } from "../product-card-actions";
+import { WishlistButton } from "../wishlist-button";
 
 export type FeaturedProductsProps = {
   products: HomeProduct[];
@@ -133,7 +134,7 @@ export function FeaturedProducts({ products, heading }: FeaturedProductsProps) {
                   pricePaisa={product.pricePaisa}
                   image={product.image}
                   className="w-full"
-                  wishlistAction={<WishlistSoonButton productTitle={product.title} />}
+                  wishlistAction={<WishlistButton slug={product.slug} productTitle={product.title} />}
                   cartAction={<ChooseOptionsLink slug={product.slug} title={product.title} />}
                 />
               </li>

@@ -1,0 +1,534 @@
+[
+  {
+    "code": "kathmandu-metropolitan-city",
+    "name": "Kathmandu Metropolitan City",
+    "districtCode": "kathmandu",
+    "wardCount": 32,
+    "postalCode": "44600"
+  },
+  {
+    "code": "lalitpur-metropolitan-city",
+    "name": "Lalitpur Metropolitan City",
+    "districtCode": "lalitpur",
+    "wardCount": 29,
+    "postalCode": "44700"
+  },
+  {
+    "code": "bhaktapur-municipality",
+    "name": "Bhaktapur Municipality",
+    "districtCode": "bhaktapur",
+    "wardCount": 10,
+    "postalCode": "44800"
+  },
+  {
+    "code": "madhyapur-thimi-municipality",
+    "name": "Madhyapur Thimi Municipality",
+    "districtCode": "bhaktapur",
+    "wardCount": 9,
+    "postalCode": null
+  },
+  {
+    "code": "suryabinayak-municipality",
+    "name": "Suryabinayak Municipality",
+    "districtCode": "bhaktapur",
+    "wardCount": 10,
+    "postalCode": null
+  },
+  {
+    "code": "kirtipur-municipality",
+    "name": "Kirtipur Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 10,
+    "postalCode": "44618"
+  },
+  {
+    "code": "budhanilkantha-municipality",
+    "name": "Budhanilkantha Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 13,
+    "postalCode": null
+  },
+  {
+    "code": "tokha-municipality",
+    "name": "Tokha Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 11,
+    "postalCode": null
+  },
+  {
+    "code": "tarakeshwar-municipality",
+    "name": "Tarakeshwar Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 11,
+    "postalCode": null
+  },
+  {
+    "code": "chandragiri-municipality",
+    "name": "Chandragiri Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 15,
+    "postalCode": null
+  },
+  {
+    "code": "nagarjun-municipality",
+    "name": "Nagarjun Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 10,
+    "postalCode": null
+  },
+  {
+    "code": "kageshwari-manohara-municipality",
+    "name": "Kageshwari Manohara Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 9,
+    "postalCode": null
+  },
+  {
+    "code": "gokarneshwar-municipality",
+    "name": "Gokarneshwar Municipality",
+    "districtCode": "kathmandu",
+    "wardCount": 9,
+    "postalCode": null
+  },
+  {
+    "code": "mahalaxmi-municipality",
+    "name": "Mahalaxmi Municipality",
+    "districtCode": "lalitpur",
+    "wardCount": 10,
+    "postalCode": null
+  },
+  {
+    "code": "godawari-municipality",
+    "name": "Godawari Municipality",
+    "districtCode": "lalitpur",
+    "wardCount": 14,
+    "postalCode": null
+  },
+  {
+    "code": "banepa-municipality",
+    "name": "Banepa Municipality",
+    "districtCode": "kavrepalanchok",
+    "wardCount": 14,
+    "postalCode": "45210"
+  },
+  {
+    "code": "dhulikhel-municipality",
+    "name": "Dhulikhel Municipality",
+    "districtCode": "kavrepalanchok",
+    "wardCount": 12,
+    "postalCode": "45200"
+  },
+  {
+    "code": "panauti-municipality",
+    "name": "Panauti Municipality",
+    "districtCode": "kavrepalanchok",
+    "wardCount": 12,
+    "postalCode": null
+  },
+  {
+    "code": "pokhara-metropolitan-city",
+    "name": "Pokhara Metropolitan City",
+    "districtCode": "kaski",
+    "wardCount": 33,
+    "postalCode": "33700"
+  },
+  {
+    "code": "bharatpur-metropolitan-city",
+    "name": "Bharatpur Metropolitan City",
+    "districtCode": "chitwan",
+    "wardCount": 29,
+    "postalCode": "44200"
+  },
+  {
+    "code": "ratnanagar-municipality",
+    "name": "Ratnanagar Municipality",
+    "districtCode": "chitwan",
+    "wardCount": 16,
+    "postalCode": null
+  },
+  {
+    "code": "khairahani-municipality",
+    "name": "Khairahani Municipality",
+    "districtCode": "chitwan",
+    "wardCount": 13,
+    "postalCode": null
+  },
+  {
+    "code": "biratnagar-metropolitan-city",
+    "name": "Biratnagar Metropolitan City",
+    "districtCode": "morang",
+    "wardCount": 19,
+    "postalCode": "56613"
+  },
+  {
+    "code": "birgunj-metropolitan-city",
+    "name": "Birgunj Metropolitan City",
+    "districtCode": "parsa",
+    "wardCount": 32,
+    "postalCode": "44300"
+  },
+  {
+    "code": "dharan-sub-metropolitan-city",
+    "name": "Dharan Sub-Metropolitan City",
+    "districtCode": "sunsari",
+    "wardCount": 20,
+    "postalCode": "56700"
+  },
+  {
+    "code": "itahari-sub-metropolitan-city",
+    "name": "Itahari Sub-Metropolitan City",
+    "districtCode": "sunsari",
+    "wardCount": 20,
+    "postalCode": "56705"
+  },
+  {
+    "code": "inaruwa-municipality",
+    "name": "Inaruwa Municipality",
+    "districtCode": "sunsari",
+    "wardCount": 10,
+    "postalCode": null
+  },
+  {
+    "code": "hetauda-sub-metropolitan-city",
+    "name": "Hetauda Sub-Metropolitan City",
+    "districtCode": "makwanpur",
+    "wardCount": 19,
+    "postalCode": "44107"
+  },
+  {
+    "code": "janakpurdham-sub-metropolitan-city",
+    "name": "Janakpurdham Sub-Metropolitan City",
+    "districtCode": "dhanusha",
+    "wardCount": 25,
+    "postalCode": "45600"
+  },
+  {
+    "code": "butwal-sub-metropolitan-city",
+    "name": "Butwal Sub-Metropolitan City",
+    "districtCode": "rupandehi",
+    "wardCount": 19,
+    "postalCode": "32907"
+  },
+  {
+    "code": "siddharthanagar-municipality",
+    "name": "Siddharthanagar Municipality",
+    "districtCode": "rupandehi",
+    "wardCount": 13,
+    "postalCode": "32900"
+  },
+  {
+    "code": "tilottama-municipality",
+    "name": "Tilottama Municipality",
+    "districtCode": "rupandehi",
+    "wardCount": 17,
+    "postalCode": null
+  },
+  {
+    "code": "lumbini-sanskritik-municipality",
+    "name": "Lumbini Sanskritik Municipality",
+    "districtCode": "rupandehi",
+    "wardCount": 13,
+    "postalCode": null
+  },
+  {
+    "code": "nepalgunj-sub-metropolitan-city",
+    "name": "Nepalgunj Sub-Metropolitan City",
+    "districtCode": "banke",
+    "wardCount": 23,
+    "postalCode": "21900"
+  },
+  {
+    "code": "kohalpur-municipality",
+    "name": "Kohalpur Municipality",
+    "districtCode": "banke",
+    "wardCount": 15,
+    "postalCode": null
+  },
+  {
+    "code": "dhangadhi-sub-metropolitan-city",
+    "name": "Dhangadhi Sub-Metropolitan City",
+    "districtCode": "kailali",
+    "wardCount": 19,
+    "postalCode": "10900"
+  },
+  {
+    "code": "tikapur-municipality",
+    "name": "Tikapur Municipality",
+    "districtCode": "kailali",
+    "wardCount": 9,
+    "postalCode": null
+  },
+  {
+    "code": "bhimdatta-municipality",
+    "name": "Bhimdatta Municipality",
+    "districtCode": "kanchanpur",
+    "wardCount": 19,
+    "postalCode": "10400"
+  },
+  {
+    "code": "kalaiya-sub-metropolitan-city",
+    "name": "Kalaiya Sub-Metropolitan City",
+    "districtCode": "bara",
+    "wardCount": 27,
+    "postalCode": null
+  },
+  {
+    "code": "jitpur-simara-sub-metropolitan-city",
+    "name": "Jitpur Simara Sub-Metropolitan City",
+    "districtCode": "bara",
+    "wardCount": 24,
+    "postalCode": null
+  },
+  {
+    "code": "ghorahi-sub-metropolitan-city",
+    "name": "Ghorahi Sub-Metropolitan City",
+    "districtCode": "dang",
+    "wardCount": 19,
+    "postalCode": "22400"
+  },
+  {
+    "code": "tulsipur-sub-metropolitan-city",
+    "name": "Tulsipur Sub-Metropolitan City",
+    "districtCode": "dang",
+    "wardCount": 19,
+    "postalCode": "22412"
+  },
+  {
+    "code": "birendranagar-municipality",
+    "name": "Birendranagar Municipality",
+    "districtCode": "surkhet",
+    "wardCount": 16,
+    "postalCode": "21700"
+  },
+  {
+    "code": "damak-municipality",
+    "name": "Damak Municipality",
+    "districtCode": "jhapa",
+    "wardCount": 10,
+    "postalCode": "57217"
+  },
+  {
+    "code": "birtamod-municipality",
+    "name": "Birtamod Municipality",
+    "districtCode": "jhapa",
+    "wardCount": 10,
+    "postalCode": "57204"
+  },
+  {
+    "code": "mechinagar-municipality",
+    "name": "Mechinagar Municipality",
+    "districtCode": "jhapa",
+    "wardCount": 15,
+    "postalCode": null
+  },
+  {
+    "code": "bhadrapur-municipality",
+    "name": "Bhadrapur Municipality",
+    "districtCode": "jhapa",
+    "wardCount": 10,
+    "postalCode": null
+  },
+  {
+    "code": "tansen-municipality",
+    "name": "Tansen Municipality",
+    "districtCode": "palpa",
+    "wardCount": 14,
+    "postalCode": "32500"
+  },
+  {
+    "code": "rajbiraj-municipality",
+    "name": "Rajbiraj Municipality",
+    "districtCode": "saptari",
+    "wardCount": 16,
+    "postalCode": "56400"
+  },
+  {
+    "code": "lahan-municipality",
+    "name": "Lahan Municipality",
+    "districtCode": "siraha",
+    "wardCount": 24,
+    "postalCode": "56502"
+  },
+  {
+    "code": "gorkha-municipality",
+    "name": "Gorkha Municipality",
+    "districtCode": "gorkha",
+    "wardCount": 14,
+    "postalCode": "34000"
+  },
+  {
+    "code": "besisahar-municipality",
+    "name": "Besisahar Municipality",
+    "districtCode": "lamjung",
+    "wardCount": 11,
+    "postalCode": null
+  },
+  {
+    "code": "waling-municipality",
+    "name": "Waling Municipality",
+    "districtCode": "syangja",
+    "wardCount": 14,
+    "postalCode": null
+  },
+  {
+    "code": "putalibazar-municipality",
+    "name": "Putalibazar Municipality",
+    "districtCode": "syangja",
+    "wardCount": 14,
+    "postalCode": null
+  },
+  {
+    "code": "baglung-municipality",
+    "name": "Baglung Municipality",
+    "districtCode": "baglung",
+    "wardCount": 14,
+    "postalCode": "33300"
+  },
+  {
+    "code": "byas-municipality",
+    "name": "Byas Municipality",
+    "districtCode": "tanahun",
+    "wardCount": 14,
+    "postalCode": null
+  },
+  {
+    "code": "ilam-municipality",
+    "name": "Ilam Municipality",
+    "districtCode": "ilam",
+    "wardCount": 12,
+    "postalCode": "57300"
+  },
+  {
+    "code": "dhankuta-municipality",
+    "name": "Dhankuta Municipality",
+    "districtCode": "dhankuta",
+    "wardCount": 10,
+    "postalCode": "56800"
+  },
+  {
+    "code": "triyuga-municipality",
+    "name": "Triyuga Municipality",
+    "districtCode": "udayapur",
+    "wardCount": 16,
+    "postalCode": null
+  },
+  {
+    "code": "bidur-municipality",
+    "name": "Bidur Municipality",
+    "districtCode": "nuwakot",
+    "wardCount": 13,
+    "postalCode": null
+  },
+  {
+    "code": "kamalamai-municipality",
+    "name": "Kamalamai Municipality",
+    "districtCode": "sindhuli",
+    "wardCount": 14,
+    "postalCode": null
+  },
+  {
+    "code": "kawasoti-municipality",
+    "name": "Kawasoti Municipality",
+    "districtCode": "nawalpur",
+    "wardCount": 17,
+    "postalCode": null
+  },
+  {
+    "code": "gulariya-municipality",
+    "name": "Gulariya Municipality",
+    "districtCode": "bardiya",
+    "wardCount": 12,
+    "postalCode": null
+  },
+  {
+    "code": "dipayal-silgadhi-municipality",
+    "name": "Dipayal Silgadhi Municipality",
+    "districtCode": "doti",
+    "wardCount": 9,
+    "postalCode": null
+  },
+  {
+    "code": "kapilvastu-municipality",
+    "name": "Kapilvastu Municipality",
+    "districtCode": "kapilvastu",
+    "wardCount": 12,
+    "postalCode": null
+  },
+  {
+    "code": "jaleshwar-municipality",
+    "name": "Jaleshwar Municipality",
+    "districtCode": "mahottari",
+    "wardCount": 12,
+    "postalCode": null
+  },
+  {
+    "code": "malangwa-municipality",
+    "name": "Malangwa Municipality",
+    "districtCode": "sarlahi",
+    "wardCount": 12,
+    "postalCode": null
+  },
+  {
+    "code": "simkot-rural-municipality",
+    "name": "Simkot Rural Municipality",
+    "districtCode": "humla",
+    "wardCount": 8,
+    "postalCode": null
+  },
+  {
+    "code": "thuli-bheri-municipality",
+    "name": "Thuli Bheri Municipality",
+    "districtCode": "dolpa",
+    "wardCount": 11,
+    "postalCode": null
+  },
+  {
+    "code": "chame-rural-municipality",
+    "name": "Chame Rural Municipality",
+    "districtCode": "manang",
+    "wardCount": 5,
+    "postalCode": null
+  },
+  {
+    "code": "gharapjhong-rural-municipality",
+    "name": "Gharapjhong Rural Municipality",
+    "districtCode": "mustang",
+    "wardCount": 5,
+    "postalCode": null
+  },
+  {
+    "code": "chhayanath-rara-municipality",
+    "name": "Chhayanath Rara Municipality",
+    "districtCode": "mugu",
+    "wardCount": 14,
+    "postalCode": null
+  },
+  {
+    "code": "chandannath-municipality",
+    "name": "Chandannath Municipality",
+    "districtCode": "jumla",
+    "wardCount": 10,
+    "postalCode": null
+  },
+  {
+    "code": "solududhkunda-municipality",
+    "name": "Solududhkunda Municipality",
+    "districtCode": "solukhumbu",
+    "wardCount": 11,
+    "postalCode": null
+  },
+  {
+    "code": "phungling-municipality",
+    "name": "Phungling Municipality",
+    "districtCode": "taplejung",
+    "wardCount": 11,
+    "postalCode": null
+  },
+  {
+    "code": "khandbari-municipality",
+    "name": "Khandbari Municipality",
+    "districtCode": "sankhuwasabha",
+    "wardCount": 11,
+    "postalCode": null
+  }
+]

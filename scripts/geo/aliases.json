@@ -1,0 +1,35 @@
+{
+  "districts": {
+    "CHITAWAN": "chitwan",
+    "KABHREPALANCHOK": "kavrepalanchok",
+    "KAPILBASTU": "kapilvastu",
+    "MAKAWANPUR": "makwanpur",
+    "NAWALPARASI_E": "nawalpur",
+    "NAWALPARASI_W": "parasi",
+    "RUKUM_E": "rukum-east",
+    "RUKUM_W": "rukum-west",
+    "TANAHU": "tanahun"
+  },
+  "names": {
+    "kathmandu|Budhanilakantha": "Budhanilkantha",
+    "kathmandu|Tarakeshwor": "Tarakeshwar",
+    "kathmandu|Kageshwori Manahora": "Kageshwari Manohara",
+    "kathmandu|Gokarneshwor": "Gokarneshwar",
+    "kaski|Pokhara Lekhnath": "Pokhara",
+    "dhanusha|Janakpur": "Janakpurdham",
+    "rupandehi|Tillotama": "Tilottama",
+    "lamjung|Besishahar": "Besisahar",
+    "ilam|Illam": "Ilam",
+    "doti|Dipayal Silgadi": "Dipayal Silgadhi",
+    "kapilvastu|Kapilbastu": "Kapilvastu",
+    "mahottari|Jaleswor": "Jaleshwar",
+    "sarlahi|Malangawa": "Malangwa",
+    "solukhumbu|Solududhakunda": "Solududhkunda"
+  },
+  "nepaliDistricts": {
+    "नवलपरासी (बर्दघाट सुस्ता पूर्व)": "nawalpur",
+    "नवलपरासी (बर्दघाट सुस्ता पश्चिम)": "parasi",
+    "रुकुम (पूर्वी भाग)": "rukum-east",
+    "रुकुम (पश्चिम भाग)": "rukum-west"
+  }
+}

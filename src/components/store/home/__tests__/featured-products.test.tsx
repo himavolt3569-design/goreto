@@ -1,7 +1,9 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { seedFeaturedProducts } from "@/test/fixtures/catalog";
 import { FeaturedProducts } from "../featured-products";
+
+vi.mock("@/components/store/wishlist-button", () => import("@/test/fakes/wishlist-button"));
 
 function renderFeatured(products = seedFeaturedProducts) {
   return render(<FeaturedProducts products={products} heading={<h2>Handpicked</h2>} />);
@@ -48,9 +50,7 @@ describe("FeaturedProducts", () => {
     expect(
       screen.getByRole("link", { name: "Choose options for White Lace Sundress" }),
     ).toHaveAttribute("href", "/products/white-lace-sundress");
-    expect(
-      screen.getByRole("button", { name: "Save White Lace Sundress to wishlist (coming soon)" }),
-    ).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("button", { name: "Save White Lace Sundress to wishlist" })).toBeInTheDocument();
   });
 
   it("shows an empty state when a tab has no products", () => {
