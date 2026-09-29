@@ -29,13 +29,15 @@ export type ProductGalleryProps = {
   /** Photos for the selected variant, in display order. */
   media: ProductMedia[];
   productTitle: string;
+  /** Quick view: thumbnails always sit under the image, sized for a narrow column. */
+  compact?: boolean;
 };
 
 /**
  * Thumbnail rail + main image + lightbox. Remount it (via `key`) when the
  * variant's photos change so the selection resets to the first photo.
  */
-export function ProductGallery({ media, productTitle }: ProductGalleryProps) {
+export function ProductGallery({ media, productTitle, compact = false }: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
   const railRef = useRef<HTMLUListElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -56,14 +58,18 @@ export function ProductGallery({ media, productTitle }: ProductGalleryProps) {
   }
 
   return (
-    <div className="flex min-w-0 flex-col-reverse gap-4 lg:flex-row">
+    <div className={cn("flex min-w-0 flex-col-reverse gap-4", !compact && "lg:flex-row")}>
       {count > 1 ? (
         <div className="flex flex-col items-center gap-3">
           {/* 528px = five 96px thumbnails and their 12px gaps (reference rail height). */}
           <ul
             ref={railRef}
             aria-label="Product images"
-            className="flex w-full snap-x gap-3 overflow-x-auto p-1 lg:max-h-[528px] lg:w-auto lg:snap-y lg:flex-col lg:overflow-y-auto lg:overflow-x-visible"
+            className={cn(
+              "flex w-full snap-x gap-3 overflow-x-auto p-1",
+              !compact &&
+                "lg:max-h-[528px] lg:w-auto lg:snap-y lg:flex-col lg:overflow-y-auto lg:overflow-x-visible",
+            )}
           >
             {media.map((item, itemIndex) => {
               const selected = item.id === active?.id;
@@ -75,7 +81,8 @@ export function ProductGallery({ media, productTitle }: ProductGalleryProps) {
                     aria-current={selected ? "true" : undefined}
                     onClick={() => setIndex(itemIndex)}
                     className={cn(
-                      "relative block size-20 overflow-hidden rounded-md border-2 bg-neutral-100 transition-colors lg:size-24",
+                      "relative block size-20 overflow-hidden rounded-md border-2 bg-neutral-100 transition-colors",
+                      !compact && "lg:size-24",
                       selected
                         ? "border-primary-500"
                         : "border-transparent hover:border-primary-200",
@@ -93,7 +100,7 @@ export function ProductGallery({ media, productTitle }: ProductGalleryProps) {
               );
             })}
           </ul>
-          {count > VISIBLE_THUMBS ? (
+          {count > VISIBLE_THUMBS && !compact ? (
             <button
               type="button"
               aria-label="Scroll to more images"
@@ -116,8 +123,12 @@ export function ProductGallery({ media, productTitle }: ProductGalleryProps) {
         {/* 7:8 matches the reference's portrait product frame. */}
         <MediaFrame
           image={active?.image ?? null}
-          priority
-          sizes="(min-width: 1280px) 600px, (min-width: 1024px) 45vw, 100vw"
+          priority={!compact}
+          sizes={
+            compact
+              ? "(min-width: 1024px) 480px, (min-width: 640px) 80vw, 100vw"
+              : "(min-width: 1280px) 600px, (min-width: 1024px) 45vw, 100vw"
+          }
           className="aspect-[7/8] w-full rounded-lg"
         />
         <div className="absolute right-4 top-4">

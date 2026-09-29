@@ -1,4 +1,6 @@
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
+import { CATALOG_CACHE_TAG } from "./categories";
 import { indexCategories, toProductDetail, toProductSummary } from "./mappers";
 import {
   fetchActiveCategories,
@@ -20,6 +22,17 @@ export const getProductBySlug = cache(async (slug: string): Promise<ProductDetai
   const ratings = await fetchRatings([row.id]);
   return toProductDetail(row, indexCategories(categories), ratings.get(row.id), Date.now());
 });
+
+/**
+ * The quick-view modal is an intercepted route, which `revalidatePath` on the
+ * product URL doesn't reach. Reading through the catalog tag instead means an
+ * admin edit (tag expired at once) is never shown stale in a quick view.
+ */
+export const getQuickViewProduct = unstable_cache(
+  async (slug: string): Promise<ProductDetail | null> => getProductBySlug(slug),
+  ["quick-view-product"],
+  { revalidate: 60, tags: [CATALOG_CACHE_TAG] },
+);
 
 /** Slugs prerendered at build time; every other product renders on first request. */
 export async function getProductSlugs(): Promise<string[]> {

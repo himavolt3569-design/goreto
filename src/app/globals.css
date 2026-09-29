@@ -113,6 +113,11 @@
     font-family: var(--font-sans);
   }
 
+  /* A modal dialog that opts in (quick view) keeps the page behind it from scrolling. */
+  html:has(dialog[data-scroll-lock][open]) {
+    overflow: hidden;
+  }
+
   /* Default keyboard focus indicator; form controls override with border + ring. */
   :focus-visible {
     outline: 2px solid var(--color-primary-500);

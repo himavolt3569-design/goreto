@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClasses } from "@/components/ui/button";
 import {
   ArrowCounterClockwiseIcon,
+  ArrowRightIcon,
   CheckCircleIcon,
   HandbagIcon,
   MoneyIcon,
@@ -32,6 +33,7 @@ import {
 } from "@/features/catalog/variants";
 import { formatNpr } from "@/lib/money/format";
 import { cn } from "@/lib/utils/cn";
+import { QUICK_VIEW_TITLE_ID } from "../quick-view/ids";
 import { SOFT_SECONDARY } from "./classes";
 import { OptionSelector } from "./option-selector";
 import { ProductGallery } from "./product-gallery";
@@ -60,8 +62,17 @@ const assuranceIcons: Record<ProductAssurance["icon"], Icon> = {
 /**
  * Gallery + product information + purchase controls. Owns the selected
  * variant, so price, stock, photos and the cart line all follow the choice.
+ * `quick-view` is the modal over a listing: the page underneath keeps its h1,
+ * and a link leads to the full product page.
  */
-export function ProductPurchase({ product }: { product: ProductPurchaseData }) {
+export function ProductPurchase({
+  product,
+  variant: layout = "page",
+}: {
+  product: ProductPurchaseData;
+  variant?: "page" | "quick-view";
+}) {
+  const quickView = layout === "quick-view";
   const router = useRouter();
   const addItem = useCartStore((state) => state.addItem);
   const [variant, setVariant] = useState(() => defaultVariant(product));
@@ -123,11 +134,17 @@ export function ProductPurchase({ product }: { product: ProductPurchaseData }) {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12">
+    <div
+      className={cn(
+        "grid gap-8",
+        quickView ? "md:grid-cols-2" : "lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12",
+      )}
+    >
       <ProductGallery
         key={media.map((item) => item.id).join("|")}
         media={media}
         productTitle={product.title}
+        compact={quickView}
       />
 
       <div className="flex min-w-0 flex-col gap-6">
@@ -137,9 +154,15 @@ export function ProductPurchase({ product }: { product: ProductPurchaseData }) {
               {product.badge.label}
             </Badge>
           ) : null}
-          <h1 className="font-display text-h1 text-neutral-900 md:text-display-2">
-            {product.title}
-          </h1>
+          {quickView ? (
+            <h2 id={QUICK_VIEW_TITLE_ID} className="font-display text-h1 text-neutral-900">
+              {product.title}
+            </h2>
+          ) : (
+            <h1 className="font-display text-h1 text-neutral-900 md:text-display-2">
+              {product.title}
+            </h1>
+          )}
           {product.rating ? (
             <Rating variant="stars" value={product.rating.value} count={product.rating.count} />
           ) : null}
@@ -223,6 +246,18 @@ export function ProductPurchase({ product }: { product: ProductPurchaseData }) {
               </p>
             ) : null}
           </div>
+
+          {quickView ? (
+            // A full load on purpose: a client navigation to the URL already
+            // shown would be intercepted into this modal again.
+            <a
+              href={`/products/${product.slug}`}
+              className={buttonClasses({ variant: "text", size: "md", className: "w-fit gap-2" })}
+            >
+              View full details
+              <ArrowRightIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+            </a>
+          ) : null}
         </div>
 
         <ul className="grid grid-cols-1 gap-4 border-t border-neutral-200 pt-6 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-neutral-200">

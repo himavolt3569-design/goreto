@@ -1,7 +1,7 @@
 import { StoreFooter } from "@/components/store/store-footer";
 import { StoreHeader } from "@/components/store/store-header";
 
-export default function StoreLayout({ children }: LayoutProps<"/">) {
+export default function StoreLayout({ children, modal }: LayoutProps<"/">) {
   return (
     <>
       <StoreHeader />
@@ -9,6 +9,8 @@ export default function StoreLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <StoreFooter />
+      {/* Product quick view (intercepted /products/[slug]); null otherwise. */}
+      {modal}
     </>
   );
 }
