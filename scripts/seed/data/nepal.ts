@@ -1,15 +1,18 @@
+import canonical from "../../../src/data/nepal/municipalities.json" with { type: "json" };
 import { slugify } from "../lib/ids.ts";
 import type { MunicipalityType } from "../types.ts";
 
 /**
  * Nepal administrative geography for the seed.
  *
- * Provinces (7) and districts (77) are complete. Municipalities are a
- * DEVELOPMENT SUBSET (the metros, sub-metros and towns the seed addresses
- * use), not the full 753 local levels. The canonical dataset belongs in
- * `src/data/nepal/` once sourced and verified (AGENTS §15.5). Postal codes are
- * given only where well known; the rest are null, as the field is optional.
- * Coordinates are approximate town centres for "location detected" examples.
+ * Provinces (7) and districts (77) are defined here and are the input to
+ * scripts/geo/build-nepal.ts. All 753 local levels come from the canonical
+ * dataset in `src/data/nepal/` (AGENTS §15.5), which the nepal_geography
+ * migration also loads; the seed mirrors it so its rows agree.
+ *
+ * `municipalities` below is the smaller set the seed spreads customers over,
+ * with weights and landmarks. Their ward counts, postal codes and centres are
+ * taken from the canonical data.
  */
 
 export const provinces = [
@@ -218,18 +221,27 @@ const municipalitySeeds: MunicipalitySeed[] = [
   ["Khandbari", M, "sankhuwasabha", 11, null, 27.37, 87.2, 0.4, ["Khandbari Bazar"]],
 ];
 
+export type CanonicalMunicipality = (typeof canonical)[number] & { type: MunicipalityType; postalCode: string | null };
+
+/** Every local level, as the nepal_geography migration loads it. */
+export const allMunicipalities = canonical as CanonicalMunicipality[];
+const canonicalByCode = new Map(allMunicipalities.map((item) => [item.code, item]));
+
 export const municipalities: Municipality[] = municipalitySeeds.map(
-  ([name, type, districtCode, wardCount, postalCode, latitude, longitude, weight, landmarks]) => {
+  ([name, type, districtCode, , postalCode, , , weight, landmarks]) => {
     const fullName = `${name} ${typeSuffix[type]}`;
+    const code = slugify(fullName);
+    const match = canonicalByCode.get(code);
+    if (!match || match.districtCode !== districtCode) throw new Error(`Seed municipality ${code} is not in src/data/nepal`);
     return {
-      code: slugify(fullName),
-      name: fullName,
+      code,
+      name: match.name,
       type,
       districtCode,
-      wardCount,
-      postalCode,
-      latitude,
-      longitude,
+      wardCount: match.wardCount,
+      postalCode: match.postalCode ?? postalCode,
+      latitude: match.latitude,
+      longitude: match.longitude,
       weight,
       landmarks,
     };

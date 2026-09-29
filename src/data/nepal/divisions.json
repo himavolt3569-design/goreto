@@ -1,0 +1,426 @@
+{
+  "provinces": [
+    {
+      "code": "koshi",
+      "number": 1,
+      "name": "Koshi Province"
+    },
+    {
+      "code": "madhesh",
+      "number": 2,
+      "name": "Madhesh Province"
+    },
+    {
+      "code": "bagmati",
+      "number": 3,
+      "name": "Bagmati Province"
+    },
+    {
+      "code": "gandaki",
+      "number": 4,
+      "name": "Gandaki Province"
+    },
+    {
+      "code": "lumbini",
+      "number": 5,
+      "name": "Lumbini Province"
+    },
+    {
+      "code": "karnali",
+      "number": 6,
+      "name": "Karnali Province"
+    },
+    {
+      "code": "sudurpashchim",
+      "number": 7,
+      "name": "Sudurpashchim Province"
+    }
+  ],
+  "districts": [
+    {
+      "code": "bhojpur",
+      "name": "Bhojpur",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "dhankuta",
+      "name": "Dhankuta",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "ilam",
+      "name": "Ilam",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "jhapa",
+      "name": "Jhapa",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "khotang",
+      "name": "Khotang",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "morang",
+      "name": "Morang",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "okhaldhunga",
+      "name": "Okhaldhunga",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "panchthar",
+      "name": "Panchthar",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "sankhuwasabha",
+      "name": "Sankhuwasabha",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "solukhumbu",
+      "name": "Solukhumbu",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "sunsari",
+      "name": "Sunsari",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "taplejung",
+      "name": "Taplejung",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "terhathum",
+      "name": "Terhathum",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "udayapur",
+      "name": "Udayapur",
+      "provinceCode": "koshi"
+    },
+    {
+      "code": "bara",
+      "name": "Bara",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "dhanusha",
+      "name": "Dhanusha",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "mahottari",
+      "name": "Mahottari",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "parsa",
+      "name": "Parsa",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "rautahat",
+      "name": "Rautahat",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "saptari",
+      "name": "Saptari",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "sarlahi",
+      "name": "Sarlahi",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "siraha",
+      "name": "Siraha",
+      "provinceCode": "madhesh"
+    },
+    {
+      "code": "bhaktapur",
+      "name": "Bhaktapur",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "chitwan",
+      "name": "Chitwan",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "dhading",
+      "name": "Dhading",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "dolakha",
+      "name": "Dolakha",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "kathmandu",
+      "name": "Kathmandu",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "kavrepalanchok",
+      "name": "Kavrepalanchok",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "lalitpur",
+      "name": "Lalitpur",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "makwanpur",
+      "name": "Makwanpur",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "nuwakot",
+      "name": "Nuwakot",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "ramechhap",
+      "name": "Ramechhap",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "rasuwa",
+      "name": "Rasuwa",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "sindhuli",
+      "name": "Sindhuli",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "sindhupalchok",
+      "name": "Sindhupalchok",
+      "provinceCode": "bagmati"
+    },
+    {
+      "code": "baglung",
+      "name": "Baglung",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "gorkha",
+      "name": "Gorkha",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "kaski",
+      "name": "Kaski",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "lamjung",
+      "name": "Lamjung",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "manang",
+      "name": "Manang",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "mustang",
+      "name": "Mustang",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "myagdi",
+      "name": "Myagdi",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "nawalpur",
+      "name": "Nawalpur",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "parbat",
+      "name": "Parbat",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "syangja",
+      "name": "Syangja",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "tanahun",
+      "name": "Tanahun",
+      "provinceCode": "gandaki"
+    },
+    {
+      "code": "arghakhanchi",
+      "name": "Arghakhanchi",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "banke",
+      "name": "Banke",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "bardiya",
+      "name": "Bardiya",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "dang",
+      "name": "Dang",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "gulmi",
+      "name": "Gulmi",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "kapilvastu",
+      "name": "Kapilvastu",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "parasi",
+      "name": "Parasi",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "palpa",
+      "name": "Palpa",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "pyuthan",
+      "name": "Pyuthan",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "rolpa",
+      "name": "Rolpa",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "rukum-east",
+      "name": "Rukum East",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "rupandehi",
+      "name": "Rupandehi",
+      "provinceCode": "lumbini"
+    },
+    {
+      "code": "dailekh",
+      "name": "Dailekh",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "dolpa",
+      "name": "Dolpa",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "humla",
+      "name": "Humla",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "jajarkot",
+      "name": "Jajarkot",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "jumla",
+      "name": "Jumla",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "kalikot",
+      "name": "Kalikot",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "mugu",
+      "name": "Mugu",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "rukum-west",
+      "name": "Rukum West",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "salyan",
+      "name": "Salyan",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "surkhet",
+      "name": "Surkhet",
+      "provinceCode": "karnali"
+    },
+    {
+      "code": "achham",
+      "name": "Achham",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "baitadi",
+      "name": "Baitadi",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "bajhang",
+      "name": "Bajhang",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "bajura",
+      "name": "Bajura",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "dadeldhura",
+      "name": "Dadeldhura",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "darchula",
+      "name": "Darchula",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "doti",
+      "name": "Doti",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "kailali",
+      "name": "Kailali",
+      "provinceCode": "sudurpashchim"
+    },
+    {
+      "code": "kanchanpur",
+      "name": "Kanchanpur",
+      "provinceCode": "sudurpashchim"
+    }
+  ]
+}

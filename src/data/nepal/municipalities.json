@@ -1,0 +1,7532 @@
+[
+ {
+  "code": "aamchowk-rural-municipality",
+  "name": "Aamchowk Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.972064,
+  "longitude": 87.037099
+ },
+ {
+  "code": "aandhikhola-rural-municipality",
+  "name": "Aandhikhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "syangja",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.166882,
+  "longitude": 83.801297
+ },
+ {
+  "code": "aarughat-rural-municipality",
+  "name": "Aarughat Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.119128,
+  "longitude": 84.816682
+ },
+ {
+  "code": "aathabis-municipality",
+  "name": "Aathabis Municipality",
+  "type": "municipality",
+  "districtCode": "dailekh",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.023888,
+  "longitude": 81.480767
+ },
+ {
+  "code": "aathbiskot-municipality",
+  "name": "Aathbiskot Municipality",
+  "type": "municipality",
+  "districtCode": "rukum-west",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.845992,
+  "longitude": 82.52108
+ },
+ {
+  "code": "aathrai-rural-municipality",
+  "name": "Aathrai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "terhathum",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.207886,
+  "longitude": 87.684636
+ },
+ {
+  "code": "aathrai-tribeni-rural-municipality",
+  "name": "Aathrai Tribeni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.319393,
+  "longitude": 87.617605
+ },
+ {
+  "code": "aaurahi-rural-municipality",
+  "name": "Aaurahi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.708252,
+  "longitude": 86.023999
+ },
+ {
+  "code": "adanchuli-rural-municipality",
+  "name": "Adanchuli Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "humla",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.700705,
+  "longitude": 81.863367
+ },
+ {
+  "code": "adarshkotwal-rural-municipality",
+  "name": "Adarshkotwal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.945956,
+  "longitude": 85.14492
+ },
+ {
+  "code": "adharsha-rural-municipality",
+  "name": "Adharsha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "doti",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.35025,
+  "longitude": 80.868921
+ },
+ {
+  "code": "agnisair-krishna-savaran-rural-municipality",
+  "name": "Agnisair Krishna Savaran Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.644828,
+  "longitude": 86.800842
+ },
+ {
+  "code": "ainselukhark-rural-municipality",
+  "name": "Ainselukhark Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.373687,
+  "longitude": 86.758365
+ },
+ {
+  "code": "ajaymeru-rural-municipality",
+  "name": "Ajaymeru Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dadeldhura",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.3641,
+  "longitude": 80.513699
+ },
+ {
+  "code": "ajirkot-rural-municipality",
+  "name": "Ajirkot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.234727,
+  "longitude": 84.68785
+ },
+ {
+  "code": "alital-rural-municipality",
+  "name": "Alital Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dadeldhura",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.114871,
+  "longitude": 80.494182
+ },
+ {
+  "code": "amargadhi-municipality",
+  "name": "Amargadhi Municipality",
+  "type": "municipality",
+  "districtCode": "dadeldhura",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.306188,
+  "longitude": 80.609241
+ },
+ {
+  "code": "anbukhaireni-rural-municipality",
+  "name": "Anbukhaireni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "tanahun",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.8794,
+  "longitude": 84.479252
+ },
+ {
+  "code": "annapurna-rural-municipality-kaski",
+  "name": "Annapurna Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kaski",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.434165,
+  "longitude": 83.805737
+ },
+ {
+  "code": "annapurna-rural-municipality-myagdi",
+  "name": "Annapurna Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "myagdi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.520535,
+  "longitude": 83.698466
+ },
+ {
+  "code": "apihimal-rural-municipality",
+  "name": "Apihimal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "darchula",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.866839,
+  "longitude": 80.88516
+ },
+ {
+  "code": "arjunchaupari-rural-municipality",
+  "name": "Arjunchaupari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "syangja",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.103962,
+  "longitude": 83.775056
+ },
+ {
+  "code": "arjundhara-municipality",
+  "name": "Arjundhara Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.714988,
+  "longitude": 87.963406
+ },
+ {
+  "code": "arnama-rural-municipality",
+  "name": "Arnama Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.690617,
+  "longitude": 86.286375
+ },
+ {
+  "code": "arun-rural-municipality",
+  "name": "Arun Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.185892,
+  "longitude": 87.209543
+ },
+ {
+  "code": "aurahi-municipality",
+  "name": "Aurahi Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.864166,
+  "longitude": 85.794346
+ },
+ {
+  "code": "aurahi-rural-municipality",
+  "name": "Aurahi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.648622,
+  "longitude": 86.310156
+ },
+ {
+  "code": "ayirabati-rural-municipality",
+  "name": "Ayirabati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.988242,
+  "longitude": 82.914317
+ },
+ {
+  "code": "babai-rural-municipality",
+  "name": "Babai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.179951,
+  "longitude": 82.067992
+ },
+ {
+  "code": "badhaiyatal-rural-municipality",
+  "name": "Badhaiyatal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bardiya",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.151619,
+  "longitude": 81.479294
+ },
+ {
+  "code": "badigad-rural-municipality",
+  "name": "Badigad Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baglung",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.268141,
+  "longitude": 83.252937
+ },
+ {
+  "code": "badikedar-rural-municipality",
+  "name": "Badikedar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "doti",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.0294,
+  "longitude": 80.867037
+ },
+ {
+  "code": "badimalika-municipality",
+  "name": "Badimalika Municipality",
+  "type": "municipality",
+  "districtCode": "bajura",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.440017,
+  "longitude": 81.499117
+ },
+ {
+  "code": "bagchaur-municipality",
+  "name": "Bagchaur Municipality",
+  "type": "municipality",
+  "districtCode": "salyan",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.472396,
+  "longitude": 82.320118
+ },
+ {
+  "code": "baglung-municipality",
+  "name": "Baglung Municipality",
+  "type": "municipality",
+  "districtCode": "baglung",
+  "wardCount": 14,
+  "postalCode": "33300",
+  "latitude": 28.250393,
+  "longitude": 83.581475
+ },
+ {
+  "code": "bagmati-municipality",
+  "name": "Bagmati Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.082174,
+  "longitude": 85.479377
+ },
+ {
+  "code": "bagmati-rural-municipality-lalitpur",
+  "name": "Bagmati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "lalitpur",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.484916,
+  "longitude": 85.294812
+ },
+ {
+  "code": "bagmati-rural-municipality-makwanpur",
+  "name": "Bagmati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.29514,
+  "longitude": 85.365816
+ },
+ {
+  "code": "bagnaskali-rural-municipality",
+  "name": "Bagnaskali Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.881624,
+  "longitude": 83.606293
+ },
+ {
+  "code": "bahudaramai-municipality",
+  "name": "Bahudaramai Municipality",
+  "type": "municipality",
+  "districtCode": "parsa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.079216,
+  "longitude": 84.823912
+ },
+ {
+  "code": "baijanath-rural-municipality",
+  "name": "Baijanath Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "banke",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.24078,
+  "longitude": 81.658496
+ },
+ {
+  "code": "baiteshwor-rural-municipality",
+  "name": "Baiteshwor Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolakha",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.634949,
+  "longitude": 86.134689
+ },
+ {
+  "code": "bakaiya-rural-municipality",
+  "name": "Bakaiya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.341018,
+  "longitude": 85.21151
+ },
+ {
+  "code": "balan-bihul-rural-municipality",
+  "name": "Balan Bihul Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.574712,
+  "longitude": 86.519547
+ },
+ {
+  "code": "balara-municipality",
+  "name": "Balara Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.787074,
+  "longitude": 85.375473
+ },
+ {
+  "code": "balefi-rural-municipality",
+  "name": "Balefi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.786248,
+  "longitude": 85.804915
+ },
+ {
+  "code": "balwa-municipality",
+  "name": "Balwa Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.771869,
+  "longitude": 85.8174
+ },
+ {
+  "code": "bandipur-rural-municipality",
+  "name": "Bandipur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "tanahun",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.918299,
+  "longitude": 84.395977
+ },
+ {
+  "code": "banepa-municipality",
+  "name": "Banepa Municipality",
+  "type": "municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 14,
+  "postalCode": "45210",
+  "latitude": 27.647441,
+  "longitude": 85.520398
+ },
+ {
+  "code": "banfikot-rural-municipality",
+  "name": "Banfikot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rukum-west",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.71109,
+  "longitude": 82.511398
+ },
+ {
+  "code": "bangad-kupinde-municipality",
+  "name": "Bangad Kupinde Municipality",
+  "type": "municipality",
+  "districtCode": "salyan",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.492573,
+  "longitude": 82.068652
+ },
+ {
+  "code": "banganga-municipality",
+  "name": "Banganga Municipality",
+  "type": "municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.683106,
+  "longitude": 83.155553
+ },
+ {
+  "code": "banglachuli-rural-municipality",
+  "name": "Banglachuli Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dang",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.994474,
+  "longitude": 82.670713
+ },
+ {
+  "code": "bannigadhi-jayagadh-rural-municipality",
+  "name": "Bannigadhi Jayagadh Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "achham",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.193338,
+  "longitude": 81.302134
+ },
+ {
+  "code": "bansagadhi-municipality",
+  "name": "Bansagadhi Municipality",
+  "type": "municipality",
+  "districtCode": "bardiya",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.26534,
+  "longitude": 81.541918
+ },
+ {
+  "code": "baragadhi-rural-municipality",
+  "name": "Baragadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.989631,
+  "longitude": 85.140631
+ },
+ {
+  "code": "barah-municipality",
+  "name": "Barah Municipality",
+  "type": "municipality",
+  "districtCode": "sunsari",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.75319,
+  "longitude": 87.158345
+ },
+ {
+  "code": "barahapokhari-rural-municipality",
+  "name": "Barahapokhari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.940238,
+  "longitude": 86.822868
+ },
+ {
+  "code": "barahathawa-municipality",
+  "name": "Barahathawa Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 18,
+  "postalCode": null,
+  "latitude": 26.981862,
+  "longitude": 85.459453
+ },
+ {
+  "code": "barahtal-rural-municipality",
+  "name": "Barahtal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "surkhet",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.653937,
+  "longitude": 81.451018
+ },
+ {
+  "code": "barbardiya-municipality",
+  "name": "Barbardiya Municipality",
+  "type": "municipality",
+  "districtCode": "bardiya",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.322454,
+  "longitude": 81.397351
+ },
+ {
+  "code": "bardaghat-municipality",
+  "name": "Bardaghat Municipality",
+  "type": "municipality",
+  "districtCode": "parasi",
+  "wardCount": 16,
+  "postalCode": null,
+  "latitude": 27.569769,
+  "longitude": 83.795619
+ },
+ {
+  "code": "bardagoriya-rural-municipality",
+  "name": "Bardagoriya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kailali",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.687611,
+  "longitude": 81.044011
+ },
+ {
+  "code": "bardibas-municipality",
+  "name": "Bardibas Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.021661,
+  "longitude": 85.835792
+ },
+ {
+  "code": "barekot-rural-municipality",
+  "name": "Barekot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jajarkot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.985989,
+  "longitude": 82.272168
+ },
+ {
+  "code": "bareng-rural-municipality",
+  "name": "Bareng Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baglung",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.1475,
+  "longitude": 83.471875
+ },
+ {
+  "code": "barhabise-municipality",
+  "name": "Barhabise Municipality",
+  "type": "municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.839463,
+  "longitude": 85.875835
+ },
+ {
+  "code": "barhadashi-rural-municipality",
+  "name": "Barhadashi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jhapa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.527504,
+  "longitude": 87.923614
+ },
+ {
+  "code": "barhagaun-muktikhsetra-rural-municipality",
+  "name": "Barhagaun Muktikhsetra Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mustang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.897412,
+  "longitude": 83.749505
+ },
+ {
+  "code": "bariyarpatti-rural-municipality",
+  "name": "Bariyarpatti Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.631121,
+  "longitude": 86.365663
+ },
+ {
+  "code": "barju-rural-municipality",
+  "name": "Barju Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sunsari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.460705,
+  "longitude": 87.212039
+ },
+ {
+  "code": "basbariya-rural-municipality",
+  "name": "Basbariya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.92573,
+  "longitude": 85.422206
+ },
+ {
+  "code": "bateshwor-rural-municipality",
+  "name": "Bateshwor Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.882573,
+  "longitude": 85.923408
+ },
+ {
+  "code": "baudhimai-municipality",
+  "name": "Baudhimai Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.892355,
+  "longitude": 85.232939
+ },
+ {
+  "code": "bedkot-municipality",
+  "name": "Bedkot Municipality",
+  "type": "municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.984097,
+  "longitude": 80.268648
+ },
+ {
+  "code": "belaka-municipality",
+  "name": "Belaka Municipality",
+  "type": "municipality",
+  "districtCode": "udayapur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.818109,
+  "longitude": 87.054324
+ },
+ {
+  "code": "belauri-municipality",
+  "name": "Belauri Municipality",
+  "type": "municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.700435,
+  "longitude": 80.360227
+ },
+ {
+  "code": "belbari-municipality",
+  "name": "Belbari Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.629906,
+  "longitude": 87.446137
+ },
+ {
+  "code": "beldandi-rural-municipality",
+  "name": "Beldandi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.773584,
+  "longitude": 80.268495
+ },
+ {
+  "code": "belhi-chapena-rural-municipality",
+  "name": "Belhi Chapena Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.506312,
+  "longitude": 86.676028
+ },
+ {
+  "code": "belkotgadhi-municipality",
+  "name": "Belkotgadhi Municipality",
+  "type": "municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.82568,
+  "longitude": 85.111175
+ },
+ {
+  "code": "beni-municipality",
+  "name": "Beni Municipality",
+  "type": "municipality",
+  "districtCode": "myagdi",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.355457,
+  "longitude": 83.526373
+ },
+ {
+  "code": "benighat-rorang-rural-municipality",
+  "name": "Benighat Rorang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.746798,
+  "longitude": 84.760134
+ },
+ {
+  "code": "besisahar-municipality",
+  "name": "Besisahar Municipality",
+  "type": "municipality",
+  "districtCode": "lamjung",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.218916,
+  "longitude": 84.352837
+ },
+ {
+  "code": "bethanchowk-rural-municipality",
+  "name": "Bethanchowk Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.505043,
+  "longitude": 85.506027
+ },
+ {
+  "code": "bhadrapur-municipality",
+  "name": "Bhadrapur Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.52526,
+  "longitude": 88.079515
+ },
+ {
+  "code": "bhagawanpur-rural-municipality",
+  "name": "Bhagawanpur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.585195,
+  "longitude": 86.470563
+ },
+ {
+  "code": "bhagawatimai-rural-municipality",
+  "name": "Bhagawatimai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dailekh",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.800488,
+  "longitude": 81.817047
+ },
+ {
+  "code": "bhageshwar-rural-municipality",
+  "name": "Bhageshwar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dadeldhura",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.281667,
+  "longitude": 80.412668
+ },
+ {
+  "code": "bhairabi-rural-municipality",
+  "name": "Bhairabi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dailekh",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.944813,
+  "longitude": 81.636882
+ },
+ {
+  "code": "bhajani-municipality",
+  "name": "Bhajani Municipality",
+  "type": "municipality",
+  "districtCode": "kailali",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.519573,
+  "longitude": 80.966162
+ },
+ {
+  "code": "bhaktapur-municipality",
+  "name": "Bhaktapur Municipality",
+  "type": "municipality",
+  "districtCode": "bhaktapur",
+  "wardCount": 10,
+  "postalCode": "44800",
+  "latitude": 27.677677,
+  "longitude": 85.435225
+ },
+ {
+  "code": "bhangaha-municipality",
+  "name": "Bhangaha Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.851542,
+  "longitude": 85.871222
+ },
+ {
+  "code": "bhanu-municipality",
+  "name": "Bhanu Municipality",
+  "type": "municipality",
+  "districtCode": "tanahun",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 28.040878,
+  "longitude": 84.407217
+ },
+ {
+  "code": "bharatpur-metropolitan-city",
+  "name": "Bharatpur Metropolitan City",
+  "type": "metropolitan_city",
+  "districtCode": "chitwan",
+  "wardCount": 29,
+  "postalCode": "44200",
+  "latitude": 27.687624,
+  "longitude": 84.435813
+ },
+ {
+  "code": "bheri-municipality",
+  "name": "Bheri Municipality",
+  "type": "municipality",
+  "districtCode": "jajarkot",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 28.709508,
+  "longitude": 82.163168
+ },
+ {
+  "code": "bheriganga-municipality",
+  "name": "Bheriganga Municipality",
+  "type": "municipality",
+  "districtCode": "surkhet",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 28.469475,
+  "longitude": 81.683213
+ },
+ {
+  "code": "bhimad-municipality",
+  "name": "Bhimad Municipality",
+  "type": "municipality",
+  "districtCode": "tanahun",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.962927,
+  "longitude": 84.066171
+ },
+ {
+  "code": "bhimdatta-municipality",
+  "name": "Bhimdatta Municipality",
+  "type": "municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 19,
+  "postalCode": "10400",
+  "latitude": 29.016208,
+  "longitude": 80.172137
+ },
+ {
+  "code": "bhimeshwor-municipality",
+  "name": "Bhimeshwor Municipality",
+  "type": "municipality",
+  "districtCode": "dolakha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.678898,
+  "longitude": 86.023914
+ },
+ {
+  "code": "bhimphedi-rural-municipality",
+  "name": "Bhimphedi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.532541,
+  "longitude": 85.117978
+ },
+ {
+  "code": "bhimsen-rural-municipality",
+  "name": "Bhimsen Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.001457,
+  "longitude": 84.744317
+ },
+ {
+  "code": "bhirkot-municipality",
+  "name": "Bhirkot Municipality",
+  "type": "municipality",
+  "districtCode": "syangja",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.042041,
+  "longitude": 83.762093
+ },
+ {
+  "code": "bhojpur-municipality",
+  "name": "Bhojpur Municipality",
+  "type": "municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.187916,
+  "longitude": 87.052349
+ },
+ {
+  "code": "bhokraha-narsingh-rural-municipality",
+  "name": "Bhokraha Narsingh Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sunsari",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.591898,
+  "longitude": 87.10506
+ },
+ {
+  "code": "bhotekoshi-rural-municipality",
+  "name": "Bhotekoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.932919,
+  "longitude": 85.908424
+ },
+ {
+  "code": "bhotkhola-rural-municipality",
+  "name": "Bhotkhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.748688,
+  "longitude": 87.476991
+ },
+ {
+  "code": "bhume-rural-municipality",
+  "name": "Bhume Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rukum-east",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.566491,
+  "longitude": 82.684734
+ },
+ {
+  "code": "bhumekasthan-municipality",
+  "name": "Bhumekasthan Municipality",
+  "type": "municipality",
+  "districtCode": "arghakhanchi",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.997787,
+  "longitude": 83.008229
+ },
+ {
+  "code": "bhumlu-rural-municipality",
+  "name": "Bhumlu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.626588,
+  "longitude": 85.742515
+ },
+ {
+  "code": "bideha-municipality",
+  "name": "Bideha Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.679781,
+  "longitude": 86.061288
+ },
+ {
+  "code": "bidur-municipality",
+  "name": "Bidur Municipality",
+  "type": "municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.919252,
+  "longitude": 85.133536
+ },
+ {
+  "code": "bigu-rural-municipality",
+  "name": "Bigu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolakha",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.954647,
+  "longitude": 86.204837
+ },
+ {
+  "code": "bihadi-rural-municipality",
+  "name": "Bihadi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parbat",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.061052,
+  "longitude": 83.599305
+ },
+ {
+  "code": "bijayanagar-rural-municipality",
+  "name": "Bijayanagar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.661846,
+  "longitude": 82.763223
+ },
+ {
+  "code": "binayee-tribeni-rural-municipality",
+  "name": "Binayee Tribeni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.631578,
+  "longitude": 83.862773
+ },
+ {
+  "code": "bindabasini-rural-municipality",
+  "name": "Bindabasini Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.036538,
+  "longitude": 84.789213
+ },
+ {
+  "code": "biratnagar-metropolitan-city",
+  "name": "Biratnagar Metropolitan City",
+  "type": "metropolitan_city",
+  "districtCode": "morang",
+  "wardCount": 19,
+  "postalCode": "56613",
+  "latitude": 26.441984,
+  "longitude": 87.275594
+ },
+ {
+  "code": "birendranagar-municipality",
+  "name": "Birendranagar Municipality",
+  "type": "municipality",
+  "districtCode": "surkhet",
+  "wardCount": 16,
+  "postalCode": "21700",
+  "latitude": 28.598758,
+  "longitude": 81.607691
+ },
+ {
+  "code": "birgunj-metropolitan-city",
+  "name": "Birgunj Metropolitan City",
+  "type": "metropolitan_city",
+  "districtCode": "parsa",
+  "wardCount": 32,
+  "postalCode": "44300",
+  "latitude": 27.107939,
+  "longitude": 84.914167
+ },
+ {
+  "code": "birtamod-municipality",
+  "name": "Birtamod Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 10,
+  "postalCode": "57204",
+  "latitude": 26.603978,
+  "longitude": 87.996128
+ },
+ {
+  "code": "biruwa-rural-municipality",
+  "name": "Biruwa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "syangja",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.993156,
+  "longitude": 83.89994
+ },
+ {
+  "code": "bishnu-rural-municipality",
+  "name": "Bishnu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.819564,
+  "longitude": 85.483457
+ },
+ {
+  "code": "bishnupur-rural-municipality-saptari",
+  "name": "Bishnupur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.520985,
+  "longitude": 86.703006
+ },
+ {
+  "code": "bishnupur-rural-municipality-siraha",
+  "name": "Bishnupur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.725875,
+  "longitude": 86.249908
+ },
+ {
+  "code": "bishrampur-rural-municipality",
+  "name": "Bishrampur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.992824,
+  "longitude": 84.903061
+ },
+ {
+  "code": "bithadchir-rural-municipality",
+  "name": "Bithadchir Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.504739,
+  "longitude": 80.856199
+ },
+ {
+  "code": "bode-barsain-municipality",
+  "name": "Bode Barsain Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.554257,
+  "longitude": 86.573641
+ },
+ {
+  "code": "bogtan-rural-municipality",
+  "name": "Bogtan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "doti",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.050358,
+  "longitude": 81.065937
+ },
+ {
+  "code": "bramhapuri-rural-municipality",
+  "name": "Bramhapuri Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.888617,
+  "longitude": 85.605074
+ },
+ {
+  "code": "brindaban-municipality",
+  "name": "Brindaban Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.044358,
+  "longitude": 85.398404
+ },
+ {
+  "code": "buddhabhumi-municipality",
+  "name": "Buddhabhumi Municipality",
+  "type": "municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.683432,
+  "longitude": 83.002654
+ },
+ {
+  "code": "buddhashanti-rural-municipality",
+  "name": "Buddhashanti Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jhapa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.740072,
+  "longitude": 88.071146
+ },
+ {
+  "code": "budhanilkantha-municipality",
+  "name": "Budhanilkantha Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.768287,
+  "longitude": 85.36386
+ },
+ {
+  "code": "budhiganga-municipality",
+  "name": "Budhiganga Municipality",
+  "type": "municipality",
+  "districtCode": "bajura",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 29.36069,
+  "longitude": 81.324025
+ },
+ {
+  "code": "budhiganga-rural-municipality",
+  "name": "Budhiganga Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.561753,
+  "longitude": 87.303877
+ },
+ {
+  "code": "budhinanda-municipality",
+  "name": "Budhinanda Municipality",
+  "type": "municipality",
+  "districtCode": "bajura",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 29.537652,
+  "longitude": 81.619458
+ },
+ {
+  "code": "bulingtar-rural-municipality",
+  "name": "Bulingtar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.80641,
+  "longitude": 84.205722
+ },
+ {
+  "code": "bungal-municipality",
+  "name": "Bungal Municipality",
+  "type": "municipality",
+  "districtCode": "bajhang",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.689316,
+  "longitude": 80.948973
+ },
+ {
+  "code": "bungdikali-rural-municipality",
+  "name": "Bungdikali Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.816551,
+  "longitude": 84.063927
+ },
+ {
+  "code": "butwal-sub-metropolitan-city",
+  "name": "Butwal Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "rupandehi",
+  "wardCount": 19,
+  "postalCode": "32907",
+  "latitude": 27.682037,
+  "longitude": 83.446077
+ },
+ {
+  "code": "byas-municipality",
+  "name": "Byas Municipality",
+  "type": "municipality",
+  "districtCode": "tanahun",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.00065,
+  "longitude": 84.290562
+ },
+ {
+  "code": "byas-rural-municipality",
+  "name": "Byas Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "darchula",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 30.170894,
+  "longitude": 80.960287
+ },
+ {
+  "code": "chabispathivera-rural-municipality",
+  "name": "Chabispathivera Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.560186,
+  "longitude": 81.062112
+ },
+ {
+  "code": "chainpur-municipality",
+  "name": "Chainpur Municipality",
+  "type": "municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.308433,
+  "longitude": 87.401602
+ },
+ {
+  "code": "chakraghatta-rural-municipality",
+  "name": "Chakraghatta Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.901818,
+  "longitude": 85.515122
+ },
+ {
+  "code": "chame-rural-municipality",
+  "name": "Chame Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "manang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.523144,
+  "longitude": 84.261723
+ },
+ {
+  "code": "champadevi-rural-municipality",
+  "name": "Champadevi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.30825,
+  "longitude": 86.311591
+ },
+ {
+  "code": "chamunda-bindrasaini-municipality",
+  "name": "Chamunda Bindrasaini Municipality",
+  "type": "municipality",
+  "districtCode": "dailekh",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.935247,
+  "longitude": 81.564271
+ },
+ {
+  "code": "chandannath-municipality",
+  "name": "Chandannath Municipality",
+  "type": "municipality",
+  "districtCode": "jumla",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 29.302842,
+  "longitude": 82.151796
+ },
+ {
+  "code": "chandragiri-municipality",
+  "name": "Chandragiri Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 15,
+  "postalCode": null,
+  "latitude": 27.685847,
+  "longitude": 85.235251
+ },
+ {
+  "code": "chandrakot-rural-municipality",
+  "name": "Chandrakot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.106951,
+  "longitude": 83.42463
+ },
+ {
+  "code": "chandranagar-rural-municipality",
+  "name": "Chandranagar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.936288,
+  "longitude": 85.604534
+ },
+ {
+  "code": "chandrapur-municipality",
+  "name": "Chandrapur Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.126985,
+  "longitude": 85.382755
+ },
+ {
+  "code": "changunarayan-municipality",
+  "name": "Changunarayan Municipality",
+  "type": "municipality",
+  "districtCode": "bhaktapur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.692116,
+  "longitude": 85.454777
+ },
+ {
+  "code": "chankheli-rural-municipality",
+  "name": "Chankheli Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "humla",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.855107,
+  "longitude": 82.236658
+ },
+ {
+  "code": "chapakot-municipality",
+  "name": "Chapakot Municipality",
+  "type": "municipality",
+  "districtCode": "syangja",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.923452,
+  "longitude": 83.793075
+ },
+ {
+  "code": "chatrakot-rural-municipality",
+  "name": "Chatrakot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.986185,
+  "longitude": 83.350316
+ },
+ {
+  "code": "chaubise-rural-municipality",
+  "name": "Chaubise Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhankuta",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.920942,
+  "longitude": 87.467464
+ },
+ {
+  "code": "chaudandigadhi-municipality",
+  "name": "Chaudandigadhi Municipality",
+  "type": "municipality",
+  "districtCode": "udayapur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.798974,
+  "longitude": 86.872991
+ },
+ {
+  "code": "chaukune-rural-municipality",
+  "name": "Chaukune Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "surkhet",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.859372,
+  "longitude": 81.27904
+ },
+ {
+  "code": "chaurideurali-rural-municipality",
+  "name": "Chaurideurali Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.571485,
+  "longitude": 85.781821
+ },
+ {
+  "code": "chaurjahari-municipality",
+  "name": "Chaurjahari Municipality",
+  "type": "municipality",
+  "districtCode": "rukum-west",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.635338,
+  "longitude": 82.252788
+ },
+ {
+  "code": "chaurpati-rural-municipality",
+  "name": "Chaurpati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "achham",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.202074,
+  "longitude": 81.129202
+ },
+ {
+  "code": "chautara-sangachokgadhi-municipality",
+  "name": "Chautara SangachokGadhi Municipality",
+  "type": "municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.752727,
+  "longitude": 85.729075
+ },
+ {
+  "code": "chharka-tangsong-rural-municipality",
+  "name": "Chharka Tangsong Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolpa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.979609,
+  "longitude": 83.340551
+ },
+ {
+  "code": "chhathar-jorpati-rural-municipality",
+  "name": "Chhathar Jorpati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhankuta",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.022277,
+  "longitude": 87.405621
+ },
+ {
+  "code": "chhathar-rural-municipality",
+  "name": "Chhathar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "terhathum",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.034378,
+  "longitude": 87.483757
+ },
+ {
+  "code": "chhatradev-rural-municipality",
+  "name": "Chhatradev Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "arghakhanchi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.00978,
+  "longitude": 83.207449
+ },
+ {
+  "code": "chhatreshwori-rural-municipality",
+  "name": "Chhatreshwori Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "salyan",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.357725,
+  "longitude": 82.307621
+ },
+ {
+  "code": "chhayanath-rara-municipality",
+  "name": "Chhayanath Rara Municipality",
+  "type": "municipality",
+  "districtCode": "mugu",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 29.535465,
+  "longitude": 82.154095
+ },
+ {
+  "code": "chhedagad-municipality",
+  "name": "Chhedagad Municipality",
+  "type": "municipality",
+  "districtCode": "jajarkot",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 28.751495,
+  "longitude": 82.019084
+ },
+ {
+  "code": "chhededaha-rural-municipality",
+  "name": "Chhededaha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajura",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.398469,
+  "longitude": 81.282398
+ },
+ {
+  "code": "chhinnamasta-rural-municipality",
+  "name": "Chhinnamasta Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.46508,
+  "longitude": 86.732323
+ },
+ {
+  "code": "chhipaharmai-rural-municipality",
+  "name": "Chhipaharmai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.063569,
+  "longitude": 84.664936
+ },
+ {
+  "code": "chhireshwornath-municipality",
+  "name": "Chhireshwornath Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.847233,
+  "longitude": 85.973017
+ },
+ {
+  "code": "chichila-rural-municipality",
+  "name": "Chichila Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.482538,
+  "longitude": 87.232404
+ },
+ {
+  "code": "chingad-rural-municipality",
+  "name": "Chingad Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "surkhet",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.627386,
+  "longitude": 81.841117
+ },
+ {
+  "code": "chisankhugadhi-rural-municipality",
+  "name": "Chisankhugadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.318364,
+  "longitude": 86.620174
+ },
+ {
+  "code": "chulachuli-rural-municipality",
+  "name": "Chulachuli Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ilam",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.765651,
+  "longitude": 87.685247
+ },
+ {
+  "code": "chum-nubri-rural-municipality",
+  "name": "Chum Nubri Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.541184,
+  "longitude": 84.87526
+ },
+ {
+  "code": "chure-rural-municipality",
+  "name": "Chure Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kailali",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.927115,
+  "longitude": 80.746613
+ },
+ {
+  "code": "dakneshwori-municipality",
+  "name": "Dakneshwori Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.530507,
+  "longitude": 86.633033
+ },
+ {
+  "code": "dakshinkali-municipality",
+  "name": "Dakshinkali Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.613625,
+  "longitude": 85.267729
+ },
+ {
+  "code": "dalome-rural-municipality",
+  "name": "Dalome Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mustang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.042197,
+  "longitude": 83.935505
+ },
+ {
+  "code": "damak-municipality",
+  "name": "Damak Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 10,
+  "postalCode": "57217",
+  "latitude": 26.669444,
+  "longitude": 87.682612
+ },
+ {
+  "code": "dangisharan-rural-municipality",
+  "name": "Dangisharan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.085823,
+  "longitude": 82.156829
+ },
+ {
+  "code": "darma-rural-municipality",
+  "name": "Darma Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "salyan",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.549934,
+  "longitude": 82.320292
+ },
+ {
+  "code": "dasharathchanda-municipality",
+  "name": "Dasharathchanda Municipality",
+  "type": "municipality",
+  "districtCode": "baitadi",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.543836,
+  "longitude": 80.418669
+ },
+ {
+  "code": "deumai-municipality",
+  "name": "Deumai Municipality",
+  "type": "municipality",
+  "districtCode": "ilam",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.932546,
+  "longitude": 87.84676
+ },
+ {
+  "code": "devchuli-municipality",
+  "name": "Devchuli Municipality",
+  "type": "municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 17,
+  "postalCode": null,
+  "latitude": 27.713764,
+  "longitude": 84.201589
+ },
+ {
+  "code": "devdaha-municipality",
+  "name": "Devdaha Municipality",
+  "type": "municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.632857,
+  "longitude": 83.571556
+ },
+ {
+  "code": "devghat-rural-municipality",
+  "name": "Devghat Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "tanahun",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.810493,
+  "longitude": 84.369114
+ },
+ {
+  "code": "devtal-rural-municipality",
+  "name": "Devtal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.947215,
+  "longitude": 85.014037
+ },
+ {
+  "code": "dewahhi-gonahi-municipality",
+  "name": "Dewahhi Gonahi Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.923517,
+  "longitude": 85.256583
+ },
+ {
+  "code": "dewanganj-rural-municipality",
+  "name": "Dewanganj Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sunsari",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.460517,
+  "longitude": 87.153686
+ },
+ {
+  "code": "dhakari-rural-municipality",
+  "name": "Dhakari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "achham",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.976108,
+  "longitude": 81.225804
+ },
+ {
+  "code": "dhanauji-rural-municipality",
+  "name": "Dhanauji Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.674758,
+  "longitude": 85.981171
+ },
+ {
+  "code": "dhangadhi-sub-metropolitan-city",
+  "name": "Dhangadhi Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "kailali",
+  "wardCount": 19,
+  "postalCode": "10900",
+  "latitude": 28.675149,
+  "longitude": 80.653623
+ },
+ {
+  "code": "dhangadhimai-municipality",
+  "name": "Dhangadhimai Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 26.809249,
+  "longitude": 86.42558
+ },
+ {
+  "code": "dhankaul-rural-municipality",
+  "name": "Dhankaul Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.882301,
+  "longitude": 85.422276
+ },
+ {
+  "code": "dhankuta-municipality",
+  "name": "Dhankuta Municipality",
+  "type": "municipality",
+  "districtCode": "dhankuta",
+  "wardCount": 10,
+  "postalCode": "56800",
+  "latitude": 26.982922,
+  "longitude": 87.327607
+ },
+ {
+  "code": "dhanpalthan-rural-municipality",
+  "name": "Dhanpalthan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.462097,
+  "longitude": 87.408772
+ },
+ {
+  "code": "dhanusadham-municipality",
+  "name": "Dhanusadham Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.881876,
+  "longitude": 86.038761
+ },
+ {
+  "code": "dharan-sub-metropolitan-city",
+  "name": "Dharan Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "sunsari",
+  "wardCount": 20,
+  "postalCode": "56700",
+  "latitude": 26.79484,
+  "longitude": 87.279258
+ },
+ {
+  "code": "dharche-rural-municipality",
+  "name": "Dharche Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.312612,
+  "longitude": 84.898
+ },
+ {
+  "code": "dharmadevi-municipality",
+  "name": "Dharmadevi Municipality",
+  "type": "municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.201225,
+  "longitude": 87.358326
+ },
+ {
+  "code": "dhaulagiri-rural-municipality",
+  "name": "Dhaulagiri Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "myagdi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.613522,
+  "longitude": 83.300122
+ },
+ {
+  "code": "dhobini-rural-municipality",
+  "name": "Dhobini Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.096878,
+  "longitude": 84.695996
+ },
+ {
+  "code": "dhorchaur-rural-municipality",
+  "name": "Dhorchaur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "salyan",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.472922,
+  "longitude": 82.176173
+ },
+ {
+  "code": "dhorpatan-municipality",
+  "name": "Dhorpatan Municipality",
+  "type": "municipality",
+  "districtCode": "baglung",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.390241,
+  "longitude": 83.116856
+ },
+ {
+  "code": "dhulikhel-municipality",
+  "name": "Dhulikhel Municipality",
+  "type": "municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 12,
+  "postalCode": "45200",
+  "latitude": 27.617617,
+  "longitude": 85.56591
+ },
+ {
+  "code": "dhunibesi-municipality",
+  "name": "Dhunibesi Municipality",
+  "type": "municipality",
+  "districtCode": "dhading",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.722537,
+  "longitude": 85.171394
+ },
+ {
+  "code": "dhurkot-rural-municipality",
+  "name": "Dhurkot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.118119,
+  "longitude": 83.165334
+ },
+ {
+  "code": "dilasaini-rural-municipality",
+  "name": "Dilasaini Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baitadi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.660917,
+  "longitude": 80.607167
+ },
+ {
+  "code": "dipayal-silgadhi-municipality",
+  "name": "Dipayal Silgadhi Municipality",
+  "type": "municipality",
+  "districtCode": "doti",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.258303,
+  "longitude": 80.973967
+ },
+ {
+  "code": "diprung-rural-municipality",
+  "name": "Diprung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.099079,
+  "longitude": 86.794102
+ },
+ {
+  "code": "dogadakedar-rural-municipality",
+  "name": "Dogadakedar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baitadi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.591861,
+  "longitude": 80.525464
+ },
+ {
+  "code": "dolpo-buddha-rural-municipality",
+  "name": "Dolpo Buddha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolpa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.287171,
+  "longitude": 83.318569
+ },
+ {
+  "code": "doramba-rural-municipality",
+  "name": "Doramba Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.54611,
+  "longitude": 85.922996
+ },
+ {
+  "code": "dordi-rural-municipality",
+  "name": "Dordi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "lamjung",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.292324,
+  "longitude": 84.52898
+ },
+ {
+  "code": "dudhkoshi-rural-municipality",
+  "name": "Dudhkoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.537219,
+  "longitude": 86.695665
+ },
+ {
+  "code": "dudhouli-municipality",
+  "name": "Dudhouli Municipality",
+  "type": "municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.024567,
+  "longitude": 86.216979
+ },
+ {
+  "code": "dudhpokhari-rural-municipality",
+  "name": "Dudhpokhari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "lamjung",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.223052,
+  "longitude": 84.597591
+ },
+ {
+  "code": "duduwa-rural-municipality",
+  "name": "Duduwa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "banke",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.034468,
+  "longitude": 81.710362
+ },
+ {
+  "code": "duhabi-municipality",
+  "name": "Duhabi Municipality",
+  "type": "municipality",
+  "districtCode": "sunsari",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.552035,
+  "longitude": 87.24507
+ },
+ {
+  "code": "duikholi-rural-municipality",
+  "name": "Duikholi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.480969,
+  "longitude": 82.550524
+ },
+ {
+  "code": "dullu-municipality",
+  "name": "Dullu Municipality",
+  "type": "municipality",
+  "districtCode": "dailekh",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 28.832932,
+  "longitude": 81.610323
+ },
+ {
+  "code": "dungeshwor-rural-municipality",
+  "name": "Dungeshwor Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dailekh",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.753828,
+  "longitude": 81.717654
+ },
+ {
+  "code": "dunhu-rural-municipality",
+  "name": "Dunhu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "darchula",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.891547,
+  "longitude": 80.619572
+ },
+ {
+  "code": "dupcheshwar-rural-municipality",
+  "name": "Dupcheshwar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.947569,
+  "longitude": 85.427714
+ },
+ {
+  "code": "durga-bhagwati-rural-municipality",
+  "name": "Durga Bhagwati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rautahat",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.833247,
+  "longitude": 85.321698
+ },
+ {
+  "code": "durgathali-rural-municipality",
+  "name": "Durgathali Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.536447,
+  "longitude": 81.002188
+ },
+ {
+  "code": "ekdanra-rural-municipality",
+  "name": "Ekdanra Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mahottari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.683614,
+  "longitude": 85.766672
+ },
+ {
+  "code": "fakphokthum-rural-municipality",
+  "name": "Fakphokthum Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ilam",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.965479,
+  "longitude": 87.753822
+ },
+ {
+  "code": "falelung-rural-municipality",
+  "name": "Falelung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "panchthar",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.168649,
+  "longitude": 87.928204
+ },
+ {
+  "code": "falgunanda-rural-municipality",
+  "name": "Falgunanda Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "panchthar",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.046869,
+  "longitude": 87.764548
+ },
+ {
+  "code": "gadhawa-rural-municipality",
+  "name": "Gadhawa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dang",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.759937,
+  "longitude": 82.610592
+ },
+ {
+  "code": "gadhi-rural-municipality",
+  "name": "Gadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sunsari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.564441,
+  "longitude": 87.183866
+ },
+ {
+  "code": "gadhimai-municipality",
+  "name": "Gadhimai Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.947066,
+  "longitude": 85.37061
+ },
+ {
+  "code": "gaidahawa-rural-municipality",
+  "name": "Gaidahawa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.587124,
+  "longitude": 83.293939
+ },
+ {
+  "code": "gaidakot-municipality",
+  "name": "Gaidakot Municipality",
+  "type": "municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 18,
+  "postalCode": null,
+  "latitude": 27.732528,
+  "longitude": 84.341624
+ },
+ {
+  "code": "gajuri-rural-municipality",
+  "name": "Gajuri Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.750051,
+  "longitude": 84.899452
+ },
+ {
+  "code": "galchi-rural-municipality",
+  "name": "Galchi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.778938,
+  "longitude": 84.989619
+ },
+ {
+  "code": "galkot-municipality",
+  "name": "Galkot Municipality",
+  "type": "municipality",
+  "districtCode": "baglung",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.251183,
+  "longitude": 83.38344
+ },
+ {
+  "code": "galyang-municipality",
+  "name": "Galyang Municipality",
+  "type": "municipality",
+  "districtCode": "syangja",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.958224,
+  "longitude": 83.658443
+ },
+ {
+  "code": "ganayapdhura-rural-municipality",
+  "name": "Ganayapdhura Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dadeldhura",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.247585,
+  "longitude": 80.679261
+ },
+ {
+  "code": "gandaki-rural-municipality",
+  "name": "Gandaki Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.861695,
+  "longitude": 84.697246
+ },
+ {
+  "code": "ganeshman-charnath-municipality",
+  "name": "Ganeshman Charnath Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.924905,
+  "longitude": 86.211393
+ },
+ {
+  "code": "gangajamuna-rural-municipality",
+  "name": "Gangajamuna Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.090852,
+  "longitude": 84.923503
+ },
+ {
+  "code": "garuda-municipality",
+  "name": "Garuda Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.950224,
+  "longitude": 85.312926
+ },
+ {
+  "code": "gaumukhi-rural-municipality",
+  "name": "Gaumukhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.252026,
+  "longitude": 83.030672
+ },
+ {
+  "code": "gaumul-rural-municipality",
+  "name": "Gaumul Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajura",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.568852,
+  "longitude": 81.483278
+ },
+ {
+  "code": "gaur-municipality",
+  "name": "Gaur Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.777989,
+  "longitude": 85.280903
+ },
+ {
+  "code": "gauradhaha-municipality",
+  "name": "Gauradhaha Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.548535,
+  "longitude": 87.696386
+ },
+ {
+  "code": "gauriganga-municipality",
+  "name": "Gauriganga Municipality",
+  "type": "municipality",
+  "districtCode": "kailali",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.750014,
+  "longitude": 80.810154
+ },
+ {
+  "code": "gauriganj-rural-municipality",
+  "name": "Gauriganj Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jhapa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.46823,
+  "longitude": 87.725951
+ },
+ {
+  "code": "gaurishankar-rural-municipality",
+  "name": "Gaurishankar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolakha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.809851,
+  "longitude": 86.324633
+ },
+ {
+  "code": "gaushala-municipality",
+  "name": "Gaushala Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.939889,
+  "longitude": 85.780091
+ },
+ {
+  "code": "geruwa-rural-municipality",
+  "name": "Geruwa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bardiya",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.499834,
+  "longitude": 81.187399
+ },
+ {
+  "code": "ghanglekh-rural-municipality",
+  "name": "Ghanglekh Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.345072,
+  "longitude": 85.794114
+ },
+ {
+  "code": "gharapjhong-rural-municipality",
+  "name": "Gharapjhong Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mustang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.768495,
+  "longitude": 83.749099
+ },
+ {
+  "code": "ghiring-rural-municipality",
+  "name": "Ghiring Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "tanahun",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.898378,
+  "longitude": 84.046828
+ },
+ {
+  "code": "ghodaghodi-municipality",
+  "name": "Ghodaghodi Municipality",
+  "type": "municipality",
+  "districtCode": "kailali",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.711331,
+  "longitude": 80.946322
+ },
+ {
+  "code": "ghorahi-sub-metropolitan-city",
+  "name": "Ghorahi Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "dang",
+  "wardCount": 19,
+  "postalCode": "22400",
+  "latitude": 28.025223,
+  "longitude": 82.465654
+ },
+ {
+  "code": "godaita-municipality",
+  "name": "Godaita Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.845896,
+  "longitude": 85.445889
+ },
+ {
+  "code": "godawari-municipality",
+  "name": "Godawari Municipality",
+  "type": "municipality",
+  "districtCode": "lalitpur",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.58096,
+  "longitude": 85.341426
+ },
+ {
+  "code": "godawari-municipality-kailali",
+  "name": "Godawari Municipality",
+  "type": "municipality",
+  "districtCode": "kailali",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.862703,
+  "longitude": 80.584112
+ },
+ {
+  "code": "gokarneshwar-municipality",
+  "name": "Gokarneshwar Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.763945,
+  "longitude": 85.407332
+ },
+ {
+  "code": "gokulganga-rural-municipality",
+  "name": "Gokulganga Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.583994,
+  "longitude": 86.28016
+ },
+ {
+  "code": "golanjor-rural-municipality",
+  "name": "Golanjor Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.261339,
+  "longitude": 86.058986
+ },
+ {
+  "code": "golbazar-municipality",
+  "name": "Golbazar Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 26.802776,
+  "longitude": 86.334648
+ },
+ {
+  "code": "gorkha-municipality",
+  "name": "Gorkha Municipality",
+  "type": "municipality",
+  "districtCode": "gorkha",
+  "wardCount": 14,
+  "postalCode": "34000",
+  "latitude": 27.977278,
+  "longitude": 84.607291
+ },
+ {
+  "code": "gosaikunda-rural-municipality",
+  "name": "Gosaikunda Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rasuwa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.211368,
+  "longitude": 85.546263
+ },
+ {
+  "code": "gramthan-rural-municipality",
+  "name": "Gramthan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.554964,
+  "longitude": 87.359947
+ },
+ {
+  "code": "gujara-municipality",
+  "name": "Gujara Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.114406,
+  "longitude": 85.249757
+ },
+ {
+  "code": "gulariya-municipality",
+  "name": "Gulariya Municipality",
+  "type": "municipality",
+  "districtCode": "bardiya",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.210093,
+  "longitude": 81.361946
+ },
+ {
+  "code": "gulmidarbar-rural-municipality",
+  "name": "Gulmidarbar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.039943,
+  "longitude": 83.310715
+ },
+ {
+  "code": "gurans-rural-municipality",
+  "name": "Gurans Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dailekh",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.709826,
+  "longitude": 81.646833
+ },
+ {
+  "code": "gurbhakot-municipality",
+  "name": "Gurbhakot Municipality",
+  "type": "municipality",
+  "districtCode": "surkhet",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.437037,
+  "longitude": 81.901981
+ },
+ {
+  "code": "guthichaur-rural-municipality",
+  "name": "Guthichaur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jumla",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.197245,
+  "longitude": 82.399452
+ },
+ {
+  "code": "haldibari-rural-municipality",
+  "name": "Haldibari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jhapa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.515913,
+  "longitude": 88.00205
+ },
+ {
+  "code": "halesi-tuwachung-municipality",
+  "name": "Halesi Tuwachung Municipality",
+  "type": "municipality",
+  "districtCode": "khotang",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.167159,
+  "longitude": 86.603079
+ },
+ {
+  "code": "hansapur-municipality",
+  "name": "Hansapur Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.762986,
+  "longitude": 86.026582
+ },
+ {
+  "code": "hanumannagar-kankalini-municipality",
+  "name": "Hanumannagar Kankalini Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 26.511575,
+  "longitude": 86.877216
+ },
+ {
+  "code": "hariharpurgadhi-rural-municipality",
+  "name": "Hariharpurgadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.256493,
+  "longitude": 85.543655
+ },
+ {
+  "code": "harinagar-rural-municipality",
+  "name": "Harinagar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sunsari",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.492423,
+  "longitude": 87.108969
+ },
+ {
+  "code": "harinas-rural-municipality",
+  "name": "Harinas Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "syangja",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.976403,
+  "longitude": 83.953049
+ },
+ {
+  "code": "haripur-municipality",
+  "name": "Haripur Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.013983,
+  "longitude": 85.544236
+ },
+ {
+  "code": "haripurwa-municipality",
+  "name": "Haripurwa Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.913155,
+  "longitude": 85.687043
+ },
+ {
+  "code": "hariwan-municipality",
+  "name": "Hariwan Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.092546,
+  "longitude": 85.582562
+ },
+ {
+  "code": "hatuwagadhi-rural-municipality",
+  "name": "Hatuwagadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.99493,
+  "longitude": 87.140787
+ },
+ {
+  "code": "helambu-rural-municipality",
+  "name": "Helambu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.006187,
+  "longitude": 85.533907
+ },
+ {
+  "code": "hetauda-sub-metropolitan-city",
+  "name": "Hetauda Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "makwanpur",
+  "wardCount": 19,
+  "postalCode": "44107",
+  "latitude": 27.421102,
+  "longitude": 85.011188
+ },
+ {
+  "code": "hilihang-rural-municipality",
+  "name": "Hilihang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "panchthar",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.220581,
+  "longitude": 87.794245
+ },
+ {
+  "code": "hima-rural-municipality",
+  "name": "Hima Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jumla",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.27105,
+  "longitude": 81.931308
+ },
+ {
+  "code": "himali-rural-municipality",
+  "name": "Himali Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajura",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.711743,
+  "longitude": 81.619266
+ },
+ {
+  "code": "hupsekot-rural-municipality",
+  "name": "Hupsekot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.701102,
+  "longitude": 84.065148
+ },
+ {
+  "code": "ichchhyakamana-rural-municipality",
+  "name": "Ichchhyakamana Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "chitwan",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.803879,
+  "longitude": 84.579301
+ },
+ {
+  "code": "ilam-municipality",
+  "name": "Ilam Municipality",
+  "type": "municipality",
+  "districtCode": "ilam",
+  "wardCount": 12,
+  "postalCode": "57300",
+  "latitude": 26.939365,
+  "longitude": 87.927599
+ },
+ {
+  "code": "inaruwa-municipality",
+  "name": "Inaruwa Municipality",
+  "type": "municipality",
+  "districtCode": "sunsari",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.599208,
+  "longitude": 87.170528
+ },
+ {
+  "code": "indrasarowar-rural-municipality",
+  "name": "Indrasarowar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.601514,
+  "longitude": 85.188945
+ },
+ {
+  "code": "indrawati-rural-municipality",
+  "name": "Indrawati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.786131,
+  "longitude": 85.627196
+ },
+ {
+  "code": "ishanath-municipality",
+  "name": "Ishanath Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.79858,
+  "longitude": 85.208311
+ },
+ {
+  "code": "ishworpur-municipality",
+  "name": "Ishworpur Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 15,
+  "postalCode": null,
+  "latitude": 27.040175,
+  "longitude": 85.718631
+ },
+ {
+  "code": "isma-rural-municipality",
+  "name": "Isma Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.16431,
+  "longitude": 83.215574
+ },
+ {
+  "code": "itahari-sub-metropolitan-city",
+  "name": "Itahari Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "sunsari",
+  "wardCount": 20,
+  "postalCode": "56705",
+  "latitude": 26.673458,
+  "longitude": 87.260674
+ },
+ {
+  "code": "jagadulla-rural-municipality",
+  "name": "Jagadulla Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolpa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.240594,
+  "longitude": 82.664341
+ },
+ {
+  "code": "jagarnathpur-rural-municipality",
+  "name": "Jagarnathpur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.143404,
+  "longitude": 84.718237
+ },
+ {
+  "code": "jahada-rural-municipality",
+  "name": "Jahada Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.409181,
+  "longitude": 87.335041
+ },
+ {
+  "code": "jaimuni-municipality",
+  "name": "Jaimuni Municipality",
+  "type": "municipality",
+  "districtCode": "baglung",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.148907,
+  "longitude": 83.587513
+ },
+ {
+  "code": "jaleshwar-municipality",
+  "name": "Jaleshwar Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.642015,
+  "longitude": 85.791338
+ },
+ {
+  "code": "jaljala-rural-municipality",
+  "name": "Jaljala Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parbat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.329185,
+  "longitude": 83.623979
+ },
+ {
+  "code": "janaki-rural-municipality",
+  "name": "Janaki Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kailali",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.5681,
+  "longitude": 81.144992
+ },
+ {
+  "code": "janaknandani-rural-municipality",
+  "name": "Janaknandani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.636329,
+  "longitude": 86.128573
+ },
+ {
+  "code": "janakpurdham-sub-metropolitan-city",
+  "name": "Janakpurdham Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "dhanusha",
+  "wardCount": 25,
+  "postalCode": "45600",
+  "latitude": 26.727394,
+  "longitude": 85.938808
+ },
+ {
+  "code": "janki-rural-municipality",
+  "name": "Janki Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "banke",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.085241,
+  "longitude": 81.600601
+ },
+ {
+  "code": "jantedhunga-rural-municipality",
+  "name": "Jantedhunga Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.9701,
+  "longitude": 86.924054
+ },
+ {
+  "code": "jayaprithivi-municipality",
+  "name": "JayaPrithivi Municipality",
+  "type": "municipality",
+  "districtCode": "bajhang",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.551409,
+  "longitude": 81.162099
+ },
+ {
+  "code": "jhapa-rural-municipality",
+  "name": "Jhapa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jhapa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.513031,
+  "longitude": 87.869323
+ },
+ {
+  "code": "jhimruk-rural-municipality",
+  "name": "Jhimruk Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.148333,
+  "longitude": 82.986045
+ },
+ {
+  "code": "jirabhawani-rural-municipality",
+  "name": "Jirabhawani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.20112,
+  "longitude": 84.722538
+ },
+ {
+  "code": "jiri-municipality",
+  "name": "Jiri Municipality",
+  "type": "municipality",
+  "districtCode": "dolakha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.66761,
+  "longitude": 86.275692
+ },
+ {
+  "code": "jitpur-simara-sub-metropolitan-city",
+  "name": "Jitpur Simara Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "bara",
+  "wardCount": 24,
+  "postalCode": null,
+  "latitude": 27.214114,
+  "longitude": 85.015106
+ },
+ {
+  "code": "jorayal-rural-municipality",
+  "name": "Jorayal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "doti",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.100937,
+  "longitude": 80.675513
+ },
+ {
+  "code": "joshipur-rural-municipality",
+  "name": "Joshipur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kailali",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.568698,
+  "longitude": 81.031132
+ },
+ {
+  "code": "jugal-rural-municipality",
+  "name": "Jugal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.003222,
+  "longitude": 85.808378
+ },
+ {
+  "code": "junichande-rural-municipality",
+  "name": "Junichande Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jajarkot",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.902374,
+  "longitude": 81.988717
+ },
+ {
+  "code": "jwalamukhi-rural-municipality",
+  "name": "Jwalamukhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.919149,
+  "longitude": 84.795194
+ },
+ {
+  "code": "k-i-singh-rural-municipality",
+  "name": "K I Singh Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "doti",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.178696,
+  "longitude": 80.980045
+ },
+ {
+  "code": "kabilasi-municipality",
+  "name": "Kabilasi Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.939894,
+  "longitude": 85.536986
+ },
+ {
+  "code": "kachankawal-rural-municipality",
+  "name": "Kachankawal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jhapa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.414943,
+  "longitude": 88.007175
+ },
+ {
+  "code": "kageshwari-manohara-municipality",
+  "name": "Kageshwari Manohara Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.732375,
+  "longitude": 85.416979
+ },
+ {
+  "code": "kaike-rural-municipality",
+  "name": "Kaike Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolpa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.921799,
+  "longitude": 82.992075
+ },
+ {
+  "code": "kailari-rural-municipality",
+  "name": "Kailari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kailali",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.598184,
+  "longitude": 80.795813
+ },
+ {
+  "code": "kailash-rural-municipality",
+  "name": "Kailash Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.608705,
+  "longitude": 84.954588
+ },
+ {
+  "code": "kakani-rural-municipality",
+  "name": "Kakani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.822004,
+  "longitude": 85.246344
+ },
+ {
+  "code": "kalaiya-sub-metropolitan-city",
+  "name": "Kalaiya Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "bara",
+  "wardCount": 27,
+  "postalCode": null,
+  "latitude": 27.025939,
+  "longitude": 84.996956
+ },
+ {
+  "code": "kaligandagi-rural-municipality",
+  "name": "Kaligandagi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "syangja",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.952206,
+  "longitude": 83.537772
+ },
+ {
+  "code": "kaligandaki-rural-municipality",
+  "name": "Kaligandaki Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.050262,
+  "longitude": 83.528515
+ },
+ {
+  "code": "kalika-municipality",
+  "name": "Kalika Municipality",
+  "type": "municipality",
+  "districtCode": "chitwan",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.714416,
+  "longitude": 84.597737
+ },
+ {
+  "code": "kalika-rural-municipality-kalikot",
+  "name": "Kalika Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kalikot",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.080597,
+  "longitude": 81.630631
+ },
+ {
+  "code": "kalika-rural-municipality-rasuwa",
+  "name": "Kalika Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rasuwa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.0292,
+  "longitude": 85.218856
+ },
+ {
+  "code": "kalikamai-rural-municipality",
+  "name": "Kalikamai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.075468,
+  "longitude": 84.728239
+ },
+ {
+  "code": "kalimati-rural-municipality",
+  "name": "Kalimati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "salyan",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.296543,
+  "longitude": 81.96388
+ },
+ {
+  "code": "kalinchok-rural-municipality",
+  "name": "Kalinchok Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolakha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.748824,
+  "longitude": 86.096572
+ },
+ {
+  "code": "kalyanpur-municipality",
+  "name": "Kalyanpur Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.754419,
+  "longitude": 86.205207
+ },
+ {
+  "code": "kamal-rural-municipality",
+  "name": "Kamal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jhapa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.607769,
+  "longitude": 87.748102
+ },
+ {
+  "code": "kamala-municipality",
+  "name": "Kamala Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.709212,
+  "longitude": 86.169491
+ },
+ {
+  "code": "kamalamai-municipality",
+  "name": "Kamalamai Municipality",
+  "type": "municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.173218,
+  "longitude": 85.912726
+ },
+ {
+  "code": "kamalbazar-municipality",
+  "name": "Kamalbazar Municipality",
+  "type": "municipality",
+  "districtCode": "achham",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 29.065328,
+  "longitude": 81.333238
+ },
+ {
+  "code": "kanakasundari-rural-municipality",
+  "name": "Kanakasundari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jumla",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.412585,
+  "longitude": 82.052274
+ },
+ {
+  "code": "kanchan-rural-municipality",
+  "name": "Kanchan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.638722,
+  "longitude": 83.263672
+ },
+ {
+  "code": "kanchanrup-municipality",
+  "name": "Kanchanrup Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.630353,
+  "longitude": 86.894044
+ },
+ {
+  "code": "kanda-rural-municipality",
+  "name": "Kanda Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.856541,
+  "longitude": 81.299825
+ },
+ {
+  "code": "kanepokhari-rural-municipality",
+  "name": "Kanepokhari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.600888,
+  "longitude": 87.499891
+ },
+ {
+  "code": "kankai-municipality",
+  "name": "Kankai Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.63688,
+  "longitude": 87.913805
+ },
+ {
+  "code": "kanthekhola-rural-municipality",
+  "name": "Kanthekhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baglung",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.263298,
+  "longitude": 83.516345
+ },
+ {
+  "code": "kapilvastu-municipality",
+  "name": "Kapilvastu Municipality",
+  "type": "municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.566834,
+  "longitude": 83.06813
+ },
+ {
+  "code": "kapurkot-rural-municipality",
+  "name": "Kapurkot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "salyan",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.249281,
+  "longitude": 82.360555
+ },
+ {
+  "code": "karaiyamai-rural-municipality",
+  "name": "Karaiyamai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.023833,
+  "longitude": 85.101192
+ },
+ {
+  "code": "karjanha-municipality",
+  "name": "Karjanha Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.873282,
+  "longitude": 86.189748
+ },
+ {
+  "code": "katahari-rural-municipality",
+  "name": "Katahari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.487939,
+  "longitude": 87.350584
+ },
+ {
+  "code": "katahariya-municipality",
+  "name": "Katahariya Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.99953,
+  "longitude": 85.251715
+ },
+ {
+  "code": "katari-municipality",
+  "name": "Katari Municipality",
+  "type": "municipality",
+  "districtCode": "udayapur",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.021607,
+  "longitude": 86.422805
+ },
+ {
+  "code": "kathmandu-metropolitan-city",
+  "name": "Kathmandu Metropolitan City",
+  "type": "metropolitan_city",
+  "districtCode": "kathmandu",
+  "wardCount": 32,
+  "postalCode": "44600",
+  "latitude": 27.708351,
+  "longitude": 85.327355
+ },
+ {
+  "code": "kaudena-rural-municipality",
+  "name": "Kaudena Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.850129,
+  "longitude": 85.505495
+ },
+ {
+  "code": "kawasoti-municipality",
+  "name": "Kawasoti Municipality",
+  "type": "municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 17,
+  "postalCode": null,
+  "latitude": 27.65145,
+  "longitude": 84.14576
+ },
+ {
+  "code": "kedarseu-rural-municipality",
+  "name": "Kedarseu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.511567,
+  "longitude": 80.93234
+ },
+ {
+  "code": "kepilasagadhi-rural-municipality",
+  "name": "Kepilasagadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.350235,
+  "longitude": 86.888222
+ },
+ {
+  "code": "kerabari-rural-municipality",
+  "name": "Kerabari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.775483,
+  "longitude": 87.386508
+ },
+ {
+  "code": "khadadevi-rural-municipality",
+  "name": "Khadadevi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.426432,
+  "longitude": 85.917353
+ },
+ {
+  "code": "khadak-municipality",
+  "name": "Khadak Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.631046,
+  "longitude": 86.597923
+ },
+ {
+  "code": "khairahani-municipality",
+  "name": "Khairahani Municipality",
+  "type": "municipality",
+  "districtCode": "chitwan",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.615979,
+  "longitude": 84.568575
+ },
+ {
+  "code": "khajura-rural-municipality",
+  "name": "Khajura Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "banke",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.121341,
+  "longitude": 81.552073
+ },
+ {
+  "code": "khandachakra-municipality",
+  "name": "Khandachakra Municipality",
+  "type": "municipality",
+  "districtCode": "kalikot",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.157614,
+  "longitude": 81.668243
+ },
+ {
+  "code": "khandbari-municipality",
+  "name": "Khandbari Municipality",
+  "type": "municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.366319,
+  "longitude": 87.209792
+ },
+ {
+  "code": "khanikhola-rural-municipality",
+  "name": "Khanikhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.428041,
+  "longitude": 85.491104
+ },
+ {
+  "code": "khaniyabash-rural-municipality",
+  "name": "Khaniyabash Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.082557,
+  "longitude": 85.061487
+ },
+ {
+  "code": "khaptadchhanna-rural-municipality",
+  "name": "Khaptadchhanna Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.458145,
+  "longitude": 81.214781
+ },
+ {
+  "code": "kharpunath-rural-municipality",
+  "name": "Kharpunath Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "humla",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 30.080081,
+  "longitude": 82.100711
+ },
+ {
+  "code": "khatyad-rural-municipality",
+  "name": "Khatyad Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mugu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.529939,
+  "longitude": 81.901735
+ },
+ {
+  "code": "khijidemba-rural-municipality",
+  "name": "Khijidemba Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.44757,
+  "longitude": 86.356954
+ },
+ {
+  "code": "khotehang-rural-municipality",
+  "name": "Khotehang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.04434,
+  "longitude": 86.851555
+ },
+ {
+  "code": "khumbupasanglahmu-rural-municipality",
+  "name": "Khumbupasanglahmu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.842358,
+  "longitude": 86.720759
+ },
+ {
+  "code": "kirtipur-municipality",
+  "name": "Kirtipur Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 10,
+  "postalCode": "44618",
+  "latitude": 27.667781,
+  "longitude": 85.278271
+ },
+ {
+  "code": "kispang-rural-municipality",
+  "name": "Kispang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.034534,
+  "longitude": 85.105386
+ },
+ {
+  "code": "kohalpur-municipality",
+  "name": "Kohalpur Municipality",
+  "type": "municipality",
+  "districtCode": "banke",
+  "wardCount": 15,
+  "postalCode": null,
+  "latitude": 28.217612,
+  "longitude": 81.730776
+ },
+ {
+  "code": "kolhabi-municipality",
+  "name": "Kolhabi Municipality",
+  "type": "municipality",
+  "districtCode": "bara",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.091339,
+  "longitude": 85.145979
+ },
+ {
+  "code": "konjyosom-rural-municipality",
+  "name": "Konjyosom Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "lalitpur",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.520007,
+  "longitude": 85.347702
+ },
+ {
+  "code": "koshi-rural-municipality",
+  "name": "Koshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sunsari",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.562061,
+  "longitude": 87.011609
+ },
+ {
+  "code": "kotahimai-rural-municipality",
+  "name": "Kotahimai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.446104,
+  "longitude": 83.344646
+ },
+ {
+  "code": "krishnanagar-municipality",
+  "name": "Krishnanagar Municipality",
+  "type": "municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.534356,
+  "longitude": 82.820017
+ },
+ {
+  "code": "krishnapur-municipality",
+  "name": "Krishnapur Municipality",
+  "type": "municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.874449,
+  "longitude": 80.450502
+ },
+ {
+  "code": "kumakhmalika-rural-municipality",
+  "name": "Kumakhmalika Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "salyan",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.553769,
+  "longitude": 82.193842
+ },
+ {
+  "code": "kummayak-rural-municipality",
+  "name": "Kummayak Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "panchthar",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.074348,
+  "longitude": 87.62347
+ },
+ {
+  "code": "kuse-rural-municipality",
+  "name": "Kuse Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jajarkot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.880578,
+  "longitude": 82.149841
+ },
+ {
+  "code": "kushma-municipality",
+  "name": "Kushma Municipality",
+  "type": "municipality",
+  "districtCode": "parbat",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.233741,
+  "longitude": 83.688322
+ },
+ {
+  "code": "kwholasothar-rural-municipality",
+  "name": "Kwholasothar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "lamjung",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.310743,
+  "longitude": 84.248457
+ },
+ {
+  "code": "lahan-municipality",
+  "name": "Lahan Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 24,
+  "postalCode": "56502",
+  "latitude": 26.756975,
+  "longitude": 86.474441
+ },
+ {
+  "code": "lakshminiya-rural-municipality",
+  "name": "Lakshminiya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.797984,
+  "longitude": 85.937222
+ },
+ {
+  "code": "lalbandi-municipality",
+  "name": "Lalbandi Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 17,
+  "postalCode": null,
+  "latitude": 27.098615,
+  "longitude": 85.701409
+ },
+ {
+  "code": "laligurans-municipality",
+  "name": "Laligurans Municipality",
+  "type": "municipality",
+  "districtCode": "terhathum",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.129931,
+  "longitude": 87.45388
+ },
+ {
+  "code": "lalitpur-metropolitan-city",
+  "name": "Lalitpur Metropolitan City",
+  "type": "metropolitan_city",
+  "districtCode": "lalitpur",
+  "wardCount": 29,
+  "postalCode": "44700",
+  "latitude": 27.649688,
+  "longitude": 85.314177
+ },
+ {
+  "code": "laljhadi-rural-municipality",
+  "name": "Laljhadi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.756617,
+  "longitude": 80.405451
+ },
+ {
+  "code": "lamahi-municipality",
+  "name": "Lamahi Municipality",
+  "type": "municipality",
+  "districtCode": "dang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.930639,
+  "longitude": 82.342835
+ },
+ {
+  "code": "lamkichuha-municipality",
+  "name": "Lamkichuha Municipality",
+  "type": "municipality",
+  "districtCode": "kailali",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.657541,
+  "longitude": 81.154606
+ },
+ {
+  "code": "laxmipur-patari-rural-municipality",
+  "name": "Laxmipur Patari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.669015,
+  "longitude": 86.419417
+ },
+ {
+  "code": "lekam-rural-municipality",
+  "name": "Lekam Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "darchula",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.657233,
+  "longitude": 80.464711
+ },
+ {
+  "code": "lekbeshi-municipality",
+  "name": "Lekbeshi Municipality",
+  "type": "municipality",
+  "districtCode": "surkhet",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.535701,
+  "longitude": 81.763933
+ },
+ {
+  "code": "letang-municipality",
+  "name": "Letang Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.764628,
+  "longitude": 87.504147
+ },
+ {
+  "code": "likhu-rural-municipality-nuwakot",
+  "name": "Likhu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.887111,
+  "longitude": 85.218711
+ },
+ {
+  "code": "likhu-rural-municipality-okhaldhunga",
+  "name": "Likhu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.372753,
+  "longitude": 86.26464
+ },
+ {
+  "code": "likhu-tamakoshi-rural-municipality",
+  "name": "Likhu Tamakoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.449064,
+  "longitude": 86.185833
+ },
+ {
+  "code": "likhupike-rural-municipality",
+  "name": "Likhupike Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.550638,
+  "longitude": 86.436398
+ },
+ {
+  "code": "lisangkhu-pakhar-rural-municipality",
+  "name": "Lisangkhu Pakhar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.677066,
+  "longitude": 85.880901
+ },
+ {
+  "code": "loharpatti-municipality",
+  "name": "Loharpatti Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.762856,
+  "longitude": 85.869538
+ },
+ {
+  "code": "lomanthang-rural-municipality",
+  "name": "Lomanthang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mustang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.201785,
+  "longitude": 83.984759
+ },
+ {
+  "code": "lumbini-sanskritik-municipality",
+  "name": "Lumbini Sanskritik Municipality",
+  "type": "municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.468663,
+  "longitude": 83.249477
+ },
+ {
+  "code": "lungri-rural-municipality",
+  "name": "Lungri Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.267244,
+  "longitude": 82.811744
+ },
+ {
+  "code": "machhapuchchhre-rural-municipality",
+  "name": "Machhapuchchhre Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kaski",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.445346,
+  "longitude": 83.96644
+ },
+ {
+  "code": "madane-rural-municipality",
+  "name": "Madane Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.175039,
+  "longitude": 83.068635
+ },
+ {
+  "code": "madhav-narayan-municipality",
+  "name": "Madhav Narayan Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.889065,
+  "longitude": 85.338854
+ },
+ {
+  "code": "madhuwan-municipality",
+  "name": "Madhuwan Municipality",
+  "type": "municipality",
+  "districtCode": "bardiya",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.336389,
+  "longitude": 81.270596
+ },
+ {
+  "code": "madhyabindu-municipality",
+  "name": "Madhyabindu Municipality",
+  "type": "municipality",
+  "districtCode": "nawalpur",
+  "wardCount": 15,
+  "postalCode": null,
+  "latitude": 27.634926,
+  "longitude": 83.9886
+ },
+ {
+  "code": "madhyanepal-municipality",
+  "name": "MadhyaNepal Municipality",
+  "type": "municipality",
+  "districtCode": "lamjung",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.1473,
+  "longitude": 84.267639
+ },
+ {
+  "code": "madhyapur-thimi-municipality",
+  "name": "Madhyapur Thimi Municipality",
+  "type": "municipality",
+  "districtCode": "bhaktapur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.685185,
+  "longitude": 85.384519
+ },
+ {
+  "code": "madi-municipality-chitwan",
+  "name": "Madi Municipality",
+  "type": "municipality",
+  "districtCode": "chitwan",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.433518,
+  "longitude": 84.355334
+ },
+ {
+  "code": "madi-municipality-sankhuwasabha",
+  "name": "Madi Municipality",
+  "type": "municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.251495,
+  "longitude": 87.413042
+ },
+ {
+  "code": "madi-rural-municipality-kaski",
+  "name": "Madi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kaski",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.364117,
+  "longitude": 84.137331
+ },
+ {
+  "code": "madi-rural-municipality-rolpa",
+  "name": "Madi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.401973,
+  "longitude": 82.508209
+ },
+ {
+  "code": "mahabharat-rural-municipality",
+  "name": "Mahabharat Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.397746,
+  "longitude": 85.630896
+ },
+ {
+  "code": "mahabu-rural-municipality",
+  "name": "Mahabu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dailekh",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.94222,
+  "longitude": 81.699831
+ },
+ {
+  "code": "mahadeva-rural-municipality",
+  "name": "Mahadeva Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.552708,
+  "longitude": 86.821534
+ },
+ {
+  "code": "mahagadhimai-municipality",
+  "name": "Mahagadhimai Municipality",
+  "type": "municipality",
+  "districtCode": "bara",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.981627,
+  "longitude": 85.05298
+ },
+ {
+  "code": "mahakali-municipality-darchula",
+  "name": "Mahakali Municipality",
+  "type": "municipality",
+  "districtCode": "darchula",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.807662,
+  "longitude": 80.565685
+ },
+ {
+  "code": "mahakali-municipality-kanchanpur",
+  "name": "Mahakali Municipality",
+  "type": "municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.905379,
+  "longitude": 80.08347
+ },
+ {
+  "code": "mahakulung-rural-municipality",
+  "name": "Mahakulung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.653129,
+  "longitude": 86.901204
+ },
+ {
+  "code": "mahalaxmi-municipality",
+  "name": "Mahalaxmi Municipality",
+  "type": "municipality",
+  "districtCode": "lalitpur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.632026,
+  "longitude": 85.381351
+ },
+ {
+  "code": "mahalaxmi-municipality-dhankuta",
+  "name": "Mahalaxmi Municipality",
+  "type": "municipality",
+  "districtCode": "dhankuta",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.134146,
+  "longitude": 87.33611
+ },
+ {
+  "code": "mahankal-rural-municipality",
+  "name": "Mahankal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "lalitpur",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.47567,
+  "longitude": 85.394481
+ },
+ {
+  "code": "maharajgunj-municipality",
+  "name": "Maharajgunj Municipality",
+  "type": "municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.536279,
+  "longitude": 82.940985
+ },
+ {
+  "code": "mahashila-rural-municipality",
+  "name": "Mahashila Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parbat",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.092465,
+  "longitude": 83.672803
+ },
+ {
+  "code": "mahawai-rural-municipality",
+  "name": "Mahawai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kalikot",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.041024,
+  "longitude": 81.857998
+ },
+ {
+  "code": "mahottari-rural-municipality",
+  "name": "Mahottari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mahottari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.70614,
+  "longitude": 85.818069
+ },
+ {
+  "code": "mai-municipality",
+  "name": "Mai Municipality",
+  "type": "municipality",
+  "districtCode": "ilam",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.767908,
+  "longitude": 87.86417
+ },
+ {
+  "code": "maijogmai-rural-municipality",
+  "name": "Maijogmai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ilam",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.961296,
+  "longitude": 88.006187
+ },
+ {
+  "code": "maiwakhola-rural-municipality",
+  "name": "Maiwakhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.385615,
+  "longitude": 87.504767
+ },
+ {
+  "code": "makalu-rural-municipality",
+  "name": "Makalu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.728738,
+  "longitude": 87.157662
+ },
+ {
+  "code": "makawanpurgadhi-rural-municipality",
+  "name": "Makawanpurgadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.436334,
+  "longitude": 85.117614
+ },
+ {
+  "code": "malangwa-municipality",
+  "name": "Malangwa Municipality",
+  "type": "municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.855158,
+  "longitude": 85.553295
+ },
+ {
+  "code": "malarani-rural-municipality",
+  "name": "Malarani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "arghakhanchi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.066808,
+  "longitude": 83.072685
+ },
+ {
+  "code": "malika-rural-municipality-gulmi",
+  "name": "Malika Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.213088,
+  "longitude": 83.149273
+ },
+ {
+  "code": "malika-rural-municipality-myagdi",
+  "name": "Malika Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "myagdi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.421122,
+  "longitude": 83.361803
+ },
+ {
+  "code": "malikaarjun-rural-municipality",
+  "name": "Malikaarjun Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "darchula",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.729604,
+  "longitude": 80.43023
+ },
+ {
+  "code": "mallarani-rural-municipality",
+  "name": "Mallarani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.073547,
+  "longitude": 82.919966
+ },
+ {
+  "code": "manahari-rural-municipality",
+  "name": "Manahari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.4853,
+  "longitude": 84.859823
+ },
+ {
+  "code": "mandandeupur-municipality",
+  "name": "Mandandeupur Municipality",
+  "type": "municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.707976,
+  "longitude": 85.598015
+ },
+ {
+  "code": "mandavi-rural-municipality",
+  "name": "Mandavi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.046955,
+  "longitude": 82.773302
+ },
+ {
+  "code": "manebhanjyang-rural-municipality",
+  "name": "Manebhanjyang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.211933,
+  "longitude": 86.468333
+ },
+ {
+  "code": "mangala-rural-municipality",
+  "name": "Mangala Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "myagdi",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.380022,
+  "longitude": 83.44615
+ },
+ {
+  "code": "mangalsen-municipality",
+  "name": "Mangalsen Municipality",
+  "type": "municipality",
+  "districtCode": "achham",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 29.095541,
+  "longitude": 81.205443
+ },
+ {
+  "code": "mangsebung-rural-municipality",
+  "name": "Mangsebung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ilam",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.827384,
+  "longitude": 87.736288
+ },
+ {
+  "code": "manra-siswa-municipality",
+  "name": "Manra Siswa Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.70501,
+  "longitude": 85.735146
+ },
+ {
+  "code": "manthali-municipality",
+  "name": "Manthali Municipality",
+  "type": "municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.408943,
+  "longitude": 86.055655
+ },
+ {
+  "code": "marchawari-rural-municipality",
+  "name": "Marchawari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.376678,
+  "longitude": 83.358098
+ },
+ {
+  "code": "marin-rural-municipality",
+  "name": "Marin Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.248093,
+  "longitude": 85.699964
+ },
+ {
+  "code": "marma-rural-municipality",
+  "name": "Marma Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "darchula",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.741135,
+  "longitude": 80.847824
+ },
+ {
+  "code": "marsyangdi-rural-municipality",
+  "name": "Marsyangdi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "lamjung",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.380443,
+  "longitude": 84.416625
+ },
+ {
+  "code": "masta-rural-municipality",
+  "name": "Masta Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.543155,
+  "longitude": 81.299302
+ },
+ {
+  "code": "mathagadhi-rural-municipality",
+  "name": "Mathagadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.766855,
+  "longitude": 83.657225
+ },
+ {
+  "code": "matihani-municipality",
+  "name": "Matihani Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.640558,
+  "longitude": 85.855602
+ },
+ {
+  "code": "maulapur-municipality",
+  "name": "Maulapur Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.93014,
+  "longitude": 85.206744
+ },
+ {
+  "code": "mayadevi-rural-municipality-kapilvastu",
+  "name": "Mayadevi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.527233,
+  "longitude": 83.143293
+ },
+ {
+  "code": "mayadevi-rural-municipality-rupandehi",
+  "name": "Mayadevi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.514328,
+  "longitude": 83.366092
+ },
+ {
+  "code": "mechinagar-municipality",
+  "name": "Mechinagar Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 15,
+  "postalCode": null,
+  "latitude": 26.681155,
+  "longitude": 88.080297
+ },
+ {
+  "code": "meghang-rural-municipality",
+  "name": "Meghang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.99558,
+  "longitude": 85.074567
+ },
+ {
+  "code": "melamchi-municipality",
+  "name": "Melamchi Municipality",
+  "type": "municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.820458,
+  "longitude": 85.526719
+ },
+ {
+  "code": "melauli-municipality",
+  "name": "Melauli Municipality",
+  "type": "municipality",
+  "districtCode": "baitadi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.419843,
+  "longitude": 80.425866
+ },
+ {
+  "code": "mellekh-rural-municipality",
+  "name": "Mellekh Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "achham",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.266808,
+  "longitude": 81.320997
+ },
+ {
+  "code": "melung-rural-municipality",
+  "name": "Melung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolakha",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.552643,
+  "longitude": 86.03669
+ },
+ {
+  "code": "menchayam-rural-municipality",
+  "name": "Menchayam Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "terhathum",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.241304,
+  "longitude": 87.522304
+ },
+ {
+  "code": "meringden-rural-municipality",
+  "name": "Meringden Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.480409,
+  "longitude": 87.540279
+ },
+ {
+  "code": "miklajung-rural-municipality-morang",
+  "name": "Miklajung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "morang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.781166,
+  "longitude": 87.622137
+ },
+ {
+  "code": "miklajung-rural-municipality-panchthar",
+  "name": "Miklajung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "panchthar",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.938004,
+  "longitude": 87.655091
+ },
+ {
+  "code": "mikwakhola-rural-municipality",
+  "name": "Mikwakhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.556899,
+  "longitude": 87.614021
+ },
+ {
+  "code": "mirchaiya-municipality",
+  "name": "Mirchaiya Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.832108,
+  "longitude": 86.247494
+ },
+ {
+  "code": "mithila-bihari-municipality",
+  "name": "Mithila Bihari Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.796522,
+  "longitude": 86.013923
+ },
+ {
+  "code": "mithila-municipality",
+  "name": "Mithila Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.998782,
+  "longitude": 85.973301
+ },
+ {
+  "code": "modi-rural-municipality",
+  "name": "Modi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parbat",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.310723,
+  "longitude": 83.718114
+ },
+ {
+  "code": "mohanyal-rural-municipality",
+  "name": "Mohanyal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kailali",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.813321,
+  "longitude": 81.113002
+ },
+ {
+  "code": "molung-rural-municipality",
+  "name": "Molung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.365617,
+  "longitude": 86.411614
+ },
+ {
+  "code": "mudkechula-rural-municipality",
+  "name": "Mudkechula Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolpa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.057225,
+  "longitude": 82.53324
+ },
+ {
+  "code": "mugum-karmarong-rural-municipality",
+  "name": "Mugum Karmarong Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mugu",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.678297,
+  "longitude": 82.532679
+ },
+ {
+  "code": "mukhiyapatti-musarmiya-rural-municipality",
+  "name": "Mukhiyapatti Musarmiya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.602651,
+  "longitude": 85.881872
+ },
+ {
+  "code": "musikot-municipality-gulmi",
+  "name": "Musikot Municipality",
+  "type": "municipality",
+  "districtCode": "gulmi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.184619,
+  "longitude": 83.307099
+ },
+ {
+  "code": "musikot-municipality-rukum-west",
+  "name": "Musikot Municipality",
+  "type": "municipality",
+  "districtCode": "rukum-west",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.612329,
+  "longitude": 82.472279
+ },
+ {
+  "code": "myagde-rural-municipality",
+  "name": "Myagde Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "tanahun",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.007272,
+  "longitude": 84.15586
+ },
+ {
+  "code": "myanglung-municipality",
+  "name": "Myanglung Municipality",
+  "type": "municipality",
+  "districtCode": "terhathum",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.141137,
+  "longitude": 87.518982
+ },
+ {
+  "code": "nagarain-municipality",
+  "name": "Nagarain Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.647058,
+  "longitude": 85.927705
+ },
+ {
+  "code": "nagarjun-municipality",
+  "name": "Nagarjun Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.72389,
+  "longitude": 85.260477
+ },
+ {
+  "code": "namkha-rural-municipality",
+  "name": "Namkha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "humla",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 30.167247,
+  "longitude": 81.619794
+ },
+ {
+  "code": "namobuddha-municipality",
+  "name": "Namobuddha Municipality",
+  "type": "municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.555948,
+  "longitude": 85.636612
+ },
+ {
+  "code": "naraha-rural-municipality",
+  "name": "Naraha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.779025,
+  "longitude": 86.282215
+ },
+ {
+  "code": "naraharinath-rural-municipality",
+  "name": "Naraharinath Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kalikot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.220836,
+  "longitude": 81.533185
+ },
+ {
+  "code": "narainapur-rural-municipality",
+  "name": "Narainapur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "banke",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.925397,
+  "longitude": 81.870873
+ },
+ {
+  "code": "narayan-municipality",
+  "name": "Narayan Municipality",
+  "type": "municipality",
+  "districtCode": "dailekh",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.877471,
+  "longitude": 81.741317
+ },
+ {
+  "code": "narphu-rural-municipality",
+  "name": "Narphu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "manang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.733542,
+  "longitude": 84.223422
+ },
+ {
+  "code": "nashong-rural-municipality",
+  "name": "Nashong Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "manang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.60823,
+  "longitude": 84.397135
+ },
+ {
+  "code": "naubahini-rural-municipality",
+  "name": "Naubahini Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.255079,
+  "longitude": 82.911154
+ },
+ {
+  "code": "naugad-rural-municipality",
+  "name": "Naugad Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "darchula",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.798237,
+  "longitude": 80.67968
+ },
+ {
+  "code": "naukunda-rural-municipality",
+  "name": "Naukunda Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rasuwa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.01896,
+  "longitude": 85.303068
+ },
+ {
+  "code": "naumule-rural-municipality",
+  "name": "Naumule Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dailekh",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.925469,
+  "longitude": 81.84483
+ },
+ {
+  "code": "nawadurga-rural-municipality",
+  "name": "Nawadurga Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dadeldhura",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.363281,
+  "longitude": 80.697933
+ },
+ {
+  "code": "nawarajpur-rural-municipality",
+  "name": "Nawarajpur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.608634,
+  "longitude": 86.429127
+ },
+ {
+  "code": "nechasalyan-rural-municipality",
+  "name": "Nechasalyan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.372582,
+  "longitude": 86.607205
+ },
+ {
+  "code": "nepalgunj-sub-metropolitan-city",
+  "name": "Nepalgunj Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "banke",
+  "wardCount": 23,
+  "postalCode": "21900",
+  "latitude": 28.065188,
+  "longitude": 81.651419
+ },
+ {
+  "code": "neshyang-rural-municipality",
+  "name": "Neshyang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "manang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.668868,
+  "longitude": 83.993102
+ },
+ {
+  "code": "netrawati-dabjong-rural-municipality",
+  "name": "Netrawati Dabjong Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.988677,
+  "longitude": 84.974679
+ },
+ {
+  "code": "nijgadh-municipality",
+  "name": "Nijgadh Municipality",
+  "type": "municipality",
+  "districtCode": "bara",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.241137,
+  "longitude": 85.1472
+ },
+ {
+  "code": "nilakantha-municipality",
+  "name": "Nilakantha Municipality",
+  "type": "municipality",
+  "districtCode": "dhading",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.91904,
+  "longitude": 84.932009
+ },
+ {
+  "code": "nisdi-rural-municipality",
+  "name": "Nisdi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.785497,
+  "longitude": 83.909262
+ },
+ {
+  "code": "nisikhola-rural-municipality",
+  "name": "Nisikhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baglung",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.375733,
+  "longitude": 83.02265
+ },
+ {
+  "code": "omsatiya-rural-municipality",
+  "name": "Omsatiya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.531297,
+  "longitude": 83.523926
+ },
+ {
+  "code": "pachaljharana-rural-municipality",
+  "name": "Pachaljharana Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kalikot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.259675,
+  "longitude": 81.723135
+ },
+ {
+  "code": "pacharauta-municipality",
+  "name": "Pacharauta Municipality",
+  "type": "municipality",
+  "districtCode": "bara",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.908967,
+  "longitude": 85.078684
+ },
+ {
+  "code": "painyu-rural-municipality",
+  "name": "Painyu Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parbat",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.047846,
+  "longitude": 83.664271
+ },
+ {
+  "code": "pakahamainpur-rural-municipality",
+  "name": "Pakahamainpur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.025401,
+  "longitude": 84.735641
+ },
+ {
+  "code": "pakhribas-municipality",
+  "name": "Pakhribas Municipality",
+  "type": "municipality",
+  "districtCode": "dhankuta",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.054454,
+  "longitude": 87.25345
+ },
+ {
+  "code": "palata-rural-municipality",
+  "name": "Palata Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kalikot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.339903,
+  "longitude": 81.842173
+ },
+ {
+  "code": "palhi-nandan-rural-municipality",
+  "name": "Palhi Nandan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parasi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.464009,
+  "longitude": 83.670018
+ },
+ {
+  "code": "palungtar-municipality",
+  "name": "Palungtar Municipality",
+  "type": "municipality",
+  "districtCode": "gorkha",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.012815,
+  "longitude": 84.522365
+ },
+ {
+  "code": "panauti-municipality",
+  "name": "Panauti Municipality",
+  "type": "municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.582641,
+  "longitude": 85.481733
+ },
+ {
+  "code": "panchadewal-binayak-municipality",
+  "name": "Panchadewal Binayak Municipality",
+  "type": "municipality",
+  "districtCode": "achham",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.099384,
+  "longitude": 81.446285
+ },
+ {
+  "code": "panchakanya-rural-municipality",
+  "name": "Panchakanya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.891169,
+  "longitude": 85.303491
+ },
+ {
+  "code": "panchakhapan-municipality",
+  "name": "Panchakhapan Municipality",
+  "type": "municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.352184,
+  "longitude": 87.304256
+ },
+ {
+  "code": "pancheshwar-rural-municipality",
+  "name": "Pancheshwar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baitadi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.446474,
+  "longitude": 80.305005
+ },
+ {
+  "code": "panchkhal-municipality",
+  "name": "Panchkhal Municipality",
+  "type": "municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.641604,
+  "longitude": 85.638887
+ },
+ {
+  "code": "panchpokhari-thangpal-rural-municipality",
+  "name": "Panchpokhari Thangpal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.007771,
+  "longitude": 85.651451
+ },
+ {
+  "code": "panchpuri-municipality",
+  "name": "Panchpuri Municipality",
+  "type": "municipality",
+  "districtCode": "surkhet",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.788496,
+  "longitude": 81.404094
+ },
+ {
+  "code": "pandav-gupha-rural-municipality",
+  "name": "Pandav Gupha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajura",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.399441,
+  "longitude": 81.647168
+ },
+ {
+  "code": "panini-rural-municipality",
+  "name": "Panini Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "arghakhanchi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.884846,
+  "longitude": 83.252608
+ },
+ {
+  "code": "parashuram-municipality",
+  "name": "Parashuram Municipality",
+  "type": "municipality",
+  "districtCode": "dadeldhura",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 29.129664,
+  "longitude": 80.341693
+ },
+ {
+  "code": "parbati-kunda-rural-municipality",
+  "name": "Parbati Kunda Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rasuwa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.216147,
+  "longitude": 85.255398
+ },
+ {
+  "code": "paroha-municipality",
+  "name": "Paroha Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.850455,
+  "longitude": 85.232874
+ },
+ {
+  "code": "parsa-rural-municipality",
+  "name": "Parsa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.872752,
+  "longitude": 85.654731
+ },
+ {
+  "code": "parsagadhi-municipality",
+  "name": "Parsagadhi Municipality",
+  "type": "municipality",
+  "districtCode": "parsa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.166557,
+  "longitude": 84.893233
+ },
+ {
+  "code": "parwanipur-rural-municipality",
+  "name": "Parwanipur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.055174,
+  "longitude": 84.932639
+ },
+ {
+  "code": "patahrishanishchare-municipality",
+  "name": "Patahrishanishchare Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.609913,
+  "longitude": 87.564122
+ },
+ {
+  "code": "patan-municipality",
+  "name": "Patan Municipality",
+  "type": "municipality",
+  "districtCode": "baitadi",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 29.45056,
+  "longitude": 80.584172
+ },
+ {
+  "code": "paterwasugauli-rural-municipality",
+  "name": "Paterwasugauli Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.185855,
+  "longitude": 84.791901
+ },
+ {
+  "code": "pathibhara-yangwarak-rural-municipality",
+  "name": "Pathibhara Yangwarak Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.324996,
+  "longitude": 87.748129
+ },
+ {
+  "code": "patrasi-rural-municipality",
+  "name": "Patrasi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jumla",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.367943,
+  "longitude": 82.370396
+ },
+ {
+  "code": "pauwadungma-rural-municipality",
+  "name": "Pauwadungma Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.122802,
+  "longitude": 87.147838
+ },
+ {
+  "code": "phaktanglung-rural-municipality",
+  "name": "Phaktanglung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.679255,
+  "longitude": 87.915968
+ },
+ {
+  "code": "phalebas-municipality",
+  "name": "Phalebas Municipality",
+  "type": "municipality",
+  "districtCode": "parbat",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.151122,
+  "longitude": 83.700172
+ },
+ {
+  "code": "phatuwa-bijayapur-municipality",
+  "name": "Phatuwa Bijayapur Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.031158,
+  "longitude": 85.214639
+ },
+ {
+  "code": "phedap-rural-municipality",
+  "name": "Phedap Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "terhathum",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.197929,
+  "longitude": 87.578685
+ },
+ {
+  "code": "phedikhola-rural-municipality",
+  "name": "Phedikhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "syangja",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.174703,
+  "longitude": 83.871072
+ },
+ {
+  "code": "pheta-rural-municipality",
+  "name": "Pheta Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.002006,
+  "longitude": 84.942115
+ },
+ {
+  "code": "phidim-municipality",
+  "name": "Phidim Municipality",
+  "type": "municipality",
+  "districtCode": "panchthar",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.119633,
+  "longitude": 87.797913
+ },
+ {
+  "code": "phikkal-rural-municipality",
+  "name": "Phikkal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.184669,
+  "longitude": 86.300354
+ },
+ {
+  "code": "phungling-municipality",
+  "name": "Phungling Municipality",
+  "type": "municipality",
+  "districtCode": "taplejung",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.382826,
+  "longitude": 87.718273
+ },
+ {
+  "code": "pipra-rural-municipality",
+  "name": "Pipra Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mahottari",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.70258,
+  "longitude": 85.866059
+ },
+ {
+  "code": "pokhara-metropolitan-city",
+  "name": "Pokhara Metropolitan City",
+  "type": "metropolitan_city",
+  "districtCode": "kaski",
+  "wardCount": 33,
+  "postalCode": "33700",
+  "latitude": 28.20929,
+  "longitude": 83.984349
+ },
+ {
+  "code": "pokhariya-municipality",
+  "name": "Pokhariya Municipality",
+  "type": "municipality",
+  "districtCode": "parsa",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.077733,
+  "longitude": 84.771907
+ },
+ {
+  "code": "prasauni-rural-municipality",
+  "name": "Prasauni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.047644,
+  "longitude": 84.967948
+ },
+ {
+  "code": "pratappur-rural-municipality",
+  "name": "Pratappur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parasi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.43576,
+  "longitude": 83.79577
+ },
+ {
+  "code": "punarbas-municipality",
+  "name": "Punarbas Municipality",
+  "type": "municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.639367,
+  "longitude": 80.46891
+ },
+ {
+  "code": "purbakhola-rural-municipality",
+  "name": "Purbakhola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.823361,
+  "longitude": 83.772354
+ },
+ {
+  "code": "purbichauki-rural-municipality",
+  "name": "Purbichauki Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "doti",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.269143,
+  "longitude": 81.061149
+ },
+ {
+  "code": "purchaudi-municipality",
+  "name": "Purchaudi Municipality",
+  "type": "municipality",
+  "districtCode": "baitadi",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 29.604791,
+  "longitude": 80.701151
+ },
+ {
+  "code": "putalibazar-municipality",
+  "name": "Putalibazar Municipality",
+  "type": "municipality",
+  "districtCode": "syangja",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.091275,
+  "longitude": 83.886471
+ },
+ {
+  "code": "putha-uttarganga-rural-municipality",
+  "name": "Putha Uttarganga Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rukum-east",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.659308,
+  "longitude": 82.809703
+ },
+ {
+  "code": "pyuthan-municipality",
+  "name": "Pyuthan Municipality",
+  "type": "municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.127435,
+  "longitude": 82.851769
+ },
+ {
+  "code": "raghuganga-rural-municipality",
+  "name": "Raghuganga Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "myagdi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.535822,
+  "longitude": 83.510708
+ },
+ {
+  "code": "rainadevi-chhahara-rural-municipality",
+  "name": "Rainadevi Chhahara Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.857332,
+  "longitude": 83.350117
+ },
+ {
+  "code": "rainas-municipality",
+  "name": "Rainas Municipality",
+  "type": "municipality",
+  "districtCode": "lamjung",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.108203,
+  "longitude": 84.494035
+ },
+ {
+  "code": "rajapur-municipality",
+  "name": "Rajapur Municipality",
+  "type": "municipality",
+  "districtCode": "bardiya",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.430855,
+  "longitude": 81.12674
+ },
+ {
+  "code": "rajbiraj-municipality",
+  "name": "Rajbiraj Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 16,
+  "postalCode": "56400",
+  "latitude": 26.53518,
+  "longitude": 86.760535
+ },
+ {
+  "code": "rajdevi-municipality",
+  "name": "Rajdevi Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.780941,
+  "longitude": 85.326121
+ },
+ {
+  "code": "rajpur-municipality",
+  "name": "Rajpur Municipality",
+  "type": "municipality",
+  "districtCode": "rautahat",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.812096,
+  "longitude": 85.260452
+ },
+ {
+  "code": "rajpur-rural-municipality",
+  "name": "Rajpur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.826414,
+  "longitude": 82.357271
+ },
+ {
+  "code": "raksirang-rural-municipality",
+  "name": "Raksirang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.590581,
+  "longitude": 84.83338
+ },
+ {
+  "code": "ramaroshan-rural-municipality",
+  "name": "Ramaroshan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "achham",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.202202,
+  "longitude": 81.416031
+ },
+ {
+  "code": "rambha-rural-municipality",
+  "name": "Rambha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.868104,
+  "longitude": 83.688633
+ },
+ {
+  "code": "ramdhuni-municipality",
+  "name": "Ramdhuni Municipality",
+  "type": "municipality",
+  "districtCode": "sunsari",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.692208,
+  "longitude": 87.174367
+ },
+ {
+  "code": "ramechhap-municipality",
+  "name": "Ramechhap Municipality",
+  "type": "municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.322234,
+  "longitude": 86.128717
+ },
+ {
+  "code": "ramgopalpur-municipality",
+  "name": "Ramgopalpur Municipality",
+  "type": "municipality",
+  "districtCode": "mahottari",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.810411,
+  "longitude": 85.784732
+ },
+ {
+  "code": "ramgram-municipality",
+  "name": "Ramgram Municipality",
+  "type": "municipality",
+  "districtCode": "parasi",
+  "wardCount": 18,
+  "postalCode": null,
+  "latitude": 27.526988,
+  "longitude": 83.648773
+ },
+ {
+  "code": "ramnagar-rural-municipality",
+  "name": "Ramnagar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sarlahi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.838354,
+  "longitude": 85.385901
+ },
+ {
+  "code": "ramprasad-rai-rural-municipality",
+  "name": "Ramprasad Rai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.081007,
+  "longitude": 87.033314
+ },
+ {
+  "code": "rampur-municipality",
+  "name": "Rampur Municipality",
+  "type": "municipality",
+  "districtCode": "palpa",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.856257,
+  "longitude": 83.896617
+ },
+ {
+  "code": "rangeli-municipality",
+  "name": "Rangeli Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.488949,
+  "longitude": 87.464273
+ },
+ {
+  "code": "rapti-municipality",
+  "name": "Rapti Municipality",
+  "type": "municipality",
+  "districtCode": "chitwan",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.649467,
+  "longitude": 84.663655
+ },
+ {
+  "code": "rapti-rural-municipality",
+  "name": "Rapti Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.869125,
+  "longitude": 82.71879
+ },
+ {
+  "code": "rapti-sonari-rural-municipality",
+  "name": "Rapti Sonari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "banke",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.098489,
+  "longitude": 81.876323
+ },
+ {
+  "code": "raskot-municipality",
+  "name": "Raskot Municipality",
+  "type": "municipality",
+  "districtCode": "kalikot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.274717,
+  "longitude": 81.646187
+ },
+ {
+  "code": "ratnanagar-municipality",
+  "name": "Ratnanagar Municipality",
+  "type": "municipality",
+  "districtCode": "chitwan",
+  "wardCount": 16,
+  "postalCode": null,
+  "latitude": 27.614836,
+  "longitude": 84.512865
+ },
+ {
+  "code": "ratuwamai-municipality",
+  "name": "Ratuwamai Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.484968,
+  "longitude": 87.614765
+ },
+ {
+  "code": "rautamai-rural-municipality",
+  "name": "Rautamai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "udayapur",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.974739,
+  "longitude": 86.681672
+ },
+ {
+  "code": "rawa-besi-rural-municipality",
+  "name": "Rawa Besi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.285103,
+  "longitude": 86.729789
+ },
+ {
+  "code": "resunga-municipality",
+  "name": "Resunga Municipality",
+  "type": "municipality",
+  "districtCode": "gulmi",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 28.053154,
+  "longitude": 83.255794
+ },
+ {
+  "code": "rhishing-rural-municipality",
+  "name": "Rhishing Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "tanahun",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.900604,
+  "longitude": 84.227926
+ },
+ {
+  "code": "ribdikot-rural-municipality",
+  "name": "Ribdikot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.867355,
+  "longitude": 83.454681
+ },
+ {
+  "code": "rohini-rural-municipality",
+  "name": "Rohini Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.50113,
+  "longitude": 83.552607
+ },
+ {
+  "code": "rolpa-municipality",
+  "name": "Rolpa Municipality",
+  "type": "municipality",
+  "districtCode": "rolpa",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.329348,
+  "longitude": 82.606935
+ },
+ {
+  "code": "rong-rural-municipality",
+  "name": "Rong Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ilam",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.805157,
+  "longitude": 88.066906
+ },
+ {
+  "code": "roshi-rural-municipality",
+  "name": "Roshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.468254,
+  "longitude": 85.657611
+ },
+ {
+  "code": "rubi-valley-rural-municipality",
+  "name": "Rubi Valley Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.226523,
+  "longitude": 85.084876
+ },
+ {
+  "code": "runtigadi-rural-municipality",
+  "name": "Runtigadi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.177112,
+  "longitude": 82.51477
+ },
+ {
+  "code": "rupa-rural-municipality",
+  "name": "Rupa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kaski",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.144546,
+  "longitude": 84.170098
+ },
+ {
+  "code": "rupakot-majhuwagadhi-municipality",
+  "name": "Rupakot Majhuwagadhi Municipality",
+  "type": "municipality",
+  "districtCode": "khotang",
+  "wardCount": 15,
+  "postalCode": null,
+  "latitude": 27.233445,
+  "longitude": 86.803275
+ },
+ {
+  "code": "rupani-rural-municipality",
+  "name": "Rupani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 26.634285,
+  "longitude": 86.744747
+ },
+ {
+  "code": "ruru-rural-municipality",
+  "name": "Ruru Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.982155,
+  "longitude": 83.426011
+ },
+ {
+  "code": "sabaila-municipality",
+  "name": "Sabaila Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 26.793254,
+  "longitude": 86.101264
+ },
+ {
+  "code": "sabhapokhari-rural-municipality",
+  "name": "Sabhapokhari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.43753,
+  "longitude": 87.358498
+ },
+ {
+  "code": "sahid-lakhan-rural-municipality",
+  "name": "Sahid Lakhan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.927762,
+  "longitude": 84.641254
+ },
+ {
+  "code": "sahidnagar-municipality",
+  "name": "Sahidnagar Municipality",
+  "type": "municipality",
+  "districtCode": "dhanusha",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.733628,
+  "longitude": 86.098315
+ },
+ {
+  "code": "sailung-rural-municipality",
+  "name": "Sailung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolakha",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.614465,
+  "longitude": 85.980103
+ },
+ {
+  "code": "sainamaina-municipality",
+  "name": "Sainamaina Municipality",
+  "type": "municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.706371,
+  "longitude": 83.304339
+ },
+ {
+  "code": "sakela-rural-municipality",
+  "name": "Sakela Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "khotang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.179978,
+  "longitude": 86.875542
+ },
+ {
+  "code": "sakhuwanankarkatti-rural-municipality",
+  "name": "Sakhuwanankarkatti Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "siraha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.627789,
+  "longitude": 86.495878
+ },
+ {
+  "code": "sakhuwaprasauni-rural-municipality",
+  "name": "SakhuwaPrasauni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.162592,
+  "longitude": 84.819211
+ },
+ {
+  "code": "salpasilichho-rural-municipality",
+  "name": "Salpasilichho Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.384257,
+  "longitude": 86.981463
+ },
+ {
+  "code": "sammarimai-rural-municipality",
+  "name": "Sammarimai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.383717,
+  "longitude": 83.311124
+ },
+ {
+  "code": "samsi-rural-municipality",
+  "name": "Samsi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mahottari",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.812591,
+  "longitude": 85.737632
+ },
+ {
+  "code": "sandakpur-rural-municipality",
+  "name": "Sandakpur Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ilam",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.046776,
+  "longitude": 87.954557
+ },
+ {
+  "code": "sandhikharka-municipality",
+  "name": "Sandhikharka Municipality",
+  "type": "municipality",
+  "districtCode": "arghakhanchi",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.964414,
+  "longitude": 83.154388
+ },
+ {
+  "code": "sangurigadhi-rural-municipality",
+  "name": "Sangurigadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhankuta",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.900555,
+  "longitude": 87.289849
+ },
+ {
+  "code": "sani-bheri-rural-municipality",
+  "name": "Sani Bheri Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rukum-west",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.669278,
+  "longitude": 82.344592
+ },
+ {
+  "code": "sanni-tribeni-rural-municipality",
+  "name": "Sanni Tribeni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kalikot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.264582,
+  "longitude": 81.586191
+ },
+ {
+  "code": "sanphebagar-municipality",
+  "name": "Sanphebagar Municipality",
+  "type": "municipality",
+  "districtCode": "achham",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 29.259031,
+  "longitude": 81.1818
+ },
+ {
+  "code": "saptakoshi-municipality",
+  "name": "Saptakoshi Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.716966,
+  "longitude": 86.936356
+ },
+ {
+  "code": "sarawal-rural-municipality",
+  "name": "Sarawal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parasi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.508934,
+  "longitude": 83.728556
+ },
+ {
+  "code": "sarkegad-rural-municipality",
+  "name": "Sarkegad Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "humla",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.789979,
+  "longitude": 81.893894
+ },
+ {
+  "code": "sarumarani-rural-municipality",
+  "name": "Sarumarani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.944087,
+  "longitude": 82.840695
+ },
+ {
+  "code": "satyawati-rural-municipality",
+  "name": "Satyawati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gulmi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.029883,
+  "longitude": 83.472426
+ },
+ {
+  "code": "sayal-rural-municipality",
+  "name": "Sayal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "doti",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.368181,
+  "longitude": 80.972979
+ },
+ {
+  "code": "shadananda-municipality",
+  "name": "Shadananda Municipality",
+  "type": "municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.336734,
+  "longitude": 87.106017
+ },
+ {
+  "code": "shahidbhumi-rural-municipality",
+  "name": "Shahidbhumi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhankuta",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 26.95902,
+  "longitude": 87.220261
+ },
+ {
+  "code": "shailyashikhar-municipality",
+  "name": "Shailyashikhar Municipality",
+  "type": "municipality",
+  "districtCode": "darchula",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.706308,
+  "longitude": 80.575004
+ },
+ {
+  "code": "shambhunath-municipality",
+  "name": "Shambhunath Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.626741,
+  "longitude": 86.675313
+ },
+ {
+  "code": "shankharapur-municipality",
+  "name": "Shankharapur Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.753664,
+  "longitude": 85.504182
+ },
+ {
+  "code": "shantinagar-rural-municipality",
+  "name": "Shantinagar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.177803,
+  "longitude": 82.201108
+ },
+ {
+  "code": "sharada-municipality",
+  "name": "Sharada Municipality",
+  "type": "municipality",
+  "districtCode": "salyan",
+  "wardCount": 15,
+  "postalCode": null,
+  "latitude": 28.388067,
+  "longitude": 82.168418
+ },
+ {
+  "code": "shey-phoksundo-rural-municipality",
+  "name": "Shey Phoksundo Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolpa",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.373068,
+  "longitude": 83.015492
+ },
+ {
+  "code": "shikhar-municipality",
+  "name": "Shikhar Municipality",
+  "type": "municipality",
+  "districtCode": "doti",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.244389,
+  "longitude": 80.82333
+ },
+ {
+  "code": "shivanath-rural-municipality",
+  "name": "Shivanath Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baitadi",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.384038,
+  "longitude": 80.350668
+ },
+ {
+  "code": "shivapuri-rural-municipality",
+  "name": "Shivapuri Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.853759,
+  "longitude": 85.369994
+ },
+ {
+  "code": "shivaraj-municipality",
+  "name": "Shivaraj Municipality",
+  "type": "municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.681821,
+  "longitude": 82.856143
+ },
+ {
+  "code": "shivasataxi-municipality",
+  "name": "Shivasataxi Municipality",
+  "type": "municipality",
+  "districtCode": "jhapa",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.608277,
+  "longitude": 87.814313
+ },
+ {
+  "code": "shiwalaya-rural-municipality",
+  "name": "Shiwalaya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jajarkot",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.69152,
+  "longitude": 81.933213
+ },
+ {
+  "code": "shuklagandaki-municipality",
+  "name": "Shuklagandaki Municipality",
+  "type": "municipality",
+  "districtCode": "tanahun",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.061038,
+  "longitude": 84.047111
+ },
+ {
+  "code": "shuklaphanta-municipality",
+  "name": "Shuklaphanta Municipality",
+  "type": "municipality",
+  "districtCode": "kanchanpur",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 28.926284,
+  "longitude": 80.374526
+ },
+ {
+  "code": "siddhalek-rural-municipality",
+  "name": "Siddhalek Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.846605,
+  "longitude": 84.838893
+ },
+ {
+  "code": "siddharthanagar-municipality",
+  "name": "Siddharthanagar Municipality",
+  "type": "municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 13,
+  "postalCode": "32900",
+  "latitude": 27.507007,
+  "longitude": 83.438671
+ },
+ {
+  "code": "siddhicharan-municipality",
+  "name": "Siddhicharan Municipality",
+  "type": "municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.338646,
+  "longitude": 86.531489
+ },
+ {
+  "code": "sidingba-rural-municipality",
+  "name": "Sidingba Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.360417,
+  "longitude": 87.942535
+ },
+ {
+  "code": "sigas-rural-municipality",
+  "name": "Sigas Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baitadi",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.449748,
+  "longitude": 80.778616
+ },
+ {
+  "code": "silichong-rural-municipality",
+  "name": "Silichong Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sankhuwasabha",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.582198,
+  "longitude": 87.0587
+ },
+ {
+  "code": "simkot-rural-municipality",
+  "name": "Simkot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "humla",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 30.136261,
+  "longitude": 81.973509
+ },
+ {
+  "code": "simraungadh-municipality",
+  "name": "Simraungadh Municipality",
+  "type": "municipality",
+  "districtCode": "bara",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.899918,
+  "longitude": 85.133228
+ },
+ {
+  "code": "simta-rural-municipality",
+  "name": "Simta Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "surkhet",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.545008,
+  "longitude": 81.945354
+ },
+ {
+  "code": "sinja-rural-municipality",
+  "name": "Sinja Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jumla",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 29.341683,
+  "longitude": 82.031328
+ },
+ {
+  "code": "siraha-municipality",
+  "name": "Siraha Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 22,
+  "postalCode": null,
+  "latitude": 26.651365,
+  "longitude": 86.218259
+ },
+ {
+  "code": "siranchok-rural-municipality",
+  "name": "Siranchok Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.085408,
+  "longitude": 84.588079
+ },
+ {
+  "code": "sirijangha-rural-municipality",
+  "name": "Sirijangha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "taplejung",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.496953,
+  "longitude": 87.968761
+ },
+ {
+  "code": "sisne-rural-municipality",
+  "name": "Sisne Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rukum-east",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.714395,
+  "longitude": 82.650446
+ },
+ {
+  "code": "sitganga-municipality",
+  "name": "Sitganga Municipality",
+  "type": "municipality",
+  "districtCode": "arghakhanchi",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.841299,
+  "longitude": 82.98997
+ },
+ {
+  "code": "siyari-rural-municipality",
+  "name": "Siyari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.569922,
+  "longitude": 83.37731
+ },
+ {
+  "code": "solududhkunda-municipality",
+  "name": "Solududhkunda Municipality",
+  "type": "municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.57244,
+  "longitude": 86.587601
+ },
+ {
+  "code": "sonama-rural-municipality",
+  "name": "Sonama Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mahottari",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.866116,
+  "longitude": 85.724481
+ },
+ {
+  "code": "soru-rural-municipality",
+  "name": "Soru Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mugu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.636982,
+  "longitude": 81.970487
+ },
+ {
+  "code": "sotang-rural-municipality",
+  "name": "Sotang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.516834,
+  "longitude": 86.77771
+ },
+ {
+  "code": "suddhodhan-rural-municipality",
+  "name": "Suddhodhan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.508146,
+  "longitude": 83.195329
+ },
+ {
+  "code": "sudhdhodhan-rural-municipality",
+  "name": "Sudhdhodhan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.614091,
+  "longitude": 83.366427
+ },
+ {
+  "code": "sukhipur-municipality",
+  "name": "Sukhipur Municipality",
+  "type": "municipality",
+  "districtCode": "siraha",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 26.697447,
+  "longitude": 86.359394
+ },
+ {
+  "code": "sukidaha-rural-municipality",
+  "name": "Sukidaha Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.445534,
+  "longitude": 82.421872
+ },
+ {
+  "code": "sulikot-rural-municipality",
+  "name": "Sulikot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "gorkha",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.206295,
+  "longitude": 84.752964
+ },
+ {
+  "code": "sunapati-rural-municipality",
+  "name": "Sunapati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.506813,
+  "longitude": 85.86202
+ },
+ {
+  "code": "sunchhahari-rural-municipality",
+  "name": "Sunchhahari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.381402,
+  "longitude": 82.830548
+ },
+ {
+  "code": "sundarbazar-municipality",
+  "name": "Sundarbazar Municipality",
+  "type": "municipality",
+  "districtCode": "lamjung",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.155335,
+  "longitude": 84.36443
+ },
+ {
+  "code": "sundarharaicha-municipality",
+  "name": "Sundarharaicha Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 26.658693,
+  "longitude": 87.344733
+ },
+ {
+  "code": "sunkoshi-rural-municipality-okhaldhunga",
+  "name": "Sunkoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "okhaldhunga",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.274134,
+  "longitude": 86.369274
+ },
+ {
+  "code": "sunkoshi-rural-municipality-sindhuli",
+  "name": "Sunkoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.380086,
+  "longitude": 85.878315
+ },
+ {
+  "code": "sunkoshi-rural-municipality-sindhupalchok",
+  "name": "Sunkoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.710453,
+  "longitude": 85.811966
+ },
+ {
+  "code": "sunkoshi-rural-municipality-udayapur",
+  "name": "Sunkoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "udayapur",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.089114,
+  "longitude": 86.650154
+ },
+ {
+  "code": "sunwal-municipality",
+  "name": "Sunwal Municipality",
+  "type": "municipality",
+  "districtCode": "parasi",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 27.616616,
+  "longitude": 83.666376
+ },
+ {
+  "code": "sunwarshi-municipality",
+  "name": "Sunwarshi Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.484601,
+  "longitude": 87.539995
+ },
+ {
+  "code": "surma-rural-municipality",
+  "name": "Surma Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.69457,
+  "longitude": 81.149032
+ },
+ {
+  "code": "surnaya-rural-municipality",
+  "name": "Surnaya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baitadi",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.529322,
+  "longitude": 80.615114
+ },
+ {
+  "code": "surunga-municipality",
+  "name": "Surunga Municipality",
+  "type": "municipality",
+  "districtCode": "saptari",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 26.692305,
+  "longitude": 86.549837
+ },
+ {
+  "code": "suryabinayak-municipality",
+  "name": "Suryabinayak Municipality",
+  "type": "municipality",
+  "districtCode": "bhaktapur",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 27.646878,
+  "longitude": 85.43742
+ },
+ {
+  "code": "suryagadhi-rural-municipality",
+  "name": "Suryagadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.946201,
+  "longitude": 85.237994
+ },
+ {
+  "code": "suryodaya-municipality",
+  "name": "Suryodaya Municipality",
+  "type": "municipality",
+  "districtCode": "ilam",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 26.897878,
+  "longitude": 88.069209
+ },
+ {
+  "code": "susta-rural-municipality",
+  "name": "Susta Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parasi",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.428427,
+  "longitude": 83.845853
+ },
+ {
+  "code": "suwarna-rural-municipality",
+  "name": "Suwarna Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bara",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.926262,
+  "longitude": 85.06211
+ },
+ {
+  "code": "suwarnabati-rural-municipality",
+  "name": "Suwarnabati Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.277185,
+  "longitude": 82.740225
+ },
+ {
+  "code": "swami-kartik-rural-municipality",
+  "name": "Swami Kartik Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajura",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.423735,
+  "longitude": 81.759111
+ },
+ {
+  "code": "sworgadwary-municipality",
+  "name": "Sworgadwary Municipality",
+  "type": "municipality",
+  "districtCode": "pyuthan",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.131381,
+  "longitude": 82.69668
+ },
+ {
+  "code": "tadi-rural-municipality",
+  "name": "Tadi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.96567,
+  "longitude": 85.340414
+ },
+ {
+  "code": "talkot-rural-municipality",
+  "name": "Talkot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 29.684838,
+  "longitude": 81.280649
+ },
+ {
+  "code": "tamakoshi-rural-municipality",
+  "name": "Tamakoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dolakha",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.543332,
+  "longitude": 86.124038
+ },
+ {
+  "code": "taman-khola-rural-municipality",
+  "name": "Taman Khola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baglung",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.438605,
+  "longitude": 83.216961
+ },
+ {
+  "code": "tanjakot-rural-municipality",
+  "name": "Tanjakot Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "humla",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 29.703354,
+  "longitude": 81.75132
+ },
+ {
+  "code": "tansen-municipality",
+  "name": "Tansen Municipality",
+  "type": "municipality",
+  "districtCode": "palpa",
+  "wardCount": 14,
+  "postalCode": "32500",
+  "latitude": 27.867099,
+  "longitude": 83.531252
+ },
+ {
+  "code": "tapli-rural-municipality",
+  "name": "Tapli Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "udayapur",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.084693,
+  "longitude": 86.537657
+ },
+ {
+  "code": "tara-khola-rural-municipality",
+  "name": "Tara Khola Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "baglung",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.307835,
+  "longitude": 83.415317
+ },
+ {
+  "code": "tarakeshwar-municipality",
+  "name": "Tarakeshwar Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.776609,
+  "longitude": 85.290408
+ },
+ {
+  "code": "tarkeshwar-rural-municipality",
+  "name": "Tarkeshwar Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "nuwakot",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.882199,
+  "longitude": 85.039182
+ },
+ {
+  "code": "tatopani-rural-municipality",
+  "name": "Tatopani Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jumla",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 29.132602,
+  "longitude": 82.151561
+ },
+ {
+  "code": "temal-rural-municipality",
+  "name": "Temal Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kavrepalanchok",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.511432,
+  "longitude": 85.755769
+ },
+ {
+  "code": "thaha-municipality",
+  "name": "Thaha Municipality",
+  "type": "municipality",
+  "districtCode": "makwanpur",
+  "wardCount": 12,
+  "postalCode": null,
+  "latitude": 27.645253,
+  "longitude": 85.098636
+ },
+ {
+  "code": "thakre-rural-municipality",
+  "name": "Thakre Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.736794,
+  "longitude": 85.065816
+ },
+ {
+  "code": "thakurbaba-municipality",
+  "name": "Thakurbaba Municipality",
+  "type": "municipality",
+  "districtCode": "bardiya",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.443438,
+  "longitude": 81.289307
+ },
+ {
+  "code": "thalara-rural-municipality",
+  "name": "Thalara Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bajhang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.451223,
+  "longitude": 80.998113
+ },
+ {
+  "code": "thantikandh-rural-municipality",
+  "name": "Thantikandh Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dailekh",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.992999,
+  "longitude": 81.540534
+ },
+ {
+  "code": "thasang-rural-municipality",
+  "name": "Thasang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "mustang",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.689232,
+  "longitude": 83.58921
+ },
+ {
+  "code": "thawang-rural-municipality",
+  "name": "Thawang Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.45947,
+  "longitude": 82.741924
+ },
+ {
+  "code": "thori-rural-municipality",
+  "name": "Thori Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "parsa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 27.299592,
+  "longitude": 84.66806
+ },
+ {
+  "code": "thuli-bheri-municipality",
+  "name": "Thuli Bheri Municipality",
+  "type": "municipality",
+  "districtCode": "dolpa",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 28.956228,
+  "longitude": 82.856507
+ },
+ {
+  "code": "thulung-dudhkoshi-rural-municipality",
+  "name": "Thulung Dudhkoshi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "solukhumbu",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.427391,
+  "longitude": 86.716274
+ },
+ {
+  "code": "tikapur-municipality",
+  "name": "Tikapur Municipality",
+  "type": "municipality",
+  "districtCode": "kailali",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 28.473933,
+  "longitude": 81.083348
+ },
+ {
+  "code": "tila-rural-municipality",
+  "name": "Tila Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "jumla",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.186405,
+  "longitude": 81.985652
+ },
+ {
+  "code": "tilagufa-municipality",
+  "name": "Tilagufa Municipality",
+  "type": "municipality",
+  "districtCode": "kalikot",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.147526,
+  "longitude": 81.853705
+ },
+ {
+  "code": "tilathi-koiladi-rural-municipality",
+  "name": "Tilathi Koiladi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.49076,
+  "longitude": 86.830794
+ },
+ {
+  "code": "tilottama-municipality",
+  "name": "Tilottama Municipality",
+  "type": "municipality",
+  "districtCode": "rupandehi",
+  "wardCount": 17,
+  "postalCode": null,
+  "latitude": 27.611546,
+  "longitude": 83.490831
+ },
+ {
+  "code": "tinau-rural-municipality",
+  "name": "Tinau Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "palpa",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.767027,
+  "longitude": 83.470525
+ },
+ {
+  "code": "tinpatan-rural-municipality",
+  "name": "Tinpatan Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhuli",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.132382,
+  "longitude": 86.135758
+ },
+ {
+  "code": "tirahut-rural-municipality",
+  "name": "Tirahut Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "saptari",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.592275,
+  "longitude": 86.861383
+ },
+ {
+  "code": "tokha-municipality",
+  "name": "Tokha Municipality",
+  "type": "municipality",
+  "districtCode": "kathmandu",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 27.774688,
+  "longitude": 85.335037
+ },
+ {
+  "code": "tribeni-municipality",
+  "name": "Tribeni Municipality",
+  "type": "municipality",
+  "districtCode": "bajura",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 29.335194,
+  "longitude": 81.430514
+ },
+ {
+  "code": "tribeni-nalagad-municipality",
+  "name": "Tribeni Nalagad Municipality",
+  "type": "municipality",
+  "districtCode": "jajarkot",
+  "wardCount": 13,
+  "postalCode": null,
+  "latitude": 28.865358,
+  "longitude": 82.393136
+ },
+ {
+  "code": "tribeni-rural-municipality-rolpa",
+  "name": "Tribeni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rolpa",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.292143,
+  "longitude": 82.484764
+ },
+ {
+  "code": "tribeni-rural-municipality-rukum-west",
+  "name": "Tribeni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rukum-west",
+  "wardCount": 10,
+  "postalCode": null,
+  "latitude": 28.567764,
+  "longitude": 82.42978
+ },
+ {
+  "code": "tribeni-rural-municipality-salyan",
+  "name": "Tribeni Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "salyan",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 28.286175,
+  "longitude": 82.193515
+ },
+ {
+  "code": "tripura-sundari-rural-municipality",
+  "name": "Tripura Sundari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "dhading",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 28.018587,
+  "longitude": 84.870775
+ },
+ {
+  "code": "tripurasundari-municipality",
+  "name": "Tripurasundari Municipality",
+  "type": "municipality",
+  "districtCode": "dolpa",
+  "wardCount": 11,
+  "postalCode": null,
+  "latitude": 29.0174,
+  "longitude": 82.763587
+ },
+ {
+  "code": "tripurasundari-rural-municipality",
+  "name": "Tripurasundari Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "sindhupalchok",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.747809,
+  "longitude": 85.952137
+ },
+ {
+  "code": "triyuga-municipality",
+  "name": "Triyuga Municipality",
+  "type": "municipality",
+  "districtCode": "udayapur",
+  "wardCount": 16,
+  "postalCode": null,
+  "latitude": 26.815347,
+  "longitude": 86.668164
+ },
+ {
+  "code": "tulsipur-sub-metropolitan-city",
+  "name": "Tulsipur Sub-Metropolitan City",
+  "type": "sub_metropolitan_city",
+  "districtCode": "dang",
+  "wardCount": 19,
+  "postalCode": "22412",
+  "latitude": 28.106183,
+  "longitude": 82.320624
+ },
+ {
+  "code": "tumbewa-rural-municipality",
+  "name": "Tumbewa Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "panchthar",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.983401,
+  "longitude": 87.570298
+ },
+ {
+  "code": "turmakhad-rural-municipality",
+  "name": "Turmakhad Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "achham",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 28.886407,
+  "longitude": 81.489889
+ },
+ {
+  "code": "tyamkemaiyung-rural-municipality",
+  "name": "Tyamkemaiyung Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "bhojpur",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 27.205062,
+  "longitude": 86.962873
+ },
+ {
+  "code": "udayapurgadhi-rural-municipality",
+  "name": "Udayapurgadhi Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "udayapur",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 26.914384,
+  "longitude": 86.551081
+ },
+ {
+  "code": "umakunda-rural-municipality",
+  "name": "Umakunda Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "ramechhap",
+  "wardCount": 7,
+  "postalCode": null,
+  "latitude": 27.643534,
+  "longitude": 86.448216
+ },
+ {
+  "code": "uralabari-municipality",
+  "name": "Uralabari Municipality",
+  "type": "municipality",
+  "districtCode": "morang",
+  "wardCount": 9,
+  "postalCode": null,
+  "latitude": 26.639877,
+  "longitude": 87.630006
+ },
+ {
+  "code": "uttargaya-rural-municipality",
+  "name": "Uttargaya Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rasuwa",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 28.07069,
+  "longitude": 85.185061
+ },
+ {
+  "code": "waling-municipality",
+  "name": "Waling Municipality",
+  "type": "municipality",
+  "districtCode": "syangja",
+  "wardCount": 14,
+  "postalCode": null,
+  "latitude": 27.984909,
+  "longitude": 83.770448
+ },
+ {
+  "code": "yangwarak-rural-municipality",
+  "name": "Yangwarak Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "panchthar",
+  "wardCount": 6,
+  "postalCode": null,
+  "latitude": 27.326805,
+  "longitude": 88.031565
+ },
+ {
+  "code": "yashodhara-rural-municipality",
+  "name": "Yashodhara Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "kapilvastu",
+  "wardCount": 8,
+  "postalCode": null,
+  "latitude": 27.484386,
+  "longitude": 83.057628
+ },
+ {
+  "code": "yemunamai-rural-municipality",
+  "name": "Yemunamai Rural Municipality",
+  "type": "rural_municipality",
+  "districtCode": "rautahat",
+  "wardCount": 5,
+  "postalCode": null,
+  "latitude": 26.842051,
+  "longitude": 85.289854
+ }
+]

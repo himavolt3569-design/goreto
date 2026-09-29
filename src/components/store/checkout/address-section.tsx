@@ -9,45 +9,34 @@ import { ICON_SIZE_SM, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui
 import { LocationMap } from "@/components/store/map/location-map";
 import { SOFT_SECONDARY } from "@/components/store/product/classes";
 import type { CheckoutFormValues } from "@/features/checkout/schemas";
+import { lookupPoint, type PointArea } from "@/features/delivery/area-client";
 import { findMunicipality, type NepalAddressData } from "@/features/delivery/nepal-address";
 import { cn } from "@/lib/utils/cn";
 import { NumberedSection } from "./numbered-section";
 
-type Suggestion = { provinceCode: string; districtCode: string; municipalityCode: string; postalCode: string | null };
-
 type LocationState =
   | { kind: "idle" }
   | { kind: "locating" }
-  | { kind: "detected" }
-  | { kind: "suggestion"; suggestion: Suggestion }
+  | { kind: "detected"; wardFound: boolean }
+  | { kind: "suggestion"; suggestion: PointArea }
   | { kind: "error"; message: string };
 
 const iconProps = { "aria-hidden": true, size: ICON_SIZE_SM, weight: ICON_WEIGHT_OUTLINE } as const;
 
-async function suggestArea(latitude: number, longitude: number): Promise<Suggestion | string> {
-  try {
-    const response = await fetch(`/api/geocode/reverse?lat=${latitude}&lng=${longitude}`);
-    if (response.status === 422) return "That location looks outside Nepal. Please enter your address below.";
-    if (!response.ok) return "We couldn't match your location to an area. Please choose it below.";
-    return (await response.json()) as Suggestion;
-  } catch {
-    return "We couldn't look up your location. Please choose your area below.";
-  }
-}
-
 function positionError(error: GeolocationPositionError): string {
   if (error.code === error.PERMISSION_DENIED) {
-    return "Location access is off. That's fine: enter your address below, or allow location in your browser settings.";
+    return "Location access is off. That's fine: enter your address below, pick it on the map, or allow location in your browser settings.";
   }
   if (error.code === error.TIMEOUT) return "Finding your location took too long. Please try again or enter your address below.";
   return "Your location isn't available right now. Please enter your address below.";
 }
 
 /**
- * Step 2: Nepal address. "Use Current Location" is optional help: the browser
- * gives coordinates, the server suggests the nearest municipality from our
- * own data, and the shopper reviews every field (ward and street are never
- * guessed). Everything works without location access.
+ * Step 2: Nepal address. "Use Current Location" and "Pick on map" are
+ * optional help: a point is matched to province, district, municipality and
+ * (where our boundary data covers it) ward, and the shopper reviews every
+ * field. The street is never guessed. Everything works without location
+ * access.
  */
 export function AddressSection({ data }: { data: NepalAddressData }) {
   const {
@@ -61,13 +50,14 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
 
   const validate = (field: keyof CheckoutFormValues) => ({ shouldValidate: Boolean(touchedFields[field]), shouldDirty: true });
 
-  function applySuggestion(suggestion: Suggestion) {
+  function applySuggestion(suggestion: PointArea) {
     setValue("provinceCode", suggestion.provinceCode, validate("provinceCode"));
     setValue("districtCode", suggestion.districtCode, validate("districtCode"));
     if (getValues("municipalityCode") !== suggestion.municipalityCode) {
       setValue("municipalityCode", suggestion.municipalityCode, validate("municipalityCode"));
       setValue("ward", "", { shouldDirty: true });
     }
+    if (suggestion.ward) setValue("ward", String(suggestion.ward), validate("ward"));
     if (suggestion.postalCode) setValue("postalCode", suggestion.postalCode, { shouldDirty: true });
   }
 
@@ -81,15 +71,15 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
       async (position) => {
         const lat = Number(position.coords.latitude.toFixed(6));
         const lng = Number(position.coords.longitude.toFixed(6));
-        const suggestion = await suggestArea(lat, lng);
-        if (typeof suggestion === "string") {
-          setLocation({ kind: "error", message: suggestion });
+        const result = await lookupPoint(lat, lng);
+        if (!result.ok) {
+          setLocation({ kind: "error", message: result.message });
           return;
         }
         setValue("latitude", lat, { shouldDirty: true });
         setValue("longitude", lng, { shouldDirty: true });
-        applySuggestion(suggestion);
-        setLocation({ kind: "detected" });
+        applySuggestion(result.area);
+        setLocation({ kind: "detected", wardFound: result.area.ward !== null });
       },
       (error) => setLocation({ kind: "error", message: positionError(error) }),
       { enableHighAccuracy: true, timeout: 15_000, maximumAge: 60_000 },
@@ -100,15 +90,17 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
     const previous = { latitude: getValues("latitude"), longitude: getValues("longitude") };
     setValue("latitude", lat, { shouldDirty: true });
     setValue("longitude", lng, { shouldDirty: true });
-    const suggestion = await suggestArea(lat, lng);
-    if (typeof suggestion === "string") {
+    const result = await lookupPoint(lat, lng);
+    if (!result.ok) {
       // Keep the pin where it last matched a known area; the map follows these values.
       setValue("latitude", previous.latitude, { shouldDirty: true });
       setValue("longitude", previous.longitude, { shouldDirty: true });
-      setLocation({ kind: "error", message: suggestion });
+      setLocation({ kind: "error", message: result.message });
       return;
     }
-    if (suggestion.municipalityCode !== getValues("municipalityCode")) {
+    const suggestion = result.area;
+    const sameWard = suggestion.ward === null || String(suggestion.ward) === getValues("ward");
+    if (suggestion.municipalityCode !== getValues("municipalityCode") || !sameWard) {
       setLocation({ kind: "suggestion", suggestion });
     }
   }
@@ -159,6 +151,7 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
                 Pin moved
               </p>
               <p className="text-body text-neutral-700">
+                {suggestion.ward ? `Ward ${suggestion.ward}, ` : ""}
                 {suggestedMunicipality.name}
                 {suggestedDistrict ? `, ${suggestedDistrict.name}` : ""}
               </p>
@@ -166,7 +159,7 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
                 type="button"
                 onClick={() => {
                   applySuggestion(suggestion);
-                  setLocation({ kind: "detected" });
+                  setLocation({ kind: "detected", wardFound: suggestion.ward !== null });
                 }}
                 className="self-start rounded-xs text-body font-medium text-primary-500 underline underline-offset-4"
               >
@@ -189,7 +182,9 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
         {location.kind === "detected" ? (
           <p className="flex items-start gap-2 rounded-md bg-success-100 px-4 py-3 text-body text-success-700">
             <CheckCircleIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} className="mt-0.5 shrink-0" />
-            Your location has been detected. Please review the area, then choose your ward and street.
+            {location.wardFound
+              ? "Your location has been detected. Please check the area and ward, then add your street or a landmark."
+              : "Your location has been detected. Please check the area, then choose your ward and add your street."}
           </p>
         ) : location.kind === "error" ? (
           <p className="flex items-start gap-2 rounded-md bg-warning-100 px-4 py-3 text-body text-neutral-900">
@@ -199,7 +194,15 @@ export function AddressSection({ data }: { data: NepalAddressData }) {
         ) : null}
       </div>
 
-      <NepalAddressFields data={data} />
+      <NepalAddressFields
+        data={data}
+        location={hasPin ? { latitude, longitude } : null}
+        onLocationPicked={(lat, lng) => {
+          setValue("latitude", lat, { shouldDirty: true });
+          setValue("longitude", lng, { shouldDirty: true });
+          setLocation({ kind: "idle" });
+        }}
+      />
     </NumberedSection>
   );
 }

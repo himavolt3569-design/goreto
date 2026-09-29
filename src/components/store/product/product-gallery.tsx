@@ -17,7 +17,7 @@ import {
 import { MediaFrame } from "@/components/ui/media-frame";
 import type { ProductMedia } from "@/features/catalog/types";
 import { cn } from "@/lib/utils/cn";
-import { WishlistSoonButton } from "../product-card-actions";
+import { WishlistButton } from "../wishlist-button";
 
 /** Thumbnails visible in the desktop rail before it scrolls. */
 const VISIBLE_THUMBS = 5;
@@ -28,6 +28,7 @@ const floatingButton =
 export type ProductGalleryProps = {
   /** Photos for the selected variant, in display order. */
   media: ProductMedia[];
+  productSlug: string;
   productTitle: string;
   /** Quick view: thumbnails always sit under the image, sized for a narrow column. */
   compact?: boolean;
@@ -37,7 +38,7 @@ export type ProductGalleryProps = {
  * Thumbnail rail + main image + lightbox. Remount it (via `key`) when the
  * variant's photos change so the selection resets to the first photo.
  */
-export function ProductGallery({ media, productTitle, compact = false }: ProductGalleryProps) {
+export function ProductGallery({ media, productSlug, productTitle, compact = false }: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
   const railRef = useRef<HTMLUListElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -132,7 +133,7 @@ export function ProductGallery({ media, productTitle, compact = false }: Product
           className="aspect-[7/8] w-full rounded-lg"
         />
         <div className="absolute right-4 top-4">
-          <WishlistSoonButton productTitle={productTitle} className="size-11" />
+          <WishlistButton slug={productSlug} productTitle={productTitle} className="size-11" />
         </div>
         {active ? (
           <button

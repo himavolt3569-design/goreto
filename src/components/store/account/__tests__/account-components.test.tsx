@@ -34,6 +34,14 @@ describe("AccountNav", () => {
     expect(within(nav).getByRole("list", { name: "Orders" })).toBeInTheDocument();
   });
 
+  it("lists the wishlist and addresses under Saved", () => {
+    pathname = "/account/addresses/new";
+    render(<AccountNav />);
+    const saved = screen.getByRole("list", { name: "Saved" });
+    expect(within(saved).getByRole("link", { name: "Wishlist" })).toHaveAttribute("href", "/account/wishlist");
+    expect(within(saved).getByRole("link", { name: "Addresses" })).toHaveAttribute("aria-current", "page");
+  });
+
   it("marks Overview only on /account", () => {
     pathname = "/account";
     render(<AccountNav />);

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useId } from "react";
-import { ClockCounterClockwiseIcon, FileTextIcon, HouseIcon, ReceiptIcon, type Icon } from "@/components/ui/icons";
+import { ClockCounterClockwiseIcon, FileTextIcon, HeartIcon, HouseIcon, MapPinIcon, ReceiptIcon, type Icon } from "@/components/ui/icons";
 import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { ACCOUNT_NAV, isAccountNavActive, type AccountNavIcon } from "@/features/account/nav";
 import { cn } from "@/lib/utils/cn";
@@ -13,6 +13,8 @@ const NAV_ICONS: Record<AccountNavIcon, Icon> = {
   orders: FileTextIcon,
   tracking: ClockCounterClockwiseIcon,
   billing: ReceiptIcon,
+  wishlist: HeartIcon,
+  addresses: MapPinIcon,
 };
 
 /**
