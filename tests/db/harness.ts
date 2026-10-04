@@ -47,7 +47,8 @@ const SUPABASE_SHIMS = `
 
 type SeedMeta = { table_order: string[]; counts: Record<string, number> };
 
-export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMeta }> {
+/** The migrations alone, like a fresh production database. */
+export async function createMigratedDatabase(): Promise<PGlite> {
   const db = await PGlite.create({ extensions: { pg_trgm } });
   await db.exec(SUPABASE_SHIMS);
 
@@ -55,6 +56,11 @@ export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMe
   for (const file of readdirSync(migrations).filter((name) => name.endsWith(".sql")).sort()) {
     await db.exec(readFileSync(join(migrations, file), "utf8"));
   }
+  return db;
+}
+
+export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMeta }> {
+  const db = await createMigratedDatabase();
 
   const lines = readFileSync(join(ROOT, "supabase/seed.ndjson"), "utf8")
     .split("\n")
@@ -63,6 +69,9 @@ export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMe
   const meta = lines.shift()!.data as unknown as SeedMeta;
   const byTable = new Map<string, Record<string, unknown>[]>();
   for (const line of lines) byTable.set(line.table, [...(byTable.get(line.table) ?? []), line.data]);
+
+  // A migration creates the default settings row; the seed's row replaces it, as `seed:load` does.
+  await db.exec("delete from public.store_settings");
 
   for (const table of meta.table_order) {
     const rows = byTable.get(table) ?? [];

@@ -1,6 +1,6 @@
 # Goreto.store — Work Log
 
-_Last updated: 2026-09-27 · Branch: `feat/whatsapp-orders` (uncommitted)_
+_Last updated: 2026-10-04 · Branch: `feat/production-release`_
 
 Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the migrations, the code in `src/`, `scripts/` and `tests/`, and a fresh run of the checks below.
 
@@ -307,7 +307,7 @@ Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishl
 - [x] Upload on the Media page: pick a product and upload photos to the end of its gallery (2026-09-27).
 - [x] Orphaned-upload cleanup: panels on `/admin/media` and `/admin/ar` delete unreferenced admin uploads older than 24 hours. It's a button, not a scheduled job; a cron route needs deployment first (2026-09-27).
 - [x] "Duplicate product": copies into a draft with `(copy)`, a free slug, `-COPY` SKUs, zero stock and copied photos, but no AR assets (2026-09-27).
-- [x] **Bulk add products** at `/admin/products/bulk`: short cards with "Add another product" at the end, created one by one (failed ones stay editable for Retry). Each product can have **7 photos + 3 videos** (MP4/WebM ≤ 50 MB), enforced in the UI, server and a DB trigger. Videos play in the storefront gallery after the photos; covers stay photo-only (2026-10-04, `goreto-admin-bulk-add-products.md`, migration `product_media_videos`). Not yet pushed to the dev DB (see §5).
+- [x] **Bulk add products** at `/admin/products/bulk`: short cards with "Add another product" at the end, created one by one (failed ones stay editable for Retry). Each product can have **7 photos + 3 videos** (MP4/WebM ≤ 50 MB), enforced in the UI, server and a DB trigger. Videos play in the storefront gallery after the photos; covers stay photo-only (2026-10-04, `goreto-admin-bulk-add-products.md`, migration `product_media_videos`). Applied on dev; follow-up fixes in PR #21.
 - [ ] Courier webhooks `api/courier/webhooks/[provider]`. **Not planned:** the client ruled out courier API integrations (§4.0).
 - [ ] Optional: mirror `role` into Clerk `publicMetadata`, written by the server only.
 
@@ -324,10 +324,10 @@ Several footer and nav links return a 404 today.
 - [ ] Playwright E2E with `@clerk/testing` for the 11 journeys in §23.4. Playwright isn't installed. Browser checks so far used throwaway scratchpad scripts.
 - [ ] Prettier. It isn't configured.
 - [ ] `README.md` is still the create-next-app boilerplate.
-- [ ] Staging and production: a Clerk production instance and webhook endpoint, and separate Supabase staging and production projects.
-- [ ] Deployment secrets: `SUPABASE_SERVICE_ROLE_KEY` is needed by the server app for the profile sync.
+- [~] **Production release** (2026-10-04, `goreto-production-release.md`, `docs/releasing.md`): the live site deploys only from the `production` branch on Vercel, with a separate free Supabase project (`goreto-prod`) and a separate Clerk application ("Goreto Live", development instance on `*.vercel.app` until a domain exists). Unfinished storefront entry points are hidden in production builds by `src/config/features.ts`. Migration `store_settings_singleton` creates the settings row a fresh database lacked. Still to do: a custom domain with a Clerk production instance, and a staging project.
+- [x] Deployment secrets: set per environment in Vercel (Production = prod, Preview = dev).
 - [ ] Add the missing `.env.example` names: `NEXT_PUBLIC_SITE_URL`, AR, geocoding and courier (§17).
-- [ ] Decide what `main` should become. Today it holds only the initial commit, and origin's default branch is `feat/design-system-homepage`.
+- [x] `production` is the release branch; `main` still holds only the initial commit and can be deleted.
 - [ ] Open and merge a PR for `feat/admin-products`.
 
 ---
@@ -335,7 +335,7 @@ Several footer and nav links return a 404 today.
 ## 5. Needs your decision or action
 
 - **WhatsApp order flow (§4.0):** built on `feat/whatsapp-orders`. Before relying on it: add each courier's dispatch WhatsApp number (Delivery → Couriers), choose the courier mode, default courier and auto-accept switches (Settings), and give the right staff `orders.write`. The signed-in browser pass is still to do. The courier portal (automatic handoff, adds a `courier` role) is the next phase.
-- **Bulk add migration (`20261004090000_product_media_videos`):** `npm run db:push` refuses because the dev DB already has the `feat/account-saved-map-picker` migrations (`20261002…`–`20261003…`, PR #18) that this branch doesn't contain. Push it once PR #18 is merged and this branch is updated. Until then, video uploads fail on dev (the bucket still allows only images) and the 7/3 limit isn't enforced by the database there.
+- **Production go-live:** see `docs/releasing.md`. Before the client takes orders, add at least one courier + service, delivery zone and rate, and the support email/phone and dispatch municipality in `/admin/settings`; checkout offers no delivery option without them.
 - **Seed AR rows have no files:** `/admin/ar` flags them "No file uploaded", but the storefront still shows AR READY for them. Upload real files or turn those rows off before launch.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.

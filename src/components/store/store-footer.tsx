@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Icon } from "@/components/ui/icons";
-import { siteConfig, type SocialPlatform } from "@/config/site";
+import { siteConfig, visibleLinks, type SocialPlatform } from "@/config/site";
 import {
   ICON_SIZE,
   ICON_WEIGHT_OUTLINE,
@@ -22,6 +22,8 @@ const linkClasses =
 
 export function StoreFooter() {
   const year = new Date().getFullYear();
+  const footerNav = visibleLinks(siteConfig.footerNav);
+  const legalNav = visibleLinks(siteConfig.legalNav);
   const socials = (Object.keys(socialMeta) as SocialPlatform[]).flatMap((platform) => {
     const href = siteConfig.social[platform];
     return href ? [{ platform, href, ...socialMeta[platform] }] : [];
@@ -38,7 +40,7 @@ export function StoreFooter() {
 
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-x-8 gap-y-3">
-              {siteConfig.footerNav.map((link) => (
+              {footerNav.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className={linkClasses}>
                     {link.label}
@@ -71,20 +73,22 @@ export function StoreFooter() {
           <p className="text-small text-neutral-500">
             © {year} {siteConfig.name}. All rights reserved.
           </p>
-          <nav aria-label="Legal">
-            <ul className="flex gap-6">
-              {siteConfig.legalNav.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="rounded-xs text-small text-neutral-500 transition-colors hover:text-primary-500"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          {legalNav.length > 0 ? (
+            <nav aria-label="Legal">
+              <ul className="flex gap-6">
+                {legalNav.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="rounded-xs text-small text-neutral-500 transition-colors hover:text-primary-500"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
         </div>
       </div>
     </footer>

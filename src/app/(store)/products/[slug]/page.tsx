@@ -7,6 +7,7 @@ import { ProductPurchase } from "@/components/store/product/product-purchase";
 import { ProductRail } from "@/components/store/product/product-rail";
 import { ProductSpecs } from "@/components/store/product/product-specs";
 import { TryOnCard } from "@/components/store/product/try-on-card";
+import { features } from "@/config/features";
 import { ChooseOptionsLink } from "@/components/store/product-card-actions";
 import { WishlistButton } from "@/components/store/wishlist-button";
 import { siteConfig } from "@/config/site";
@@ -67,7 +68,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
         />
       </div>
 
-      {product.tryOn ? (
+      {features.arTryOn && product.tryOn ? (
         <section aria-labelledby="try-on-title">
           <TryOnCard productSlug={product.slug} tryOn={product.tryOn} />
         </section>

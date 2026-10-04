@@ -14,6 +14,7 @@ import {
   ShieldCheckIcon,
   TruckIcon,
 } from "@/components/ui";
+import { features } from "@/config/features";
 import { picsumImage } from "@/lib/media/picsum";
 
 const trustItems: { icon: ReactNode; title: string; caption: string }[] = [
@@ -64,10 +65,12 @@ export function Hero() {
               Shop Now
               <ArrowRightIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
             </Link>
-            <Link href="/try-on" className={buttonClasses({ variant: "secondary" })}>
-              <CubeIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
-              Try in AR
-            </Link>
+            {features.arTryOn ? (
+              <Link href="/try-on" className={buttonClasses({ variant: "secondary" })}>
+                <CubeIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                Try in AR
+              </Link>
+            ) : null}
           </div>
           <ul className="mt-2 grid gap-4 sm:grid-cols-3 sm:gap-6">
             {trustItems.map((item) => (
@@ -82,9 +85,11 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="hidden items-center justify-end lg:flex">
-          <ArMockup />
-        </div>
+        {features.arTryOn ? (
+          <div className="hidden items-center justify-end lg:flex">
+            <ArMockup />
+          </div>
+        ) : null}
       </div>
 
       {/* Portrait: in flow below the copy on small screens, bleeds right on desktop. */}
