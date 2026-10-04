@@ -80,7 +80,8 @@ export async function deleteAddressAction(id: string): Promise<AddressActionResu
   const { error } = await getUserSupabase().rpc("account_delete_address", { p_id: id });
   if (error) {
     logUnexpected("account_delete_address", error);
-    return error.code === "P0002" ? { ok: true } : addressFailureFromError(error);
+    // P0002: already deleted (e.g. in another tab), so still refresh the list.
+    if (error.code !== "P0002") return addressFailureFromError(error);
   }
   revalidatePath(ADDRESSES_PATH);
   return { ok: true };

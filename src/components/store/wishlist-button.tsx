@@ -33,6 +33,7 @@ const wishlistApi: WishlistApi = {
 export function WishlistButton({ slug, productTitle, className }: { slug: string; productTitle: string; className?: string }) {
   const { isLoaded, isSignedIn, userId } = useAuth();
   const saved = useWishlistStore((state) => state.slugs.has(slug));
+  const ready = useWishlistStore((state) => state.status === "ready");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState("");
@@ -48,7 +49,7 @@ export function WishlistButton({ slug, productTitle, className }: { slug: string
   }, [error]);
 
   async function toggle() {
-    if (!isLoaded || busy) return;
+    if (!isLoaded || !ready || busy) return;
     const next = !saved;
     setBusy(true);
     setError(null);
@@ -79,7 +80,7 @@ export function WishlistButton({ slug, productTitle, className }: { slug: string
           type="button"
           aria-label={label}
           aria-pressed={saved}
-          aria-disabled={!isLoaded || busy || undefined}
+          aria-disabled={!isLoaded || !ready || busy || undefined}
           onClick={() => void toggle()}
           className={classes}
         >

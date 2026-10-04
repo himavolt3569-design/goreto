@@ -54,7 +54,7 @@ export async function syncWishlistUser(userId: string | null, api: WishlistApi):
 
   if (!userId) {
     if (current.userId === null && current.status === "idle") return;
-    useWishlistStore.setState({ userId: null, status: "idle", slugs: new Set() });
+    useWishlistStore.setState({ userId: null, status: "idle", slugs: new Set(), pendingSlug: null });
     return;
   }
 

@@ -18,13 +18,11 @@ const SIGNED_OUT: WishlistChange = { ok: false, message: "Sign in to save produc
 const FAILED: WishlistChange = { ok: false, message: "We couldn't update your wishlist. Please try again." };
 const slugSchema = z.string().refine(isValidSlug);
 
-async function activeProductId(slug: string): Promise<string | null> {
-  const { data, error } = await getUserSupabase()
-    .from("products")
-    .select("id")
-    .eq("slug", slug)
-    .eq("status", "active")
-    .maybeSingle();
+/** Product id by slug; `activeOnly: false` finds any product RLS lets the caller see. */
+async function productIdBySlug(slug: string, activeOnly: boolean): Promise<string | null> {
+  let query = getUserSupabase().from("products").select("id").eq("slug", slug);
+  if (activeOnly) query = query.eq("status", "active");
+  const { data, error } = await query.maybeSingle();
   if (error) throw new Error(`Wishlist product lookup failed: ${error.message}`);
   return data?.id ?? null;
 }
@@ -34,7 +32,7 @@ export async function saveToWishlistAction(slug: string): Promise<WishlistChange
   const profile = await getCurrentProfile();
   if (!profile) return SIGNED_OUT;
 
-  const productId = await activeProductId(slug);
+  const productId = await productIdBySlug(slug, true);
   if (!productId) return { ok: false, message: "This product is no longer available." };
 
   const { error } = await getUserSupabase().from("wishlist_items").insert({ user_id: profile.id, product_id: productId });
@@ -49,7 +47,8 @@ export async function removeFromWishlistAction(slug: string): Promise<WishlistCh
   const profile = await getCurrentProfile();
   if (!profile) return SIGNED_OUT;
 
-  const productId = await activeProductId(slug);
+  // Not filtered on status, so a product taken off sale can still be removed.
+  const productId = await productIdBySlug(slug, false);
   if (!productId) return { ok: true };
 
   const { error } = await getUserSupabase()

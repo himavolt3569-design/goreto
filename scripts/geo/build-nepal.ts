@@ -456,6 +456,7 @@ async function main() {
   const presimplified = presimplify(topo as unknown as Parameters<typeof presimplify>[0]);
   let simplified: BoundaryTopology | null = null;
   let agreement = 0;
+  let simplifiedSize = 0;
   // `share` is the fraction of points kept; the least simplified that fits wins.
   for (const share of [0.3, 0.2, 0.15, 0.1, 0.07, 0.05]) {
     const candidate = quantize(simplify(presimplified, quantile(presimplified, share)), 1e5) as unknown as BoundaryTopology;
@@ -463,7 +464,11 @@ async function main() {
     agreement = lookupAgreement(candidate, validWards, levels);
     console.log(`  simplify ${share}: ${(size / 1e6).toFixed(1)} MB, lookups agree ${(agreement * 100).toFixed(2)}%`);
     simplified = candidate;
+    simplifiedSize = size;
     if (size <= BOUNDARIES_MAX_BYTES) break;
+  }
+  if (simplifiedSize > BOUNDARIES_MAX_BYTES) {
+    problem(`Simplified boundaries are ${(simplifiedSize / 1e6).toFixed(1)} MB, over the ${(BOUNDARIES_MAX_BYTES / 1e6).toFixed(1)} MB budget`);
   }
   if (!simplified || agreement < 0.99) problem(`Simplified boundaries agree on only ${(agreement * 100).toFixed(2)}% of lookups`);
   if (problems.length) {
