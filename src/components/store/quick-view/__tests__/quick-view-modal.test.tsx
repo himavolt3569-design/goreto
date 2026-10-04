@@ -2,6 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QuickViewModal } from "../quick-view-modal";
 
+vi.mock("@/components/store/wishlist-button", () => import("@/test/fakes/wishlist-button"));
+
 const back = vi.fn();
 let pathname = "/products/pearl-choker";
 vi.mock("next/navigation", () => ({

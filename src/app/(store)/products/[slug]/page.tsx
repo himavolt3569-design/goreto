@@ -7,7 +7,8 @@ import { ProductPurchase } from "@/components/store/product/product-purchase";
 import { ProductRail } from "@/components/store/product/product-rail";
 import { ProductSpecs } from "@/components/store/product/product-specs";
 import { TryOnCard } from "@/components/store/product/try-on-card";
-import { ChooseOptionsLink, WishlistSoonButton } from "@/components/store/product-card-actions";
+import { ChooseOptionsLink } from "@/components/store/product-card-actions";
+import { WishlistButton } from "@/components/store/wishlist-button";
 import { siteConfig } from "@/config/site";
 import {
   getProductBySlug,
@@ -117,7 +118,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
                   image={item.image}
                   rating={item.rating ?? undefined}
                   className="w-full"
-                  wishlistAction={<WishlistSoonButton productTitle={item.title} />}
+                  wishlistAction={<WishlistButton slug={item.slug} productTitle={item.title} />}
                   cartAction={<ChooseOptionsLink slug={item.slug} title={item.title} />}
                 />
               </li>

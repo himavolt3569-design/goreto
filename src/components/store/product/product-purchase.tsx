@@ -143,6 +143,7 @@ export function ProductPurchase({
       <ProductGallery
         key={media.map((item) => item.id).join("|")}
         media={media}
+        productSlug={product.slug}
         productTitle={product.title}
         compact={quickView}
       />

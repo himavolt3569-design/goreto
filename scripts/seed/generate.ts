@@ -21,7 +21,7 @@ import {
   staffPermissionLines,
   storeSettingsLine,
 } from "./build/people.ts";
-import { municipalities } from "./data/nepal.ts";
+import { allMunicipalities } from "./data/nepal.ts";
 import { BASE_SEED, rngFor } from "./lib/random.ts";
 import { DAY, NOW, iso } from "./lib/time.ts";
 import { TABLE_ORDER, type SeedLine, type TableName } from "./types.ts";
@@ -87,14 +87,14 @@ export function generateSeedLines(): string[] {
       money_unit: "paisa",
       table_order: TABLE_ORDER,
       counts,
-      nepal_municipalities: { source: "dev-seed-subset", rows: municipalities.length, of_total: 753 },
+      nepal_municipalities: { source: "src/data/nepal/municipalities.json", rows: allMunicipalities.length, of_total: 753 },
       notes: [
         "DEVELOPMENT DATA ONLY. Never load this file into a production database.",
         "Each line is {table, data, dev?}. Insert `data` as the row; `dev` holds loader hints and is never a column.",
         "Lines are in foreign-key order. Ids are deterministic UUIDv5, so reloading upserts rather than duplicates.",
         "People, emails and phone numbers are fictional. Emails use reserved example.* domains. Never message seed phone numbers: they may belong to real people.",
         "clerk_user_id values (user_seed_*) do not exist in Clerk. Bootstrap the real owner by mapping the owner profile to their Clerk user id.",
-        "nepal_municipalities is a subset used by seed addresses, not the full 753 local levels.",
+        "nepal_* rows mirror the canonical geography in src/data/nepal (also loaded by the nepal_geography migration).",
         "product_media.storage_path and product_ar_assets.asset_path point to files that do not exist yet. dev.placeholder_url gives Picsum stand-ins; they repeat across products and may not match the alt text.",
         "Shipment events have no coordinates: couriers are manual integrations and no live location source exists.",
         "Canceled orders carry payment_status 'failed' (no cash will be collected). Pending COD is payment_status 'pending' only.",

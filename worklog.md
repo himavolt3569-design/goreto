@@ -265,6 +265,7 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [x] **Checkout** `/checkout` (§4.4, §12): migration `checkout_place_order` (`checkout_quote`, atomic `place_order`, `get_order_tracking`, `nearest_municipality`); contact with +977 phone; Province → District → Municipality → Ward cascade; "Use Current Location" with a Leaflet/OpenStreetMap map and nearest-municipality suggestion (no third-party geocoder); delivery options from zones/rates; server-validated coupons; COD only; signed-in prefill from the default address.
 - [x] **Order confirmation** `/order-confirmation/[orderNumber]` and **tracking** `/track/[orderNumber]` (§4.5): guests via a hashed tracking secret in an httpOnly cookie or a tracking link; owners via their session; events only, no fake courier location.
 - [ ] Guest-order claiming after sign-up, matched on a Clerk-verified email (§9.1).
+- [x] **Pick address on map + full Nepal geography** (2026-10-03, `goreto-address-map-picker.md`, migrations `nepal_geography`, `account_address_coordinates`): "Pick on map" beside Street / Landmark in every address form (checkout, account addresses, admin WhatsApp order) opens a Leaflet/OSM dialog; a map tap, dragged pin, GPS or "Place pin at centre" fills Province → District → Municipality → Ward from our own boundary data, and "Use Current Location" at checkout now fills the ward too. Canonical geography built by `node scripts/geo/build-nepal.ts` into `src/data/nepal/`: all 753 local levels (Open Knowledge Nepal, CC BY 4.0), 6,720 ward polygons (OpenStreetMap, ODbL) and the official ward counts (Department of Postal Services, 6,743 wards). The migration upserts all 753 local levels and keeps the 76 old codes; the seed now mirrors the canonical files.
 
 ### 4.2 Discovery
 - [x] **Search** `/search` (§13) (2026-09-28, `goreto-discovery-1-search.md`, migration `storefront_search`): `search_products` RPC (exact title → prefix → FTS + trigram typo tolerance, category words), category and price filters, sort, 24-per-page pagination, all in the URL and working without JavaScript. Header search, footer "Shop" and "New Arrivals" now land here.
@@ -274,13 +275,14 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [ ] Reviews on the product page: a list and a write form. "(N reviews)" is plain text today.
 
 ### 4.3 Customer account area (§4.9)
-Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses → 3. reviews + profile & security.
+Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses ✅ → 3. reviews + profile & security.
 - [x] **Phase 1** (2026-10-01, `goreto-account-1-orders-billing.md`, migration `account_reads`): grouped account nav (sidebar from `lg`, scrollable pill row below), `loading`/`error` states; overview with profile card, stat cards (total orders, in progress, billed to date with pending COD as a hint) and the latest 3 orders; `/account/orders` (10 per page); `/account/orders/[orderNumber]` reusing the tracking view without the tracking secret, so only your own signed-in orders open; `/account/tracking` (latest 50 events); `/account/billing` (billed = collected only, pending COD separate, per-order breakdown). `account_summary()` and `account_tracking_events()` filter on the caller's own profile, so owners and staff see only their personal orders.
 - [x] Overview stat cards: total orders, orders in progress, total billed to date.
 - [x] `/account/orders` (paginated) and `/account/orders/[orderNumber]` (detail plus timeline).
 - [x] `/account/tracking`: events across the customer's orders.
-- [ ] `/account/wishlist`. The wishlist heart is still an inert "coming soon" button on cards.
-- [ ] `/account/addresses`, including a default address for checkout.
+- [x] **Phase 2** (2026-10-02, `goreto-account-2-wishlist-addresses.md`, migration `account_addresses_wishlist`): the storefront heart (cards, product page, quick view) saves and removes through Server Actions, with saved state loaded in the browser from `GET /api/account/wishlist` so storefront pages stay cached; signed out it opens the sign-in modal and saves after sign-in. `/account/wishlist` shows live price and stock, Add to Cart for single-variant products, Choose options otherwise, and "No longer available" for hidden products. `/account/addresses` (+ `new`, `[id]/edit`) with one default kept by `account_save_address` / `account_set_default_address` / `account_delete_address` (deleting the default promotes the newest). Caps: 10 addresses, 200 wishlist items (triggers).
+- [x] `/account/wishlist`, with the storefront heart.
+- [x] `/account/addresses`, including a default address for checkout (checkout already prefilled the default).
 - [ ] `/account/reviews`, showing moderation status.
 - [x] `/account/billing`: billed total = collected orders only. Pending COD is shown separately and totals are computed in SQL.
 - [ ] `/account/profile/[[...rest]]`: Clerk `<UserProfile />`, themed.
@@ -349,4 +351,6 @@ Several footer and nav links return a 404 today.
 - The signed-upload path with the Clerk-token client was checked manually, not in automated tests.
 - Seed product photos are repeated Picsum placeholders, so alt text won't always match the image.
 - Admin uploads can be attached for 20 hours; after that the save asks for a new upload. This keeps saves clear of the unused-upload cleanup, which only deletes files older than 24 hours.
+- Map-picker ward detection: 23 official wards have no OSM ward polygon (points there fill the municipality and ask for the ward), national parks aren't inside any local level in the OKN data (points there say "couldn't match"), and the simplified boundaries agree with full detail on 99.55% of random points. Every field stays editable. Refresh with `node scripts/geo/build-nepal.ts --refresh`.
+- `nearest_municipality()` is no longer used (the lookup is in `src/features/delivery/locate.ts`); drop it in a later cleanup.
 - Stock adjustments don't revalidate the storefront. Product pages refresh every 60 seconds, and checkout must re-check stock in the database.

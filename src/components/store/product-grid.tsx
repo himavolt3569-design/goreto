@@ -1,4 +1,5 @@
-import { ChooseOptionsLink, WishlistSoonButton } from "@/components/store/product-card-actions";
+import { ChooseOptionsLink } from "@/components/store/product-card-actions";
+import { WishlistButton } from "@/components/store/wishlist-button";
 import { ProductCard } from "@/components/ui/product-card";
 import type { ProductSummary } from "@/features/catalog/types";
 
@@ -15,7 +16,7 @@ export function ProductGrid({ products }: { products: readonly ProductSummary[] 
             image={product.image}
             rating={product.rating ?? undefined}
             className="w-full"
-            wishlistAction={<WishlistSoonButton productTitle={product.title} />}
+            wishlistAction={<WishlistButton slug={product.slug} productTitle={product.title} />}
             cartAction={<ChooseOptionsLink slug={product.slug} title={product.title} />}
           />
         </li>

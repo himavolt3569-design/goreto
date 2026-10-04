@@ -238,7 +238,7 @@ export function parseSpecs(json: Json): ProductSpec[] {
   return parsed.success ? parsed.data : [];
 }
 
-function parseOptionValues(json: Json): Record<string, string> {
+export function parseOptionValues(json: Json): Record<string, string> {
   if (json === null || typeof json !== "object" || Array.isArray(json)) return {};
   return Object.fromEntries(
     Object.entries(json).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
