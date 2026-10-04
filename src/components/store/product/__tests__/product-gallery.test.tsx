@@ -36,7 +36,7 @@ describe("ProductGallery", () => {
       ...aviators.media,
       { id: "video-1", kind: "video" as const, image: { src: "https://example.test/clip.mp4", alt: "Aviators turned in the light" }, variantId: null },
     ];
-    const { container } = render(<ProductGallery media={media} productTitle={aviators.title} />);
+    const { container } = render(<ProductGallery media={media} productSlug={aviators.slug} productTitle={aviators.title} />);
     fireEvent.click(screen.getByRole("button", { name: "Show video 3 of 3" }));
 
     // The main frame (the closed lightbox holds a second player).
