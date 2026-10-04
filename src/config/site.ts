@@ -3,7 +3,15 @@
  * move to the settings singleton (AGENTS §11.9) once it exists.
  */
 
-export type SiteLink = { label: string; href: string };
+import { features, type FeatureName } from "./features";
+
+/** `feature` hides the link while that feature is unfinished (src/config/features.ts). */
+export type SiteLink = { label: string; href: string; feature?: FeatureName };
+
+/** The links whose feature is ready (or that need none). */
+export function visibleLinks(links: readonly SiteLink[], enabled: Record<FeatureName, boolean> = features): SiteLink[] {
+  return links.filter((link) => !link.feature || enabled[link.feature]);
+}
 
 export type SocialPlatform = "instagram" | "youtube" | "pinterest";
 
@@ -19,24 +27,24 @@ export const siteConfig = {
 
   mainNav: [
     { label: "Categories", href: "/categories" },
-    { label: "AR Try-On", href: "/try-on" },
+    { label: "AR Try-On", href: "/try-on", feature: "arTryOn" },
     { label: "New Arrivals", href: "/search?sort=newest" },
     { label: "Collections", href: "/collections" },
-    { label: "Offers", href: "/offers" },
+    { label: "Offers", href: "/offers", feature: "offers" },
   ] satisfies SiteLink[],
 
   footerNav: [
     { label: "Shop", href: "/search" },
     { label: "Categories", href: "/categories" },
-    { label: "AR Try-On", href: "/try-on" },
-    { label: "Help", href: "/help" },
-    { label: "About", href: "/about" },
+    { label: "AR Try-On", href: "/try-on", feature: "arTryOn" },
+    { label: "Help", href: "/help", feature: "infoPages" },
+    { label: "About", href: "/about", feature: "infoPages" },
   ] satisfies SiteLink[],
 
   legalNav: [
-    { label: "Privacy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Cookies", href: "/cookies" },
+    { label: "Privacy", href: "/privacy", feature: "infoPages" },
+    { label: "Terms", href: "/terms", feature: "infoPages" },
+    { label: "Cookies", href: "/cookies", feature: "infoPages" },
   ] satisfies SiteLink[],
 
   /**
