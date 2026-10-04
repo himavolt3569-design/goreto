@@ -69,8 +69,10 @@ export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMe
     const columns = Object.keys(rows[0]!).map((column) => `"${column}"`).join(", ");
     for (let start = 0; start < rows.length; start += 500) {
       await db.query(
+        // The nepal_geography migration already loaded the geography the seed mirrors.
         `insert into public.${table} (${columns})
-         select ${columns} from jsonb_populate_recordset(null::public.${table}, $1::jsonb)`,
+         select ${columns} from jsonb_populate_recordset(null::public.${table}, $1::jsonb)
+         ${table.startsWith("nepal_") ? "on conflict (code) do nothing" : ""}`,
         [JSON.stringify(rows.slice(start, start + 500))],
       );
     }

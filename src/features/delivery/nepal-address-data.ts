@@ -11,7 +11,7 @@ export async function getNepalAddressData(): Promise<NepalAddressData> {
   const [provinces, districts, municipalities] = await Promise.all([
     supabase.from("nepal_provinces").select("code, name").order("sort_order").order("number"),
     supabase.from("nepal_districts").select("code, province_code, name").order("name"),
-    supabase.from("nepal_municipalities").select("code, district_code, name, ward_count, postal_code").order("name"),
+    supabase.from("nepal_municipalities").select("code, district_code, name, ward_count, postal_code, latitude, longitude").order("name"),
   ]);
   const error = provinces.error ?? districts.error ?? municipalities.error;
   if (error) throw new Error(`Could not load Nepal addresses: ${error.message}`);
@@ -25,6 +25,8 @@ export async function getNepalAddressData(): Promise<NepalAddressData> {
       name: row.name,
       wardCount: row.ward_count,
       postalCode: row.postal_code,
+      latitude: row.latitude,
+      longitude: row.longitude,
     })),
   };
 }

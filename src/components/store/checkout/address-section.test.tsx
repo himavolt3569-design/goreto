@@ -103,23 +103,41 @@ describe("AddressSection", () => {
     expect(screen.queryByTestId("map")).not.toBeInTheDocument();
   });
 
-  it("fills the area from the nearest municipality and shows the map", async () => {
+  it("fills the area and ward from the location and shows the map", async () => {
     const getCurrentPosition = vi.fn((success: PositionCallback) =>
       success({ coords: { latitude: 27.7154, longitude: 85.3123 } } as GeolocationPosition),
     );
     Object.defineProperty(navigator, "geolocation", { value: { getCurrentPosition }, configurable: true });
     const fetchMock = vi.fn(async () =>
-      Response.json({ provinceCode: "bagmati", districtCode: "kathmandu", municipalityCode: "kathmandu-metro", postalCode: "44600" }),
+      Response.json({ provinceCode: "bagmati", districtCode: "kathmandu", municipalityCode: "kathmandu-metro", ward: 26, postalCode: "44600" }),
     );
     vi.stubGlobal("fetch", fetchMock);
 
     render(<Harness />);
     fireEvent.click(screen.getByRole("button", { name: "Use Current Location" }));
 
-    expect(await screen.findByText(/Your location has been detected/)).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenCalledWith("/api/geocode/reverse?lat=27.7154&lng=85.3123");
+    expect(await screen.findByText(/check the area and ward, then add your street/)).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledWith("/api/geocode/reverse?lat=27.7154&lng=85.3123", expect.anything());
     expect(screen.getByTestId("map")).toBeInTheDocument();
-    expect(values()).toMatchObject({ municipalityCode: "kathmandu-metro", ward: "", latitude: 27.7154, longitude: 85.3123 });
+    expect(values()).toMatchObject({ municipalityCode: "kathmandu-metro", ward: "26", latitude: 27.7154, longitude: 85.3123 });
+    vi.unstubAllGlobals();
+  });
+
+  it("asks for the ward when the location has no ward boundary", async () => {
+    const getCurrentPosition = vi.fn((success: PositionCallback) =>
+      success({ coords: { latitude: 27.7154, longitude: 85.3123 } } as GeolocationPosition),
+    );
+    Object.defineProperty(navigator, "geolocation", { value: { getCurrentPosition }, configurable: true });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => Response.json({ provinceCode: "bagmati", districtCode: "kathmandu", municipalityCode: "kathmandu-metro", ward: null, postalCode: null })),
+    );
+
+    render(<Harness />);
+    fireEvent.click(screen.getByRole("button", { name: "Use Current Location" }));
+
+    expect(await screen.findByText(/choose your ward and add your street/)).toBeInTheDocument();
+    expect(values()).toMatchObject({ municipalityCode: "kathmandu-metro", ward: "" });
     vi.unstubAllGlobals();
   });
 });

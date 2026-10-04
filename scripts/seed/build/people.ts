@@ -1,5 +1,6 @@
 import { OWNER, featureFlags, staffSeeds } from "../data/commerce.ts";
 import {
+  allMunicipalities,
   districtByCode,
   districts,
   municipalities,
@@ -225,7 +226,7 @@ export function geographyLines() {
       table: "nepal_districts" as const,
       data: { code: district.code, province_code: district.provinceCode, name: district.name, sort_order: index + 1 } satisfies DistrictRow,
     })),
-    nepal_municipalities: municipalities.map((municipality) => ({
+    nepal_municipalities: allMunicipalities.map((municipality) => ({
       table: "nepal_municipalities" as const,
       data: {
         code: municipality.code,
