@@ -17,7 +17,7 @@ import {
   updateProductMediaAction,
 } from "@/features/admin/actions/products";
 import type { ActionResult } from "@/features/admin/auth";
-import { MAX_PHOTOS, MAX_VIDEOS } from "@/features/admin/product-form/file-signature";
+import { detectImageFormat, MAX_PHOTOS, MAX_VIDEOS, SIGNATURE_BYTES, type MediaKind } from "@/features/admin/product-form/file-signature";
 import type { EditorMedia } from "@/features/admin/queries/product-editor";
 import { cn } from "@/lib/utils/cn";
 import { ActionMessage, FormDialog, HiddenFields } from "../action-forms";
@@ -33,6 +33,18 @@ import { ACCEPTED_IMAGE_TYPES, ACCEPTED_VIDEO_TYPES, uploadMediaFile } from "./u
  */
 
 type UploadStatus = { id: string; name: string; state: "uploading" | "done" | "error"; message?: string };
+
+const LIMITS: Record<MediaKind, number> = { image: MAX_PHOTOS, video: MAX_VIDEOS };
+
+const LIMIT_MESSAGES: Record<MediaKind, string> = {
+  image: `Up to ${MAX_PHOTOS} photos per product.`,
+  video: `Up to ${MAX_VIDEOS} videos per product.`,
+};
+
+/** Photo or video from the file's bytes; anything that isn't a photo is checked as a video by the upload. */
+async function kindOf(file: File): Promise<MediaKind> {
+  return detectImageFormat(new Uint8Array(await file.slice(0, SIGNATURE_BYTES).arrayBuffer())) ? "image" : "video";
+}
 
 async function uploadMedia(productId: string, file: File): Promise<{ ok: boolean; message?: string }> {
   const uploaded = await uploadMediaFile({ productId }, file);
@@ -67,9 +79,13 @@ export function MediaManager({
     setBusy(true);
     const batch = files.map((file) => ({ id: `${file.name}-${file.lastModified}-${Math.random()}`, name: file.name, state: "uploading" as const }));
     setUploads(batch);
+    // Room left per kind; a file over its kind's limit never gets an upload ticket.
+    const used: Record<MediaKind, number> = { image: photoCount, video: videoCount };
     // One at a time keeps the gallery order the same as the chosen order.
     for (const [index, file] of files.entries()) {
-      const outcome = await uploadMedia(productId, file);
+      const kind = await kindOf(file);
+      const outcome = used[kind] >= LIMITS[kind] ? { ok: false, message: LIMIT_MESSAGES[kind] } : await uploadMedia(productId, file);
+      if (outcome.ok) used[kind] += 1;
       setUploads((current) =>
         current.map((item) => (item.id === batch[index]!.id ? { ...item, state: outcome.ok ? "done" : "error", message: outcome.message } : item)),
       );

@@ -59,7 +59,7 @@ export type MediaKind = "image" | "video";
 export const MEDIA_CONTENT_TYPES: Record<MediaFormat, string> = { ...IMAGE_CONTENT_TYPES, ...VIDEO_CONTENT_TYPES };
 
 /** Same box layout as MP4 but not a playable web video: QuickTime (.mov), HEIF/AVIF images, audio only. */
-const MP4_REFUSED_BRANDS = new Set(["avif", "avis", "qt  ", "heic", "heix", "mif1", "msf1", "M4A ", "M4B "]);
+const MP4_REFUSED_BRANDS = new Set(["avif", "avis", "qt  ", "heic", "heix", "heim", "heis", "hevc", "mif1", "msf1", "M4A ", "M4B "]);
 
 export function detectVideoFormat(bytes: Uint8Array): VideoFormat | null {
   if (bytes.length >= 4 && bytes[0] === 0x1a && bytes[1] === 0x45 && bytes[2] === 0xdf && bytes[3] === 0xa3) return "webm";

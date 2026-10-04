@@ -66,7 +66,8 @@ export function MediaStrip({
   const busy = uploading.length > 0;
 
   async function addFiles(chosen: File[]) {
-    if (chosen.length === 0 || disabled) return;
+    // One batch at a time: the limits below count only finished uploads.
+    if (chosen.length === 0 || disabled || busy) return;
     const nextFailures: Failure[] = [];
     // Uploads already in the card plus the ones accepted in this batch.
     const used = { image: photos.length, video: videos.length };
@@ -213,14 +214,14 @@ export function MediaStrip({
               htmlFor={inputId}
               onDragOver={(event) => {
                 event.preventDefault();
-                setDragging(true);
+                if (!busy) setDragging(true);
               }}
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
               className={cn(
                 "flex size-full cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed p-2 text-center transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary-500",
                 dragging ? "border-primary-500 bg-primary-100" : "border-neutral-300 bg-white hover:border-primary-300 hover:bg-primary-100",
-                disabled && "pointer-events-none opacity-60",
+                (disabled || busy) && "pointer-events-none opacity-60",
               )}
             >
               <UploadSimpleIcon aria-hidden="true" size={ICON_SIZE} weight={ICON_WEIGHT_OUTLINE} className="text-primary-500" />
@@ -234,7 +235,7 @@ export function MediaStrip({
                 accept={`${ACCEPTED_IMAGE_TYPES},${ACCEPTED_VIDEO_TYPES}`}
                 aria-describedby={hintId}
                 className="sr-only"
-                disabled={disabled}
+                disabled={disabled || busy}
                 onChange={onInput}
               />
             </label>
