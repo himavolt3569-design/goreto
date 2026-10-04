@@ -183,3 +183,15 @@ vercel link / vercel env add / vercel --prod (only if Git integration doesn't tr
 ## Later: custom domain
 
 Add the domain in Vercel, then enable the **production instance** of "Goreto Live" in Clerk with its DNS records. Swap the Clerk keys in Vercel and the Supabase third-party auth domain. Users from the dev instance don't carry over: the owner re-signs up and is re-bootstrapped. Tell the client before then.
+
+## Outcome (2026-10-04)
+
+Executed and live at https://goreto-kappa.vercel.app. Differences from the plan:
+
+- PR #20 was merged before its last fixes reached the branch, so those fixes shipped as PR #21. The feature switch and settings migration shipped as PR #22.
+- The CLI did the Clerk steps. `clerk apps create "Goreto Live"` created the app, and `clerk config patch` copied the dev app's sign-in settings and the `role: authenticated` session claim, which replaces the dashboard's Supabase integration toggle. `clerk env pull --file .env.production.local` wrote the keys.
+- The Vercel API (PATCH `/v9/projects/goreto/branch`) set the production branch. Vercel Authentication defaulted to "all except custom domains", which would have locked the client out of `*.vercel.app`, so it was changed to previews only.
+- The CLI created `goreto-prod` with a generated password that exists only in `.env.production.local`. The first `db push` hit a deadlock against the new project's background work, and a rerun applied everything.
+- The owner opened the live site, signed up and was bootstrapped. The webhook secret is in Vercel.
+
+Still open: the client's store setup (couriers, zones, rates, products), the AR wording on the homepage, a custom domain with a Clerk production instance, and Supabase Pro.

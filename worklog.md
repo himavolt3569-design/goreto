@@ -1,6 +1,6 @@
 # Goreto.store — Work Log
 
-_Last updated: 2026-10-04 · Branch: `feat/production-release`_
+_Last updated: 2026-10-04 · Live since 2026-10-04: https://goreto-kappa.vercel.app (branch `production`)_
 
 Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the migrations, the code in `src/`, `scripts/` and `tests/`, and a fresh run of the checks below.
 
@@ -324,7 +324,9 @@ Several footer and nav links return a 404 today.
 - [ ] Playwright E2E with `@clerk/testing` for the 11 journeys in §23.4. Playwright isn't installed. Browser checks so far used throwaway scratchpad scripts.
 - [ ] Prettier. It isn't configured.
 - [ ] `README.md` is still the create-next-app boilerplate.
-- [~] **Production release** (2026-10-04, `goreto-production-release.md`, `docs/releasing.md`): the live site deploys only from the `production` branch on Vercel, with a separate free Supabase project (`goreto-prod`) and a separate Clerk application ("Goreto Live", development instance on `*.vercel.app` until a domain exists). Unfinished storefront entry points are hidden in production builds by `src/config/features.ts`. Migration `store_settings_singleton` creates the settings row a fresh database lacked. Still to do: a custom domain with a Clerk production instance, and a staging project.
+- [x] **Production release, live 2026-10-04** (`goreto-production-release.md`, `docs/releasing.md`): https://goreto-kappa.vercel.app deploys only from the `production` branch (Vercel project `goreto`, team "projectshamro-2560's projects"). It uses the separate free Supabase project `goreto-prod` (ap-south-1, migrations only, no seed) and the separate Clerk app "Goreto Live" (development instance until a domain exists, with third-party auth and the webhook configured). Owner: himavolt3569@gmail.com. Unfinished storefront entry points are hidden in production builds by `src/config/features.ts`. Migration `store_settings_singleton` creates the settings row a fresh database lacked.
+- [ ] Custom domain: Vercel domain, then the Goreto Live **production** instance (DNS), new keys in Vercel and Supabase third-party auth. Dev-instance users don't carry over, so the owner must sign up again and be re-bootstrapped.
+- [ ] Move `goreto-prod` to Supabase Pro once real orders flow (free projects pause after 7 idle days and have no backups).
 - [x] Deployment secrets: set per environment in Vercel (Production = prod, Preview = dev).
 - [ ] Add the missing `.env.example` names: `NEXT_PUBLIC_SITE_URL`, AR, geocoding and courier (§17).
 - [x] `production` is the release branch; `main` still holds only the initial commit and can be deleted.
@@ -335,15 +337,15 @@ Several footer and nav links return a 404 today.
 ## 5. Needs your decision or action
 
 - **WhatsApp order flow (§4.0):** built on `feat/whatsapp-orders`. Before relying on it: add each courier's dispatch WhatsApp number (Delivery → Couriers), choose the courier mode, default courier and auto-accept switches (Settings), and give the right staff `orders.write`. The signed-in browser pass is still to do. The courier portal (automatic handoff, adds a `courier` role) is the next phase.
-- **Production go-live:** see `docs/releasing.md`. Before the client takes orders, add at least one courier + service, delivery zone and rate, and the support email/phone and dispatch municipality in `/admin/settings`; checkout offers no delivery option without them.
-- **Seed AR rows have no files:** `/admin/ar` flags them "No file uploaded", but the storefront still shows AR READY for them. Upload real files or turn those rows off before launch.
+- **Production store setup (client):** before taking orders, add at least one courier + service, delivery zone and rate, support email/phone and the dispatch municipality (`/admin/settings`), and real products. Checkout offers no delivery option without them.
+- **AR wording on the live homepage:** the hero copy and "How it works" still describe AR try-on (no links). Decide whether to reword until `/try-on` ships.
+- **Seed AR rows have no files (dev only):** `/admin/ar` flags them "No file uploaded". Production has no seed, so this no longer blocks launch.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.
 - **Orange contrast:** white on `#F97316` and orange text on white measure about 2.8:1, below WCAG AA for body text. The reference colours were kept as-is. This was raised in the design-system prompt and hasn't been decided yet.
 - **Store support email and phone:** they're empty in `store_settings`. You can set them in `/admin/settings`.
-- **Clerk webhook:** needs `CLERK_WEBHOOK_SIGNING_SECRET` in `.env.local` and an endpoint in the Clerk Dashboard. When the identity task shipped, the secret wasn't set; I can't tell from the repo whether it has been since.
-- **Supabase third-party auth (Clerk):** configured in the Supabase Dashboard. The owner bootstrap and admin work ran as the real owner, which suggests it's working. Local `config.toml` keeps it disabled, which is expected.
-- **Before production:** run `npm run seed:purge`. The seed is development-only, and its fake owner is already demoted on dev.
+- **Clerk webhook:** configured for production (Goreto Live → `https://goreto-kappa.vercel.app/api/webhooks/clerk`, secret in Vercel). The dev app still has no endpoint or `CLERK_WEBHOOK_SIGNING_SECRET` in `.env.local`; the lazy profile upsert covers dev.
+- **Supabase third-party auth (Clerk):** configured in the Supabase Dashboard. The owner bootstrap and admin work ran as the real owner, which suggests it's working. Local `config.toml` keeps it disabled, which is expected. Production (`goreto-prod`) trusts only the Goreto Live domain `natural-tetra-315.clerk.accounts.dev`.
 
 ## 6. Known limits carried forward
 
