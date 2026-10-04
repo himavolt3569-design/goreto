@@ -39,6 +39,14 @@ Playwright is not installed yet, so no E2E suite exists.
 
 Supabase Cloud grants `anon`/`authenticated` access to every new table and function by default. Each migration must revoke and grant explicitly, following `20260925050144_harden_grants.sql`. The PGlite harness (`tests/db/harness.ts`) reproduces these permissive defaults, so a missing revoke fails the tests.
 
+### Production (live since 2026-10-04)
+
+The live site is https://goreto-kappa.vercel.app. Vercel deploys production **only** from the `production` branch, and every other branch gets a preview build. `docs/releasing.md` describes the full process.
+
+- Production uses its own Supabase project, `goreto-prod` (no seed), and its own Clerk app, "Goreto Live". Their values live in the untracked `.env.production.local` in the main checkout. The npm scripts load `.env.local`, so they always target **dev**. To reach prod, run a script with `node --env-file=.env.production.local ...`, and do a `--dry-run` before any push.
+- To release: apply migrations to prod first, then merge `feat/design-system-homepage` into `production`. Never seed prod.
+- `src/config/features.ts` hides links to unbuilt pages in production builds. When a feature ships, delete its flag rather than flipping it.
+
 ## Architecture
 
 **Three Supabase clients, chosen by trust level** (`src/lib/supabase/`):
