@@ -19,11 +19,11 @@ const HEX = /^#[0-9a-fA-F]{6}$/;
 export const PRODUCT_STATUSES = ["draft", "active", "archived"] as const;
 export type ProductFormStatus = (typeof PRODUCT_STATUSES)[number];
 
-const text = (max: number, label = "this") => z.string().trim().max(max, `Keep ${label} under ${max + 1} characters`);
+export const text = (max: number, label = "this") => z.string().trim().max(max, `Keep ${label} under ${max + 1} characters`);
 
-const requiredText = (max: number, message: string) => z.string().trim().min(1, message).max(max, `Use at most ${max} characters`);
+export const requiredText = (max: number, message: string) => z.string().trim().min(1, message).max(max, `Use at most ${max} characters`);
 
-const wholeNumber = (min: number, max: number, message: string) =>
+export const wholeNumber = (min: number, max: number, message: string) =>
   z
     .string()
     .trim()
@@ -37,7 +37,7 @@ const optionalWholeNumber = (min: number, max: number, message: string) =>
     .refine((value) => value === "" || (/^\d+$/.test(value) && Number(value) >= min && Number(value) <= max), message)
     .transform((value) => (value === "" ? null : Number(value)));
 
-const rupees = (required: boolean) =>
+export const rupees = (required: boolean) =>
   z.string().transform((value, context) => {
     if (value.trim() === "") {
       if (required) context.addIssue({ code: "custom", message: "Enter a price" });

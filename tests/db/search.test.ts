@@ -211,3 +211,20 @@ describe("search_products safety", () => {
     expect(await scalar<boolean>("select prosecdef from pg_proc where proname = 'search_products'")).toBe(false);
   });
 });
+
+describe("search_products covers", () => {
+  it("never uses a video as the cover", async () => {
+    const productId = await scalar<string>(
+      "select p.id from products p join product_media m on m.product_id = p.id where p.status = 'active' group by p.id order by p.id limit 1",
+    );
+    const slug = await scalar<string>(`select slug from products where id = '${productId}'`);
+    const setup = [
+      `update product_media set sort_order = sort_order + 1 where product_id = '${productId}'`,
+      `insert into product_media (product_id, kind, storage_path, sort_order) values ('${productId}', 'video', 'products/${productId}/clip.mp4', 0)`,
+    ];
+    const hit = (await search({ q: null, limit: 48 }, setup)).find((row) => row.slug === slug)
+      ?? (await search({ q: slug.replaceAll("-", " ") }, setup)).find((row) => row.slug === slug);
+    expect(hit?.cover_path).toBeTruthy();
+    expect(hit?.cover_path).not.toMatch(/\.mp4$/);
+  });
+});

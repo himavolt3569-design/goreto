@@ -117,6 +117,13 @@ describe("variant media", () => {
     expect(mediaForVariant(beanie.media, grey.id)).toHaveLength(1);
   });
 
+  it("puts videos after every photo", () => {
+    const clip = { id: "clip", kind: "video" as const, image: { src: "clip.mp4", alt: "" }, variantId: null };
+    const media = mediaForVariant([clip, ...beanie.media], red.id);
+    expect(media.at(-1)).toBe(clip);
+    expect(media.slice(0, -1).every((item) => item.kind === "image")).toBe(true);
+  });
+
   it("keeps shared photos for products without variant photos", () => {
     const bracelets = product("beaded-wrist-stack");
     expect(mediaForVariant(bracelets.media, bracelets.variants[1].id)).toHaveLength(2);

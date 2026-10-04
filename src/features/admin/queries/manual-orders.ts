@@ -64,6 +64,7 @@ export async function searchOrderVariants(query: unknown): Promise<LookupResult<
     .ilike("title", containsPattern(term))
     .order("title")
     .order("sort_order", { referencedTable: "product_media" })
+    .eq("product_media.kind", "image")
     .limit(1, { referencedTable: "product_media" })
     .order("sku", { referencedTable: "product_variants" })
     .limit(10);

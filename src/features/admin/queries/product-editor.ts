@@ -19,6 +19,7 @@ export type EditorMedia = {
   url: string | null;
   altText: string;
   variantId: string | null;
+  kind: "image" | "video";
 };
 
 export type EditorArAsset = {
@@ -56,7 +57,7 @@ export async function fetchProductEditor(productId: string): Promise<ProductEdit
        status, is_featured, is_bestseller, is_limited_edition, low_stock_threshold, options, specs,
        care_instructions, tags, updated_at,
        product_variants(id, sku, title, option_values, price_paisa, stock_quantity, weight_grams, is_active, sort_order),
-       product_media(id, storage_path, alt_text, variant_id, sort_order),
+       product_media(id, storage_path, alt_text, variant_id, sort_order, kind),
        product_ar_assets(id, mode, placement, asset_format, is_active),
        collection_products(collection_id, collections(id, title))`,
     )
@@ -129,6 +130,7 @@ export async function fetchProductEditor(productId: string): Promise<ProductEdit
       url: mediaUrl(media.storage_path),
       altText: media.alt_text,
       variantId: media.variant_id,
+      kind: media.kind,
     })),
     arAssets: data.product_ar_assets.map((asset) => ({
       id: asset.id,

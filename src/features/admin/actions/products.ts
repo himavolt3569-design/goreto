@@ -7,11 +7,21 @@ import { z } from "zod";
 import { PRODUCT_MEDIA_BUCKET } from "@/lib/media/storage";
 import { authorizeAdmin, databaseErrorResult, deniedResult, type ActionResult } from "../auth";
 import { canAccess } from "../nav";
-import { verifyStoredImage } from "../media-verify";
-import { formatForContentType, IMAGE_CONTENT_TYPES, MAX_IMAGE_BYTES, MAX_STAGED_PHOTOS, type ImageFormat } from "../product-form/file-signature";
+import { verifyStoredMedia } from "../media-verify";
+import {
+  MAX_IMAGE_BYTES,
+  MAX_PHOTOS,
+  MAX_VIDEO_BYTES,
+  MAX_VIDEOS,
+  MEDIA_CONTENT_TYPES,
+  mediaFormatForContentType,
+  mediaKindOf,
+  type MediaFormat,
+} from "../product-form/file-signature";
 import { duplicateValues } from "../product-form/duplicate";
+import { defaultAltText, numberedSku, numberedSlug, quickKeys, quickProductSchema, toProductFormValues } from "../product-form/quick-product";
 import { issuesByPath, productFormSchema, toSavePayload } from "../product-form/schema";
-import { fetchProductEditor } from "../queries/product-editor";
+import { fetchDefaultLowStockThreshold, fetchProductEditor } from "../queries/product-editor";
 import { adminDb } from "../queries/shared";
 import { authorizeAndParse, NOT_UPDATED, revalidateStorefrontCatalog } from "./helpers";
 
@@ -21,8 +31,8 @@ import { authorizeAndParse, NOT_UPDATED, revalidateStorefrontCatalog } from "./h
  * functions check again. Photos upload straight from the browser to Storage
  * with a server-issued signed URL on a server-chosen path (AGENTS §18.3); the
  * server then checks the stored bytes before a product_media row exists.
- * On Add product, photos are staged under `products/new-<stagingId>/` and
- * attached when the product is created.
+ * On Add product and Bulk add, photos and videos are staged under
+ * `products/new-<stagingId>/` and attached when the product is created.
  */
 
 const productId = z.uuid();
@@ -44,23 +54,24 @@ function saveErrorResult(error: { code?: string; message: string; details?: stri
   return databaseErrorResult(error, "save product");
 }
 
-/* ---------- Photo checks shared by the editor and Add product ---------- */
+/* ---------- Media checks shared by the editor, Add product and Bulk add ---------- */
 
 /** Editor: `products/<productId>/<uuid>.<ext>`. Add product: `products/new-<stagingId>/<uuid>.<ext>`. */
-const PATH_PATTERN = /^products\/(new-)?([0-9a-f-]{36})\/[0-9a-f-]{36}\.(jpg|png|webp|avif)$/;
+const PATH_PATTERN = /^products\/(new-)?([0-9a-f-]{36})\/[0-9a-f-]{36}\.(jpg|png|webp|avif|mp4|webm)$/;
 
-type StoredPath = { staged: boolean; ownerId: string; format: ImageFormat };
+type StoredPath = { staged: boolean; ownerId: string; format: MediaFormat };
 
 function parsePath(path: string): StoredPath | null {
   const match = PATH_PATTERN.exec(path);
-  return match ? { staged: match[1] === "new-", ownerId: match[2]!, format: match[3] as ImageFormat } : null;
+  return match ? { staged: match[1] === "new-", ownerId: match[2]!, format: match[3] as MediaFormat } : null;
 }
 
-type MediaInsert = { productId: string; path: string; format: ImageFormat; altText: string; variantId: string | null; sortOrder: number };
+type MediaInsert = { productId: string; path: string; format: MediaFormat; altText: string; variantId: string | null; sortOrder: number };
 
 /**
- * Checks the stored file really is the image type its name says, then adds it
- * to the product's gallery. Anything rejected is deleted from storage.
+ * Checks the stored file really is the photo or video type its name says,
+ * then adds it to the product's gallery. Anything rejected is deleted from
+ * storage. The database refuses more than 7 photos or 3 videos per product.
  */
 async function verifyAndInsertMedia(db: ReturnType<typeof adminDb>, media: MediaInsert): Promise<{ ok: true; slug: string | null } | { ok: false; message: string }> {
   const bucket = db.storage.from(PRODUCT_MEDIA_BUCKET);
@@ -69,9 +80,11 @@ async function verifyAndInsertMedia(db: ReturnType<typeof adminDb>, media: Media
     return { ok: false as const, message };
   };
 
-  const verified = await verifyStoredImage(db, media.path, media.format);
+  const verified = await verifyStoredMedia(db, media.path, media.format);
   if (!verified.ok) return verified;
 
+  const kind = mediaKindOf(media.format);
+  if (media.variantId && kind === "video") return reject("Videos are shared by every variant.");
   if (media.variantId) {
     const { data: variant } = await db.from("product_variants").select("id").eq("id", media.variantId).eq("product_id", media.productId).maybeSingle();
     if (!variant) return reject("That variant no longer exists. Refresh the page.");
@@ -79,35 +92,67 @@ async function verifyAndInsertMedia(db: ReturnType<typeof adminDb>, media: Media
 
   const { data, error } = await db
     .from("product_media")
-    .insert({ product_id: media.productId, storage_path: media.path, alt_text: media.altText, variant_id: media.variantId, sort_order: media.sortOrder })
+    .insert({ product_id: media.productId, kind, storage_path: media.path, alt_text: media.altText, variant_id: media.variantId, sort_order: media.sortOrder })
     .select("products(slug)")
     .single();
   if (error) {
     await bucket.remove([media.path]);
-    const result = databaseErrorResult(error, "attach product photo");
-    return { ok: false, message: result.ok ? "The photo couldn't be added." : result.message };
+    const result = databaseErrorResult(error, "attach product media");
+    return { ok: false, message: result.ok ? "The file couldn't be added." : result.message };
   }
   return { ok: true, slug: data.products?.slug ?? null };
 }
 
 /* ---------- Save and delete ---------- */
 
-
 const stagedMediaSchema = z
   .object({
     stagingId: z.uuid(),
-    photos: z
+    /** Gallery order. Empty alt text is filled from the product name on Bulk add. */
+    media: z
       .array(z.object({ path: z.string().regex(PATH_PATTERN, "Invalid upload"), altText: z.string().trim().max(200, "Use at most 200 characters") }))
-      .max(MAX_STAGED_PHOTOS, `Add at most ${MAX_STAGED_PHOTOS} photos at once`),
+      .max(MAX_PHOTOS + MAX_VIDEOS, `Add at most ${MAX_PHOTOS} photos and ${MAX_VIDEOS} videos`),
   })
-  .refine(
-    (staged) =>
-      staged.photos.every((photo) => {
-        const path = parsePath(photo.path);
-        return path?.staged === true && path.ownerId === staged.stagingId;
-      }),
-    "Invalid upload",
-  );
+  .superRefine((staged, context) => {
+    const paths = staged.media.map((item) => parsePath(item.path));
+    if (!paths.every((path) => path?.staged === true && path.ownerId === staged.stagingId)) {
+      context.addIssue({ code: "custom", message: "Invalid upload" });
+      return;
+    }
+    const videos = paths.filter((path) => mediaKindOf(path!.format) === "video").length;
+    if (paths.length - videos > MAX_PHOTOS) context.addIssue({ code: "custom", message: `Add at most ${MAX_PHOTOS} photos` });
+    if (videos > MAX_VIDEOS) context.addIssue({ code: "custom", message: `Add at most ${MAX_VIDEOS} videos` });
+  });
+
+type StagedMedia = z.output<typeof stagedMediaSchema>;
+
+/** Attaches staged uploads to a new product in order; counts what was added and rejected. */
+async function attachStagedMedia(
+  db: ReturnType<typeof adminDb>,
+  newProductId: string,
+  staged: StagedMedia | undefined,
+  altFor: (kind: "image" | "video", position: number) => string = () => "",
+): Promise<{ added: number; rejected: number }> {
+  let added = 0;
+  let rejected = 0;
+  const positions = { image: 0, video: 0 };
+  for (const item of staged?.media ?? []) {
+    const format = parsePath(item.path)!.format;
+    const kind = mediaKindOf(format);
+    positions[kind] += 1;
+    const outcome = await verifyAndInsertMedia(db, {
+      productId: newProductId,
+      path: item.path,
+      format,
+      altText: item.altText || altFor(kind, positions[kind]),
+      variantId: null,
+      sortOrder: added,
+    });
+    if (outcome.ok) added += 1;
+    else rejected += 1;
+  }
+  return { added, rejected };
+}
 
 /**
  * Create (`id` null) or update a product. Creating attaches the photos staged
@@ -140,20 +185,7 @@ export async function saveProductAction(id: string | null, input: unknown, stage
   const result = data as SaveRpcResult;
 
   if (id === null) {
-    let added = 0;
-    let rejected = 0;
-    for (const photo of stagedMedia?.data?.photos ?? []) {
-      const outcome = await verifyAndInsertMedia(db, {
-        productId: result.id,
-        path: photo.path,
-        format: parsePath(photo.path)!.format,
-        altText: photo.altText,
-        variantId: null,
-        sortOrder: added,
-      });
-      if (outcome.ok) added += 1;
-      else rejected += 1;
-    }
+    const { added, rejected } = await attachStagedMedia(db, result.id, stagedMedia?.data);
     revalidateStorefrontCatalog(result.slug);
     redirect(`/admin/products/${result.id}/edit?created=1&photos=${added}${rejected > 0 ? `&rejected=${rejected}` : ""}`);
   }
@@ -169,6 +201,82 @@ export async function saveProductAction(id: string | null, input: unknown, stage
         ? `Saved. ${kept.join(", ")} ${kept.length === 1 ? "has" : "have"} orders, so ${kept.length === 1 ? "it was" : "they were"} set inactive instead of deleted.`
         : "Product saved.",
   };
+}
+
+/* ---------- Bulk add ---------- */
+
+export type QuickCreateResult =
+  | { ok: true; id: string; slug: string; published: boolean; mediaAdded: number; mediaRejected: number }
+  | { ok: false; message: string; fieldErrors?: Record<string, string> };
+
+/** Free slug and SKU for a new product: exact lookups, numbering past any that exist. */
+async function freeKeys(db: ReturnType<typeof adminDb>, title: string): Promise<{ slug: string; sku: string } | { error: { code?: string; message: string } } | null> {
+  const base = quickKeys(title);
+  let slug: string | null = null;
+  let sku: string | null = null;
+  for (let attempt = 1; attempt <= 50 && (slug === null || sku === null); attempt += 1) {
+    const [slugs, skus] = await Promise.all([
+      slug === null ? db.from("products").select("slug").eq("slug", numberedSlug(base.slug, attempt)) : null,
+      sku === null ? db.from("product_variants").select("sku").eq("sku", numberedSku(base.sku, attempt)) : null,
+    ]);
+    const error = slugs?.error ?? skus?.error;
+    if (error) return { error };
+    if (slugs?.data?.length === 0) slug = numberedSlug(base.slug, attempt);
+    if (skus?.data?.length === 0) sku = numberedSku(base.sku, attempt);
+  }
+  return slug && sku ? { slug, sku } : null;
+}
+
+/**
+ * Bulk add: creates one product from a short card (no options, one variant)
+ * through the same schema and admin_save_product as the full editor, then
+ * attaches its staged photos and videos. The page calls it once per card.
+ */
+export async function quickCreateProductAction(input: unknown, staged: unknown): Promise<QuickCreateResult> {
+  const auth = await authorizeAdmin("catalog.write");
+  if (!auth.ok) {
+    const denied = deniedResult(auth.reason);
+    return { ok: false, message: denied.ok ? "" : denied.message };
+  }
+
+  const card = quickProductSchema.safeParse(input);
+  if (!card.success) return { ok: false, message: "Check the highlighted fields.", fieldErrors: issuesByPath(card.error) };
+  const media = stagedMediaSchema.safeParse(staged);
+  if (!media.success) return { ok: false, message: media.error.issues[0]?.message ?? "Invalid upload" };
+  const hasPhoto = media.data.media.some((item) => mediaKindOf(parsePath(item.path)!.format) === "image");
+  if (card.data.publish && !hasPhoto) return { ok: false, message: "Add a photo before publishing.", fieldErrors: { publish: "Add a photo before publishing" } };
+
+  const db = adminDb();
+  const lowStockThreshold = await fetchDefaultLowStockThreshold();
+  const rawCard = input as Parameters<typeof toProductFormValues>[0];
+
+  // A name another card or product just took can still collide; look again once.
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const keys = await freeKeys(db, card.data.title);
+    if (keys === null) return { ok: false, message: "Too many products already use this name. Change it a little and try again." };
+    if ("error" in keys) return databaseErrorResult(keys.error, "pick product slug") as QuickCreateResult;
+
+    const parsed = productFormSchema.safeParse(toProductFormValues(rawCard, { ...keys, lowStockThreshold }));
+    if (!parsed.success) return { ok: false, message: "Check the highlighted fields.", fieldErrors: issuesByPath(parsed.error) };
+    const payload = toSavePayload(parsed.data);
+
+    const { data, error } = await db.rpc("admin_save_product", {
+      p_product_id: null as unknown as string,
+      p_product: payload.product,
+      p_variants: payload.variants,
+      p_collection_ids: null as unknown as string[],
+    });
+    if (error?.code === "23505" && attempt === 0) continue;
+    if (error) return saveErrorResult(error) as QuickCreateResult;
+
+    const created = data as SaveRpcResult;
+    // Media follows the same check as the editor; alt text comes from the name.
+    const { added, rejected } = await attachStagedMedia(db, created.id, media.data, (kind, position) => defaultAltText(card.data.title, kind, position));
+    if (card.data.publish) revalidateStorefrontCatalog(created.slug);
+    else revalidatePath("/admin/products");
+    return { ok: true, id: created.id, slug: created.slug, published: card.data.publish, mediaAdded: added, mediaRejected: rejected };
+  }
+  return { ok: false, message: "Another product took this name at the same moment. Try again." };
 }
 
 const deleteSchema = z.object({ productId });
@@ -194,7 +302,7 @@ export async function deleteProductAction(_previous: ActionResult | null, formDa
 
 /* ---------- Duplicate ---------- */
 
-const COPYABLE_PHOTO = /\.(jpe?g|png|webp|avif)$/i;
+const COPYABLE_MEDIA = /\.(jpe?g|png|webp|avif|mp4|webm)$/i;
 
 /**
  * Copies a product into a new draft: same details, options and prices, new
@@ -212,7 +320,7 @@ export async function duplicateProductAction(_previous: ActionResult | null, for
   if (!source) return NOT_UPDATED;
 
   const db = adminDb();
-  const photos = await db.from("product_media").select("storage_path, alt_text").eq("product_id", source.id).eq("kind", "image").order("sort_order");
+  const photos = await db.from("product_media").select("storage_path, alt_text, kind").eq("product_id", source.id).order("sort_order");
   if (photos.error) return databaseErrorResult(photos.error, "prepare product copy");
 
   // Look up exactly the slug and SKUs each attempt would use (never a capped
@@ -248,16 +356,16 @@ export async function duplicateProductAction(_previous: ActionResult | null, for
   const copy = data as SaveRpcResult;
 
   const bucket = db.storage.from(PRODUCT_MEDIA_BUCKET);
-  const rows: { product_id: string; storage_path: string; alt_text: string; sort_order: number }[] = [];
+  const rows: { product_id: string; kind: "image" | "video"; storage_path: string; alt_text: string; sort_order: number }[] = [];
   let skipped = 0;
   for (const photo of photos.data) {
-    const extension = COPYABLE_PHOTO.exec(photo.storage_path)?.[1]?.toLowerCase().replace("jpeg", "jpg");
+    const extension = COPYABLE_MEDIA.exec(photo.storage_path)?.[1]?.toLowerCase().replace("jpeg", "jpg");
     const target = `products/${copy.id}/${randomUUID()}.${extension}`;
     if (!extension || (await bucket.copy(photo.storage_path, target)).error) {
       skipped += 1;
       continue;
     }
-    rows.push({ product_id: copy.id, storage_path: target, alt_text: photo.alt_text, sort_order: rows.length });
+    rows.push({ product_id: copy.id, kind: photo.kind, storage_path: target, alt_text: photo.alt_text, sort_order: rows.length });
   }
   if (rows.length > 0) {
     const { error: mediaError } = await db.from("product_media").insert(rows);
@@ -282,14 +390,20 @@ const uploadRequestSchema = z
     productId: productId.optional(),
     /** ...or the Add product page's staging id. */
     stagingId: z.uuid().optional(),
-    contentType: z.enum(Object.values(IMAGE_CONTENT_TYPES) as [string, ...string[]], "Use a JPEG, PNG, WebP or AVIF image"),
-    size: z.number().int().min(1, "The file is empty").max(MAX_IMAGE_BYTES, "Use an image under 10 MB"),
+    contentType: z.enum(Object.values(MEDIA_CONTENT_TYPES) as [string, ...string[]], "Use a JPEG, PNG, WebP or AVIF photo, or an MP4 or WebM video"),
+    size: z.number().int().min(1, "The file is empty"),
   })
-  .refine((request) => Boolean(request.productId) !== Boolean(request.stagingId), "Invalid upload");
+  .refine((request) => Boolean(request.productId) !== Boolean(request.stagingId), "Invalid upload")
+  .superRefine((request, context) => {
+    const video = mediaKindOf(mediaFormatForContentType(request.contentType)!) === "video";
+    if (request.size > (video ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES)) {
+      context.addIssue({ code: "custom", message: video ? "Use a video under 50 MB" : "Use an image under 10 MB" });
+    }
+  });
 
 export type UploadTicket = { ok: true; path: string; signedUrl: string } | { ok: false; message: string };
 
-/** A one-time signed upload URL for a new photo, on a path the server picks. */
+/** A one-time signed upload URL for a new photo or video, on a path the server picks. */
 export async function createProductMediaUploadAction(request: unknown): Promise<UploadTicket> {
   const auth = await authorizeAdmin("catalog.write");
   if (!auth.ok) {
@@ -305,7 +419,7 @@ export async function createProductMediaUploadAction(request: unknown): Promise<
     if (!product) return { ok: false, message: "That product no longer exists. Refresh the page." };
   }
 
-  const format = formatForContentType(parsed.data.contentType)!;
+  const format = mediaFormatForContentType(parsed.data.contentType)!;
   const folder = parsed.data.productId ?? `new-${parsed.data.stagingId}`;
   const path = `products/${folder}/${randomUUID()}.${format}`;
   // Signed with the caller's token, so the Storage insert policy (catalog.write) applies.
@@ -386,8 +500,9 @@ export async function updateProductMediaAction(_previous: ActionResult | null, f
   if (!input.ok) return input.result;
 
   const db = adminDb();
-  const { data: media } = await db.from("product_media").select("product_id").eq("id", input.data.mediaId).maybeSingle();
+  const { data: media } = await db.from("product_media").select("product_id, kind").eq("id", input.data.mediaId).maybeSingle();
   if (!media) return NOT_UPDATED;
+  if (input.data.variantId && media.kind === "video") return { ok: false, message: "Videos are shared by every variant." };
   if (input.data.variantId) {
     const { data: variant } = await db.from("product_variants").select("id").eq("id", input.data.variantId).eq("product_id", media.product_id).maybeSingle();
     if (!variant) return { ok: false, message: "That variant no longer exists. Refresh the page." };

@@ -80,7 +80,7 @@ export function ProductForm({ productId, defaultValues, categories, collections,
       const input = form.getValues();
       setResult(null);
       startTransition(async () => {
-        const staged = stagingId ? { stagingId, photos: photos.map((photo) => ({ path: photo.path, altText: photo.altText })) } : undefined;
+        const staged = stagingId ? { stagingId, media: photos.map((photo) => ({ path: photo.path, altText: photo.altText })) } : undefined;
         const response = await saveProductAction(productId, input, staged);
         if (!response) return; // Created: the action redirected to the editor.
         setResult(response);

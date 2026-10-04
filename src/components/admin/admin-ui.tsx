@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRightIcon, CaretLeftIcon, CaretRightIcon, CheckCircleIcon, PencilSimpleIcon, PlusIcon, type Icon } from "@/components/ui/icons";
+import { ArrowRightIcon, CaretLeftIcon, CaretRightIcon, CheckCircleIcon, PencilSimpleIcon, PlayCircleIcon, PlusIcon, type Icon } from "@/components/ui/icons";
 import { ICON_SIZE, ICON_SIZE_SM, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { buttonClasses } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -108,10 +108,21 @@ export const numericClasses = "text-right tabular-nums";
 export const editorGridClasses = "grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:items-start";
 
 /** Small product/order thumbnail (decorative: the row names the item). */
-export function Thumb({ src, className, sizes = "48px" }: { src: string | null; className?: string; sizes?: string }) {
+export function Thumb({ src, className, sizes = "48px", kind = "image" }: { src: string | null; className?: string; sizes?: string; kind?: "image" | "video" }) {
   return (
     <span className={cn("relative block size-12 shrink-0 overflow-hidden rounded-sm bg-neutral-100", className)}>
-      {src ? <Image src={src} alt="" fill sizes={sizes} className="object-cover" /> : null}
+      {src && kind === "video" ? (
+        <>
+          {/* The first frame stands in for a poster; nothing plays here. */}
+          <video src={`${src}#t=0.1`} muted playsInline preload="metadata" aria-hidden="true" className="size-full object-cover" />
+          <span className="absolute inset-0 flex items-center justify-center bg-neutral-900/20 text-white">
+            <PlayCircleIcon aria-hidden="true" size={ICON_SIZE} weight="fill" />
+          </span>
+          <span className="sr-only">Video</span>
+        </>
+      ) : src ? (
+        <Image src={src} alt="" fill sizes={sizes} className="object-cover" />
+      ) : null}
     </span>
   );
 }

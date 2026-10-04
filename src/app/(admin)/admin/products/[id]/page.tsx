@@ -33,6 +33,14 @@ const STATUS_BUTTONS: { status: ProductStatus; label: string; variant: "primary"
 ];
 
 /** Product overview for staff: status, stock and what's live. Editing happens on /edit. */
+function mediaSummary(media: { kind: "image" | "video" }[]): string {
+  const videos = media.filter((item) => item.kind === "video").length;
+  const photos = media.length - videos;
+  const parts = [`${photos} ${photos === 1 ? "photo" : "photos"}`];
+  if (videos > 0) parts.push(`${videos} ${videos === 1 ? "video" : "videos"}`);
+  return `${parts.join(", ")} in gallery order.`;
+}
+
 export default async function ProductDetailPage({ params }: PageProps<"/admin/products/[id]">) {
   const profile = await requireAdminAccess("catalog.read");
   const { id } = await params;
@@ -121,14 +129,14 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
             </TableScroll>
           </Panel>
 
-          <Panel title="Media" description={`${product.product_media.length} images in gallery order.`} bodyClassName="px-6 pb-6">
+          <Panel title="Media" description={mediaSummary(product.product_media)} bodyClassName="px-6 pb-6">
             {product.product_media.length === 0 ? (
               <p className="text-body text-neutral-500">No media yet.</p>
             ) : (
               <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {product.product_media.map((media) => (
                   <li key={media.id} className="flex flex-col gap-2">
-                    <Thumb src={mediaUrl(media.storage_path)} sizes="(min-width: 640px) 200px, 45vw" className="aspect-square size-auto w-full" />
+                    <Thumb src={mediaUrl(media.storage_path)} kind={media.kind} sizes="(min-width: 640px) 200px, 45vw" className="aspect-square size-auto w-full" />
                     <p className={cn("text-small", media.alt_text ? "text-neutral-700" : "text-warning-700")}>{media.alt_text || "Missing alt text"}</p>
                   </li>
                 ))}

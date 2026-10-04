@@ -71,6 +71,7 @@ export async function fetchAdminProducts(filter: ProductFilter): Promise<Page<Ad
     .from("products")
     .select(PRODUCT_ROW_SELECT, { count: "exact" })
     .order("sort_order", { referencedTable: "product_media" })
+    .eq("product_media.kind", "image")
     .limit(1, { referencedTable: "product_media" })
     .order("updated_at", { ascending: false })
     .order("id");
@@ -88,6 +89,7 @@ export async function fetchRecentProducts(limit = 5): Promise<AdminProductRow[]>
     .from("products")
     .select(PRODUCT_ROW_SELECT)
     .order("sort_order", { referencedTable: "product_media" })
+    .eq("product_media.kind", "image")
     .limit(1, { referencedTable: "product_media" })
     .order("updated_at", { ascending: false })
     .order("id")
@@ -297,6 +299,7 @@ export async function fetchMerchandisedProducts(): Promise<AdminProductRow[]> {
     .select(PRODUCT_ROW_SELECT)
     .or("is_featured.eq.true,is_bestseller.eq.true")
     .order("sort_order", { referencedTable: "product_media" })
+    .eq("product_media.kind", "image")
     .limit(1, { referencedTable: "product_media" })
     .order("is_featured", { ascending: false })
     .order("title");

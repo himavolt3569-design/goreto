@@ -124,6 +124,9 @@ export type ProductVariant = {
 
 export type ProductMedia = {
   id: string;
+  /** Videos play in the gallery only; covers, cards and the cart always use photos. */
+  kind: "image" | "video";
+  /** The file's public URL and alt text (for a video too). */
   image: MediaImage;
   /** Photos of one specific variant; `null` for photos shared by every variant. */
   variantId: string | null;

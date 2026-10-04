@@ -88,6 +88,7 @@ export { UploadSimpleIcon } from "@phosphor-icons/react/dist/ssr/UploadSimple";
 export { UserIcon } from "@phosphor-icons/react/dist/ssr/User";
 export { UserMinusIcon } from "@phosphor-icons/react/dist/ssr/UserMinus";
 export { UsersIcon } from "@phosphor-icons/react/dist/ssr/Users";
+export { VideoCameraIcon } from "@phosphor-icons/react/dist/ssr/VideoCamera";
 export { WarningCircleIcon } from "@phosphor-icons/react/dist/ssr/WarningCircle";
 export { WhatsappLogoIcon } from "@phosphor-icons/react/dist/ssr/WhatsappLogo";
 export { XCircleIcon } from "@phosphor-icons/react/dist/ssr/XCircle";

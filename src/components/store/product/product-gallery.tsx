@@ -7,6 +7,7 @@ import {
   CaretLeftIcon,
   CaretRightIcon,
   CornersOutIcon,
+  PlayCircleIcon,
   XIcon,
 } from "@/components/ui/icons";
 import {
@@ -77,7 +78,7 @@ export function ProductGallery({ media, productTitle, compact = false }: Product
                 <li key={item.id} className="shrink-0 snap-start">
                   <button
                     type="button"
-                    aria-label={`Show image ${itemIndex + 1} of ${count}`}
+                    aria-label={`Show ${item.kind === "video" ? "video" : "image"} ${itemIndex + 1} of ${count}`}
                     aria-current={selected ? "true" : undefined}
                     onClick={() => setIndex(itemIndex)}
                     className={cn(
@@ -88,13 +89,30 @@ export function ProductGallery({ media, productTitle, compact = false }: Product
                         : "border-transparent hover:border-primary-200",
                     )}
                   >
-                    <Image
-                      src={item.image.src}
-                      alt=""
-                      fill
-                      sizes="96px"
-                      className="object-cover"
-                    />
+                    {item.kind === "video" ? (
+                      <>
+                        {/* First frame as the thumbnail; nothing plays in the rail. */}
+                        <video
+                          src={`${item.image.src}#t=0.1`}
+                          muted
+                          playsInline
+                          preload="metadata"
+                          aria-hidden="true"
+                          className="size-full object-cover"
+                        />
+                        <span className="absolute inset-0 flex items-center justify-center bg-neutral-900/20 text-white">
+                          <PlayCircleIcon aria-hidden="true" size={ICON_SIZE} weight="fill" />
+                        </span>
+                      </>
+                    ) : (
+                      <Image
+                        src={item.image.src}
+                        alt=""
+                        fill
+                        sizes="96px"
+                        className="object-cover"
+                      />
+                    )}
                   </button>
                 </li>
               );
@@ -121,20 +139,34 @@ export function ProductGallery({ media, productTitle, compact = false }: Product
 
       <div className="relative min-w-0 flex-1">
         {/* 7:8 matches the reference's portrait product frame. */}
-        <MediaFrame
-          image={active?.image ?? null}
-          priority={!compact}
-          sizes={
-            compact
-              ? "(min-width: 1024px) 480px, (min-width: 640px) 80vw, 100vw"
-              : "(min-width: 1280px) 600px, (min-width: 1024px) 45vw, 100vw"
-          }
-          className="aspect-[7/8] w-full rounded-lg"
-        />
+        {active?.kind === "video" ? (
+          // Never autoplays: the shopper starts it, with sound off until they choose.
+          <video
+            key={active.id}
+            src={active.image.src}
+            controls
+            muted
+            playsInline
+            preload="metadata"
+            aria-label={active.image.alt || `${productTitle} video`}
+            className="aspect-[7/8] w-full rounded-lg bg-neutral-900 object-contain"
+          />
+        ) : (
+          <MediaFrame
+            image={active?.image ?? null}
+            priority={!compact}
+            sizes={
+              compact
+                ? "(min-width: 1024px) 480px, (min-width: 640px) 80vw, 100vw"
+                : "(min-width: 1280px) 600px, (min-width: 1024px) 45vw, 100vw"
+            }
+            className="aspect-[7/8] w-full rounded-lg"
+          />
+        )}
         <div className="absolute right-4 top-4">
           <WishlistSoonButton productTitle={productTitle} className="size-11" />
         </div>
-        {active ? (
+        {active && active.kind === "image" ? (
           <button
             ref={expandRef}
             type="button"
@@ -167,13 +199,26 @@ export function ProductGallery({ media, productTitle, compact = false }: Product
         >
           <div className="relative mx-auto flex size-full max-w-4xl items-center justify-center">
             <div className="relative size-full overflow-hidden rounded-lg bg-white">
-              <Image
-                src={active.image.src}
-                alt={active.image.alt}
-                fill
-                sizes="(min-width: 896px) 896px, 100vw"
-                className="object-contain"
-              />
+              {active.kind === "video" ? (
+                <video
+                  key={active.id}
+                  src={active.image.src}
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                  aria-label={active.image.alt || `${productTitle} video`}
+                  className="size-full bg-neutral-900 object-contain"
+                />
+              ) : (
+                <Image
+                  src={active.image.src}
+                  alt={active.image.alt}
+                  fill
+                  sizes="(min-width: 896px) 896px, 100vw"
+                  className="object-contain"
+                />
+              )}
             </div>
             <button
               type="button"

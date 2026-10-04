@@ -148,10 +148,10 @@ describe("ProductForm", () => {
       fireEvent.click(screen.getByRole("button", { name: "Create product" }));
     });
     await waitFor(() => expect(saveProductAction).toHaveBeenCalledOnce());
-    const staged = saveProductAction.mock.calls[0]![2] as { stagingId: string; photos: { path: string; altText: string }[] };
+    const staged = saveProductAction.mock.calls[0]![2] as { stagingId: string; media: { path: string; altText: string }[] };
     expect(staged.stagingId).toBe(STAGING_ID);
-    expect(staged.photos.map((photo) => photo.altText)).toEqual(["Back of the scarf", ""]);
-    expect(staged.photos[0]!.path).toMatch(/1\.jpg$/);
+    expect(staged.media.map((photo) => photo.altText)).toEqual(["Back of the scarf", ""]);
+    expect(staged.media[0]!.path).toMatch(/1\.jpg$/);
   });
 
   it("shows existing stock read-only and never as an input", () => {

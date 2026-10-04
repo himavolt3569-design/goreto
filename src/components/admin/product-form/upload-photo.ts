@@ -1,8 +1,18 @@
 import { createProductMediaUploadAction, type UploadTicket } from "@/features/admin/actions/products";
-import { detectImageFormat, IMAGE_CONTENT_TYPES, MAX_IMAGE_BYTES, SIGNATURE_BYTES } from "@/features/admin/product-form/file-signature";
+import {
+  detectImageFormat,
+  detectVideoFormat,
+  IMAGE_CONTENT_TYPES,
+  isQuickTime,
+  MAX_IMAGE_BYTES,
+  MAX_VIDEO_BYTES,
+  SIGNATURE_BYTES,
+  VIDEO_CONTENT_TYPES,
+  type MediaKind,
+} from "@/features/admin/product-form/file-signature";
 
 /*
- * Browser half of a photo upload (AGENTS §18.3–18.4): pre-check the file's
+ * Browser half of a photo or video upload (AGENTS §18.3–18.4): pre-check the file's
  * bytes and size, ask the server for a signed URL on a path it chooses, and
  * PUT the file straight to Storage. The server verifies the stored bytes
  * again before the photo joins a gallery.
@@ -13,6 +23,17 @@ const MIN_RECOMMENDED_EDGE = 800;
 export type UploadTarget = { productId: string } | { stagingId: string };
 
 export type UploadedPhoto = { ok: true; path: string; warning?: string } | { ok: false; message: string };
+
+const UPLOAD_FAILED = "The upload failed. Check your connection and try again.";
+
+/** PUTs the file to a signed Storage upload URL; true when stored. */
+async function putFile(signedUrl: string, file: File, contentType: string): Promise<boolean> {
+  const body = new FormData();
+  body.append("cacheControl", "31536000");
+  body.append("", new Blob([file], { type: contentType }));
+  const upload = await fetch(signedUrl, { method: "PUT", body, headers: { "x-upsert": "false" } }).catch(() => null);
+  return Boolean(upload?.ok);
+}
 
 /** Short side in pixels, or null when the browser can't decode the format. */
 async function shortestEdge(file: File): Promise<number | null> {
@@ -44,11 +65,7 @@ export async function uploadImageFile(file: File, requestTicket: (request: Ticke
   const ticket = await requestTicket({ contentType, size: file.size });
   if (!ticket.ok) return { ok: false, message: ticket.message };
 
-  const body = new FormData();
-  body.append("cacheControl", "31536000");
-  body.append("", new Blob([file], { type: contentType }));
-  const upload = await fetch(ticket.signedUrl, { method: "PUT", body, headers: { "x-upsert": "false" } }).catch(() => null);
-  if (!upload?.ok) return { ok: false, message: "The upload failed. Check your connection and try again." };
+  if (!(await putFile(ticket.signedUrl, file, contentType))) return { ok: false, message: UPLOAD_FAILED };
 
   return edge !== null && edge < MIN_RECOMMENDED_EDGE
     ? { ok: true, path: ticket.path, warning: `It's ${edge}px on the short side; ${MIN_RECOMMENDED_EDGE}px or more looks sharper.` }
@@ -56,3 +73,27 @@ export async function uploadImageFile(file: File, requestTicket: (request: Ticke
 }
 
 export const ACCEPTED_IMAGE_TYPES = Object.values(IMAGE_CONTENT_TYPES).join(",");
+
+/* ---------- Videos ---------- */
+
+export const ACCEPTED_VIDEO_TYPES = Object.values(VIDEO_CONTENT_TYPES).join(",");
+
+export type UploadedMedia = { ok: true; path: string; kind: MediaKind; warning?: string } | { ok: false; message: string };
+
+/** A product photo or video, told apart by the file's bytes. */
+export async function uploadMediaFile(target: UploadTarget, file: File): Promise<UploadedMedia> {
+  const head = new Uint8Array(await file.slice(0, SIGNATURE_BYTES).arrayBuffer());
+  if (detectImageFormat(head)) {
+    const photo = await uploadPhotoFile(target, file);
+    return photo.ok ? { ...photo, kind: "image" } : photo;
+  }
+  if (isQuickTime(head)) return { ok: false, message: "MOV videos don't play in most browsers. Export it as MP4 and try again." };
+  const format = detectVideoFormat(head);
+  if (!format) return { ok: false, message: "Not a JPEG, PNG, WebP or AVIF photo, or an MP4 or WebM video." };
+  if (file.size > MAX_VIDEO_BYTES) return { ok: false, message: "Larger than 50 MB." };
+
+  const contentType = VIDEO_CONTENT_TYPES[format];
+  const ticket = await createProductMediaUploadAction({ ...target, contentType, size: file.size });
+  if (!ticket.ok) return { ok: false, message: ticket.message };
+  return (await putFile(ticket.signedUrl, file, contentType)) ? { ok: true, path: ticket.path, kind: "video" } : { ok: false, message: UPLOAD_FAILED };
+}

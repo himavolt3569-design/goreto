@@ -46,7 +46,7 @@ export default async function MediaPage({ searchParams }: PageProps<"/admin/medi
             <ul className="grid grid-cols-2 gap-6 px-6 pb-6 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
               {media.rows.map((item) => (
                 <li key={item.id} className="flex min-w-0 flex-col gap-2">
-                  <Thumb src={item.url} sizes="(min-width: 1536px) 200px, (min-width: 640px) 30vw, 45vw" className="aspect-square size-auto w-full rounded-md" />
+                  <Thumb src={item.url} kind={item.kind} sizes="(min-width: 1536px) 200px, (min-width: 640px) 30vw, 45vw" className="aspect-square size-auto w-full rounded-md" />
                   <Link href={`/admin/products/${item.productId}`} className="truncate rounded-xs text-body font-medium hover:text-primary-600">
                     {item.productTitle}
                   </Link>
