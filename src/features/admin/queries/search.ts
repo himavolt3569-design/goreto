@@ -22,6 +22,7 @@ export async function searchProducts(term: string): Promise<ProductHit[]> {
       .select("id, title, status, product_media(storage_path, sort_order)")
       .ilike("title", pattern)
       .order("sort_order", { referencedTable: "product_media" })
+      .eq("product_media.kind", "image")
       .limit(1, { referencedTable: "product_media" })
       .order("title")
       .limit(LIMIT),

@@ -14,12 +14,12 @@ export type PickerProduct = { id: string; title: string; status: ProductStatus; 
 /** Linked products the caller can't read (e.g. drafts without catalog.read) are kept by id so saving doesn't drop them. */
 export type CollectionProduct = PickerProduct | { id: string; title: null; status: null; thumbnail: null };
 
-export const PICKER_PRODUCT_COLUMNS = "id, title, status, product_media(storage_path, sort_order)";
+export const PICKER_PRODUCT_COLUMNS = "id, title, status, product_media(storage_path, sort_order, kind)";
 
-type PickerRow = { id: string; title: string; status: ProductStatus; product_media: { storage_path: string; sort_order: number }[] };
+type PickerRow = { id: string; title: string; status: ProductStatus; product_media: { storage_path: string; sort_order: number; kind: "image" | "video" }[] };
 
 export function mapPickerProduct(row: PickerRow): PickerProduct {
-  const cover = [...row.product_media].sort((a, b) => a.sort_order - b.sort_order)[0];
+  const cover = row.product_media.filter((media) => media.kind === "image").sort((a, b) => a.sort_order - b.sort_order)[0];
   return { id: row.id, title: row.title, status: row.status, thumbnail: mediaUrl(cover?.storage_path) };
 }
 
@@ -41,6 +41,7 @@ export async function searchPickerProducts(query: unknown, what: string): Promis
     .neq("status", "archived")
     .order("title")
     .order("sort_order", { referencedTable: "product_media" })
+    .eq("product_media.kind", "image")
     .limit(1, { referencedTable: "product_media" })
     .limit(20);
   if (error) {

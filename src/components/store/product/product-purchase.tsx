@@ -99,7 +99,7 @@ export function ProductPurchase({
   }
 
   function addToCart(): number {
-    const cover = media[0]?.image ?? null;
+    const cover = media.find((item) => item.kind === "image")?.image ?? null;
     return addItem(
       {
         variantId: variant.id,

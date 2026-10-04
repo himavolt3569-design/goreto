@@ -63,7 +63,7 @@ export type DetailRow = Omit<CardRow, "product_media"> &
     >[];
     product_media: Pick<
       Tables["product_media"]["Row"],
-      "id" | "storage_path" | "alt_text" | "sort_order" | "variant_id"
+      "id" | "storage_path" | "alt_text" | "sort_order" | "variant_id" | "kind"
     >[];
     product_ar_assets: Pick<Tables["product_ar_assets"]["Row"], "mode" | "placement" | "is_active">[];
   };
@@ -267,7 +267,7 @@ export function toProductDetail(
 ): ProductDetail {
   const category = index.byId.get(row.category_id);
   const media = [...row.product_media].sort(bySortOrder);
-  const cover = media[0];
+  const cover = media.find((item) => item.kind === "image");
 
   return {
     slug: row.slug,
@@ -292,7 +292,7 @@ export function toProductDetail(
       })),
     media: media.flatMap((item) => {
       const image = productMediaImage(item.storage_path, item.alt_text);
-      return image ? [{ id: item.id, image, variantId: item.variant_id }] : [];
+      return image ? [{ id: item.id, kind: item.kind, image, variantId: item.variant_id }] : [];
     }),
     specs: parseSpecs(row.specs),
     careInstructions: row.care_instructions,

@@ -353,3 +353,47 @@ describe("admin_set_product_status", () => {
     expect(await runAs(db, owner, "select public.admin_set_product_status(gen_random_uuid(), 'active')")).toMatch(/product not found/);
   });
 });
+
+describe("product media limits (migration product_media_videos)", () => {
+  const insertMedia = (kind: "image" | "video", count: number, from = 1) =>
+    `insert into product_media (product_id, kind, storage_path, sort_order)
+       select ${TEST_ID}, '${kind}', 'products/test-tote/${kind}-' || n || '.${kind === "image" ? "jpg" : "mp4"}', n
+       from generate_series(${from}, ${from + count - 1}) n`;
+
+  it("allows 7 photos and 3 videos on a product", async () => {
+    const outcomes = await runStepsAs(db, catalogStaff, [
+      createStep(),
+      insertMedia("image", 7),
+      insertMedia("video", 3),
+      `select count(*)::int from product_media where product_id = ${TEST_ID}`,
+    ]);
+    expect(outcomes[3]).toBe(10);
+  });
+
+  it("refuses an 8th photo or a 4th video", async () => {
+    expect((await runStepsAs(db, owner, [createStep(), insertMedia("image", 7), insertMedia("image", 1, 8)]))[2]).toMatch(/at most 7 photos/);
+    expect((await runStepsAs(db, owner, [createStep(), insertMedia("video", 3), insertMedia("video", 1, 4)]))[2]).toMatch(/at most 3 videos/);
+  });
+
+  it("counts a photo changed into a video against the video limit", async () => {
+    const outcomes = await runStepsAs(db, owner, [
+      createStep(),
+      insertMedia("video", 3),
+      insertMedia("image", 1),
+      `update product_media set kind = 'video' where product_id = ${TEST_ID} and kind = 'image'`,
+    ]);
+    expect(outcomes[3]).toMatch(/at most 3 videos/);
+  });
+
+  it("keeps the trigger function off the API", async () => {
+    expect(await runAs(db, catalogStaff, "select public.product_media_enforce_limits()")).toMatch(/^error:permission denied/);
+  });
+
+  it("lets the product-media bucket take MP4 and WebM up to 50 MB", async () => {
+    const bucket = (await db.query<{ file_size_limit: number; allowed_mime_types: string[] }>(
+      "select file_size_limit, allowed_mime_types from storage.buckets where id = 'product-media'",
+    )).rows[0]!;
+    expect(Number(bucket.file_size_limit)).toBe(52_428_800);
+    expect(bucket.allowed_mime_types).toEqual(expect.arrayContaining(["image/jpeg", "video/mp4", "video/webm"]));
+  });
+});

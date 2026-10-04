@@ -31,6 +31,23 @@ describe("ProductGallery", () => {
     ).toBeGreaterThan(0);
   });
 
+  it("plays a video in the main frame with controls and no image viewer", () => {
+    const media = [
+      ...aviators.media,
+      { id: "video-1", kind: "video" as const, image: { src: "https://example.test/clip.mp4", alt: "Aviators turned in the light" }, variantId: null },
+    ];
+    const { container } = render(<ProductGallery media={media} productTitle={aviators.title} />);
+    fireEvent.click(screen.getByRole("button", { name: "Show video 3 of 3" }));
+
+    // The main frame (the closed lightbox holds a second player).
+    const player = screen.getAllByLabelText("Aviators turned in the light")[0]!;
+    expect(player.tagName).toBe("VIDEO");
+    expect(player).toHaveAttribute("controls");
+    expect(player).not.toHaveAttribute("autoplay");
+    expect(screen.queryByRole("button", { name: "View larger image" })).not.toBeInTheDocument();
+    expect(container.querySelector('img[src*="clip.mp4"]')).toBeNull();
+  });
+
   it("hides the thumbnail rail for a single photo", () => {
     const bag = seedProducts.find((product) => product.slug === "leather-weekender-bag");
     if (!bag) throw new Error("missing bag seed");

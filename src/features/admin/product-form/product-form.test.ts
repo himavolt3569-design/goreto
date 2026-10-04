@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectImageFormat, formatForContentType } from "./file-signature";
+import { detectImageFormat, detectMediaFormat, detectVideoFormat, formatForContentType, isQuickTime } from "./file-signature";
 import { normalizeSku, sanitizeSlugInput, skuStem, slugFromTitle, slugProblem, slugWordCount, suggestSku, toKey, uniqueKey } from "./keys";
 import { issuesByPath, productFormSchema, toSavePayload, type ProductFormValues, type VariantFormValues } from "./schema";
 import { combinationCount, combinations, mergeVariants, renameOptionKey, variantsMatchOptions } from "./variant-matrix";
@@ -65,6 +65,20 @@ describe("file signature", () => {
     expect(detectImageFormat(bytes(0x89, "PNG", 0x0d, 0x0a, 0x1a, 0x0a))).toBe("png");
     expect(detectImageFormat(bytes("RIFF", 0, 0, 0, 0, "WEBPVP8 "))).toBe("webp");
     expect(detectImageFormat(bytes(0, 0, 0, 0x1c, "ftypavif"))).toBe("avif");
+  });
+
+  it("recognises MP4 and WebM videos, and refuses MOV, HEIF and AVIF as video", () => {
+    expect(detectVideoFormat(bytes(0, 0, 0, 0x20, "ftypisom"))).toBe("mp4");
+    expect(detectVideoFormat(bytes(0, 0, 0, 0x18, "ftypmp42"))).toBe("mp4");
+    expect(detectVideoFormat(bytes(0x1a, 0x45, 0xdf, 0xa3, 0x9f))).toBe("webm");
+    expect(detectVideoFormat(bytes(0, 0, 0, 0x14, "ftypqt  "))).toBeNull();
+    expect(isQuickTime(bytes(0, 0, 0, 0x14, "ftypqt  "))).toBe(true);
+    expect(detectVideoFormat(bytes(0, 0, 0, 0x1c, "ftypavif"))).toBeNull();
+    expect(detectVideoFormat(bytes(0, 0, 0, 0x18, "ftypheic"))).toBeNull();
+    expect(detectVideoFormat(bytes(0xff, 0xd8, 0xff, 0xe0))).toBeNull();
+    expect(detectMediaFormat(bytes(0xff, 0xd8, 0xff, 0xe0))).toBe("jpg");
+    expect(detectMediaFormat(bytes(0, 0, 0, 0x1c, "ftypavif"))).toBe("avif");
+    expect(detectMediaFormat(bytes(0, 0, 0, 0x20, "ftypisom"))).toBe("mp4");
   });
 
   it("rejects everything else, whatever the name says", () => {
