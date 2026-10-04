@@ -43,18 +43,18 @@ function variantLabel(variant: { sku: string; title: string | null; option_value
   return `${variant.title || values.join(" / ") || "Default"} (${variant.sku})`;
 }
 
-const PRODUCT_COLUMNS = "id, title, status, product_media(storage_path, sort_order), product_variants(id, sku, title, option_values, sort_order)";
+const PRODUCT_COLUMNS = "id, title, status, product_media(storage_path, sort_order, kind), product_variants(id, sku, title, option_values, sort_order)";
 
 type ProductRow = {
   id: string;
   title: string;
   status: ProductStatus;
-  product_media: { storage_path: string; sort_order: number }[];
+  product_media: { storage_path: string; sort_order: number; kind: "image" | "video" }[];
   product_variants: { id: string; sku: string; title: string | null; option_values: Json; sort_order: number }[];
 };
 
 function toArProduct(row: ProductRow): ArProduct {
-  const cover = [...row.product_media].sort((a, b) => a.sort_order - b.sort_order)[0];
+  const cover = row.product_media.filter((media) => media.kind === "image").sort((a, b) => a.sort_order - b.sort_order)[0];
   return {
     id: row.id,
     title: row.title,

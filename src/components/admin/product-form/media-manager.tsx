@@ -17,23 +17,37 @@ import {
   updateProductMediaAction,
 } from "@/features/admin/actions/products";
 import type { ActionResult } from "@/features/admin/auth";
+import { detectImageFormat, MAX_PHOTOS, MAX_VIDEOS, SIGNATURE_BYTES, type MediaKind } from "@/features/admin/product-form/file-signature";
 import type { EditorMedia } from "@/features/admin/queries/product-editor";
 import { cn } from "@/lib/utils/cn";
 import { ActionMessage, FormDialog, HiddenFields } from "../action-forms";
 import { Thumb } from "../admin-ui";
-import { ACCEPTED_IMAGE_TYPES, uploadPhotoFile } from "./upload-photo";
+import { ACCEPTED_IMAGE_TYPES, ACCEPTED_VIDEO_TYPES, uploadMediaFile } from "./upload-photo";
 
 /*
- * Product photos (AGENTS §18.3–18.4). Files go straight from the browser to
- * Storage on a signed URL the server issues for a path it chooses; the server
- * then checks the stored bytes before the photo joins the gallery. The first
- * photo is the cover. Photos can belong to one variant or all of them.
+ * Product photos and videos (AGENTS §18.3–18.4). Files go straight from the
+ * browser to Storage on a signed URL the server issues for a path it chooses;
+ * the server then checks the stored bytes before the file joins the gallery.
+ * The first photo is the cover. Photos can belong to one variant or all of
+ * them; videos are shared by every variant. At most 7 photos and 3 videos.
  */
 
 type UploadStatus = { id: string; name: string; state: "uploading" | "done" | "error"; message?: string };
 
-async function uploadPhoto(productId: string, file: File): Promise<{ ok: boolean; message?: string }> {
-  const uploaded = await uploadPhotoFile({ productId }, file);
+const LIMITS: Record<MediaKind, number> = { image: MAX_PHOTOS, video: MAX_VIDEOS };
+
+const LIMIT_MESSAGES: Record<MediaKind, string> = {
+  image: `Up to ${MAX_PHOTOS} photos per product.`,
+  video: `Up to ${MAX_VIDEOS} videos per product.`,
+};
+
+/** Photo or video from the file's bytes; anything that isn't a photo is checked as a video by the upload. */
+async function kindOf(file: File): Promise<MediaKind> {
+  return detectImageFormat(new Uint8Array(await file.slice(0, SIGNATURE_BYTES).arrayBuffer())) ? "image" : "video";
+}
+
+async function uploadMedia(productId: string, file: File): Promise<{ ok: boolean; message?: string }> {
+  const uploaded = await uploadMediaFile({ productId }, file);
   if (!uploaded.ok) return uploaded;
   const attached = await attachProductMediaAction({ productId, path: uploaded.path, altText: "", variantId: null });
   if (!attached.ok) return { ok: false, message: attached.message };
@@ -54,6 +68,9 @@ export function MediaManager({
   const [uploads, setUploads] = useState<UploadStatus[]>([]);
   const [busy, setBusy] = useState(false);
   const [reorderState, reorder, reordering] = useActionState(reorderProductMediaAction, null);
+  const videoCount = media.filter((item) => item.kind === "video").length;
+  const photoCount = media.length - videoCount;
+  const full = photoCount >= MAX_PHOTOS && videoCount >= MAX_VIDEOS;
 
   async function onFiles(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? []);
@@ -62,9 +79,13 @@ export function MediaManager({
     setBusy(true);
     const batch = files.map((file) => ({ id: `${file.name}-${file.lastModified}-${Math.random()}`, name: file.name, state: "uploading" as const }));
     setUploads(batch);
+    // Room left per kind; a file over its kind's limit never gets an upload ticket.
+    const used: Record<MediaKind, number> = { image: photoCount, video: videoCount };
     // One at a time keeps the gallery order the same as the chosen order.
     for (const [index, file] of files.entries()) {
-      const outcome = await uploadPhoto(productId, file);
+      const kind = await kindOf(file);
+      const outcome = used[kind] >= LIMITS[kind] ? { ok: false, message: LIMIT_MESSAGES[kind] } : await uploadMedia(productId, file);
+      if (outcome.ok) used[kind] += 1;
       setUploads((current) =>
         current.map((item) => (item.id === batch[index]!.id ? { ...item, state: outcome.ok ? "done" : "error", message: outcome.message } : item)),
       );
@@ -89,19 +110,33 @@ export function MediaManager({
         <div className="flex flex-col gap-1">
           <h2 className="text-h2 text-neutral-900">Media</h2>
           <p className="text-body text-neutral-500">
-            JPEG, PNG, WebP or AVIF up to 10 MB. The first photo is the cover. Alt text describes the photo for screen readers.
+            Up to {MAX_PHOTOS} photos (JPEG, PNG, WebP or AVIF, 10 MB each) and {MAX_VIDEOS} videos (MP4 or WebM, 50 MB each). The first photo is the
+            cover. Alt text describes each file for screen readers.
+          </p>
+          <p className="text-small font-medium text-neutral-700">
+            {photoCount}/{MAX_PHOTOS} photos · {videoCount}/{MAX_VIDEOS} videos
           </p>
         </div>
         <div>
-          <input ref={inputRef} id={inputId} type="file" accept={ACCEPTED_IMAGE_TYPES} multiple className="sr-only" onChange={onFiles} disabled={busy} />
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="file"
+            accept={`${ACCEPTED_IMAGE_TYPES},${ACCEPTED_VIDEO_TYPES}`}
+            multiple
+            className="sr-only"
+            onChange={onFiles}
+            disabled={busy}
+          />
           <Button
             variant="secondary"
             size="md"
             loading={busy}
+            disabled={full}
             onClick={() => inputRef.current?.click()}
             leadingIcon={<UploadSimpleIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />}
           >
-            Upload photos
+            Upload photos or videos
           </Button>
         </div>
       </div>
@@ -168,7 +203,9 @@ function MediaItem({
   onMove: (offset: -1 | 1) => void;
 }) {
   const [state, save, saving] = useActionState<ActionResult | null, FormData>(updateProductMediaAction, null);
-  const label = `photo ${position + 1}`;
+  const video = item.kind === "video";
+  const noun = video ? "video" : "photo";
+  const label = `${noun} ${position + 1}`;
 
   // Submitted by hand so typed alt text survives a validation error.
   function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -180,9 +217,17 @@ function MediaItem({
   return (
     <li className="grid gap-4 rounded-md border border-neutral-200 p-4 sm:grid-cols-[8rem_minmax(0,1fr)]">
       <div className="flex flex-col gap-2">
-        <Thumb src={item.url} sizes="128px" className="aspect-square size-auto w-full rounded-md" />
+        {video && item.url ? (
+          <video src={item.url} controls muted playsInline preload="metadata" aria-label={item.altText || label} className="aspect-square w-full rounded-md bg-neutral-900 object-cover" />
+        ) : (
+          <Thumb src={item.url} sizes="128px" className="aspect-square size-auto w-full rounded-md" />
+        )}
         <div className="flex items-center justify-between gap-1">
-          {position === 0 ? (
+          {video ? (
+            <Badge size="sm" tone="neutral">
+              Video
+            </Badge>
+          ) : position === 0 ? (
             <Badge size="sm" tone="new">
               Cover
             </Badge>
@@ -215,28 +260,40 @@ function MediaItem({
       <div className="flex min-w-0 flex-col gap-4">
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           <HiddenFields values={{ mediaId: item.id }} />
-          <div className="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <div className={cn("grid gap-4", !video && "md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]")}>
             <Field
               label={`Alt text for ${label}`}
               error={state && !state.ok ? state.fieldErrors?.altText : undefined}
               hint={item.altText ? undefined : <span className="text-warning-700">Missing alt text</span>}
             >
-              {(control) => <Input {...control} name="altText" defaultValue={item.altText} maxLength={200} placeholder="e.g. Gold hoop earrings on a model" />}
-            </Field>
-            <Field label="Shown for" error={state && !state.ok ? state.fieldErrors?.variantId : undefined}>
               {(control) => (
-                <Select
+                <Input
                   {...control}
-                  name="variantId"
-                  defaultValue={item.variantId ?? ""}
-                  options={[{ value: "", label: "All variants" }, ...variants.map((variant) => ({ value: variant.id, label: variant.label }))]}
+                  name="altText"
+                  defaultValue={item.altText}
+                  maxLength={200}
+                  placeholder={video ? "e.g. Model turning to show the earrings" : "e.g. Gold hoop earrings on a model"}
                 />
               )}
             </Field>
+            {video ? (
+              <input type="hidden" name="variantId" value="" />
+            ) : (
+              <Field label="Shown for" error={state && !state.ok ? state.fieldErrors?.variantId : undefined}>
+                {(control) => (
+                  <Select
+                    {...control}
+                    name="variantId"
+                    defaultValue={item.variantId ?? ""}
+                    options={[{ value: "", label: "All variants" }, ...variants.map((variant) => ({ value: variant.id, label: variant.label }))]}
+                  />
+                )}
+              </Field>
+            )}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button type="submit" variant="tertiary" size="md" loading={saving}>
-              Save photo details
+              Save {noun} details
             </Button>
             <ActionMessage state={state} />
           </div>
@@ -245,13 +302,13 @@ function MediaItem({
           <FormDialog
             action={deleteProductMediaAction}
             hidden={{ mediaId: item.id }}
-            title="Delete this photo?"
+            title={`Delete this ${noun}?`}
             description="It's removed from the gallery and from storage. This can't be undone."
-            triggerLabel="Delete photo"
+            triggerLabel={`Delete ${noun}`}
             triggerIcon={<TrashIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />}
-            submitLabel="Delete photo"
+            submitLabel={`Delete ${noun}`}
           >
-            <Thumb src={item.url} sizes="96px" className="size-24 rounded-md" />
+            <Thumb src={item.url} kind={item.kind} sizes="96px" className="size-24 rounded-md" />
           </FormDialog>
         </div>
       </div>

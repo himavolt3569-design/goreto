@@ -1764,6 +1764,29 @@ export type Database = {
         }
         Returns: Json
       }
+      account_delete_address: { Args: { p_id: string }; Returns: undefined }
+      account_save_address: {
+        Args: {
+          p_district_code: string
+          p_id: string
+          p_label: string
+          p_latitude?: number
+          p_longitude?: number
+          p_make_default: boolean
+          p_municipality_code: string
+          p_phone_e164: string
+          p_postal_code: string
+          p_province_code: string
+          p_recipient_name: string
+          p_street_landmark: string
+          p_ward: number
+        }
+        Returns: string
+      }
+      account_set_default_address: {
+        Args: { p_id: string }
+        Returns: undefined
+      }
       account_summary: {
         Args: never
         Returns: {

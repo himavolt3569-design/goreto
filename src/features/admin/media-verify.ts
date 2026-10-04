@@ -1,7 +1,16 @@
 import "server-only";
 import { AR_ASSETS_BUCKET, arAssetUrl, PRODUCT_MEDIA_BUCKET, productMediaUrl } from "@/lib/media/storage";
 import { AR_SIGNATURE_BYTES, detectArFormat, MAX_AR_BYTES, type ArFormat } from "./asset-signature";
-import { detectImageFormat, MAX_IMAGE_BYTES, SIGNATURE_BYTES, type ImageFormat } from "./product-form/file-signature";
+import {
+  detectImageFormat,
+  detectVideoFormat,
+  MAX_IMAGE_BYTES,
+  MAX_VIDEO_BYTES,
+  SIGNATURE_BYTES,
+  type ImageFormat,
+  type MediaFormat,
+  type VideoFormat,
+} from "./product-form/file-signature";
 import type { adminDb } from "./queries/shared";
 
 /*
@@ -82,4 +91,21 @@ export function verifyStoredArAsset(db: ReturnType<typeof adminDb>, path: string
     wrongType: model ? "That file isn't a GLB or USDZ model." : "That file isn't a PNG or WebP image.",
     tooLarge: "Use a file under 25 MB.",
   });
+}
+
+export function verifyStoredVideo(db: ReturnType<typeof adminDb>, path: string, format: VideoFormat): Promise<VerifyResult> {
+  return verifyStoredObject(db, path, {
+    bucket: PRODUCT_MEDIA_BUCKET,
+    url: productMediaUrl(path),
+    headBytes: SIGNATURE_BYTES,
+    matches: (bytes) => detectVideoFormat(bytes) === format,
+    maxBytes: MAX_VIDEO_BYTES,
+    wrongType: "That file isn't an MP4 or WebM video.",
+    tooLarge: "Use a video under 50 MB.",
+  });
+}
+
+/** A product photo or video, by the format its server-chosen path names. */
+export function verifyStoredMedia(db: ReturnType<typeof adminDb>, path: string, format: MediaFormat): Promise<VerifyResult> {
+  return format === "mp4" || format === "webm" ? verifyStoredVideo(db, path, format) : verifyStoredImage(db, path, format);
 }

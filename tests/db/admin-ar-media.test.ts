@@ -125,6 +125,16 @@ describe("admin_orphaned_storage_objects", () => {
     expect(outcomes[0]).toEqual([`categories/${UUID_A}/${UUID_B}.png`, `products/new-${UUID_A}/${UUID_B}.jpg`]);
   });
 
+  it("lists unreferenced product videos too", async () => {
+    const outcomes = await runStepsWithSetup(
+      db,
+      [`insert into storage.objects (bucket_id, name, created_at) values ('product-media', 'products/new-${UUID_A}/${UUID_A}.mp4', ${old}), ('product-media', 'products/${productId}/${UUID_B}.webm', ${old})`],
+      owner,
+      [list("product-media")],
+    );
+    expect(outcomes[0]).toEqual([`products/${productId}/${UUID_B}.webm`, `products/new-${UUID_A}/${UUID_A}.mp4`]);
+  });
+
   it("reads the size from the object metadata", async () => {
     const outcomes = await runStepsWithSetup(db, seedObjects(), owner, [
       "select sum(size_bytes)::int from public.admin_orphaned_storage_objects('product-media')",

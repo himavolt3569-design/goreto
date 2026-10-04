@@ -47,7 +47,8 @@ const SUPABASE_SHIMS = `
 
 type SeedMeta = { table_order: string[]; counts: Record<string, number> };
 
-export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMeta }> {
+/** The migrations alone, like a fresh production database. */
+export async function createMigratedDatabase(): Promise<PGlite> {
   const db = await PGlite.create({ extensions: { pg_trgm } });
   await db.exec(SUPABASE_SHIMS);
 
@@ -55,6 +56,11 @@ export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMe
   for (const file of readdirSync(migrations).filter((name) => name.endsWith(".sql")).sort()) {
     await db.exec(readFileSync(join(migrations, file), "utf8"));
   }
+  return db;
+}
+
+export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMeta }> {
+  const db = await createMigratedDatabase();
 
   const lines = readFileSync(join(ROOT, "supabase/seed.ndjson"), "utf8")
     .split("\n")
@@ -64,13 +70,18 @@ export async function createSeededDatabase(): Promise<{ db: PGlite; meta: SeedMe
   const byTable = new Map<string, Record<string, unknown>[]>();
   for (const line of lines) byTable.set(line.table, [...(byTable.get(line.table) ?? []), line.data]);
 
+  // A migration creates the default settings row; the seed's row replaces it, as `seed:load` does.
+  await db.exec("delete from public.store_settings");
+
   for (const table of meta.table_order) {
     const rows = byTable.get(table) ?? [];
     const columns = Object.keys(rows[0]!).map((column) => `"${column}"`).join(", ");
     for (let start = 0; start < rows.length; start += 500) {
       await db.query(
+        // The nepal_geography migration already loaded the geography the seed mirrors.
         `insert into public.${table} (${columns})
-         select ${columns} from jsonb_populate_recordset(null::public.${table}, $1::jsonb)`,
+         select ${columns} from jsonb_populate_recordset(null::public.${table}, $1::jsonb)
+         ${table.startsWith("nepal_") ? "on conflict (code) do nothing" : ""}`,
         [JSON.stringify(rows.slice(start, start + 500))],
       );
     }

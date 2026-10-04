@@ -100,12 +100,12 @@ export function maxPurchasable(stockQuantity: number): number {
 
 /**
  * Gallery for a variant: its own photos first, then photos shared by every
- * variant. Photos of other variants are left out.
+ * variant, then videos. Photos of other variants are left out.
  */
 export function mediaForVariant(media: ProductMedia[], variantId: string): ProductMedia[] {
   const own = media.filter((item) => item.variantId === variantId);
   const shared = media.filter((item) => item.variantId === null);
-  return [...own, ...shared];
+  return [...own, ...shared].sort((a, b) => Number(a.kind === "video") - Number(b.kind === "video"));
 }
 
 /** A photo of the variant(s) carrying `value`, for image swatches. */
@@ -119,6 +119,6 @@ export function swatchImage(
       .filter((variant) => variant.optionValues[optionName] === value)
       .map((variant) => variant.id),
   );
-  const match = product.media.find((item) => item.variantId !== null && ids.has(item.variantId));
+  const match = product.media.find((item) => item.kind === "image" && item.variantId !== null && ids.has(item.variantId));
   return match?.image ?? null;
 }

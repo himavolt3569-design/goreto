@@ -4,6 +4,8 @@ import { useCartStore } from "@/features/cart/store";
 import { seedProducts } from "@/test/fixtures/catalog";
 import { ProductPurchase } from "../product-purchase";
 
+vi.mock("@/components/store/wishlist-button", () => import("@/test/fakes/wishlist-button"));
+
 const push = vi.fn();
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
 

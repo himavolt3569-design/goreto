@@ -1,6 +1,6 @@
 # Goreto.store — Work Log
 
-_Last updated: 2026-09-27 · Branch: `feat/whatsapp-orders` (uncommitted)_
+_Last updated: 2026-10-04 · Live since 2026-10-04: https://goreto-kappa.vercel.app (branch `production`)_
 
 Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the migrations, the code in `src/`, `scripts/` and `tests/`, and a fresh run of the checks below.
 
@@ -265,6 +265,7 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [x] **Checkout** `/checkout` (§4.4, §12): migration `checkout_place_order` (`checkout_quote`, atomic `place_order`, `get_order_tracking`, `nearest_municipality`); contact with +977 phone; Province → District → Municipality → Ward cascade; "Use Current Location" with a Leaflet/OpenStreetMap map and nearest-municipality suggestion (no third-party geocoder); delivery options from zones/rates; server-validated coupons; COD only; signed-in prefill from the default address.
 - [x] **Order confirmation** `/order-confirmation/[orderNumber]` and **tracking** `/track/[orderNumber]` (§4.5): guests via a hashed tracking secret in an httpOnly cookie or a tracking link; owners via their session; events only, no fake courier location.
 - [ ] Guest-order claiming after sign-up, matched on a Clerk-verified email (§9.1).
+- [x] **Pick address on map + full Nepal geography** (2026-10-03, `goreto-address-map-picker.md`, migrations `nepal_geography`, `account_address_coordinates`): "Pick on map" beside Street / Landmark in every address form (checkout, account addresses, admin WhatsApp order) opens a Leaflet/OSM dialog; a map tap, dragged pin, GPS or "Place pin at centre" fills Province → District → Municipality → Ward from our own boundary data, and "Use Current Location" at checkout now fills the ward too. Canonical geography built by `node scripts/geo/build-nepal.ts` into `src/data/nepal/`: all 753 local levels (Open Knowledge Nepal, CC BY 4.0), 6,720 ward polygons (OpenStreetMap, ODbL) and the official ward counts (Department of Postal Services, 6,743 wards). The migration upserts all 753 local levels and keeps the 76 old codes; the seed now mirrors the canonical files.
 
 ### 4.2 Discovery
 - [x] **Search** `/search` (§13) (2026-09-28, `goreto-discovery-1-search.md`, migration `storefront_search`): `search_products` RPC (exact title → prefix → FTS + trigram typo tolerance, category words), category and price filters, sort, 24-per-page pagination, all in the URL and working without JavaScript. Header search, footer "Shop" and "New Arrivals" now land here.
@@ -274,13 +275,14 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [ ] Reviews on the product page: a list and a write form. "(N reviews)" is plain text today.
 
 ### 4.3 Customer account area (§4.9)
-Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses → 3. reviews + profile & security.
+Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses ✅ → 3. reviews + profile & security.
 - [x] **Phase 1** (2026-10-01, `goreto-account-1-orders-billing.md`, migration `account_reads`): grouped account nav (sidebar from `lg`, scrollable pill row below), `loading`/`error` states; overview with profile card, stat cards (total orders, in progress, billed to date with pending COD as a hint) and the latest 3 orders; `/account/orders` (10 per page); `/account/orders/[orderNumber]` reusing the tracking view without the tracking secret, so only your own signed-in orders open; `/account/tracking` (latest 50 events); `/account/billing` (billed = collected only, pending COD separate, per-order breakdown). `account_summary()` and `account_tracking_events()` filter on the caller's own profile, so owners and staff see only their personal orders.
 - [x] Overview stat cards: total orders, orders in progress, total billed to date.
 - [x] `/account/orders` (paginated) and `/account/orders/[orderNumber]` (detail plus timeline).
 - [x] `/account/tracking`: events across the customer's orders.
-- [ ] `/account/wishlist`. The wishlist heart is still an inert "coming soon" button on cards.
-- [ ] `/account/addresses`, including a default address for checkout.
+- [x] **Phase 2** (2026-10-02, `goreto-account-2-wishlist-addresses.md`, migration `account_addresses_wishlist`): the storefront heart (cards, product page, quick view) saves and removes through Server Actions, with saved state loaded in the browser from `GET /api/account/wishlist` so storefront pages stay cached; signed out it opens the sign-in modal and saves after sign-in. `/account/wishlist` shows live price and stock, Add to Cart for single-variant products, Choose options otherwise, and "No longer available" for hidden products. `/account/addresses` (+ `new`, `[id]/edit`) with one default kept by `account_save_address` / `account_set_default_address` / `account_delete_address` (deleting the default promotes the newest). Caps: 10 addresses, 200 wishlist items (triggers).
+- [x] `/account/wishlist`, with the storefront heart.
+- [x] `/account/addresses`, including a default address for checkout (checkout already prefilled the default).
 - [ ] `/account/reviews`, showing moderation status.
 - [x] `/account/billing`: billed total = collected orders only. Pending COD is shown separately and totals are computed in SQL.
 - [ ] `/account/profile/[[...rest]]`: Clerk `<UserProfile />`, themed.
@@ -305,7 +307,7 @@ Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishl
 - [x] Upload on the Media page: pick a product and upload photos to the end of its gallery (2026-09-27).
 - [x] Orphaned-upload cleanup: panels on `/admin/media` and `/admin/ar` delete unreferenced admin uploads older than 24 hours. It's a button, not a scheduled job; a cron route needs deployment first (2026-09-27).
 - [x] "Duplicate product": copies into a draft with `(copy)`, a free slug, `-COPY` SKUs, zero stock and copied photos, but no AR assets (2026-09-27).
-- [ ] Optional: video media.
+- [x] **Bulk add products** at `/admin/products/bulk`: short cards with "Add another product" at the end, created one by one (failed ones stay editable for Retry). Each product can have **7 photos + 3 videos** (MP4/WebM ≤ 50 MB), enforced in the UI, server and a DB trigger. Videos play in the storefront gallery after the photos; covers stay photo-only (2026-10-04, `goreto-admin-bulk-add-products.md`, migration `product_media_videos`). Applied on dev; follow-up fixes in PR #21.
 - [ ] Courier webhooks `api/courier/webhooks/[provider]`. **Not planned:** the client ruled out courier API integrations (§4.0).
 - [ ] Optional: mirror `role` into Clerk `publicMetadata`, written by the server only.
 
@@ -322,10 +324,12 @@ Several footer and nav links return a 404 today.
 - [ ] Playwright E2E with `@clerk/testing` for the 11 journeys in §23.4. Playwright isn't installed. Browser checks so far used throwaway scratchpad scripts.
 - [ ] Prettier. It isn't configured.
 - [ ] `README.md` is still the create-next-app boilerplate.
-- [ ] Staging and production: a Clerk production instance and webhook endpoint, and separate Supabase staging and production projects.
-- [ ] Deployment secrets: `SUPABASE_SERVICE_ROLE_KEY` is needed by the server app for the profile sync.
+- [x] **Production release, live 2026-10-04** (`goreto-production-release.md`, `docs/releasing.md`): https://goreto-kappa.vercel.app deploys only from the `production` branch (Vercel project `goreto`, team "projectshamro-2560's projects"). It uses the separate free Supabase project `goreto-prod` (ap-south-1, migrations only, no seed) and the separate Clerk app "Goreto Live" (development instance until a domain exists, with third-party auth and the webhook configured). Owner: himavolt3569@gmail.com. Unfinished storefront entry points are hidden in production builds by `src/config/features.ts`. Migration `store_settings_singleton` creates the settings row a fresh database lacked.
+- [ ] Custom domain: Vercel domain, then the Goreto Live **production** instance (DNS), new keys in Vercel and Supabase third-party auth. Dev-instance users don't carry over, so the owner must sign up again and be re-bootstrapped.
+- [ ] Move `goreto-prod` to Supabase Pro once real orders flow (free projects pause after 7 idle days and have no backups).
+- [x] Deployment secrets: set per environment in Vercel (Production = prod, Preview = dev).
 - [ ] Add the missing `.env.example` names: `NEXT_PUBLIC_SITE_URL`, AR, geocoding and courier (§17).
-- [ ] Decide what `main` should become. Today it holds only the initial commit, and origin's default branch is `feat/design-system-homepage`.
+- [x] `production` is the release branch; `main` still holds only the initial commit and can be deleted.
 - [ ] Open and merge a PR for `feat/admin-products`.
 
 ---
@@ -333,14 +337,15 @@ Several footer and nav links return a 404 today.
 ## 5. Needs your decision or action
 
 - **WhatsApp order flow (§4.0):** built on `feat/whatsapp-orders`. Before relying on it: add each courier's dispatch WhatsApp number (Delivery → Couriers), choose the courier mode, default courier and auto-accept switches (Settings), and give the right staff `orders.write`. The signed-in browser pass is still to do. The courier portal (automatic handoff, adds a `courier` role) is the next phase.
-- **Seed AR rows have no files:** `/admin/ar` flags them "No file uploaded", but the storefront still shows AR READY for them. Upload real files or turn those rows off before launch.
+- **Production store setup (client):** before taking orders, add at least one courier + service, delivery zone and rate, support email/phone and the dispatch municipality (`/admin/settings`), and real products. Checkout offers no delivery option without them.
+- **AR wording on the live homepage:** the hero copy and "How it works" still describe AR try-on (no links). Decide whether to reword until `/try-on` ships.
+- **Seed AR rows have no files (dev only):** `/admin/ar` flags them "No file uploaded". Production has no seed, so this no longer blocks launch.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.
 - **Orange contrast:** white on `#F97316` and orange text on white measure about 2.8:1, below WCAG AA for body text. The reference colours were kept as-is. This was raised in the design-system prompt and hasn't been decided yet.
 - **Store support email and phone:** they're empty in `store_settings`. You can set them in `/admin/settings`.
-- **Clerk webhook:** needs `CLERK_WEBHOOK_SIGNING_SECRET` in `.env.local` and an endpoint in the Clerk Dashboard. When the identity task shipped, the secret wasn't set; I can't tell from the repo whether it has been since.
-- **Supabase third-party auth (Clerk):** configured in the Supabase Dashboard. The owner bootstrap and admin work ran as the real owner, which suggests it's working. Local `config.toml` keeps it disabled, which is expected.
-- **Before production:** run `npm run seed:purge`. The seed is development-only, and its fake owner is already demoted on dev.
+- **Clerk webhook:** configured for production (Goreto Live → `https://goreto-kappa.vercel.app/api/webhooks/clerk`, secret in Vercel). The dev app still has no endpoint or `CLERK_WEBHOOK_SIGNING_SECRET` in `.env.local`; the lazy profile upsert covers dev.
+- **Supabase third-party auth (Clerk):** configured in the Supabase Dashboard. The owner bootstrap and admin work ran as the real owner, which suggests it's working. Local `config.toml` keeps it disabled, which is expected. Production (`goreto-prod`) trusts only the Goreto Live domain `natural-tetra-315.clerk.accounts.dev`.
 
 ## 6. Known limits carried forward
 
@@ -348,4 +353,6 @@ Several footer and nav links return a 404 today.
 - The signed-upload path with the Clerk-token client was checked manually, not in automated tests.
 - Seed product photos are repeated Picsum placeholders, so alt text won't always match the image.
 - Admin uploads can be attached for 20 hours; after that the save asks for a new upload. This keeps saves clear of the unused-upload cleanup, which only deletes files older than 24 hours.
+- Map-picker ward detection: 23 official wards have no OSM ward polygon (points there fill the municipality and ask for the ward), national parks aren't inside any local level in the OKN data (points there say "couldn't match"), and the simplified boundaries agree with full detail on 99.55% of random points. Every field stays editable. Refresh with `node scripts/geo/build-nepal.ts --refresh`.
+- `nearest_municipality()` is no longer used (the lookup is in `src/features/delivery/locate.ts`); drop it in a later cleanup.
 - Stock adjustments don't revalidate the storefront. Product pages refresh every 60 seconds, and checkout must re-check stock in the database.

@@ -24,7 +24,7 @@ const DETAIL_SELECT = `
   id, slug, title, category_id, short_description, description, base_price_paisa,
   low_stock_threshold, is_bestseller, is_limited_edition, published_at, options, specs, care_instructions,
   product_variants(id, sku, option_values, price_paisa, stock_quantity, sort_order, is_active),
-  product_media(id, storage_path, alt_text, sort_order, variant_id),
+  product_media(id, storage_path, alt_text, sort_order, variant_id, kind),
   product_ar_assets(mode, placement, is_active)
 `;
 
@@ -74,6 +74,7 @@ export async function fetchProductCards(filter: CardFilter = {}): Promise<CardRo
     .select(CARD_SELECT)
     .eq("status", "active")
     .order("sort_order", { referencedTable: "product_media" })
+    .eq("product_media.kind", "image")
     .limit(1, { referencedTable: "product_media" })
     .order("is_featured", { ascending: false })
     .order("published_at", { ascending: false })
@@ -176,6 +177,7 @@ export async function fetchCollectionProductCards(collectionId: string): Promise
     .order("sort_order")
     .order("product_id")
     .order("sort_order", { referencedTable: "products.product_media" })
+    .eq("products.product_media.kind", "image")
     .limit(1, { referencedTable: "products.product_media" });
   if (error) fail("collection products", error);
   return (data satisfies CollectionLinkRow[]).map((link) => link.products);

@@ -1,8 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { CollectionSummary } from "@/features/catalog/types";
 import { CollectionBanner } from "../../collection-banner";
 import { CollectionCard } from "../collection-card";
+
+vi.mock("@/components/store/wishlist-button", () => import("@/test/fakes/wishlist-button"));
 
 const collection: CollectionSummary = {
   slug: "pashmina-edit",

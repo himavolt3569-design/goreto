@@ -57,10 +57,15 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
         description="Every product in the catalog, including drafts and archived items. Newest changes first."
         actions={
           canWrite ? (
-            <Link href="/admin/products/new" className={buttonClasses({ variant: "primary", size: "md" })}>
-              <PlusIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
-              Add product
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/admin/products/new" className={buttonClasses({ variant: "tertiary", size: "md" })}>
+                Full form
+              </Link>
+              <Link href="/admin/products/bulk" className={buttonClasses({ variant: "primary", size: "md" })}>
+                <PlusIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                Add products
+              </Link>
+            </div>
           ) : undefined
         }
       />
@@ -96,8 +101,8 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
             description="Try a different name, status or category."
             action={
               canWrite ? (
-                <Link href="/admin/products/new" className={buttonClasses({ variant: "secondary", size: "md" })}>
-                  Add product
+                <Link href="/admin/products/bulk" className={buttonClasses({ variant: "secondary", size: "md" })}>
+                  Add products
                 </Link>
               ) : undefined
             }

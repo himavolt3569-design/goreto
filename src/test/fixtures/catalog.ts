@@ -417,6 +417,7 @@ function toProductDetail({ categorySlug, variants, photos, ...product }: SeedPro
     })),
     media: photos.map((photo, index) => ({
       id: `${product.slug}--photo-${index + 1}`,
+      kind: "image" as const,
       image: { src: picsumImage(photo.picsumId, GALLERY_W, GALLERY_H), alt: photo.alt },
       variantId: photo.variant ? variantId(photo.variant) : null,
     })),

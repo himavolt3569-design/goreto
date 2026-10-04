@@ -74,8 +74,8 @@ export const detailRow: DetailRow = {
     { id: "v-old", sku: "GRT-PDE-OLD", option_values: { Metal: "gold" }, price_paisa: null, stock_quantity: 5, sort_order: 3, is_active: false },
   ],
   product_media: [
-    { id: "m-2", storage_path: "products/pearl-drop-earrings/02.jpg", alt_text: "Silver pair", sort_order: 2, variant_id: "v-silver" },
-    { id: "m-1", storage_path: "products/pearl-drop-earrings/01.jpg", alt_text: "Pearl earrings on a model", sort_order: 1, variant_id: null },
+    { id: "m-2", storage_path: "products/pearl-drop-earrings/02.jpg", alt_text: "Silver pair", sort_order: 2, variant_id: "v-silver", kind: "image" },
+    { id: "m-1", storage_path: "products/pearl-drop-earrings/01.jpg", alt_text: "Pearl earrings on a model", sort_order: 1, variant_id: null, kind: "image" },
   ],
   product_ar_assets: [
     { mode: "photo_ai", placement: "upper_body", is_active: true },
