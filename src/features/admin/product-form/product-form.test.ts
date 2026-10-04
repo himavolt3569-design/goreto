@@ -75,6 +75,7 @@ describe("file signature", () => {
     expect(isQuickTime(bytes(0, 0, 0, 0x14, "ftypqt  "))).toBe(true);
     expect(detectVideoFormat(bytes(0, 0, 0, 0x1c, "ftypavif"))).toBeNull();
     expect(detectVideoFormat(bytes(0, 0, 0, 0x18, "ftypheic"))).toBeNull();
+    for (const brand of ["heim", "heis", "hevc"]) expect(detectVideoFormat(bytes(0, 0, 0, 0x18, `ftyp${brand}`))).toBeNull();
     expect(detectVideoFormat(bytes(0xff, 0xd8, 0xff, 0xe0))).toBeNull();
     expect(detectMediaFormat(bytes(0xff, 0xd8, 0xff, 0xe0))).toBe("jpg");
     expect(detectMediaFormat(bytes(0, 0, 0, 0x1c, "ftypavif"))).toBe("avif");

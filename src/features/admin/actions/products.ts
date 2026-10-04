@@ -126,14 +126,15 @@ const stagedMediaSchema = z
 
 type StagedMedia = z.output<typeof stagedMediaSchema>;
 
-/** Attaches staged uploads to a new product in order; counts what was added and rejected. */
+/** Attaches staged uploads to a new product in order; counts what was added (and how many photos) and rejected. */
 async function attachStagedMedia(
   db: ReturnType<typeof adminDb>,
   newProductId: string,
   staged: StagedMedia | undefined,
   altFor: (kind: "image" | "video", position: number) => string = () => "",
-): Promise<{ added: number; rejected: number }> {
+): Promise<{ added: number; images: number; rejected: number }> {
   let added = 0;
+  let images = 0;
   let rejected = 0;
   const positions = { image: 0, video: 0 };
   for (const item of staged?.media ?? []) {
@@ -148,10 +149,12 @@ async function attachStagedMedia(
       variantId: null,
       sortOrder: added,
     });
-    if (outcome.ok) added += 1;
-    else rejected += 1;
+    if (outcome.ok) {
+      added += 1;
+      if (kind === "image") images += 1;
+    } else rejected += 1;
   }
-  return { added, rejected };
+  return { added, images, rejected };
 }
 
 /**
@@ -256,7 +259,8 @@ export async function quickCreateProductAction(input: unknown, staged: unknown):
     if (keys === null) return { ok: false, message: "Too many products already use this name. Change it a little and try again." };
     if ("error" in keys) return databaseErrorResult(keys.error, "pick product slug") as QuickCreateResult;
 
-    const parsed = productFormSchema.safeParse(toProductFormValues(rawCard, { ...keys, lowStockThreshold }));
+    // Saved as a draft; it's published only once a photo is attached.
+    const parsed = productFormSchema.safeParse(toProductFormValues({ ...rawCard, publish: false }, { ...keys, lowStockThreshold }));
     if (!parsed.success) return { ok: false, message: "Check the highlighted fields.", fieldErrors: issuesByPath(parsed.error) };
     const payload = toSavePayload(parsed.data);
 
@@ -271,10 +275,16 @@ export async function quickCreateProductAction(input: unknown, staged: unknown):
 
     const created = data as SaveRpcResult;
     // Media follows the same check as the editor; alt text comes from the name.
-    const { added, rejected } = await attachStagedMedia(db, created.id, media.data, (kind, position) => defaultAltText(card.data.title, kind, position));
-    if (card.data.publish) revalidateStorefrontCatalog(created.slug);
-    else revalidatePath("/admin/products");
-    return { ok: true, id: created.id, slug: created.slug, published: card.data.publish, mediaAdded: added, mediaRejected: rejected };
+    const { added, images, rejected } = await attachStagedMedia(db, created.id, media.data, (kind, position) => defaultAltText(card.data.title, kind, position));
+    let published = false;
+    if (card.data.publish && images > 0) {
+      const { error: statusError } = await db.rpc("admin_set_product_status", { p_product_id: created.id, p_status: "active" });
+      if (statusError) console.error(`Admin action: a bulk-added product was left as a draft (${statusError.code ?? "unknown"})`);
+      else published = true;
+    }
+    if (published) revalidateStorefrontCatalog(created.slug);
+    revalidatePath("/admin/products");
+    return { ok: true, id: created.id, slug: created.slug, published, mediaAdded: added, mediaRejected: rejected };
   }
   return { ok: false, message: "Another product took this name at the same moment. Try again." };
 }
