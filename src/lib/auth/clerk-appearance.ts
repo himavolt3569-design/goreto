@@ -23,7 +23,7 @@ export const clerkAppearance = {
     colorSuccess: "#22C55E", // success-500
     colorWarning: "#F59E0B", // warning-500
     colorNeutral: "#0F172A",
-    fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif",
+    fontFamily: "var(--font-poppins), ui-sans-serif, system-ui, sans-serif",
     borderRadius: "12px", // md, the default control radius
   },
 } as const;

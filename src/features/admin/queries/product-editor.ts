@@ -54,7 +54,7 @@ export async function fetchProductEditor(productId: string): Promise<ProductEdit
     .from("products")
     .select(
       `id, title, slug, category_id, short_description, description, base_price_paisa, compare_at_price_paisa,
-       status, is_featured, is_bestseller, is_limited_edition, low_stock_threshold, options, specs,
+       status, is_featured, is_bestseller, is_limited_edition, is_sponsored, low_stock_threshold, options, specs,
        care_instructions, tags, updated_at,
        product_variants(id, sku, title, option_values, price_paisa, stock_quantity, weight_grams, is_active, sort_order),
        product_media(id, storage_path, alt_text, variant_id, sort_order, kind),
@@ -102,6 +102,7 @@ export async function fetchProductEditor(productId: string): Promise<ProductEdit
       isFeatured: data.is_featured,
       isBestseller: data.is_bestseller,
       isLimitedEdition: data.is_limited_edition,
+      isSponsored: data.is_sponsored,
       lowStockThreshold: String(data.low_stock_threshold),
       options: options.map((option) => ({
         name: option.name,

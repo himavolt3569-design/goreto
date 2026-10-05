@@ -27,6 +27,7 @@ export default async function NewCategoryPage({ searchParams }: PageProps<"/admi
         categoryId={null}
         values={emptyCategoryValues(parent?.id ?? null)}
         imageUrl={null}
+        heroImageUrl={null}
         parents={parents}
         hasChildren={false}
         saved={null}

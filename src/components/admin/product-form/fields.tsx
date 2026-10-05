@@ -4,6 +4,8 @@ import type { ReactNode, TextareaHTMLAttributes } from "react";
 import { get, useFormContext, useFormState, type FieldPath } from "react-hook-form";
 import { Card } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
+import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
+import { CaretDownIcon } from "@/components/ui/icons";
 import { Input, fieldControlClasses, type InputProps } from "@/components/ui/input";
 import type { ProductFormValues } from "@/features/admin/product-form/schema";
 import { cn } from "@/lib/utils/cn";
@@ -43,6 +45,64 @@ export function FormSection({
         {action}
       </div>
       {children}
+    </Card>
+  );
+}
+
+/**
+ * A folded form section (AGENTS §4.7 progressive disclosure). The header is
+ * an accordion button with a one-line summary, so folded content is never
+ * hidden silently. Folded fields stay mounted (the `hidden` attribute), so
+ * the form keeps registering and validating them.
+ */
+export function CollapsibleSection({
+  id,
+  title,
+  summary,
+  open,
+  onToggle,
+  errorCount = 0,
+  children,
+}: {
+  id: string;
+  title: string;
+  summary: ReactNode;
+  open: boolean;
+  onToggle: () => void;
+  errorCount?: number;
+  children: ReactNode;
+}) {
+  const panelId = `${id}-panel`;
+  return (
+    <Card id={id} className="scroll-mt-24 overflow-hidden">
+      <h2>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={onToggle}
+          className="flex min-h-16 w-full items-center gap-4 px-6 py-3 text-left transition-colors hover:bg-neutral-50 focus-visible:-outline-offset-2"
+        >
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="text-h3 text-neutral-900">{title}</span>
+            <span className="truncate text-small text-neutral-500">{summary}</span>
+          </span>
+          {errorCount > 0 ? (
+            <span className="shrink-0 rounded-full bg-error-100 px-2 py-1 text-small font-medium text-error-700">
+              {errorCount} to fix
+            </span>
+          ) : null}
+          <CaretDownIcon
+            aria-hidden="true"
+            size={ICON_SIZE_SM}
+            weight={ICON_WEIGHT_OUTLINE}
+            className={cn("shrink-0 text-neutral-700 transition-transform motion-reduce:transition-none", open && "rotate-180")}
+          />
+        </button>
+      </h2>
+      <div id={panelId} hidden={!open} className="flex flex-col gap-6 border-t border-neutral-200 px-6 py-6">
+        {children}
+      </div>
     </Card>
   );
 }
@@ -90,6 +150,20 @@ export function TextAreaField({
     <Field label={label} hint={hint} error={error}>
       {(control) => <textarea {...control} {...textarea} rows={rows} className={cn(fieldControlClasses, "h-auto py-3")} {...register(name)} />}
     </Field>
+  );
+}
+
+/** A checkbox styled as a toggle chip, for compact rows of flags. The description becomes its tooltip. */
+export function CheckboxChip({ name, label, description }: { name: ProductPath; label: string; description: string }) {
+  const { register } = useFormContext<ProductFormValues>();
+  return (
+    <label
+      title={description}
+      className="flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 text-body font-medium text-neutral-700 transition-colors hover:border-primary-300 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-100 has-[:checked]:text-primary-700 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary-500"
+    >
+      <input type="checkbox" {...register(name)} className="size-4 shrink-0 cursor-pointer accent-primary-500" />
+      {label}
+    </label>
   );
 }
 

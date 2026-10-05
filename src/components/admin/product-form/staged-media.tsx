@@ -3,19 +3,17 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState, type ChangeEvent, type Dispatch, type SetStateAction } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonClasses } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { iconButtonClasses } from "@/components/ui/icon-button";
-import { ArrowDownIcon, ArrowUpIcon, CheckCircleIcon, ImageIcon, TrashIcon, UploadSimpleIcon, WarningCircleIcon } from "@/components/ui/icons";
+import { ArrowLeftIcon, ArrowRightIcon, TrashIcon, UploadSimpleIcon, WarningCircleIcon } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { discardStagedMediaAction } from "@/features/admin/actions/products";
 import { MAX_STAGED_PHOTOS } from "@/features/admin/product-form/file-signature";
 import { ACCEPTED_IMAGE_TYPES, uploadPhotoFile } from "./upload-photo";
 
 /*
- * Photos on the Add product page. They upload to a staging folder right away
+ * Photos on the Add product page, as a compact grid inside Essentials. They upload to a staging folder right away
  * (so large files don't hold up saving) and are checked and attached, in this
  * order, when the product is created. Linking a photo to a variant happens in
  * the editor afterwards, once the variants exist.
@@ -94,38 +92,90 @@ export function StagedMedia({ stagingId, photos, onChange }: { stagingId: string
   }
 
   const busy = uploading.length > 0;
+  const full = photos.length >= MAX_STAGED_PHOTOS;
 
   return (
-    <Card id="media" className="flex scroll-mt-24 flex-col gap-6 p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-h2 text-neutral-900">Media</h2>
-          <p className="text-body text-neutral-500">
-            JPEG, PNG, WebP or AVIF up to 10 MB. The first photo is the cover. Photos are added when you create the product; you can tie them to variants afterwards.
-          </p>
-        </div>
-        <div>
-          <input ref={inputRef} id={inputId} type="file" accept={ACCEPTED_IMAGE_TYPES} multiple className="sr-only" onChange={onFiles} disabled={busy} tabIndex={-1} />
-          <Button
-            variant="secondary"
-            size="md"
-            loading={busy}
-            disabled={photos.length >= MAX_STAGED_PHOTOS}
+    <section id="media" aria-labelledby={`${inputId}-title`} className="flex scroll-mt-24 flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <h3 id={`${inputId}-title`} className="text-body font-medium text-neutral-900">
+          Photos
+        </h3>
+        <p className="text-small text-neutral-500">JPEG, PNG, WebP or AVIF up to 10 MB. The first photo is the cover.</p>
+      </div>
+      <input ref={inputRef} id={inputId} type="file" accept={ACCEPTED_IMAGE_TYPES} multiple className="sr-only" onChange={onFiles} disabled={busy} tabIndex={-1} />
+
+      {/* The list's items and the Add tile share one grid; role="list" keeps the list semantics under display: contents. */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <ol role="list" className="contents" aria-label="Photos to add">
+          {photos.map((photo, index) => {
+            const label = `photo ${index + 1}`;
+            return (
+              <li key={photo.key} className="flex flex-col gap-2 rounded-md border border-neutral-200 p-2">
+                <span className="relative block aspect-square w-full overflow-hidden rounded-sm bg-neutral-100">
+                  <Image src={photo.previewUrl} alt="" fill unoptimized sizes="160px" className="object-cover" />
+                  {index === 0 ? (
+                    <Badge size="sm" tone="new" className="absolute left-2 top-2">
+                      Cover
+                    </Badge>
+                  ) : null}
+                </span>
+                {photo.warning ? <p className="text-small text-warning-700">{photo.warning}</p> : null}
+                <Field label={`Alt text for ${label}`} hideLabel>
+                  {(control) => (
+                    <Input
+                      {...control}
+                      value={photo.altText}
+                      onChange={(event) => update(photo.key, event.target.value)}
+                      maxLength={200}
+                      placeholder="Describe the photo"
+                      className={photo.altText ? undefined : "border-warning-500"}
+                    />
+                  )}
+                </Field>
+                <div className="flex items-center justify-between">
+                  <div className="flex">
+                    <button type="button" aria-label={`Move ${label} earlier`} disabled={index === 0} onClick={() => move(index, -1)} className={iconButtonClasses({ variant: "ghost", size: "sm" })}>
+                      <ArrowLeftIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Move ${label} later`}
+                      disabled={index === photos.length - 1}
+                      onClick={() => move(index, 1)}
+                      className={iconButtonClasses({ variant: "ghost", size: "sm" })}
+                    >
+                      <ArrowRightIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                    </button>
+                  </div>
+                  <button type="button" aria-label={`Remove ${label}`} onClick={() => remove(photo)} className={iconButtonClasses({ variant: "ghost", size: "sm" })}>
+                    <TrashIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+        {!full ? (
+          <button
+            type="button"
             onClick={() => inputRef.current?.click()}
-            leadingIcon={<UploadSimpleIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />}
+            disabled={busy}
+            className="flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-md border border-dashed border-neutral-300 bg-neutral-50 p-4 text-center text-body text-neutral-700 transition-colors hover:border-primary-300 hover:bg-primary-100 disabled:opacity-60"
           >
-            Upload photos
-          </Button>
-        </div>
+            {busy ? (
+              <span aria-hidden="true" className="size-6 animate-pulse rounded-full bg-primary-300 motion-reduce:animate-none" />
+            ) : (
+              <UploadSimpleIcon aria-hidden="true" size={24} weight={ICON_WEIGHT_OUTLINE} className="text-primary-500" />
+            )}
+            <span className="font-medium">{photos.length === 0 ? "Add photos" : "Add more"}</span>
+          </button>
+        ) : null}
       </div>
 
       <div aria-live="polite" className="flex flex-col gap-1">
         {uploading.map((name) => (
-          <p key={name} className="flex items-center gap-2 text-small text-neutral-700">
-            <span aria-hidden="true" className="size-3 shrink-0 animate-pulse rounded-full bg-primary-300 motion-reduce:animate-none" />
-            <span>
-              <span className="font-medium">{name}</span>: uploading…
-            </span>
+          <p key={name} className="text-small text-neutral-700">
+            <span className="font-medium">{name}</span>: uploading…
           </p>
         ))}
         {failures.map((failure) => (
@@ -136,79 +186,10 @@ export function StagedMedia({ stagingId, photos, onChange }: { stagingId: string
             </span>
           </p>
         ))}
+        {photos.length > 0 && photos.some((photo) => !photo.altText) ? (
+          <p className="text-small text-warning-700">Photos with an orange border still need a short description for screen readers.</p>
+        ) : null}
       </div>
-
-      {photos.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 rounded-md border border-dashed border-neutral-300 px-6 py-12 text-center">
-          <ImageIcon aria-hidden="true" size={32} weight={ICON_WEIGHT_OUTLINE} className="text-neutral-500" />
-          <p className="text-body font-medium text-neutral-900">No photos yet</p>
-          <p className="text-body text-neutral-500">Products without photos show a placeholder on the storefront.</p>
-        </div>
-      ) : (
-        <ol className="flex flex-col gap-4" aria-label="Photos to add">
-          {photos.map((photo, index) => {
-            const label = `photo ${index + 1}`;
-            return (
-              <li key={photo.key} className="grid gap-4 rounded-md border border-neutral-200 p-4 sm:grid-cols-[8rem_minmax(0,1fr)]">
-                <div className="flex flex-col gap-2">
-                  <span className="relative block aspect-square w-full overflow-hidden rounded-md bg-neutral-100">
-                    <Image src={photo.previewUrl} alt="" fill unoptimized sizes="128px" className="object-cover" />
-                  </span>
-                  <div className="flex items-center justify-between gap-1">
-                    {index === 0 ? (
-                      <Badge size="sm" tone="new">
-                        Cover
-                      </Badge>
-                    ) : (
-                      <span className="text-small text-neutral-500">#{index + 1}</span>
-                    )}
-                    <div className="flex">
-                      <button type="button" aria-label={`Move ${label} earlier`} disabled={index === 0} onClick={() => move(index, -1)} className={iconButtonClasses({ variant: "ghost", size: "sm" })}>
-                        <ArrowUpIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={`Move ${label} later`}
-                        disabled={index === photos.length - 1}
-                        onClick={() => move(index, 1)}
-                        className={iconButtonClasses({ variant: "ghost", size: "sm" })}
-                      >
-                        <ArrowDownIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex min-w-0 flex-col gap-3">
-                  <p className="flex items-center gap-2 truncate text-small text-neutral-500">
-                    <CheckCircleIcon aria-hidden="true" size={16} weight={ICON_WEIGHT_OUTLINE} className="shrink-0 text-success-700" />
-                    <span className="truncate">{photo.name}</span>
-                  </p>
-                  {photo.warning ? <p className="text-small text-warning-700">{photo.warning}</p> : null}
-                  <Field label={`Alt text for ${label}`} hint={photo.altText ? undefined : <span className="text-warning-700">Missing alt text</span>}>
-                    {(control) => (
-                      <Input
-                        {...control}
-                        value={photo.altText}
-                        onChange={(event) => update(photo.key, event.target.value)}
-                        maxLength={200}
-                        placeholder="e.g. Gold hoop earrings on a model"
-                      />
-                    )}
-                  </Field>
-                  <button
-                    type="button"
-                    onClick={() => remove(photo)}
-                    className={buttonClasses({ variant: "tertiary", size: "md", className: "w-fit" })}
-                  >
-                    <TrashIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
-                    Remove photo
-                  </button>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-      )}
-    </Card>
+    </section>
   );
 }

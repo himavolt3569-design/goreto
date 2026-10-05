@@ -72,6 +72,7 @@ export { QuotesIcon } from "@phosphor-icons/react/dist/ssr/Quotes";
 export { ReceiptIcon } from "@phosphor-icons/react/dist/ssr/Receipt";
 export { ScanSmileyIcon } from "@phosphor-icons/react/dist/ssr/ScanSmiley";
 export { SealPercentIcon } from "@phosphor-icons/react/dist/ssr/SealPercent";
+export { SealCheckIcon } from "@phosphor-icons/react/dist/ssr/SealCheck";
 export { ShieldCheckIcon } from "@phosphor-icons/react/dist/ssr/ShieldCheck";
 export { ShoppingCartIcon } from "@phosphor-icons/react/dist/ssr/ShoppingCart";
 export { SignOutIcon } from "@phosphor-icons/react/dist/ssr/SignOut";

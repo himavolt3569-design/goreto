@@ -98,8 +98,9 @@ describe("CategoryForm", () => {
     return render(
       <CategoryForm
         categoryId={null}
-        values={{ title: "", slug: "", parentId: PARENT_ID, description: "", imagePath: "", isActive: true, sortOrder: 0 }}
+        values={{ title: "", slug: "", parentId: PARENT_ID, description: "", imagePath: "", heroImagePath: "", heroImageAlt: "", heroEyebrow: "", heroTitle: "", heroText: "", isActive: true, sortOrder: 0 }}
         imageUrl={null}
+        heroImageUrl={null}
         parents={[{ id: PARENT_ID, title: "Jewelry", parentId: null }]}
         hasChildren={hasChildren}
         saved={null}

@@ -65,6 +65,7 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
             <ProductStatusPill status={productDisplayStatus(product.status, stockState)} />
             {product.is_featured ? <Badge size="sm" tone="new">Featured</Badge> : null}
             {product.is_bestseller ? <Badge size="sm" tone="bestseller">Bestseller</Badge> : null}
+            {product.is_sponsored ? <Badge size="sm" tone="neutral">Sponsored</Badge> : null}
             {product.is_limited_edition ? <Badge size="sm" tone="limited">Limited</Badge> : null}
             {arModes.length > 0 ? <Badge size="sm" tone="ar-ready">AR Ready</Badge> : null}
           </div>
@@ -175,6 +176,10 @@ export default async function ProductDetailPage({ params }: PageProps<"/admin/pr
               <div className="flex items-center justify-between gap-4">
                 <span className="text-body text-neutral-900">Bestseller badge</span>
                 <ToggleForm action={setProductFlagAction} id={product.id} checked={product.is_bestseller} label="Bestseller badge" extra={{ flag: "is_bestseller" }} />
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-body text-neutral-900">Sponsored (Goreto Pick tick)</span>
+                <ToggleForm action={setProductFlagAction} id={product.id} checked={product.is_sponsored} label="Sponsored" extra={{ flag: "is_sponsored" }} />
               </div>
             </Panel>
           ) : null}

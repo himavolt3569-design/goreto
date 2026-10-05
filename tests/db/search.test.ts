@@ -45,7 +45,7 @@ function searchSql(args: Args): string {
       ${literal(args.q)}, ${literal(args.category)}, ${literal(args.min)}, ${literal(args.max)},
       ${literal(args.sort)}, ${args.limit ?? 48}, ${args.offset ?? 0}
     ) with ordinality as t(id, slug, title, category_id, base_price_paisa, is_bestseller,
-      is_limited_edition, published_at, cover_path, cover_alt, total_count, n)`;
+      is_limited_edition, is_sponsored, published_at, cover_path, cover_alt, total_count, n)`;
 }
 
 async function search(args: Args, setup: string[] = []): Promise<Hit[]> {

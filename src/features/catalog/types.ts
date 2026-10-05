@@ -17,6 +17,8 @@ export type HomeProduct = {
   categorySlug: string;
   pricePaisa: number;
   image: MediaImage | null;
+  /** Sponsored product: shown with the "Goreto Pick" tick (PickBadge). */
+  isPick: boolean;
 };
 
 export type HomeCollection = {
@@ -39,6 +41,8 @@ export type Testimonial = {
 export type HomepageData = {
   categories: HomeCategory[];
   featuredProducts: HomeProduct[];
+  /** Sponsored products for the Goreto Picks section; empty hides it. */
+  picks: HomeProduct[];
   collections: HomeCollection[];
   testimonials: Testimonial[];
 };
@@ -52,6 +56,15 @@ export type CategoryDetail = {
   description: string;
   /** Set for subcategories, for breadcrumbs. */
   parent: CategoryRef | null;
+  /** Banner at the top of the page; `null` keeps the plain heading. */
+  hero: CategoryHero | null;
+};
+
+export type CategoryHero = {
+  eyebrow: string;
+  title: string;
+  text: string;
+  image: MediaImage;
 };
 
 /** One `/categories` tile. */
@@ -161,6 +174,8 @@ export type ProductDetail = {
   title: string;
   category: CategoryRef;
   badge: ProductBadge | null;
+  /** Sponsored product: shown with the "Goreto Pick" tick (PickBadge). */
+  isPick: boolean;
   rating: ProductRating | null;
   shortDescription: string;
   description: string;

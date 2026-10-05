@@ -32,7 +32,8 @@ export async function setProductFlagAction(_previous: ActionResult | null, formD
   const input = await authorizeAndParse("catalog.write", productFlagSchema, formData);
   if (!input.ok) return input.result;
 
-  const update = input.data.flag === "is_featured" ? { is_featured: input.data.value } : { is_bestseller: input.data.value };
+  const { flag, value } = input.data;
+  const update = flag === "is_featured" ? { is_featured: value } : flag === "is_bestseller" ? { is_bestseller: value } : { is_sponsored: value };
   const { data, error } = await adminDb().from("products").update(update).eq("id", input.data.id).select("slug");
   if (error) return databaseErrorResult(error, "set product flag");
   if (data.length !== 1) return NOT_UPDATED;

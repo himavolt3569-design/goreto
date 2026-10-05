@@ -45,6 +45,7 @@ The live site is https://goreto-kappa.vercel.app. Vercel deploys production **on
 
 - Production uses its own Supabase project, `goreto-prod` (no seed), and its own Clerk app, "Goreto Live". Their values live in the untracked `.env.production.local` in the main checkout. The npm scripts load `.env.local`, so they always target **dev**. To reach prod, run a script with `node --env-file=.env.production.local ...`, and do a `--dry-run` before any push.
 - To release: apply migrations to prod first, then merge `feat/design-system-homepage` into `production`. Never seed prod.
+- A local `npm run build` loads `.env.production.local`, so prerendering queries **prod**. Run it after prod has the branch's migrations, or load `.env.local` into `process.env` first to build against dev.
 - `src/config/features.ts` hides links to unbuilt pages in production builds. When a feature ships, delete its flag rather than flipping it.
 
 ## Architecture

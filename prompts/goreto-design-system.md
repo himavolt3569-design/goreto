@@ -1,5 +1,7 @@
 # Implement the Goreto.store Design System
 
+> **Superseded typeface (2026-10-04):** Inter and Playfair Display were replaced by Poppins everywhere. See `prompts/goreto-poppins-heroes-sponsors.md` and AGENTS.md §3.2.
+
 ## Goal
 
 Turn `designs/Goreto-designsystem.png` into code: Tailwind v4 design tokens, fonts, an icon convention, and a set of reusable, accessible UI primitives and card/navigation components in `components/ui`. Add a dev-only `/design-system` page that renders every section of the reference so it can be compared visually.

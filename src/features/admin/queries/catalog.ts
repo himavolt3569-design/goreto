@@ -1,6 +1,7 @@
 import "server-only";
 import type { Database } from "@/types/database";
 import { parseArAssetPath } from "../ar-forms";
+import { EMPTY_CATEGORY_HERO } from "../catalog-forms";
 import { containsPattern, quotedFilterValue } from "../search-input";
 import { stockStateFor, type StockState } from "../states";
 
@@ -24,11 +25,12 @@ export type AdminProductRow = {
   thumbnail: string | null;
   isFeatured: boolean;
   isBestseller: boolean;
+  isSponsored: boolean;
   updatedAt: string;
 };
 
 const PRODUCT_ROW_SELECT =
-  "id, title, slug, status, base_price_paisa, low_stock_threshold, is_featured, is_bestseller, updated_at, categories(title), product_variants(stock_quantity, is_active), product_media(storage_path, sort_order)";
+  "id, title, slug, status, base_price_paisa, low_stock_threshold, is_featured, is_bestseller, is_sponsored, updated_at, categories(title), product_variants(stock_quantity, is_active), product_media(storage_path, sort_order)";
 
 type ProductRowData = {
   id: string;
@@ -39,6 +41,7 @@ type ProductRowData = {
   low_stock_threshold: number;
   is_featured: boolean;
   is_bestseller: boolean;
+  is_sponsored: boolean;
   updated_at: string;
   categories: { title: string } | null;
   product_variants: { stock_quantity: number; is_active: boolean }[];
@@ -60,6 +63,7 @@ function toProductRow(row: ProductRowData): AdminProductRow {
     thumbnail: mediaUrl(row.product_media[0]?.storage_path),
     isFeatured: row.is_featured,
     isBestseller: row.is_bestseller,
+    isSponsored: row.is_sponsored,
     updatedAt: row.updated_at,
   };
 }
@@ -103,7 +107,7 @@ export async function fetchProductDetail(productId: string) {
     .from("products")
     .select(
       `id, title, slug, status, short_description, description, base_price_paisa, compare_at_price_paisa,
-       low_stock_threshold, is_featured, is_bestseller, is_limited_edition, tags, specs, care_instructions,
+       low_stock_threshold, is_featured, is_bestseller, is_limited_edition, is_sponsored, tags, specs, care_instructions,
        published_at, archived_at, created_at, updated_at, categories(title, slug),
        product_variants(id, sku, title, option_values, price_paisa, stock_quantity, is_active, sort_order),
        product_media(id, storage_path, alt_text, sort_order, kind, variant_id),
@@ -297,7 +301,7 @@ export async function fetchMerchandisedProducts(): Promise<AdminProductRow[]> {
   const { data, error } = await adminDb()
     .from("products")
     .select(PRODUCT_ROW_SELECT)
-    .or("is_featured.eq.true,is_bestseller.eq.true")
+    .or("is_featured.eq.true,is_bestseller.eq.true,is_sponsored.eq.true")
     .order("sort_order", { referencedTable: "product_media" })
     .eq("product_media.kind", "image")
     .limit(1, { referencedTable: "product_media" })
@@ -315,6 +319,11 @@ export type CategoryFormValues = {
   parentId: string;
   description: string;
   imagePath: string;
+  heroImagePath: string;
+  heroImageAlt: string;
+  heroEyebrow: string;
+  heroTitle: string;
+  heroText: string;
   isActive: boolean;
   sortOrder: number;
 };
@@ -323,19 +332,20 @@ export type CategoryEditorData = {
   id: string;
   values: CategoryFormValues;
   imageUrl: string | null;
+  heroImageUrl: string | null;
   children: { id: string; title: string }[];
   productCount: number;
   updatedAt: string;
 };
 
 export function emptyCategoryValues(parentId: string | null): CategoryFormValues {
-  return { title: "", slug: "", parentId: parentId ?? "", description: "", imagePath: "", isActive: true, sortOrder: 0 };
+  return { ...EMPTY_CATEGORY_HERO, title: "", slug: "", parentId: parentId ?? "", description: "", imagePath: "", isActive: true, sortOrder: 0 };
 }
 
 export async function fetchCategoryEditor(id: string): Promise<CategoryEditorData | null> {
   const db = adminDb();
   const [category, children, products] = await Promise.all([
-    db.from("categories").select("id, title, slug, parent_id, description, image_path, is_active, sort_order, updated_at").eq("id", id).maybeSingle(),
+    db.from("categories").select("id, title, slug, parent_id, description, image_path, hero_image_path, hero_image_alt, hero_eyebrow, hero_title, hero_text, is_active, sort_order, updated_at").eq("id", id).maybeSingle(),
     db.from("categories").select("id, title").eq("parent_id", id).order("sort_order").order("title"),
     db.from("products").select("id", { count: "exact", head: true }).eq("category_id", id),
   ]);
@@ -353,10 +363,16 @@ export async function fetchCategoryEditor(id: string): Promise<CategoryEditorDat
       parentId: row.parent_id ?? "",
       description: row.description,
       imagePath: row.image_path ?? "",
+      heroImagePath: row.hero_image_path ?? "",
+      heroImageAlt: row.hero_image_alt,
+      heroEyebrow: row.hero_eyebrow,
+      heroTitle: row.hero_title,
+      heroText: row.hero_text,
       isActive: row.is_active,
       sortOrder: row.sort_order,
     },
     imageUrl: mediaUrl(row.image_path),
+    heroImageUrl: mediaUrl(row.hero_image_path),
     children: children.data,
     productCount: products.count ?? 0,
     updatedAt: row.updated_at,

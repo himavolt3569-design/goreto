@@ -18,6 +18,7 @@ export function toCardRow(row: SearchRow): CardRow {
     base_price_paisa: row.base_price_paisa,
     is_bestseller: row.is_bestseller,
     is_limited_edition: row.is_limited_edition,
+    is_sponsored: row.is_sponsored,
     published_at: row.published_at,
     product_media: coverPath ? [{ storage_path: coverPath, alt_text: row.cover_alt ?? "" }] : [],
   };

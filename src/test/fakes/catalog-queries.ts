@@ -29,6 +29,7 @@ export async function fetchProductCountsByCategory() {
 export async function fetchProductCards(filter: CardFilter = {}) {
   let rows = cardRows.filter((row) => {
     if (filter.featuredOnly && !FEATURED.has(row.id)) return false;
+    if (filter.sponsoredOnly && !row.is_sponsored) return false;
     if (filter.categoryIds && !filter.categoryIds.includes(row.category_id)) return false;
     if (filter.excludeCategoryIds?.includes(row.category_id)) return false;
     if (filter.excludeProductId === row.id) return false;

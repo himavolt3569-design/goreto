@@ -26,7 +26,7 @@ import {
 } from "@/features/admin/product-form/variant-matrix";
 import type { EditorVariantInfo } from "@/features/admin/queries/product-editor";
 import { cn } from "@/lib/utils/cn";
-import { FormSection, GroupError, useFieldError } from "./fields";
+import { GroupError, useFieldError } from "./fields";
 
 /*
  * Options (Colour, Size, ...) and the variants they produce. Staff edit the
@@ -56,7 +56,27 @@ export function fillEmptySkus(values: ProductFormValues): VariantFormValues[] | 
   return values.variants.map((variant) => (variant.sku.trim() === "" ? { ...variant, sku: freshSku(stem, names, variant.optionValues, taken) } : variant));
 }
 
-export function OptionsVariantsSection({ variantInfo }: { variantInfo: Record<string, EditorVariantInfo> }) {
+/**
+ * A product with no options and one variant is a "single product": its stock
+ * sits in Essentials and its SKU, weight and active state in Advanced, instead
+ * of a one-row variants table.
+ */
+export function useSingleVariant(): boolean {
+  const options = useWatch<ProductFormValues, "options">({ name: "options" }) ?? [];
+  const variants = useWatch<ProductFormValues, "variants">({ name: "variants" }) ?? [];
+  return options.length === 0 && variants.length === 1;
+}
+
+/** One line for the folded section header. */
+export function variantsSummary(values: Pick<ProductFormValues, "options" | "variants">): string {
+  const names = values.options.map((option) => option.name.trim()).filter(Boolean);
+  if (values.options.length === 0 && values.variants.length === 1) return "Single product, no options like Colour or Size";
+  const count = `${values.variants.length} ${values.variants.length === 1 ? "variant" : "variants"}`;
+  return names.length > 0 ? `${names.join(", ")} · ${count}` : count;
+}
+
+/** Options (Colour, Size, ...) and the variants they make; the content of the folded "Options & variants" section. */
+export function OptionsVariantsFields({ variantInfo }: { variantInfo: Record<string, EditorVariantInfo> }) {
   const { control, getValues, setValue, setError, clearErrors } = useFormContext<ProductFormValues>();
   const options = useFieldArray({ control, name: "options", keyName: "fieldKey" });
   const variants = useFieldArray({ control, name: "variants", keyName: "fieldKey" });
@@ -114,12 +134,13 @@ export function OptionsVariantsSection({ variantInfo }: { variantInfo: Record<st
     if (previous !== next.trim()) setValue("variants", renameOptionKey(getValues("variants"), previous, next.trim()));
   }
 
+  const single = optionsNow.length === 0 && (watchedVariants?.length ?? 0) === 1;
+
   return (
-    <FormSection
-      id="variants"
-      title="Options & variants"
-      description="Options are what shoppers choose, like Colour or Size. Each combination is a variant with its own SKU, price and stock."
-    >
+    <>
+      <p className="text-body text-neutral-500">
+        Options are what shoppers choose, like Colour or Size. Each combination becomes a variant with its own SKU, price and stock.
+      </p>
       <div className="flex flex-col gap-4">
         {options.fields.map((option, index) => (
           <OptionEditor
@@ -142,78 +163,87 @@ export function OptionsVariantsSection({ variantInfo }: { variantInfo: Record<st
         ) : null}
       </div>
 
-      <div className="flex flex-col gap-4 border-t border-neutral-200 pt-6">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <h3 className="text-h3 text-neutral-900">
-            Variants <span className="text-neutral-500">({watchedVariants?.length ?? 0})</span>
-          </h3>
-          <Button
-            variant={inSync ? "tertiary" : "primary"}
-            size="md"
-            leadingIcon={<ArrowsClockwiseIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />}
-            onClick={updateVariants}
-          >
-            Update variants
-          </Button>
-        </div>
-
-        {!inSync ? (
-          <p role="status" className="rounded-md bg-warning-100 px-4 py-3 text-body text-warning-700">
-            The options changed. Choose <strong>Update variants</strong> to match them before saving.
+      {single ? (
+        <>
+          <p className="rounded-md bg-neutral-100 px-4 py-3 text-body text-neutral-700">
+            No options, so this is a single product. Its stock is under Essentials, and its SKU and weight under Advanced.
           </p>
-        ) : null}
-        <GroupError name="variants" />
-
-        <div className="overflow-x-auto rounded-md border border-neutral-200" role="region" aria-label="Variants" tabIndex={0}>
-          <table className={cn(tableClasses, "min-w-[880px]")}>
-            <thead>
-              <tr className={theadRowClasses}>
-                <th scope="col" className={thClasses}>Variant</th>
-                <th scope="col" className={thClasses}>SKU</th>
-                <th scope="col" className={thClasses}>Price (Rs.)</th>
-                <th scope="col" className={thClasses}>Weight (g)</th>
-                <th scope="col" className={thClasses}>Stock</th>
-                <th scope="col" className={thClasses}>Active</th>
-                <th scope="col" className={thClasses}>
-                  <span className="sr-only">Remove</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {variants.fields.map((field, index) => {
-                const row = watchedVariants?.[index] ?? field;
-                return (
-                  <VariantRow
-                    key={field.fieldKey}
-                    index={index}
-                    label={variantLabel(row)}
-                    info={row.id ? variantInfo[row.id] : undefined}
-                    sku={row.sku}
-                    basePrice={basePrice}
-                    canRemove={variants.fields.length > 1}
-                    onRemove={() => removeVariant(index)}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {pendingRemoval.length > 0 ? (
-          <div role="status" className="flex flex-col gap-1 rounded-md bg-neutral-100 px-4 py-3 text-body text-neutral-700">
-            <p className="font-medium text-neutral-900">Removed when you save:</p>
-            <ul className="list-disc pl-6">
-              {pendingRemoval.map((row) => (
-                <li key={row.id}>
-                  {row.sku}
-                  {row.id && variantInfo[row.id]?.ordered ? " (has orders, so it's set inactive instead of deleted)" : ""}
-                </li>
-              ))}
-            </ul>
+          <GroupError name="variants" />
+        </>
+      ) : (
+        <div className="flex flex-col gap-4 border-t border-neutral-200 pt-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <h3 className="text-h3 text-neutral-900">
+              Variants <span className="text-neutral-500">({watchedVariants?.length ?? 0})</span>
+            </h3>
+            <Button
+              variant={inSync ? "tertiary" : "primary"}
+              size="md"
+              leadingIcon={<ArrowsClockwiseIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />}
+              onClick={updateVariants}
+            >
+              Update variants
+            </Button>
           </div>
-        ) : null}
-      </div>
-    </FormSection>
+
+          {!inSync ? (
+            <p role="status" className="rounded-md bg-warning-100 px-4 py-3 text-body text-warning-700">
+              The options changed. Choose <strong>Update variants</strong> to match them before saving.
+            </p>
+          ) : null}
+          <GroupError name="variants" />
+
+          <div className="overflow-x-auto rounded-md border border-neutral-200" role="region" aria-label="Variants" tabIndex={0}>
+            <table className={cn(tableClasses, "min-w-[880px]")}>
+              <thead>
+                <tr className={theadRowClasses}>
+                  <th scope="col" className={thClasses}>Variant</th>
+                  <th scope="col" className={thClasses}>SKU</th>
+                  <th scope="col" className={thClasses}>Price (Rs.)</th>
+                  <th scope="col" className={thClasses}>Weight (g)</th>
+                  <th scope="col" className={thClasses}>Stock</th>
+                  <th scope="col" className={thClasses}>Active</th>
+                  <th scope="col" className={thClasses}>
+                    <span className="sr-only">Remove</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {variants.fields.map((field, index) => {
+                  const row = watchedVariants?.[index] ?? field;
+                  return (
+                    <VariantRow
+                      key={field.fieldKey}
+                      index={index}
+                      label={variantLabel(row)}
+                      info={row.id ? variantInfo[row.id] : undefined}
+                      sku={row.sku}
+                      basePrice={basePrice}
+                      canRemove={variants.fields.length > 1}
+                      onRemove={() => removeVariant(index)}
+                    />
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {pendingRemoval.length > 0 ? (
+            <div role="status" className="flex flex-col gap-1 rounded-md bg-neutral-100 px-4 py-3 text-body text-neutral-700">
+              <p className="font-medium text-neutral-900">Removed when you save:</p>
+              <ul className="list-disc pl-6">
+                {pendingRemoval.map((row) => (
+                  <li key={row.id}>
+                    {row.sku}
+                    {row.id && variantInfo[row.id]?.ordered ? " (has orders, so it's set inactive instead of deleted)" : ""}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </div>
+      )}
+    </>
   );
 }
 

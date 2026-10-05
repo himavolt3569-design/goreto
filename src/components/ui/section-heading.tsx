@@ -14,7 +14,7 @@ export type SectionHeadingProps = {
   className?: string;
 };
 
-/** Eyebrow + Playfair section title + supporting line, as used on the homepage. */
+/** Eyebrow + display section title + supporting line, as used on the homepage. */
 export function SectionHeading({
   eyebrow,
   title,

@@ -78,11 +78,33 @@ describe("category view models", () => {
     expect(toCategoryDetail(categoryRows[3], index).parent).toEqual({ slug: "jewelry", title: "Jewelry" });
     expect(toCategoryDetail(categoryRows[0], index).parent).toBeNull();
   });
+
+  it("has no hero until a hero photo is uploaded", () => {
+    const row = { ...categoryRows[0], hero_title: "Gold for every day", hero_text: "Light pieces." };
+    expect(toCategoryDetail(row, index).hero).toBeNull();
+  });
+
+  it("builds the hero, falling back to the name and description", () => {
+    const row = { ...categoryRows[0], hero_image_path: "categories/c-jewelry/hero.jpg", hero_image_alt: "Gold rings" };
+    expect(toCategoryDetail(row, index).hero).toEqual({
+      eyebrow: "",
+      title: "Jewelry",
+      text: "Everyday gold and silver.",
+      image: { src: expect.stringContaining("categories/c-jewelry/hero.jpg"), alt: "Gold rings" },
+    });
+    const custom = { ...row, hero_eyebrow: "New season", hero_title: "Gold for every day", hero_text: "Light pieces." };
+    expect(toCategoryDetail(custom, index).hero).toMatchObject({ eyebrow: "New season", title: "Gold for every day", text: "Light pieces." });
+  });
 });
 
 describe("product cards", () => {
   const index = indexCategories(categoryRows);
   const ratings = new Map(ratingRows.map((row) => [row.product_id, row]));
+
+  it("carries the sponsored flag as isPick", () => {
+    expect(toHomeProduct(cardRows[3], index).isPick).toBe(true);
+    expect(toHomeProduct(cardRows[0], index).isPick).toBe(false);
+  });
 
   it("uses the top-level category slug so homepage tabs keep working", () => {
     expect(toHomeProduct(cardRows[2], index).categorySlug).toBe("jewelry");

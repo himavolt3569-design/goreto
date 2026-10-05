@@ -92,7 +92,7 @@ export const toggleSchema = z.object({ id, value: checkbox });
 
 export const productFlagSchema = z.object({
   id,
-  flag: z.enum(["is_featured", "is_bestseller"]),
+  flag: z.enum(["is_featured", "is_bestseller", "is_sponsored"]),
   value: checkbox,
 });
 
