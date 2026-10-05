@@ -18,6 +18,11 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          hero_eyebrow: string
+          hero_image_alt: string
+          hero_image_path: string | null
+          hero_text: string
+          hero_title: string
           id: string
           image_path: string | null
           is_active: boolean
@@ -30,6 +35,11 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string
+          hero_eyebrow?: string
+          hero_image_alt?: string
+          hero_image_path?: string | null
+          hero_text?: string
+          hero_title?: string
           id?: string
           image_path?: string | null
           is_active?: boolean
@@ -42,6 +52,11 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          hero_eyebrow?: string
+          hero_image_alt?: string
+          hero_image_path?: string | null
+          hero_text?: string
+          hero_title?: string
           id?: string
           image_path?: string | null
           is_active?: boolean
@@ -1187,6 +1202,7 @@ export type Database = {
           is_bestseller: boolean
           is_featured: boolean
           is_limited_edition: boolean
+          is_sponsored: boolean
           low_stock_threshold: number
           options: Json
           published_at: string | null
@@ -1211,6 +1227,7 @@ export type Database = {
           is_bestseller?: boolean
           is_featured?: boolean
           is_limited_edition?: boolean
+          is_sponsored?: boolean
           low_stock_threshold?: number
           options?: Json
           published_at?: string | null
@@ -1235,6 +1252,7 @@ export type Database = {
           is_bestseller?: boolean
           is_featured?: boolean
           is_limited_edition?: boolean
+          is_sponsored?: boolean
           low_stock_threshold?: number
           options?: Json
           published_at?: string | null
@@ -1765,6 +1783,26 @@ export type Database = {
         Returns: Json
       }
       account_delete_address: { Args: { p_id: string }; Returns: undefined }
+      account_delete_review: {
+        Args: { p_id: string }
+        Returns: {
+          previous_status: Database["public"]["Enums"]["review_status"]
+          product_slug: string
+        }[]
+      }
+      account_reviewable_items: {
+        Args: never
+        Returns: {
+          delivered_at: string
+          image_path: string
+          order_item_id: string
+          order_number: string
+          product_id: string
+          product_slug: string
+          product_title: string
+          variant_title: string
+        }[]
+      }
       account_save_address: {
         Args: {
           p_district_code: string
@@ -1787,6 +1825,15 @@ export type Database = {
         Args: { p_id: string }
         Returns: undefined
       }
+      account_submit_review: {
+        Args: {
+          p_body: string
+          p_order_item_id: string
+          p_rating: number
+          p_title: string
+        }
+        Returns: string
+      }
       account_summary: {
         Args: never
         Returns: {
@@ -1806,6 +1853,18 @@ export type Database = {
           occurred_at: string
           order_number: string
           status: Database["public"]["Enums"]["shipment_status"]
+        }[]
+      }
+      account_update_review: {
+        Args: {
+          p_body: string
+          p_id: string
+          p_rating: number
+          p_title: string
+        }
+        Returns: {
+          previous_status: Database["public"]["Enums"]["review_status"]
+          product_slug: string
         }[]
       }
       admin_accept_order: {
@@ -2162,6 +2221,7 @@ export type Database = {
           id: string
           is_bestseller: boolean
           is_limited_edition: boolean
+          is_sponsored: boolean
           published_at: string
           slug: string
           title: string

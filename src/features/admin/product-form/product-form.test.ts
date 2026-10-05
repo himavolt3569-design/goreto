@@ -160,6 +160,7 @@ describe("productFormSchema", () => {
     isFeatured: false,
     isBestseller: false,
     isLimitedEdition: false,
+    isSponsored: false,
     lowStockThreshold: "3",
     options: [{ name: "Colour", values: [{ value: "tan", label: "Tan", swatchHex: "#c19a6b" }] }],
     variants: [variant()],

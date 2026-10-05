@@ -38,6 +38,7 @@ export default async function EditCategoryPage({ params, searchParams }: PagePro
         categoryId={category.id}
         values={category.values}
         imageUrl={category.imageUrl}
+        heroImageUrl={category.heroImageUrl}
         parents={parents}
         hasChildren={category.children.length > 0}
         saved={{ slug: category.values.slug, isActive: category.values.isActive, updatedLabel: formatDateTime(category.updatedAt) }}

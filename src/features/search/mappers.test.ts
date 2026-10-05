@@ -9,6 +9,7 @@ const row: SearchRow = {
   base_price_paisa: 249900,
   is_bestseller: false,
   is_limited_edition: true,
+  is_sponsored: true,
   published_at: "2026-09-01T00:00:00Z",
   cover_path: "products/pearl-choker/01.jpg",
   cover_alt: "Pearl choker on a stand",
@@ -25,6 +26,7 @@ describe("toCardRow", () => {
       base_price_paisa: 249900,
       is_bestseller: false,
       is_limited_edition: true,
+      is_sponsored: true,
       published_at: "2026-09-01T00:00:00Z",
       product_media: [{ storage_path: "products/pearl-choker/01.jpg", alt_text: "Pearl choker on a stand" }],
     });

@@ -79,6 +79,7 @@ export function toProductFormValues(
     isFeatured: false,
     isBestseller: false,
     isLimitedEdition: false,
+    isSponsored: false,
     lowStockThreshold: String(lowStockThreshold),
     options: [],
     variants: [{ id: null, sku, title: "", optionValues: {}, price: "", weightGrams: "", isActive: true, initialStock: card.stock }],

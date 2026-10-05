@@ -81,6 +81,14 @@ const imagePath = z
   .max(300, "Invalid image")
   .transform((value) => (value === "" ? null : value));
 
+/** Like imagePath, for fields some forms leave out (the quick-create pop-up has no hero). */
+const optionalImagePath = z
+  .string()
+  .trim()
+  .max(300, "Invalid image")
+  .optional()
+  .transform((value) => (value ? value : null));
+
 /** A disabled select sends nothing, so a missing value means "none". */
 const optionalUuid = z
   .string()
@@ -96,12 +104,25 @@ export const categoryFormSchema = z.object({
   parentId: optionalUuid,
   description: text(500),
   imagePath,
+  // Category hero banner (optional; the pop-up form doesn't send these).
+  heroImagePath: optionalImagePath,
+  // The alt text field is disabled (and not submitted) without an image.
+  heroImageAlt: text(200).default(""),
+  heroEyebrow: text(40).default(""),
+  heroTitle: text(80).default(""),
+  heroText: text(240).default(""),
   isActive: checkbox,
   sortOrder,
   stagingId: z.uuid().optional(),
+}).refine((value) => value.heroImagePath === null || value.heroImageAlt !== "", {
+  message: "Describe the image for people using screen readers",
+  path: ["heroImageAlt"],
 });
 
 export type CategoryFormInput = z.infer<typeof categoryFormSchema>;
+
+/** A category without a hero banner, as form values (shared by the editor and the pop-up). */
+export const EMPTY_CATEGORY_HERO = { heroImagePath: "", heroImageAlt: "", heroEyebrow: "", heroTitle: "", heroText: "" } as const;
 
 /* ---------- Collection ---------- */
 

@@ -166,6 +166,21 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
 - Menus and the date picker share the popover styles.
 - A follow-up review fix keeps unsaved edits in the product form, handles stale variants, and defers the chart-window form submit until the Select commits.
 
+### Phase 11 — Poppins, smaller hero, category heroes, sponsored products (2026-10-04, `goreto-poppins-heroes-sponsors.md`)
+- **Poppins** replaces Inter and Playfair Display everywhere: storefront, admin, Clerk and `/design-system`. AGENTS.md §3.2 now names Poppins.
+- The product page's short description drops to 14/20. The homepage hero is now 280px (it was 560px), and its trust row is a strip below it.
+- **Category heroes**: an optional banner on `/categories/<slug>` (image, eyebrow, title, text) edited in the category form's "Category hero" section. Migration `category_heroes`.
+- **Sponsored products**: a "Sponsored" checkbox and toggles in admin. Shoppers see a blue "Goreto Pick" tick on cards, the quick view and the product page, plus a homepage "Goreto Picks" section. Migration `product_sponsored`.
+- Both migrations are applied on **dev**, not yet on prod.
+
+### Phase 12 — Shorter product form (2026-10-04, `goreto-admin-product-form-compact.md`)
+- Add and Edit product now open on one **Essentials** card: name, category, price, compare-at price, stock (for a product without options), short description and photos.
+- Everything else is in folded sections with one-line summaries: Description & specifications, Options & variants, Badges/tags/collections, and Advanced (URL slug, low-stock alert, SKU, weight).
+- On save, any section with an error opens and shows "N to fix".
+- Products without options no longer show the variants table.
+- The status picker is a compact three-way switch. Below `xl`, the status/save panel sticks to the bottom of the screen.
+- UI only: same fields, schema and save action.
+
 ---
 
 ## 4. Remaining work
@@ -342,6 +357,8 @@ Several footer and nav links return a 404 today.
 - **Seed AR rows have no files (dev only):** `/admin/ar` flags them "No file uploaded". Production has no seed, so this no longer blocks launch.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.
+- **Sponsored products are not disclosed to shoppers:** at the client's request the tick reads "Goreto Pick" and never "Sponsored". Undisclosed paid placement may count as misleading advertising under Nepal's Consumer Protection Act 2075. The wording is one constant (`PICK_LABEL` in `src/components/ui/pick-badge.tsx`).
+- **Release Phase 11:** apply migrations `category_heroes` and `product_sponsored` to prod (dry run first) before merging to `production`. Otherwise `/categories` and the homepage fail.
 - **Orange contrast:** white on `#F97316` and orange text on white measure about 2.8:1, below WCAG AA for body text. The reference colours were kept as-is. This was raised in the design-system prompt and hasn't been decided yet.
 - **Store support email and phone:** they're empty in `store_settings`. You can set them in `/admin/settings`.
 - **Clerk webhook:** configured for production (Goreto Live → `https://goreto-kappa.vercel.app/api/webhooks/clerk`, secret in Vercel). The dev app still has no endpoint or `CLERK_WEBHOOK_SIGNING_SECRET` in `.env.local`; the lazy profile upsert covers dev.

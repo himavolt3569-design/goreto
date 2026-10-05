@@ -26,6 +26,8 @@ describe("getHomepageData", () => {
       "canvas-tote",
     ]);
     expect(data.featuredProducts[0].categorySlug).toBe("jewelry");
+    expect(data.featuredProducts.map((product) => product.isPick)).toEqual([false, true]);
+    expect(data.picks.map((product) => product.slug)).toEqual(["canvas-tote"]);
     expect(data.collections.map((collection) => collection.slug)).toEqual(["autumn-styles"]);
     expect(data.testimonials).toHaveLength(1);
   });

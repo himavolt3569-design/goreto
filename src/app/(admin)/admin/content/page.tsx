@@ -31,7 +31,7 @@ export default async function ContentPage() {
       {products ? (
         <Panel
           title="Homepage merchandising"
-          description="Featured products fill the homepage's Handpicked grid; Bestseller adds the badge. Only active products are shown to shoppers."
+          description="Featured products fill the homepage's Handpicked grid; Bestseller adds the badge; Sponsored adds the blue “Goreto Pick” tick and the Goreto Picks section. Only active products are shown to shoppers."
         >
           {products.length === 0 ? (
             <EmptyState icon={StarIcon} title="Nothing is featured yet" />
@@ -44,6 +44,7 @@ export default async function ContentPage() {
                     <th scope="col" className={thClasses}>Status</th>
                     <th scope="col" className={thClasses}>Featured</th>
                     <th scope="col" className={thClasses}>Bestseller</th>
+                    <th scope="col" className={thClasses}>Sponsored</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -79,6 +80,16 @@ export default async function ContentPage() {
                           label={`Mark ${product.title} as a bestseller`}
                           disabled={!canWrite}
                           extra={{ flag: "is_bestseller" }}
+                        />
+                      </td>
+                      <td className={tdClasses}>
+                        <ToggleForm
+                          action={setProductFlagAction}
+                          id={product.id}
+                          checked={product.isSponsored}
+                          label={`Mark ${product.title} as sponsored`}
+                          disabled={!canWrite}
+                          extra={{ flag: "is_sponsored" }}
                         />
                       </td>
                     </tr>

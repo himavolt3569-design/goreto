@@ -103,6 +103,7 @@ export const productFormSchema = z
     isFeatured: z.boolean(),
     isBestseller: z.boolean(),
     isLimitedEdition: z.boolean(),
+    isSponsored: z.boolean(),
     lowStockThreshold: wholeNumber(0, 10_000, "Enter a number between 0 and 10,000"),
     options: z.array(optionSchema).max(MAX_OPTIONS, `Use at most ${MAX_OPTIONS} options`),
     variants: z.array(variantSchema).min(1, "Add at least one variant").max(MAX_VARIANTS, `Use at most ${MAX_VARIANTS} variants`),
@@ -175,6 +176,8 @@ export function toSavePayload(product: ProductFormOutput) {
       is_featured: product.isFeatured,
       is_bestseller: product.isBestseller,
       is_limited_edition: product.isLimitedEdition,
+      // Not read by admin_save_product; saveProductAction writes it right after.
+      is_sponsored: product.isSponsored,
       low_stock_threshold: product.lowStockThreshold,
       options: product.options.map((option) => ({
         name: option.name,
@@ -227,6 +230,7 @@ export function emptyProductValues(lowStockThreshold: number, canLinkCollections
     isFeatured: false,
     isBestseller: false,
     isLimitedEdition: false,
+    isSponsored: false,
     lowStockThreshold: String(lowStockThreshold),
     options: [],
     variants: [emptyVariant("", {})],

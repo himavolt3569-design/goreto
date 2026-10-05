@@ -60,6 +60,7 @@ export const seedCategoryDetails: (CategoryDetail & { image: MediaImage })[] = s
     title,
     description,
     parent: null,
+    hero: null,
     image: { src: picsumImage(picsumId, CATEGORY_TILE_PX, CATEGORY_TILE_PX), alt: "" },
   }),
 );
@@ -86,7 +87,7 @@ type SeedVariant = {
   stock: number;
 };
 
-type SeedProduct = Omit<ProductDetail, "category" | "variants" | "media"> & {
+type SeedProduct = Omit<ProductDetail, "category" | "variants" | "media" | "isPick"> & {
   categorySlug: string;
   variants: SeedVariant[];
   photos: SeedPhoto[];
@@ -408,6 +409,7 @@ function toProductDetail({ categorySlug, variants, photos, ...product }: SeedPro
   const variantId = (key: string) => `${product.slug}--${key}`;
   return {
     ...product,
+    isPick: false,
     category: { slug: categorySlug, title: categoryTitles[categorySlug] ?? categorySlug },
     variants: variants.map(({ key, stock, pricePaisa, ...variant }) => ({
       ...variant,
@@ -432,6 +434,7 @@ function toHomeProduct(product: SeedProduct): HomeProduct {
     categorySlug: product.categorySlug,
     pricePaisa: product.basePricePaisa,
     image: { src: picsumImage(cover.picsumId, PRODUCT_PX, PRODUCT_PX), alt: cover.alt },
+    isPick: false,
   };
 }
 

@@ -57,6 +57,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
             slug: product.slug,
             title: product.title,
             badge: product.badge,
+            isPick: product.isPick,
             rating: product.rating,
             shortDescription: product.shortDescription,
             basePricePaisa: product.basePricePaisa,
@@ -117,6 +118,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
                   href={`/products/${item.slug}`}
                   pricePaisa={item.pricePaisa}
                   image={item.image}
+                  pick={item.isPick}
                   rating={item.rating ?? undefined}
                   className="w-full"
                   wishlistAction={<WishlistButton slug={item.slug} productTitle={item.title} />}

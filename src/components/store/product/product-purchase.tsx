@@ -16,6 +16,7 @@ import {
   type Icon,
 } from "@/components/ui/icons";
 import { ICON_SIZE, ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
+import { PickBadge } from "@/components/ui/pick-badge";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { Rating } from "@/components/ui/rating";
 import { StatusIndicator } from "@/components/ui/status";
@@ -44,6 +45,7 @@ export type ProductPurchaseData = Pick<
   | "slug"
   | "title"
   | "badge"
+  | "isPick"
   | "rating"
   | "shortDescription"
   | "basePricePaisa"
@@ -158,10 +160,12 @@ export function ProductPurchase({
           {quickView ? (
             <h2 id={QUICK_VIEW_TITLE_ID} className="font-display text-h1 text-neutral-900">
               {product.title}
+              {product.isPick ? <PickBadge size={22} className="ml-2" /> : null}
             </h2>
           ) : (
             <h1 className="font-display text-h1 text-neutral-900 md:text-display-2">
               {product.title}
+              {product.isPick ? <PickBadge size={28} className="ml-2" /> : null}
             </h1>
           )}
           {product.rating ? (
@@ -177,7 +181,7 @@ export function ProductPurchase({
             </p>
             <StatusIndicator status={stock.status} label={stock.label} />
           </div>
-          <p className="text-body-lg text-neutral-500">{product.shortDescription}</p>
+          <p className="text-body text-neutral-500">{product.shortDescription}</p>
         </div>
 
         {product.options.map((option) => (

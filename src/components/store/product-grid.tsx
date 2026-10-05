@@ -14,6 +14,7 @@ export function ProductGrid({ products }: { products: readonly ProductSummary[] 
             href={`/products/${product.slug}`}
             pricePaisa={product.pricePaisa}
             image={product.image}
+            pick={product.isPick}
             rating={product.rating ?? undefined}
             className="w-full"
             wishlistAction={<WishlistButton slug={product.slug} productTitle={product.title} />}

@@ -104,14 +104,14 @@ const neutralSwatches = [
 ];
 
 const typeScale = [
-  { style: "Display 1", font: "Playfair Display", size: "48 / 56", weight: "Bold", use: "Hero titles", className: "font-display text-display-1" },
-  { style: "Display 2", font: "Playfair Display", size: "36 / 44", weight: "Bold", use: "Section titles", className: "font-display text-display-2" },
-  { style: "Heading 1", font: "Inter", size: "28 / 36", weight: "Semibold", use: "Product titles", className: "text-h1" },
-  { style: "Heading 2", font: "Inter", size: "22 / 30", weight: "Semibold", use: "Card titles", className: "text-h2" },
-  { style: "Heading 3", font: "Inter", size: "18 / 26", weight: "Medium", use: "Section labels", className: "text-h3" },
-  { style: "Body Large", font: "Inter", size: "16 / 24", weight: "Regular", use: "Body copy", className: "text-body-lg" },
-  { style: "Body", font: "Inter", size: "14 / 20", weight: "Regular", use: "Supporting text", className: "text-body" },
-  { style: "Small", font: "Inter", size: "12 / 16", weight: "Regular", use: "Captions, meta", className: "text-small" },
+  { style: "Display 1", font: "Poppins", size: "48 / 56", weight: "Bold", use: "Hero titles", className: "font-display text-display-1" },
+  { style: "Display 2", font: "Poppins", size: "36 / 44", weight: "Bold", use: "Section titles", className: "font-display text-display-2" },
+  { style: "Heading 1", font: "Poppins", size: "28 / 36", weight: "Semibold", use: "Product titles", className: "text-h1" },
+  { style: "Heading 2", font: "Poppins", size: "22 / 30", weight: "Semibold", use: "Card titles", className: "text-h2" },
+  { style: "Heading 3", font: "Poppins", size: "18 / 26", weight: "Medium", use: "Section labels", className: "text-h3" },
+  { style: "Body Large", font: "Poppins", size: "16 / 24", weight: "Regular", use: "Body copy", className: "text-body-lg" },
+  { style: "Body", font: "Poppins", size: "14 / 20", weight: "Regular", use: "Supporting text", className: "text-body" },
+  { style: "Small", font: "Poppins", size: "12 / 16", weight: "Regular", use: "Captions, meta", className: "text-small" },
 ];
 
 const spacing = [
@@ -234,15 +234,9 @@ export default function DesignSystemPage() {
           <div className="flex items-center gap-8">
             <span aria-hidden="true" className="font-display text-display-1">Ag</span>
             <div>
-              <p className="font-display text-h1 font-normal">Playfair Display</p>
-              <p className="text-body-lg text-neutral-500">Elegant • Premium • Expressive</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-8">
-            <span aria-hidden="true" className="text-display-1 font-semibold">Ag</span>
-            <div>
-              <p className="text-h1 font-normal">Inter</p>
-              <p className="text-body-lg text-neutral-500">Clean • Modern • Highly legible</p>
+              <p className="text-h1 font-normal">Poppins</p>
+              <p className="text-body-lg text-neutral-500">Warm • Geometric • Confident</p>
+              <p className="text-small text-neutral-500">Regular 400 · Medium 500 · Semibold 600 · Bold 700</p>
             </div>
           </div>
           <div className="flex flex-col gap-2 border-t border-neutral-200 pt-4">
@@ -401,7 +395,7 @@ export default function DesignSystemPage() {
               "Height: 44px (default)",
               "Padding: 0 16px (lg), 0 12px (md)",
               "Radius: 12px",
-              "Font: Inter Medium (14–16px)",
+              "Font: Poppins Medium (14–16px)",
               "Icon spacing: 8px",
             ]}
           />
