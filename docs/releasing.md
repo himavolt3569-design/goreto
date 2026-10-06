@@ -19,8 +19,9 @@ Merging a PR never changes the live site. Only a push to `production` does.
 | | Development | Production |
 | --- | --- | --- |
 | Env file | `.env.local` | `.env.production.local` (untracked) |
-| Supabase project | `goreto.store`, ref `lvvjnedwyrmmcagkixpn` (demo seed) | `goreto-prod`, ref `znliqwobpljclodooexx`, Mumbai, free plan (real data, never seeded) |
-| Clerk application | Goreto (dev instance) | Goreto Live, `app_3KEipwYZZ8YqhL0692wQxOglYc7` (development instance until a custom domain exists) |
+| Supabase project | `goreto-dev`, ref `jkjrfgictvpolvohgwcg`, Mumbai (demo seed) | `goreto-prod`, ref `etfcgwvdshhcxkrkytne`, Mumbai, free plan (real data, never seeded) |
+| Supabase account | Org "hamroofficialprojects's Org" (since 2026-10-06; the earlier projects `lvvjnedwyrmmcagkixpn` / `znliqwobpljclodooexx` belong to the old account and are no longer used) | same org |
+| Clerk application | Goreto (dev instance, `precise-bunny-2406.clerk.accounts.dev`) | Goreto Live, `app_3KEipwYZZ8YqhL0692wQxOglYc7` (development instance until a custom domain exists) |
 | Vercel env scope | Preview | Production |
 
 The npm scripts (`db:push`, `seed:*`, `owner:bootstrap`) load `.env.local`, so by default they hit **dev**. To target production, run the script with the prod file:

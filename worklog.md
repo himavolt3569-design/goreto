@@ -1,6 +1,6 @@
 # Goreto.store — Work Log
 
-_Last updated: 2026-10-04 · Live since 2026-10-04: https://goreto-kappa.vercel.app (branch `production`)_
+_Last updated: 2026-10-06 · Live since 2026-10-04: https://goreto-kappa.vercel.app (branch `production`)_
 
 Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the migrations, the code in `src/`, `scripts/` and `tests/`, and a fresh run of the checks below.
 
@@ -287,10 +287,10 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [x] **Product quick view** (§4.3) (2026-09-28, `goreto-discovery-2-quick-view.md`): intercepted `/products/[slug]` in a `@modal` slot of the store layout. Every storefront product card (and its bag icon) opens a native-`<dialog>` quick view with the variant picker, Add to Cart and Buy Now; the URL is the canonical product page, so reload/share/new tab open the full page, and Back/Forward close and reopen it. "View full details" does a full load. Data reads through `CATALOG_CACHE_TAG`, so admin edits reach it at once.
 - [x] **Collections** (2026-09-29, `goreto-discovery-3-collections.md`, no migration): `/collections` lists live collections (active and in their schedule window) with active-product counts; `/collections/[slug]` shows the banner (shared with the homepage carousel) and products in the curated admin order, with the category sort control and quick view. Ended, off or unknown collections return 404. Admin saves revalidate both.
 - [ ] `/offers` page.
-- [ ] Reviews on the product page: a list and a write form. "(N reviews)" is plain text today.
+- [x] **Reviews on the product page** (2026-10-06, `goreto-account-3-reviews-profile.md`, migration `product_reviews`): "Customer reviews" with the average, a 5 → 1 breakdown, the latest 4 and "See all"; `/products/[slug]/reviews` (10 per page, `?page=`); "(N reviews)" jumps to the section. **Verified buyers only** (client decision): `submit_review` derives the delivered order item in SQL, and direct inserts now need one too.
 
 ### 4.3 Customer account area (§4.9)
-Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses ✅ → 3. reviews + profile & security.
+Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses ✅ → 3. reviews + profile & security ✅.
 - [x] **Phase 1** (2026-10-01, `goreto-account-1-orders-billing.md`, migration `account_reads`): grouped account nav (sidebar from `lg`, scrollable pill row below), `loading`/`error` states; overview with profile card, stat cards (total orders, in progress, billed to date with pending COD as a hint) and the latest 3 orders; `/account/orders` (10 per page); `/account/orders/[orderNumber]` reusing the tracking view without the tracking secret, so only your own signed-in orders open; `/account/tracking` (latest 50 events); `/account/billing` (billed = collected only, pending COD separate, per-order breakdown). `account_summary()` and `account_tracking_events()` filter on the caller's own profile, so owners and staff see only their personal orders.
 - [x] Overview stat cards: total orders, orders in progress, total billed to date.
 - [x] `/account/orders` (paginated) and `/account/orders/[orderNumber]` (detail plus timeline).
@@ -298,9 +298,9 @@ Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishl
 - [x] **Phase 2** (2026-10-02, `goreto-account-2-wishlist-addresses.md`, migration `account_addresses_wishlist`): the storefront heart (cards, product page, quick view) saves and removes through Server Actions, with saved state loaded in the browser from `GET /api/account/wishlist` so storefront pages stay cached; signed out it opens the sign-in modal and saves after sign-in. `/account/wishlist` shows live price and stock, Add to Cart for single-variant products, Choose options otherwise, and "No longer available" for hidden products. `/account/addresses` (+ `new`, `[id]/edit`) with one default kept by `account_save_address` / `account_set_default_address` / `account_delete_address` (deleting the default promotes the newest). Caps: 10 addresses, 200 wishlist items (triggers).
 - [x] `/account/wishlist`, with the storefront heart.
 - [x] `/account/addresses`, including a default address for checkout (checkout already prefilled the default).
-- [ ] `/account/reviews`, showing moderation status.
+- [x] `/account/reviews` (2026-10-06): "Ready to review" (delivered products not yet reviewed), and your reviews marked Awaiting approval, Published or Not published (the staff note is never shown), with Edit (back to moderation) and Delete. Write and edit at `/account/reviews/[slug]`.
 - [x] `/account/billing`: billed total = collected orders only. Pending COD is shown separately and totals are computed in SQL.
-- [ ] `/account/profile/[[...rest]]`: Clerk `<UserProfile />`, themed.
+- [x] `/account/profile/[[...rest]]` (2026-10-06): Clerk `<UserProfile />` in the account shell, themed from `clerk-appearance.ts`. New nav group **Profile**: Reviews, Profile & security.
 - [x] Grouped account navigation, plus empty, loading and error states (phase 1 sections; later phases add theirs).
 
 ### 4.4 AR / virtual try-on (§14)
@@ -336,6 +336,7 @@ Several footer and nav links return a 404 today.
 - [ ] Full Nepal administrative dataset: all 753 local levels, from a verified source, in `src/data/nepal/` (§15.5). The seed has only 76.
 
 ### 4.8 Quality, tooling and deployment
+- [x] **New Supabase account** (2026-10-06, `goreto-supabase-account-migration.md`): `goreto-dev` (`jkjrfgictvpolvohgwcg`) and `goreto-prod` (`etfcgwvdshhcxkrkytne`), Mumbai. Both have every migration and Clerk third-party auth, and the owner is bootstrapped on both; dev is seeded. Vercel Production and Preview are switched and production is redeployed. Fresh start: no data was copied. The old projects are untouched and unused.
 - [ ] Playwright E2E with `@clerk/testing` for the 11 journeys in §23.4. Playwright isn't installed. Browser checks so far used throwaway scratchpad scripts.
 - [ ] Prettier. It isn't configured.
 - [ ] `README.md` is still the create-next-app boilerplate.
@@ -358,7 +359,7 @@ Several footer and nav links return a 404 today.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.
 - **Sponsored products are not disclosed to shoppers:** at the client's request the tick reads "Goreto Pick" and never "Sponsored". Undisclosed paid placement may count as misleading advertising under Nepal's Consumer Protection Act 2075. The wording is one constant (`PICK_LABEL` in `src/components/ui/pick-badge.tsx`).
-- **Release Phase 11:** apply migrations `category_heroes` and `product_sponsored` to prod (dry run first) before merging to `production`. Otherwise `/categories` and the homepage fail.
+- **Release Phases 11–12 and account phase 3:** the new `goreto-prod` already has every migration (through `product_reviews`), so `feat/poppins-heroes-sponsors` and `feat/account-reviews-profile` can be merged to `production` without a database step.
 - **Orange contrast:** white on `#F97316` and orange text on white measure about 2.8:1, below WCAG AA for body text. The reference colours were kept as-is. This was raised in the design-system prompt and hasn't been decided yet.
 - **Store support email and phone:** they're empty in `store_settings`. You can set them in `/admin/settings`.
 - **Clerk webhook:** configured for production (Goreto Live → `https://goreto-kappa.vercel.app/api/webhooks/clerk`, secret in Vercel). The dev app still has no endpoint or `CLERK_WEBHOOK_SIGNING_SECRET` in `.env.local`; the lazy profile upsert covers dev.

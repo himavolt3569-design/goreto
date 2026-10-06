@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.18"
   }
   public: {
     Tables: {
@@ -1783,24 +1783,14 @@ export type Database = {
         Returns: Json
       }
       account_delete_address: { Args: { p_id: string }; Returns: undefined }
-      account_delete_review: {
-        Args: { p_id: string }
-        Returns: {
-          previous_status: Database["public"]["Enums"]["review_status"]
-          product_slug: string
-        }[]
-      }
-      account_reviewable_items: {
+      account_reviewable_products: {
         Args: never
         Returns: {
           delivered_at: string
           image_path: string
-          order_item_id: string
-          order_number: string
           product_id: string
-          product_slug: string
-          product_title: string
-          variant_title: string
+          slug: string
+          title: string
         }[]
       }
       account_save_address: {
@@ -1825,15 +1815,6 @@ export type Database = {
         Args: { p_id: string }
         Returns: undefined
       }
-      account_submit_review: {
-        Args: {
-          p_body: string
-          p_order_item_id: string
-          p_rating: number
-          p_title: string
-        }
-        Returns: string
-      }
       account_summary: {
         Args: never
         Returns: {
@@ -1853,18 +1834,6 @@ export type Database = {
           occurred_at: string
           order_number: string
           status: Database["public"]["Enums"]["shipment_status"]
-        }[]
-      }
-      account_update_review: {
-        Args: {
-          p_body: string
-          p_id: string
-          p_rating: number
-          p_title: string
-        }
-        Returns: {
-          previous_status: Database["public"]["Enums"]["review_status"]
-          product_slug: string
         }[]
       }
       admin_accept_order: {
@@ -2195,12 +2164,31 @@ export type Database = {
         }
         Returns: Json
       }
+      product_rating_breakdown: {
+        Args: { p_product_slug: string }
+        Returns: {
+          rating: number
+          review_count: number
+        }[]
+      }
       product_rating_summaries: {
         Args: { product_ids: string[] }
         Returns: {
           product_id: string
           rating_avg: number
           rating_count: number
+        }[]
+      }
+      product_reviews: {
+        Args: { p_limit?: number; p_offset?: number; p_product_slug: string }
+        Returns: {
+          author_name: string
+          body: string
+          created_at: string
+          rating: number
+          review_id: string
+          title: string
+          verified: boolean
         }[]
       }
       search_products: {
@@ -2237,6 +2225,15 @@ export type Database = {
           quote: string
           review_id: string
         }[]
+      }
+      submit_review: {
+        Args: {
+          p_body: string
+          p_product_slug: string
+          p_rating: number
+          p_title: string
+        }
+        Returns: string
       }
       sync_clerk_profile: {
         Args: {

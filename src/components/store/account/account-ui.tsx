@@ -6,6 +6,7 @@ import { ICON_SIZE, ICON_SIZE_XS, ICON_WEIGHT_OUTLINE } from "@/components/ui/ic
 import { CaretLeftIcon, CaretRightIcon, type Icon } from "@/components/ui/icons";
 import { billingLine, type BillingLine, type PaymentStatus } from "@/features/account/billing";
 import type { OrderStatus } from "@/features/orders/tracking-model";
+import { REVIEW_STATUS_DISPLAY, type ReviewStatus } from "@/features/reviews/schema";
 import { cn } from "@/lib/utils/cn";
 
 /* Small building blocks shared by the account pages. */
@@ -46,7 +47,7 @@ export function AccountEmptyState({
   );
 }
 
-const paymentTones: Record<BillingLine["tone"], string> = {
+const pillTones: Record<BillingLine["tone"], string> = {
   success: "bg-success-100 text-success-700",
   warning: "bg-warning-100 text-warning-700",
   error: "bg-error-100 text-error-700",
@@ -57,8 +58,18 @@ const paymentTones: Record<BillingLine["tone"], string> = {
 export function PaymentStatusPill({ status, paymentStatus }: { status: OrderStatus; paymentStatus: PaymentStatus }) {
   const line = billingLine(status, paymentStatus);
   return (
-    <span className={cn("inline-flex h-8 items-center whitespace-nowrap rounded-sm px-3 text-body font-medium", paymentTones[line.tone])}>
+    <span className={cn("inline-flex h-8 items-center whitespace-nowrap rounded-sm px-3 text-body font-medium", pillTones[line.tone])}>
       {line.label}
+    </span>
+  );
+}
+
+/** A review's moderation state as readable text on a tinted pill. */
+export function ReviewStatusPill({ status }: { status: ReviewStatus }) {
+  const display = REVIEW_STATUS_DISPLAY[status];
+  return (
+    <span className={cn("inline-flex h-8 items-center whitespace-nowrap rounded-sm px-3 text-body font-medium", pillTones[display.tone])}>
+      {display.label}
     </span>
   );
 }

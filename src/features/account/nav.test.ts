@@ -20,4 +20,10 @@ describe("ACCOUNT_NAV", () => {
     expect(new Set(hrefs).size).toBe(hrefs.length);
     expect(hrefs.every((href) => href === "/account" || href.startsWith("/account/"))).toBe(true);
   });
+
+  it("groups reviews and profile & security under Profile, last", () => {
+    const profile = ACCOUNT_NAV.at(-1)!;
+    expect(profile.label).toBe("Profile");
+    expect(profile.items.map((item) => item.href)).toEqual(["/account/reviews", "/account/profile"]);
+  });
 });

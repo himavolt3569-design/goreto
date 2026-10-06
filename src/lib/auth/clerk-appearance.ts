@@ -27,3 +27,21 @@ export const clerkAppearance = {
     borderRadius: "12px", // md, the default control radius
   },
 } as const;
+
+/**
+ * `<UserProfile />` inside the account shell: fill the content column and sit
+ * on the page like our other cards (border, no extra shadow) instead of
+ * floating at Clerk's fixed width.
+ */
+export const clerkUserProfileAppearance = {
+  elements: {
+    rootBox: { width: "100%" },
+    cardBox: {
+      width: "100%",
+      maxWidth: "100%",
+      boxShadow: "none",
+      border: "1px solid #E2E8F0", // neutral-200
+      borderRadius: "16px", // lg, the card radius
+    },
+  },
+} as const;

@@ -26,7 +26,9 @@ export async function moderateReviewAction(_previous: ActionResult | null, formD
   if (data.length !== 1) return NOT_UPDATED;
 
   // Ratings and testimonials on the storefront come from published reviews.
-  revalidateStorefrontCatalog(data[0]!.products?.slug);
+  const slug = data[0]!.products?.slug;
+  revalidateStorefrontCatalog(slug);
+  if (slug) revalidatePath(`/products/${slug}/reviews`);
   refresh();
   return { ok: true, message: input.data.decision === "published" ? "Review published." : "Review rejected." };
 }

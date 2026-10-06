@@ -168,8 +168,14 @@ export function ProductPurchase({
               {product.isPick ? <PickBadge size={28} className="ml-2" /> : null}
             </h1>
           )}
-          {product.rating ? (
+          {product.rating && quickView ? (
             <Rating variant="stars" value={product.rating.value} count={product.rating.count} />
+          ) : null}
+          {product.rating && !quickView ? (
+            // On the full page the summary jumps to the Customer reviews section.
+            <a href="#reviews" className="w-fit rounded-xs hover:underline">
+              <Rating variant="stars" value={product.rating.value} count={product.rating.count} />
+            </a>
           ) : null}
         </div>
 

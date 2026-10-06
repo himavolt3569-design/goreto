@@ -28,6 +28,11 @@ export function formatOrderDateTime(iso: string): string {
   return `${dayFormat.format(date)}, ${timeFormat.format(date)}`;
 }
 
+/** "18 Mar 2025" for a timestamp, in Nepal time. */
+export function formatNepalDate(iso: string): string {
+  return dayFormat.format(new Date(iso));
+}
+
 /** "18 Mar, 10:24 AM" for stepper labels. */
 export function formatShortDateTime(iso: string): string {
   const date = new Date(iso);

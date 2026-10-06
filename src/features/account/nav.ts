@@ -1,10 +1,10 @@
 /*
  * Customer account navigation (AGENTS §4.9), grouped so later sections
- * (Profile: reviews, profile & security) slot in without restructuring. Only
- * built sections are listed.
+ * (loyalty, notifications, returns) slot in without restructuring. Only built
+ * sections are listed.
  */
 
-export type AccountNavIcon = "overview" | "orders" | "tracking" | "billing" | "wishlist" | "addresses";
+export type AccountNavIcon = "overview" | "orders" | "tracking" | "billing" | "wishlist" | "addresses" | "reviews" | "profile";
 
 export type AccountNavItem = { label: string; href: string; icon: AccountNavIcon };
 export type AccountNavGroup = { label: string; items: AccountNavItem[] };
@@ -27,6 +27,13 @@ export const ACCOUNT_NAV: AccountNavGroup[] = [
     items: [
       { label: "Wishlist", href: "/account/wishlist", icon: "wishlist" },
       { label: "Addresses", href: "/account/addresses", icon: "addresses" },
+    ],
+  },
+  {
+    label: "Profile",
+    items: [
+      { label: "Reviews", href: "/account/reviews", icon: "reviews" },
+      { label: "Profile & security", href: "/account/profile", icon: "profile" },
     ],
   },
 ];

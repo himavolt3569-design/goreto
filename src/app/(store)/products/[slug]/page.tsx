@@ -7,6 +7,7 @@ import { ProductPurchase } from "@/components/store/product/product-purchase";
 import { ProductRail } from "@/components/store/product/product-rail";
 import { ProductSpecs } from "@/components/store/product/product-specs";
 import { TryOnCard } from "@/components/store/product/try-on-card";
+import { ProductReviews } from "@/components/store/reviews/product-reviews";
 import { features } from "@/config/features";
 import { ChooseOptionsLink } from "@/components/store/product-card-actions";
 import { WishlistButton } from "@/components/store/wishlist-button";
@@ -16,6 +17,7 @@ import {
   getProductSlugs,
   getRelatedProducts,
 } from "@/features/catalog/product-detail";
+import { fetchProductReviewSummary } from "@/features/reviews/queries";
 
 /** Catalog data is cached and refreshed at most once a minute (ISR). */
 export const revalidate = 60;
@@ -39,7 +41,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = await getRelatedProducts(product);
+  const [related, reviews] = await Promise.all([getRelatedProducts(product), fetchProductReviewSummary(product.slug)]);
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 pb-16 pt-6 md:px-8 lg:gap-12">
@@ -107,6 +109,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
           ]}
         />
       </section>
+
+      <ProductReviews productSlug={product.slug} breakdown={reviews.breakdown} latest={reviews.latest} />
 
       {related.length > 0 ? (
         <section aria-labelledby="related-title">
