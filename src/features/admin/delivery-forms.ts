@@ -147,6 +147,17 @@ export const courierFormSchema = z.object({
       }
     }, "Enter a full https:// address")
     .transform((value) => (value === "" ? null : value)),
+  /** Customers' "Track on …" link; {tracking} becomes the tracking number. */
+  trackingUrlTemplate: z
+    .string()
+    .trim()
+    .max(300, "Use at most 300 characters")
+    .optional()
+    .default("")
+    .refine((value) => value === "" || (/^https:\/\/\S+$/.test(value) && value.includes("{tracking}")), "Use a full https:// address containing {tracking}")
+    .transform((value) => (value === "" ? null : value)),
+  /** Booked and tracked through the Daraz Logistics API (prompts/goreto-daraz-courier.md). */
+  darazApi: checkbox,
   isActive: checkbox,
 });
 
@@ -172,6 +183,12 @@ export const courierServiceFormSchema = z
     description: text(200),
     minDays: days,
     maxDays: days,
+    /** The Daraz deliveryOption this service books (Daraz couriers only). */
+    providerOption: z
+      .enum(["", "standard", "economy"])
+      .optional()
+      .default("")
+      .transform((value) => (value === "" ? null : value)),
     isActive: checkbox,
   })
   .refine((value) => value.maxDays >= value.minDays, { message: "Can't be less than the minimum", path: ["maxDays"] });

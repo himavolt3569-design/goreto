@@ -81,7 +81,7 @@ export default async function SupportPage() {
               <div className="flex items-center justify-between gap-4 py-3">
                 <dt className="text-neutral-700">Couriers</dt>
                 <dd className="text-right text-neutral-900">
-                  {activeCouriers.length} active · {activeCouriers.every((courier) => courier.integrationMode === "manual") ? "manual tracking" : "API tracking for some"}
+                  {activeCouriers.length} active · {activeCouriers.every((courier) => courier.integrationMode === "manual") ? "manual tracking" : "Daraz Express API for some"}
                 </dd>
               </div>
             ) : null}

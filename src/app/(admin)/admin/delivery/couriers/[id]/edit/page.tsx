@@ -31,7 +31,7 @@ export default async function EditCourierPage({ params, searchParams }: PageProp
       {created ? <SuccessNotice>Courier created. Add its services below.</SuccessNotice> : null}
       <CourierForm courierId={courier.id} values={courier.values} savedSlug={courier.values.slug} updatedLabel={formatDateTime(courier.updatedAt)} />
       <div className={editorGridClasses}>
-        <CourierServices courierId={courier.id} courierName={courier.values.title} services={courier.services} />
+        <CourierServices courierId={courier.id} courierName={courier.values.title} services={courier.services} darazApi={courier.values.darazApi} />
         <CourierDangerZone courierId={courier.id} name={courier.values.title} serviceCount={courier.services.length} shipmentCount={courier.shipmentCount} />
       </div>
     </>

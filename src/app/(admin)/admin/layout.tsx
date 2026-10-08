@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 function quickActions(profile: CurrentProfile): QuickAction[] {
   const candidates: [boolean, QuickAction][] = [
     [canAccess(profile, "catalog.write"), { label: "Add products", href: "/admin/products/bulk", icon: "add" }],
+    [canAccess(profile, "orders.write"), { label: "Send a parcel", href: "/admin/parcels?new=1", icon: "send" }],
     [canAccess(profile, "orders.write"), { label: "New WhatsApp order", href: "/admin/orders/new", icon: "whatsapp" }],
     [canAccess(profile, "orders.read"), { label: "Review pending orders", href: "/admin/orders?status=pending_confirmation", icon: "orders" }],
     [canAccess(profile, "catalog.read"), { label: "Restock low inventory", href: "/admin/inventory?stock=low_stock", icon: "inventory" }],

@@ -16,7 +16,9 @@
     "db:types": "node --env-file-if-exists=.env.local scripts/db/supabase.ts types",
     "seed:load": "node --env-file-if-exists=.env.local scripts/seed/load.ts",
     "seed:purge": "node --env-file-if-exists=.env.local scripts/seed/purge.ts",
-    "owner:bootstrap": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/auth/bootstrap-owner.ts"
+    "owner:bootstrap": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/auth/bootstrap-owner.ts",
+    "daraz:mock": "node --env-file-if-exists=.env.local scripts/daraz/mock-server.ts",
+    "daraz:locations": "node --env-file-if-exists=.env.local scripts/daraz/import-locations.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.5",
@@ -29,6 +31,7 @@
     "leaflet": "^1.9.4",
     "libphonenumber-js": "^1.13.14",
     "next": "16.3.6",
+    "pdf-lib": "1.17.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-hook-form": "^7.88.0",

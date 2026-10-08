@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getCurrentProfile } from "@/lib/auth/profile";
+import { scheduleAutoBooking } from "@/lib/courier/auto-book";
 import { getUserSupabase } from "@/lib/supabase/server";
 import { checkoutFailureFromError, GENERIC_FAILURE, type CheckoutFailure } from "./errors";
 import { parseCheckoutQuote, type CheckoutQuote } from "./quote";
@@ -106,6 +107,8 @@ export async function placeOrderAction(input: PlaceOrderInput): Promise<PlaceOrd
   }
 
   await rememberTrackingSecret(placed.data.order_number, secret);
+  // An auto-accepted order can go straight to Daraz Express when the store asked for that.
+  scheduleAutoBooking();
   return { ok: true, orderNumber: placed.data.order_number };
 }
 

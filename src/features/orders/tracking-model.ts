@@ -85,6 +85,11 @@ const trackingSchema = z.object({
       courier_name: z.string().nullable(),
       courier_phone: z.string().nullable(),
       courier_website: z.string().nullable(),
+      // The courier's own tracking page (couriers.tracking_url_template), when set.
+      courier_tracking_url: z
+        .string()
+        .nullish()
+        .transform((value) => (value && /^https:\/\//.test(value) ? value : null)),
     })
     .nullable(),
   events: z.array(
@@ -158,7 +163,7 @@ export type OrderTracking = {
     estimatedFrom: string | null;
     estimatedTo: string | null;
     /** Present only once staff assign a courier. */
-    courier: { name: string; phone: string | null; website: string | null } | null;
+    courier: { name: string; phone: string | null; website: string | null; trackingUrl: string | null } | null;
   } | null;
   /** Newest first. */
   events: OrderTrackingEvent[];
@@ -230,7 +235,7 @@ export function parseOrderTracking(json: unknown): OrderTracking {
           estimatedTo: shipment.estimated_delivery_to,
           courier:
             shipment.assigned_at && shipment.courier_name
-              ? { name: shipment.courier_name, phone: shipment.courier_phone, website: shipment.courier_website }
+              ? { name: shipment.courier_name, phone: shipment.courier_phone, website: shipment.courier_website, trackingUrl: shipment.courier_tracking_url }
               : null,
         }
       : null,

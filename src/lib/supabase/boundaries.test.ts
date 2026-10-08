@@ -5,13 +5,16 @@ import { describe, expect, it } from "vitest";
 
 /*
  * Guards the server/client and test/app boundaries (AGENTS §26.6): in src/
- * the service-role key lives in one server-only module with one importer
- * (the Clerk -> profiles sync), and fixtures never ship in the app.
+ * the service-role key lives in one server-only module with two importers
+ * (the Clerk -> profiles sync and the courier sync), and fixtures never ship
+ * in the app.
  */
 
 const SERVICE_ROLE_MODULE = join("lib", "supabase", "admin.ts");
 const BROWSER_CLIENT = join("lib", "supabase", "browser.ts");
-const ADMIN_CLIENT_IMPORTERS = [join("lib", "auth", "profile-sync.ts")];
+// The Clerk -> profiles sync, and the courier sync for webhooks and the
+// scheduled job (no user session; prompts/goreto-daraz-courier.md).
+const ADMIN_CLIENT_IMPORTERS = [join("lib", "auth", "profile-sync.ts"), join("lib", "courier", "provider-sync.ts")];
 
 const SRC = join(process.cwd(), "src");
 
@@ -34,7 +37,7 @@ describe("source boundaries", () => {
     expect(offenders.map((path) => relative(SRC, path))).toEqual([SERVICE_ROLE_MODULE]);
   });
 
-  it("imports the admin client only from the profile sync", () => {
+  it("imports the admin client only from the profile and courier syncs", () => {
     const importers = appFiles.filter((path) =>
       /from ["'](@\/lib\/supabase\/admin|\.\/admin|\.\.\/supabase\/admin)["']/.test(readFileSync(path, "utf8")),
     );

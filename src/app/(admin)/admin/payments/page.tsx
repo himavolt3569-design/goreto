@@ -8,6 +8,7 @@ import { OrderStatusPill } from "@/components/ui/status";
 import { requireAdminAccess } from "@/features/admin/auth";
 import { presetRange, RANGE_PRESETS, resolveRange, todayInKathmandu } from "@/features/admin/date-range";
 import { formatCount, formatDateTime } from "@/features/admin/format";
+import { fetchCourierOverview } from "@/features/admin/queries/daraz";
 import { fetchOrders, fetchOutstandingCod, fetchPaymentSummary, PAYMENT_STATUSES } from "@/features/admin/queries/orders";
 import { pageNumber, pickEnum } from "@/features/admin/queries/shared";
 import { hrefWith } from "@/features/admin/url";
@@ -28,10 +29,11 @@ export default async function PaymentsPage({ searchParams }: PageProps<"/admin/p
   const payment = pickEnum(params.payment, PAYMENT_STATUSES);
   const page = pageNumber(params.page);
 
-  const [summary, outstanding, orders] = await Promise.all([
+  const [summary, outstanding, orders, courier] = await Promise.all([
     fetchPaymentSummary(range),
     fetchOutstandingCod(),
     fetchOrders({ q: "", status: null, payment, from: range.from, to: range.to, page }),
+    fetchCourierOverview(),
   ]);
 
   const presets = RANGE_PRESETS.map((preset) => {
@@ -72,6 +74,15 @@ export default async function PaymentsPage({ searchParams }: PageProps<"/admin/p
         <StatCard label="Failed" value={formatNpr(summary.failed.totalPaisa)} hint={`${formatCount(summary.failed.count)} canceled or undelivered`} icon={WarningCircleIcon} tone="error" />
         <StatCard label="Refunded" value={formatNpr(summary.refunded.totalPaisa)} hint={`${formatCount(summary.refunded.count)} orders`} icon={ArrowCounterClockwiseIcon} tone="neutral" />
       </section>
+
+      {courier.cod_unsettled_count > 0 ? (
+        <p className="text-body text-neutral-700">
+          {formatNpr(courier.cod_unsettled_paisa)} of collected cash is still with Daraz Express ({formatCount(courier.cod_unsettled_count)} delivered parcels not in a recorded payout).{" "}
+          <Link href="/admin/daraz?tab=settlements" className="font-medium text-primary-600 hover:text-primary-700">
+            Match DEX payouts
+          </Link>
+        </p>
+      ) : null}
 
       <LinkTabs label="Payment status" tabs={tabs} />
 

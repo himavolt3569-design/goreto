@@ -43,7 +43,7 @@ export default async function DeliveryPage({ searchParams }: PageProps<"/admin/d
             key={courier.id}
             title={courier.name}
             description={[
-              courier.integrationMode === "manual" ? "Manual tracking: staff record each update" : "API integration",
+              courier.integrationMode === "manual" ? "Manual tracking: staff record each update" : "Daraz Express API: booked and tracked under Sales › Daraz Express",
               courier.supportPhone ? `Support ${courier.supportPhone}` : null,
             ]
               .filter(Boolean)

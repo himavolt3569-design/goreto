@@ -70,6 +70,31 @@ describe("NotificationsMenu", () => {
     await waitFor(() => expect(markNotificationsReadAction).toHaveBeenCalledWith(feed.items[0]!.id));
   });
 
+  it("shows Daraz delivery problems as courier alerts", () => {
+    const courierFeed: NotificationFeed = {
+      unreadCount: 1,
+      items: [
+        {
+          id: "00000000-0000-4000-8000-000000000002",
+          kind: "courier_attention",
+          title: "Daraz: order #GT260927000002 needs attention",
+          body: "Delivery attempt didn't succeed: Customer not reachable.",
+          href: "/admin/orders/GT260927000002",
+          createdAt: new Date().toISOString(),
+          read: false,
+          totalPaisa: 120000,
+          channel: "website",
+        },
+      ],
+    };
+    render(<NotificationsMenu profileId="p1" initialFeed={courierFeed} initialAttention={attention} />);
+    fireEvent.click(screen.getByRole("button", { name: /1 new order notification/ }));
+    const [item] = screen.getAllByRole("menuitem");
+    expect(item).toHaveTextContent("Daraz: order #GT260927000002 needs attention (new)");
+    expect(item).toHaveAttribute("href", "/admin/orders/GT260927000002");
+    expect(item!.querySelector(".bg-warning-100")).not.toBeNull();
+  });
+
   it("marks everything read", async () => {
     render(<NotificationsMenu profileId="p1" initialFeed={feed} initialAttention={attention} />);
     fireEvent.click(screen.getByRole("button", { name: /Notifications/ }));

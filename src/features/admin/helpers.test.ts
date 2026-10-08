@@ -88,12 +88,12 @@ describe("admin navigation", () => {
   it("shows the owner everything, grouped as in the reference", () => {
     const groups = visibleNav(owner);
     expect(groups.map((group) => group.label)).toEqual(["Overview", "Catalog", "Sales", "Customers", "Content", "System"]);
-    expect(groups.flatMap((group) => group.items)).toHaveLength(18);
+    expect(groups.flatMap((group) => group.items)).toHaveLength(20);
   });
 
   it("shows staff only what they may open and drops empty groups", () => {
     const labels = visibleNav(fulfilment).flatMap((group) => group.items.map((item) => item.label));
-    expect(labels).toEqual(["Dashboard", "Orders", "Payments", "Support"]);
+    expect(labels).toEqual(["Dashboard", "Send & track", "Orders", "Payments", "Daraz Express", "Support"]);
     expect(canAccess(fulfilment, "owner")).toBe(false);
   });
 

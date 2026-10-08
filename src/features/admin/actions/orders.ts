@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { z } from "zod";
+import { scheduleAutoBooking } from "@/lib/courier/auto-book";
 import type { Database } from "@/types/database";
 import { authorizeAdmin, databaseErrorResult, deniedResult, type ActionResult } from "../auth";
 import { adminDb } from "../queries/shared";
@@ -56,6 +57,7 @@ export async function acceptOrderAction(_previous: ActionResult | null, formData
   if (error) return saveErrorResult(error, "accept order");
 
   refresh();
+  scheduleAutoBooking();
   const result = acceptedSchema.safeParse(data);
   if (result.success && result.data.already_accepted) return { ok: true, message: "This order was already accepted." };
   return {

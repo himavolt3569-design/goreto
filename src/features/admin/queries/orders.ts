@@ -156,7 +156,7 @@ export async function fetchOrderDetail(orderNumber: string) {
        order_items(id, product_id, product_title, variant_title, sku, image_path, unit_price_paisa, quantity, line_total_paisa, created_at),
        courier_handoffs(id, courier_id, status, attempts, first_sent_at, last_sent_at, last_sent_by, created_at),
        shipments(id, status, tracking_number, estimated_delivery_from, estimated_delivery_to, assigned_at, delivered_at, created_at,
-         couriers(id, name, support_phone, website_url, dispatch_whatsapp_e164),
+         couriers(id, name, support_phone, website_url, dispatch_whatsapp_e164, api_provider),
          courier_services(name),
          shipment_events(id, status, message, location_label, source, occurred_at, created_at))`,
     )

@@ -19,6 +19,8 @@ export type AdminNavIcon =
   | "media"
   | "orders"
   | "payments"
+  | "send"
+  | "shipments"
   | "coupons"
   | "customers"
   | "reviews"
@@ -59,8 +61,10 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     label: "Sales",
     items: [
+      { label: "Send & track", href: "/admin/parcels", icon: "send", access: "orders.read" },
       { label: "Orders", href: "/admin/orders", icon: "orders", access: "orders.read" },
       { label: "Payments", href: "/admin/payments", icon: "payments", access: "orders.read" },
+      { label: "Daraz Express", href: "/admin/daraz", icon: "shipments", access: "orders.read" },
       { label: "Coupons", href: "/admin/coupons", icon: "coupons", access: "promotions.manage" },
     ],
   },

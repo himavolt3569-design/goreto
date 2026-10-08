@@ -7,6 +7,7 @@ import {
   CubeIcon,
   FileTextIcon,
   PackageIcon,
+  PaperPlaneTiltIcon,
   PlusIcon,
   SignOutIcon,
   StarIcon,
@@ -23,10 +24,11 @@ import { Menu, MenuButton, MenuLink, MenuSeparator } from "./menu";
  * notifications-menu.tsx). Items arrive filtered by permission.
  */
 
-export type QuickAction = { label: string; href: string; icon: "add" | "whatsapp" | "orders" | "inventory" | "reviews" | "store" };
+export type QuickAction = { label: string; href: string; icon: "add" | "send" | "whatsapp" | "orders" | "inventory" | "reviews" | "store" };
 
 const QUICK_ACTION_ICONS = {
   add: CubeIcon,
+  send: PaperPlaneTiltIcon,
   whatsapp: WhatsappLogoIcon,
   orders: FileTextIcon,
   inventory: PackageIcon,

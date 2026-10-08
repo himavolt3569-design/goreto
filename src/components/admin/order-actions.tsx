@@ -49,6 +49,8 @@ export function OrderActions({
   currentCourierId,
   currentTracking,
   acceptPreview,
+  apiCourier = false,
+  apiBooked = false,
 }: {
   orderId: string;
   status: OrderStatus;
@@ -59,6 +61,10 @@ export function OrderActions({
   currentTracking: string | null;
   /** Loaded for pending orders only. */
   acceptPreview: AcceptPreview | null;
+  /** The courier is booked through its API (Daraz Express): tracking comes from the courier. */
+  apiCourier?: boolean;
+  /** A live API booking pins the courier until it's canceled in the courier panel. */
+  apiBooked?: boolean;
 }) {
   const next = forwardTransition(status);
   const needsCourier = next === "shipped" && !hasCourier;
@@ -95,7 +101,7 @@ export function OrderActions({
       ) : null}
 
       <div className="flex flex-wrap gap-2">
-        {canAssignCourier(status) ? (
+        {canAssignCourier(status) && !apiBooked ? (
           <FormDialog
             action={assignCourierAction}
             hidden={{ orderId }}
@@ -119,19 +125,23 @@ export function OrderActions({
                     />
                   )}
                 </Field>
-                <Field
-                  label="Tracking number"
-                  hint="Optional. Letters, digits and dashes."
-                  error={state && !state.ok ? state.fieldErrors?.trackingNumber : undefined}
-                >
-                  {(control) => <Input {...control} name="trackingNumber" defaultValue={currentTracking ?? ""} maxLength={64} autoComplete="off" />}
-                </Field>
+                {apiCourier ? (
+                  <p className="text-small text-neutral-500">Daraz Express gives the tracking number when you book the parcel in the Daraz Express panel.</p>
+                ) : (
+                  <Field
+                    label="Tracking number"
+                    hint="Optional. Letters, digits and dashes."
+                    error={state && !state.ok ? state.fieldErrors?.trackingNumber : undefined}
+                  >
+                    {(control) => <Input {...control} name="trackingNumber" defaultValue={currentTracking ?? ""} maxLength={64} autoComplete="off" />}
+                  </Field>
+                )}
               </>
             )}
           </FormDialog>
         ) : null}
 
-        {canAddTrackingEvent(status) ? (
+        {canAddTrackingEvent(status) && !apiBooked ? (
           <FormDialog
             action={addShipmentEventAction}
             hidden={{ orderId }}
