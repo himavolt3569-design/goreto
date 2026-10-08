@@ -178,12 +178,14 @@ describe("customer", () => {
         limit 1`),
     ).toBe(1);
 
-    // No order item: allowed (unverified review).
+    // No order item: rejected (verified buyers only, migration product_reviews).
     expect(
-      await reviewAs(users.customer, `
-        select current_profile_id(), p.id, null::uuid, 4, 'Nice'
-        from products p where p.status = 'active' and ${unreviewedBy("p.id")} limit 1`),
-    ).toBe(1);
+      isError(
+        await reviewAs(users.customer, `
+          select current_profile_id(), p.id, null::uuid, 4, 'Nice'
+          from products p where p.status = 'active' and ${unreviewedBy("p.id")} limit 1`),
+      ),
+    ).toBe(true);
 
     // Own delivered item, but a different product: rejected.
     expect(

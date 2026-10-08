@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.18"
   }
   public: {
     Tables: {
@@ -18,6 +18,11 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          hero_eyebrow: string
+          hero_image_alt: string
+          hero_image_path: string | null
+          hero_text: string
+          hero_title: string
           id: string
           image_path: string | null
           is_active: boolean
@@ -30,6 +35,11 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string
+          hero_eyebrow?: string
+          hero_image_alt?: string
+          hero_image_path?: string | null
+          hero_text?: string
+          hero_title?: string
           id?: string
           image_path?: string | null
           is_active?: boolean
@@ -42,6 +52,11 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          hero_eyebrow?: string
+          hero_image_alt?: string
+          hero_image_path?: string | null
+          hero_text?: string
+          hero_title?: string
           id?: string
           image_path?: string | null
           is_active?: boolean
@@ -206,6 +221,63 @@ export type Database = {
         }
         Relationships: []
       }
+      courier_api_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          duration_ms: number | null
+          error_code: string | null
+          error_message: string | null
+          id: string
+          order_id: string | null
+          provider: string
+          success: boolean
+          trace_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          provider: string
+          success: boolean
+          trace_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          provider?: string
+          success?: boolean
+          trace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courier_api_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courier_api_log_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courier_handoffs: {
         Row: {
           attempts: number
@@ -280,6 +352,170 @@ export type Database = {
           },
         ]
       }
+      courier_provider_accounts: {
+        Row: {
+          auto_book: boolean
+          booking_endpoint: string
+          box_presets: Json
+          created_at: string
+          declare_insurance: boolean
+          default_delivery_option: string
+          default_height_cm: number
+          default_item_category: string | null
+          default_length_cm: number
+          default_open_box: boolean
+          default_weight_grams: number | null
+          default_width_cm: number
+          external_seller_id: string | null
+          id: string
+          linked_at: string | null
+          origin_address_details: string | null
+          origin_daraz_address_id: string | null
+          origin_email: string | null
+          origin_latitude: number | null
+          origin_longitude: number | null
+          origin_name: string | null
+          origin_phone_e164: string | null
+          phone_format: string
+          pickup_synced_at: string | null
+          pickup_warehouse_code: string | null
+          platform_name: string | null
+          provider: string
+          return_synced_at: string | null
+          return_warehouse_code: string | null
+          solution_codes: string[]
+          undeliverable_option: string
+          updated_at: string
+          xspace_case_template_id: number | null
+          xspace_category_id: string | null
+        }
+        Insert: {
+          auto_book?: boolean
+          booking_endpoint?: string
+          box_presets?: Json
+          created_at?: string
+          declare_insurance?: boolean
+          default_delivery_option?: string
+          default_height_cm?: number
+          default_item_category?: string | null
+          default_length_cm?: number
+          default_open_box?: boolean
+          default_weight_grams?: number | null
+          default_width_cm?: number
+          external_seller_id?: string | null
+          id?: string
+          linked_at?: string | null
+          origin_address_details?: string | null
+          origin_daraz_address_id?: string | null
+          origin_email?: string | null
+          origin_latitude?: number | null
+          origin_longitude?: number | null
+          origin_name?: string | null
+          origin_phone_e164?: string | null
+          phone_format?: string
+          pickup_synced_at?: string | null
+          pickup_warehouse_code?: string | null
+          platform_name?: string | null
+          provider: string
+          return_synced_at?: string | null
+          return_warehouse_code?: string | null
+          solution_codes?: string[]
+          undeliverable_option?: string
+          updated_at?: string
+          xspace_case_template_id?: number | null
+          xspace_category_id?: string | null
+        }
+        Update: {
+          auto_book?: boolean
+          booking_endpoint?: string
+          box_presets?: Json
+          created_at?: string
+          declare_insurance?: boolean
+          default_delivery_option?: string
+          default_height_cm?: number
+          default_item_category?: string | null
+          default_length_cm?: number
+          default_open_box?: boolean
+          default_weight_grams?: number | null
+          default_width_cm?: number
+          external_seller_id?: string | null
+          id?: string
+          linked_at?: string | null
+          origin_address_details?: string | null
+          origin_daraz_address_id?: string | null
+          origin_email?: string | null
+          origin_latitude?: number | null
+          origin_longitude?: number | null
+          origin_name?: string | null
+          origin_phone_e164?: string | null
+          phone_format?: string
+          pickup_synced_at?: string | null
+          pickup_warehouse_code?: string | null
+          platform_name?: string | null
+          provider?: string
+          return_synced_at?: string | null
+          return_warehouse_code?: string | null
+          solution_codes?: string[]
+          undeliverable_option?: string
+          updated_at?: string
+          xspace_case_template_id?: number | null
+          xspace_category_id?: string | null
+        }
+        Relationships: []
+      }
+      courier_remittances: {
+        Row: {
+          created_at: string
+          deductions_paisa: number
+          expected_paisa: number
+          gross_paisa: number
+          id: string
+          net_paisa: number | null
+          note: string | null
+          parcel_count: number
+          provider: string
+          recorded_by: string | null
+          reference: string
+          statement_date: string
+        }
+        Insert: {
+          created_at?: string
+          deductions_paisa?: number
+          expected_paisa: number
+          gross_paisa: number
+          id?: string
+          net_paisa?: number | null
+          note?: string | null
+          parcel_count: number
+          provider: string
+          recorded_by?: string | null
+          reference: string
+          statement_date: string
+        }
+        Update: {
+          created_at?: string
+          deductions_paisa?: number
+          expected_paisa?: number
+          gross_paisa?: number
+          id?: string
+          net_paisa?: number | null
+          note?: string | null
+          parcel_count?: number
+          provider?: string
+          recorded_by?: string | null
+          reference?: string
+          statement_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courier_remittances_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courier_services: {
         Row: {
           courier_id: string
@@ -290,6 +526,7 @@ export type Database = {
           id: string
           is_active: boolean
           name: string
+          provider_option: string | null
           service_code: string
           service_level: Database["public"]["Enums"]["service_level"]
           updated_at: string
@@ -303,6 +540,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           name: string
+          provider_option?: string | null
           service_code: string
           service_level: Database["public"]["Enums"]["service_level"]
           updated_at?: string
@@ -316,6 +554,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           name?: string
+          provider_option?: string | null
           service_code?: string
           service_level?: Database["public"]["Enums"]["service_level"]
           updated_at?: string
@@ -330,8 +569,99 @@ export type Database = {
           },
         ]
       }
+      courier_support_cases: {
+        Row: {
+          case_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          order_id: string | null
+          provider: string
+          rating: number | null
+          status: string | null
+          subject: string
+          synced_at: string | null
+          tracking_number: string | null
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          order_id?: string | null
+          provider: string
+          rating?: number | null
+          status?: string | null
+          subject: string
+          synced_at?: string | null
+          tracking_number?: string | null
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          order_id?: string | null
+          provider?: string
+          rating?: number | null
+          status?: string | null
+          subject?: string
+          synced_at?: string | null
+          tracking_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courier_support_cases_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courier_support_cases_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courier_webhook_inbox: {
+        Row: {
+          attempts: number
+          body_sha256: string
+          error: string | null
+          id: string
+          payload: Json
+          processed_at: string | null
+          provider: string
+          received_at: string
+        }
+        Insert: {
+          attempts?: number
+          body_sha256: string
+          error?: string | null
+          id?: string
+          payload: Json
+          processed_at?: string | null
+          provider: string
+          received_at?: string
+        }
+        Update: {
+          attempts?: number
+          body_sha256?: string
+          error?: string | null
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          provider?: string
+          received_at?: string
+        }
+        Relationships: []
+      }
       couriers: {
         Row: {
+          api_provider: string | null
           created_at: string
           dispatch_whatsapp_e164: string | null
           id: string
@@ -341,10 +671,12 @@ export type Database = {
           name: string
           slug: string
           support_phone: string | null
+          tracking_url_template: string | null
           updated_at: string
           website_url: string | null
         }
         Insert: {
+          api_provider?: string | null
           created_at?: string
           dispatch_whatsapp_e164?: string | null
           id?: string
@@ -354,10 +686,12 @@ export type Database = {
           name: string
           slug: string
           support_phone?: string | null
+          tracking_url_template?: string | null
           updated_at?: string
           website_url?: string | null
         }
         Update: {
+          api_provider?: string | null
           created_at?: string
           dispatch_whatsapp_e164?: string | null
           id?: string
@@ -367,6 +701,7 @@ export type Database = {
           name?: string
           slug?: string
           support_phone?: string | null
+          tracking_url_template?: string | null
           updated_at?: string
           website_url?: string | null
         }
@@ -455,6 +790,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      daraz_locations: {
+        Row: {
+          daraz_address_id: string
+          daraz_city: string | null
+          municipality_code: string
+          updated_at: string
+        }
+        Insert: {
+          daraz_address_id: string
+          daraz_city?: string | null
+          municipality_code: string
+          updated_at?: string
+        }
+        Update: {
+          daraz_address_id?: string
+          daraz_city?: string | null
+          municipality_code?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daraz_locations_municipality_code_fkey"
+            columns: ["municipality_code"]
+            isOneToOne: true
+            referencedRelation: "nepal_municipalities"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -1187,6 +1551,7 @@ export type Database = {
           is_bestseller: boolean
           is_featured: boolean
           is_limited_edition: boolean
+          is_sponsored: boolean
           low_stock_threshold: number
           options: Json
           published_at: string | null
@@ -1211,6 +1576,7 @@ export type Database = {
           is_bestseller?: boolean
           is_featured?: boolean
           is_limited_edition?: boolean
+          is_sponsored?: boolean
           low_stock_threshold?: number
           options?: Json
           published_at?: string | null
@@ -1235,6 +1601,7 @@ export type Database = {
           is_bestseller?: boolean
           is_featured?: boolean
           is_limited_edition?: boolean
+          is_sponsored?: boolean
           low_stock_threshold?: number
           options?: Json
           published_at?: string | null
@@ -1380,6 +1747,45 @@ export type Database = {
           },
         ]
       }
+      shipment_courier_finance: {
+        Row: {
+          actual_fee_paisa: number | null
+          cod_remittance_id: string | null
+          estimated_fee_paisa: number | null
+          shipment_id: string
+          updated_at: string
+        }
+        Insert: {
+          actual_fee_paisa?: number | null
+          cod_remittance_id?: string | null
+          estimated_fee_paisa?: number | null
+          shipment_id: string
+          updated_at?: string
+        }
+        Update: {
+          actual_fee_paisa?: number | null
+          cod_remittance_id?: string | null
+          estimated_fee_paisa?: number | null
+          shipment_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_courier_finance_cod_remittance_id_fkey"
+            columns: ["cod_remittance_id"]
+            isOneToOne: false
+            referencedRelation: "courier_remittances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipment_courier_finance_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: true
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipment_events: {
         Row: {
           created_at: string
@@ -1389,6 +1795,7 @@ export type Database = {
           longitude: number | null
           message: string
           occurred_at: string
+          provider_event_key: string | null
           shipment_id: string
           source: Database["public"]["Enums"]["shipment_event_source"]
           status: Database["public"]["Enums"]["shipment_status"]
@@ -1401,6 +1808,7 @@ export type Database = {
           longitude?: number | null
           message: string
           occurred_at: string
+          provider_event_key?: string | null
           shipment_id: string
           source: Database["public"]["Enums"]["shipment_event_source"]
           status: Database["public"]["Enums"]["shipment_status"]
@@ -1413,6 +1821,7 @@ export type Database = {
           longitude?: number | null
           message?: string
           occurred_at?: string
+          provider_event_key?: string | null
           shipment_id?: string
           source?: Database["public"]["Enums"]["shipment_event_source"]
           status?: Database["public"]["Enums"]["shipment_status"]
@@ -1430,42 +1839,105 @@ export type Database = {
       shipments: {
         Row: {
           assigned_at: string | null
+          awb_printed_at: string | null
+          booked_at: string | null
           courier_id: string | null
           courier_service_id: string | null
           created_at: string
           delivered_at: string | null
+          delivery_option: string | null
           estimated_delivery_from: string | null
           estimated_delivery_to: string | null
+          first_mile_type: string | null
           id: string
+          last_mile_provider: string | null
           order_id: string
+          package_height_cm: number | null
+          package_length_cm: number | null
+          package_weight_grams: number | null
+          package_width_cm: number | null
+          pickup_cutoff_at: string | null
+          provider: string | null
+          provider_auto_book_failed_at: string | null
+          provider_booking_attempts: number
+          provider_canceled_at: string | null
+          provider_needs_action: boolean
+          provider_package_code: string | null
+          provider_receiver: Json | null
+          provider_reference: string | null
+          provider_status: string | null
+          provider_synced_at: string | null
+          ready_to_ship_at: string | null
           status: Database["public"]["Enums"]["shipment_status"]
           tracking_number: string | null
           updated_at: string
         }
         Insert: {
           assigned_at?: string | null
+          awb_printed_at?: string | null
+          booked_at?: string | null
           courier_id?: string | null
           courier_service_id?: string | null
           created_at?: string
           delivered_at?: string | null
+          delivery_option?: string | null
           estimated_delivery_from?: string | null
           estimated_delivery_to?: string | null
+          first_mile_type?: string | null
           id?: string
+          last_mile_provider?: string | null
           order_id: string
+          package_height_cm?: number | null
+          package_length_cm?: number | null
+          package_weight_grams?: number | null
+          package_width_cm?: number | null
+          pickup_cutoff_at?: string | null
+          provider?: string | null
+          provider_auto_book_failed_at?: string | null
+          provider_booking_attempts?: number
+          provider_canceled_at?: string | null
+          provider_needs_action?: boolean
+          provider_package_code?: string | null
+          provider_receiver?: Json | null
+          provider_reference?: string | null
+          provider_status?: string | null
+          provider_synced_at?: string | null
+          ready_to_ship_at?: string | null
           status?: Database["public"]["Enums"]["shipment_status"]
           tracking_number?: string | null
           updated_at?: string
         }
         Update: {
           assigned_at?: string | null
+          awb_printed_at?: string | null
+          booked_at?: string | null
           courier_id?: string | null
           courier_service_id?: string | null
           created_at?: string
           delivered_at?: string | null
+          delivery_option?: string | null
           estimated_delivery_from?: string | null
           estimated_delivery_to?: string | null
+          first_mile_type?: string | null
           id?: string
+          last_mile_provider?: string | null
           order_id?: string
+          package_height_cm?: number | null
+          package_length_cm?: number | null
+          package_weight_grams?: number | null
+          package_width_cm?: number | null
+          pickup_cutoff_at?: string | null
+          provider?: string | null
+          provider_auto_book_failed_at?: string | null
+          provider_booking_attempts?: number
+          provider_canceled_at?: string | null
+          provider_needs_action?: boolean
+          provider_package_code?: string | null
+          provider_receiver?: Json | null
+          provider_reference?: string | null
+          provider_status?: string | null
+          provider_synced_at?: string | null
+          ready_to_ship_at?: string | null
           status?: Database["public"]["Enums"]["shipment_status"]
           tracking_number?: string | null
           updated_at?: string
@@ -1765,6 +2237,16 @@ export type Database = {
         Returns: Json
       }
       account_delete_address: { Args: { p_id: string }; Returns: undefined }
+      account_reviewable_products: {
+        Args: never
+        Returns: {
+          delivered_at: string
+          image_path: string
+          product_id: string
+          slug: string
+          title: string
+        }[]
+      }
       account_save_address: {
         Args: {
           p_district_code: string
@@ -1830,6 +2312,10 @@ export type Database = {
         Args: { p_from: string; p_to: string }
         Returns: Json
       }
+      admin_apply_provider_history: {
+        Args: { p_history: Json; p_order_id: string }
+        Returns: Json
+      }
       admin_assert_linkable_customer: {
         Args: { p_customer_id: string }
         Returns: undefined
@@ -1863,6 +2349,10 @@ export type Database = {
           product_count: number
         }[]
       }
+      admin_clear_provider_booking: {
+        Args: { p_order_id: string; p_provider: string; p_reason: string }
+        Returns: undefined
+      }
       admin_coupon_order_counts: {
         Args: never
         Returns: {
@@ -1870,6 +2360,7 @@ export type Database = {
           order_count: number
         }[]
       }
+      admin_courier_overview: { Args: { p_provider: string }; Returns: Json }
       admin_create_order: {
         Args: {
           p_address: Json
@@ -1920,6 +2411,10 @@ export type Database = {
         Args: { p_product_id: string }
         Returns: string[]
       }
+      admin_delete_remittance: {
+        Args: { p_remittance_id: string }
+        Returns: undefined
+      }
       admin_delivery_history_counts: {
         Args: never
         Returns: {
@@ -1927,6 +2422,27 @@ export type Database = {
           record_type: string
           use_count: number
         }[]
+      }
+      admin_log_courier_call: {
+        Args: {
+          p_action: string
+          p_duration_ms: number
+          p_error_code: string
+          p_error_message: string
+          p_order_id: string
+          p_provider: string
+          p_success: boolean
+          p_trace_id: string
+        }
+        Returns: undefined
+      }
+      admin_mark_awb_printed: {
+        Args: { p_order_id: string; p_provider: string }
+        Returns: undefined
+      }
+      admin_mark_provider_ready: {
+        Args: { p_order_id: string; p_provider: string }
+        Returns: undefined
       }
       admin_mark_refunded: { Args: { p_order_id: string }; Returns: undefined }
       admin_order_quote: {
@@ -1971,9 +2487,52 @@ export type Database = {
         Args: { p_product_id: string }
         Returns: boolean
       }
+      admin_provider_booking_reference: {
+        Args: { p_order_id: string; p_provider: string }
+        Returns: string
+      }
       admin_record_courier_handoff: {
         Args: { p_order_id: string }
         Returns: Json
+      }
+      admin_record_provider_booking: {
+        Args: { p_booking: Json; p_order_id: string; p_provider: string }
+        Returns: undefined
+      }
+      admin_record_provider_feedback: {
+        Args: {
+          p_feedback: string
+          p_order_id: string
+          p_provider: string
+          p_reattempt_on: string
+        }
+        Returns: undefined
+      }
+      admin_record_provider_receiver_update: {
+        Args: { p_order_id: string; p_provider: string; p_receiver: Json }
+        Returns: undefined
+      }
+      admin_record_remittance: {
+        Args: {
+          p_deductions_paisa: number
+          p_gross_paisa: number
+          p_note: string
+          p_provider: string
+          p_reference: string
+          p_statement_date: string
+          p_tracking_numbers: string[]
+        }
+        Returns: Json
+      }
+      admin_record_support_case: {
+        Args: {
+          p_case_id: string
+          p_order_id: string
+          p_provider: string
+          p_subject: string
+          p_tracking_number: string
+        }
+        Returns: string
       }
       admin_reorder_product_media: {
         Args: { p_media_ids: string[]; p_product_id: string }
@@ -2034,6 +2593,19 @@ export type Database = {
         }
         Returns: Database["public"]["Enums"]["order_status"]
       }
+      admin_update_provider_account: {
+        Args: { p_patch: Json; p_provider: string }
+        Returns: undefined
+      }
+      admin_update_support_case: {
+        Args: {
+          p_case_id: string
+          p_provider: string
+          p_rating: number
+          p_status: string
+        }
+        Returns: undefined
+      }
       apply_staff_invitation: {
         Args: { p_profile_id: string }
         Returns: boolean
@@ -2077,6 +2649,28 @@ export type Database = {
           p_municipality_code?: string
         }
         Returns: Json
+      }
+      courier_apply_provider_history: {
+        Args: { p_history: Json; p_shipment_id: string }
+        Returns: Json
+      }
+      courier_auto_book_candidates: {
+        Args: { p_limit?: number; p_provider: string }
+        Returns: {
+          order_id: string
+        }[]
+      }
+      courier_auto_book_failed: {
+        Args: { p_order_id: string; p_reason: string }
+        Returns: undefined
+      }
+      courier_provider_booking_reference: {
+        Args: { p_order_id: string; p_provider: string }
+        Returns: string
+      }
+      courier_record_provider_booking: {
+        Args: { p_booking: Json; p_order_id: string; p_provider: string }
+        Returns: undefined
       }
       create_order_core: {
         Args: {
@@ -2136,6 +2730,13 @@ export type Database = {
         }
         Returns: Json
       }
+      product_rating_breakdown: {
+        Args: { p_product_slug: string }
+        Returns: {
+          rating: number
+          review_count: number
+        }[]
+      }
       product_rating_summaries: {
         Args: { product_ids: string[] }
         Returns: {
@@ -2143,6 +2744,123 @@ export type Database = {
           rating_avg: number
           rating_count: number
         }[]
+      }
+      product_reviews: {
+        Args: { p_limit?: number; p_offset?: number; p_product_slug: string }
+        Returns: {
+          author_name: string
+          body: string
+          created_at: string
+          rating: number
+          review_id: string
+          title: string
+          verified: boolean
+        }[]
+      }
+      provider_bookable_shipment: {
+        Args: { p_order_id: string; p_provider: string }
+        Returns: {
+          assigned_at: string | null
+          awb_printed_at: string | null
+          booked_at: string | null
+          courier_id: string | null
+          courier_service_id: string | null
+          created_at: string
+          delivered_at: string | null
+          delivery_option: string | null
+          estimated_delivery_from: string | null
+          estimated_delivery_to: string | null
+          first_mile_type: string | null
+          id: string
+          last_mile_provider: string | null
+          order_id: string
+          package_height_cm: number | null
+          package_length_cm: number | null
+          package_weight_grams: number | null
+          package_width_cm: number | null
+          pickup_cutoff_at: string | null
+          provider: string | null
+          provider_auto_book_failed_at: string | null
+          provider_booking_attempts: number
+          provider_canceled_at: string | null
+          provider_needs_action: boolean
+          provider_package_code: string | null
+          provider_receiver: Json | null
+          provider_reference: string | null
+          provider_status: string | null
+          provider_synced_at: string | null
+          ready_to_ship_at: string | null
+          status: Database["public"]["Enums"]["shipment_status"]
+          tracking_number: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "shipments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      provider_booked_shipment: {
+        Args: { p_order_id: string; p_provider: string }
+        Returns: {
+          assigned_at: string | null
+          awb_printed_at: string | null
+          booked_at: string | null
+          courier_id: string | null
+          courier_service_id: string | null
+          created_at: string
+          delivered_at: string | null
+          delivery_option: string | null
+          estimated_delivery_from: string | null
+          estimated_delivery_to: string | null
+          first_mile_type: string | null
+          id: string
+          last_mile_provider: string | null
+          order_id: string
+          package_height_cm: number | null
+          package_length_cm: number | null
+          package_weight_grams: number | null
+          package_width_cm: number | null
+          pickup_cutoff_at: string | null
+          provider: string | null
+          provider_auto_book_failed_at: string | null
+          provider_booking_attempts: number
+          provider_canceled_at: string | null
+          provider_needs_action: boolean
+          provider_package_code: string | null
+          provider_receiver: Json | null
+          provider_reference: string | null
+          provider_status: string | null
+          provider_synced_at: string | null
+          ready_to_ship_at: string | null
+          status: Database["public"]["Enums"]["shipment_status"]
+          tracking_number: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "shipments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      provider_booking_reference_core: {
+        Args: { p_order_id: string; p_provider: string }
+        Returns: string
+      }
+      provider_history_core: {
+        Args: { p_history: Json; p_shipment_id: string }
+        Returns: Json
+      }
+      provider_record_booking_core: {
+        Args: {
+          p_actor: string
+          p_booking: Json
+          p_order_id: string
+          p_provider: string
+        }
+        Returns: undefined
       }
       search_products: {
         Args: {
@@ -2162,6 +2880,7 @@ export type Database = {
           id: string
           is_bestseller: boolean
           is_limited_edition: boolean
+          is_sponsored: boolean
           published_at: string
           slug: string
           title: string
@@ -2177,6 +2896,15 @@ export type Database = {
           quote: string
           review_id: string
         }[]
+      }
+      submit_review: {
+        Args: {
+          p_body: string
+          p_product_slug: string
+          p_rating: number
+          p_title: string
+        }
+        Returns: string
       }
       sync_clerk_profile: {
         Args: {
@@ -2202,7 +2930,7 @@ export type Database = {
         | "freeform"
       coupon_type: "fixed" | "percentage"
       courier_assignment_mode: "auto" | "manual"
-      courier_handoff_channel: "whatsapp_link"
+      courier_handoff_channel: "whatsapp_link" | "daraz_api"
       courier_handoff_status: "pending" | "sent" | "superseded"
       courier_integration_mode: "manual" | "api"
       media_kind: "image" | "video"
@@ -2213,7 +2941,10 @@ export type Database = {
         | "rural_municipality"
       newsletter_source: "homepage" | "checkout" | "account"
       newsletter_status: "subscribed" | "unsubscribed"
-      notification_kind: "order_pending" | "order_auto_accepted"
+      notification_kind:
+        | "order_pending"
+        | "order_auto_accepted"
+        | "courier_attention"
       order_acceptance: "staff" | "auto"
       order_channel: "website" | "whatsapp"
       order_status:
@@ -2400,7 +3131,7 @@ export const Constants = {
       ],
       coupon_type: ["fixed", "percentage"],
       courier_assignment_mode: ["auto", "manual"],
-      courier_handoff_channel: ["whatsapp_link"],
+      courier_handoff_channel: ["whatsapp_link", "daraz_api"],
       courier_handoff_status: ["pending", "sent", "superseded"],
       courier_integration_mode: ["manual", "api"],
       media_kind: ["image", "video"],
@@ -2412,7 +3143,11 @@ export const Constants = {
       ],
       newsletter_source: ["homepage", "checkout", "account"],
       newsletter_status: ["subscribed", "unsubscribed"],
-      notification_kind: ["order_pending", "order_auto_accepted"],
+      notification_kind: [
+        "order_pending",
+        "order_auto_accepted",
+        "courier_attention",
+      ],
       order_acceptance: ["staff", "auto"],
       order_channel: ["website", "whatsapp"],
       order_status: [

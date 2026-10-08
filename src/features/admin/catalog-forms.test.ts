@@ -68,6 +68,13 @@ describe("categoryFormSchema", () => {
     });
   });
 
+  it("accepts a hero and leaves it empty when the form has no hero fields (quick create)", () => {
+    expect(
+      categoryFormSchema.parse(category({ heroImagePath: `categories/new-${ID}/${FILE}.jpg`, heroImageAlt: "Gold rings", heroTitle: "Gold" })),
+    ).toMatchObject({ heroImagePath: `categories/new-${ID}/${FILE}.jpg`, heroImageAlt: "Gold rings", heroTitle: "Gold", heroText: "" });
+    expect(categoryFormSchema.parse(category())).toMatchObject({ heroImagePath: null, heroImageAlt: "", heroEyebrow: "", heroTitle: "", heroText: "" });
+  });
+
   it("treats a missing parent (disabled select) as top-level and a missing checkbox as hidden", () => {
     const withoutParent: Record<string, string> = category();
     delete withoutParent.parentId;
@@ -81,6 +88,9 @@ describe("categoryFormSchema", () => {
     ["a bad parent id", { parentId: "nope" }, "parentId"],
     ["a negative sort order", { sortOrder: "-1" }, "sortOrder"],
     ["a long description", { description: "x".repeat(501) }, "description"],
+    ["a hero image without alt text", { heroImagePath: `categories/new-${ID}/${FILE}.jpg` }, "heroImageAlt"],
+    ["a long hero title", { heroTitle: "x".repeat(81) }, "heroTitle"],
+    ["long hero text", { heroText: "x".repeat(241) }, "heroText"],
   ])("rejects %s", (_label, overrides, field) => {
     const result = categoryFormSchema.safeParse(category(overrides));
     expect(result.success).toBe(false);

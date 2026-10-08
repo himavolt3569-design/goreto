@@ -16,12 +16,14 @@ import {
   ImageIcon,
   LockSimpleIcon,
   PackageIcon,
+  PaperPlaneTiltIcon,
   QuestionIcon,
   SealPercentIcon,
   StarIcon,
   TagIcon,
   TruckIcon,
   UserIcon,
+  VanIcon,
   type Icon,
 } from "@/components/ui/icons";
 import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
@@ -37,6 +39,8 @@ export const NAV_ICONS: Record<AdminNavIcon, Icon> = {
   media: ImageIcon,
   orders: FileTextIcon,
   payments: CreditCardIcon,
+  send: PaperPlaneTiltIcon,
+  shipments: VanIcon,
   coupons: SealPercentIcon,
   customers: UserIcon,
   reviews: StarIcon,

@@ -19,6 +19,8 @@ export type OrderVariantOption = {
   pricePaisa: number;
   stock: number;
   thumbnail: string | null;
+  /** Saved shipping weight, for the parcel weight preview; null when not set. */
+  weightGrams: number | null;
 };
 
 export type LookupResult<T> = { ok: true; results: T[] } | { ok: false; message: string };
@@ -58,7 +60,7 @@ export async function searchOrderVariants(query: unknown): Promise<LookupResult<
   const { data, error } = await adminDb()
     .from("products")
     .select(
-      "id, title, base_price_paisa, product_media(storage_path, sort_order), product_variants(id, title, sku, price_paisa, stock_quantity, is_active)",
+      "id, title, base_price_paisa, product_media(storage_path, sort_order), product_variants(id, title, sku, price_paisa, stock_quantity, weight_grams, is_active)",
     )
     .eq("status", "active")
     .ilike("title", containsPattern(term))
@@ -86,6 +88,7 @@ export async function searchOrderVariants(query: unknown): Promise<LookupResult<
           pricePaisa: variant.price_paisa ?? product.base_price_paisa,
           stock: variant.stock_quantity,
           thumbnail: mediaUrl(product.product_media[0]?.storage_path),
+          weightGrams: variant.weight_grams,
         })),
     ),
   };

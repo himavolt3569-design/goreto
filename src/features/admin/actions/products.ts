@@ -54,6 +54,21 @@ function saveErrorResult(error: { code?: string; message: string; details?: stri
   return databaseErrorResult(error, "save product");
 }
 
+/**
+ * products.is_sponsored, written right after admin_save_product (which doesn't
+ * know the column) under the same catalog.write policy. A new product that
+ * fails here is still created, so only an update reports the error.
+ */
+async function saveSponsored(db: ReturnType<typeof adminDb>, id: string, value: boolean, isNew: boolean): Promise<ActionResult | null> {
+  const { error } = await db.from("products").update({ is_sponsored: value }).eq("id", id);
+  if (!error) return null;
+  if (isNew) {
+    console.error("Admin action failed (save sponsored flag on a new product)");
+    return null;
+  }
+  return databaseErrorResult(error, "save sponsored flag");
+}
+
 /* ---------- Media checks shared by the editor, Add product and Bulk add ---------- */
 
 /** Editor: `products/<productId>/<uuid>.<ext>`. Add product: `products/new-<stagingId>/<uuid>.<ext>`. */
@@ -186,6 +201,8 @@ export async function saveProductAction(id: string | null, input: unknown, stage
   });
   if (error) return saveErrorResult(error);
   const result = data as SaveRpcResult;
+  const sponsored = await saveSponsored(db, result.id, payload.product.is_sponsored, id === null);
+  if (sponsored) return sponsored;
 
   if (id === null) {
     const { added, rejected } = await attachStagedMedia(db, result.id, stagedMedia?.data);

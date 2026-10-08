@@ -62,6 +62,13 @@ function renderForm(values: ProductFormValues, productId: string | null = "0c6a1
 
 beforeEach(() => saveProductAction.mockReset());
 
+/** Opens a folded section by its header (the button's name starts with the title). */
+function openSection(title: string) {
+  const header = screen.getByRole("button", { name: new RegExp(`^${title}`) });
+  if (header.getAttribute("aria-expanded") !== "true") fireEvent.click(header);
+  return header;
+}
+
 describe("ProductForm", () => {
   it("keeps unsaved edits when the page refreshes without a product save", () => {
     const props = {
@@ -118,6 +125,7 @@ describe("ProductForm", () => {
     fireEvent.change(name, { target: { value: "Silk Scarf Blue" } });
     expect(slug).toHaveValue("dhaka-topi-festival");
 
+    openSection("Advanced");
     fireEvent.click(screen.getByRole("button", { name: "Generate from name" }));
     expect(slug).toHaveValue("silk-scarf-blue");
     expect(screen.getByText(/Auto from name/)).toBeInTheDocument();
@@ -156,6 +164,7 @@ describe("ProductForm", () => {
 
   it("shows existing stock read-only and never as an input", () => {
     renderForm(editValues());
+    openSection("Options & variants");
     const table = screen.getByRole("region", { name: "Variants" });
     expect(within(table).getByText("7")).toBeInTheDocument();
     expect(within(table).queryByLabelText(/Starting stock/)).not.toBeInTheDocument();
@@ -164,6 +173,7 @@ describe("ProductForm", () => {
 
   it("keeps existing variants and adds new combinations when variants are updated", async () => {
     renderForm(editValues());
+    openSection("Options & variants");
     fireEvent.click(screen.getByRole("button", { name: "Add value" }));
     const newValue = screen.getByLabelText("Value 2");
     fireEvent.change(newValue, { target: { value: "Black" } });
@@ -183,6 +193,7 @@ describe("ProductForm", () => {
     values.options[0]!.values.push({ value: "black", label: "Black", swatchHex: "", locked: true });
     values.variants.push({ ...values.variants[0]!, id: null, sku: "GRT-CTO-BLK", optionValues: { Colour: "black" } });
     renderForm(values);
+    openSection("Options & variants");
     fireEvent.click(screen.getByRole("button", { name: "Remove variant Tan" }));
     expect(await screen.findByText(/Removed when you save/)).toBeInTheDocument();
     expect(screen.getByText(/GRT-CTO-TAN \(has orders/)).toBeInTheDocument();
@@ -202,6 +213,60 @@ describe("ProductForm", () => {
     const sku = screen.getByLabelText("SKU for Tan");
     await waitFor(() => expect(sku).toHaveAttribute("aria-invalid", "true"));
     expect(screen.getAllByText(/already used by another variant/).length).toBeGreaterThan(0);
+  });
+
+  it("folds everything but Essentials, with summaries and wired accordion headers", () => {
+    renderForm(editValues());
+    const header = screen.getByRole("button", { name: /^Options & variants/ });
+    expect(header).toHaveAttribute("aria-expanded", "false");
+    expect(header).toHaveTextContent("Colour · 1 variant");
+    const panel = document.getElementById(header.getAttribute("aria-controls")!)!;
+    expect(panel).not.toBeVisible();
+    fireEvent.click(header);
+    expect(header).toHaveAttribute("aria-expanded", "true");
+    expect(panel).toBeVisible();
+    expect(screen.getByRole("button", { name: /^Advanced/ })).toHaveTextContent("/products/canvas-tote");
+  });
+
+  it("puts a single product's stock in Essentials and its SKU in Advanced, without the variants table", () => {
+    renderForm(emptyProductValues(5, false), null);
+    expect(screen.getByRole("textbox", { name: /^Stock/ })).toHaveValue("0");
+    openSection("Options & variants");
+    expect(screen.queryByRole("region", { name: "Variants" })).not.toBeInTheDocument();
+    expect(screen.getByText(/this is a single product/)).toBeInTheDocument();
+    openSection("Advanced");
+    expect(screen.getByRole("textbox", { name: /^SKU/ })).toBeInTheDocument();
+  });
+
+  it("shows the variants table once the first option is added", () => {
+    renderForm(emptyProductValues(5, false), null);
+    openSection("Options & variants");
+    fireEvent.click(screen.getByRole("button", { name: /Add options/ }));
+    expect(screen.getByRole("region", { name: "Variants" })).toBeInTheDocument();
+    expect(screen.queryByRole("textbox", { name: /^Stock/ })).not.toBeInTheDocument();
+  });
+
+  it("opens a folded section with an error on submit and counts what to fix", async () => {
+    renderForm({ ...editValues(), specs: [{ label: "", value: "Cotton" }] });
+    const header = screen.getByRole("button", { name: /^Description & specifications/ });
+    expect(header).toHaveAttribute("aria-expanded", "false");
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    });
+    await waitFor(() => expect(header).toHaveAttribute("aria-expanded", "true"));
+    expect(header).toHaveTextContent("1 to fix");
+    expect(saveProductAction).not.toHaveBeenCalled();
+  });
+
+  it("opens the section a server error points to", async () => {
+    saveProductAction.mockResolvedValue({ ok: false, message: "Another product already uses this URL slug", fieldErrors: { slug: "Another product already uses this URL slug" } });
+    renderForm(editValues());
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    });
+    const header = screen.getByRole("button", { name: /^Advanced/ });
+    await waitFor(() => expect(header).toHaveAttribute("aria-expanded", "true"));
+    expect(screen.getByLabelText(/URL slug/)).toHaveAttribute("aria-invalid", "true");
   });
 
   it("blocks submit with client errors and doesn't call the server", async () => {

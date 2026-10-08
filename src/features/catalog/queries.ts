@@ -18,11 +18,11 @@ import type {
  */
 
 const CARD_SELECT =
-  "id, slug, title, category_id, base_price_paisa, is_bestseller, is_limited_edition, published_at, product_media(storage_path, alt_text)";
+  "id, slug, title, category_id, base_price_paisa, is_bestseller, is_limited_edition, is_sponsored, published_at, product_media(storage_path, alt_text)";
 
 const DETAIL_SELECT = `
   id, slug, title, category_id, short_description, description, base_price_paisa,
-  low_stock_threshold, is_bestseller, is_limited_edition, published_at, options, specs, care_instructions,
+  low_stock_threshold, is_bestseller, is_limited_edition, is_sponsored, published_at, options, specs, care_instructions,
   product_variants(id, sku, option_values, price_paisa, stock_quantity, sort_order, is_active),
   product_media(id, storage_path, alt_text, sort_order, variant_id, kind),
   product_ar_assets(mode, placement, is_active)
@@ -36,7 +36,7 @@ function fail(what: string, error: { message: string }): never {
 export const fetchActiveCategories = cache(async (): Promise<CategoryRow[]> => {
   const { data, error } = await getPublicSupabase()
     .from("categories")
-    .select("id, parent_id, slug, title, description, image_path")
+    .select("id, parent_id, slug, title, description, image_path, hero_image_path, hero_image_alt, hero_eyebrow, hero_title, hero_text")
     .eq("is_active", true)
     .order("sort_order")
     .order("title");
@@ -61,6 +61,7 @@ export type CardFilter = {
   excludeCategoryIds?: readonly string[];
   excludeProductId?: string;
   featuredOnly?: boolean;
+  sponsoredOnly?: boolean;
   limit?: number;
 };
 
@@ -81,6 +82,7 @@ export async function fetchProductCards(filter: CardFilter = {}): Promise<CardRo
     .order("slug");
 
   if (filter.featuredOnly) query = query.eq("is_featured", true);
+  if (filter.sponsoredOnly) query = query.eq("is_sponsored", true);
   if (filter.categoryIds) query = query.in("category_id", [...filter.categoryIds]);
   if (filter.excludeCategoryIds?.length) {
     query = query.not("category_id", "in", `(${filter.excludeCategoryIds.join(",")})`);

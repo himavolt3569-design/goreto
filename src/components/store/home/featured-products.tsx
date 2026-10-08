@@ -133,6 +133,7 @@ export function FeaturedProducts({ products, heading }: FeaturedProductsProps) {
                   href={`/products/${product.slug}`}
                   pricePaisa={product.pricePaisa}
                   image={product.image}
+                  pick={product.isPick}
                   className="w-full"
                   wishlistAction={<WishlistButton slug={product.slug} productTitle={product.title} />}
                   cartAction={<ChooseOptionsLink slug={product.slug} title={product.title} />}

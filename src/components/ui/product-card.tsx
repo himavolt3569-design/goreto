@@ -4,6 +4,7 @@ import { formatNpr } from "@/lib/money/format";
 import { cn } from "@/lib/utils/cn";
 import { Badge, type BadgeTone } from "./badge";
 import { MediaFrame, type MediaImage } from "./media-frame";
+import { PickBadge } from "./pick-badge";
 import { Rating } from "./rating";
 
 export type ProductCardProps = {
@@ -13,6 +14,8 @@ export type ProductCardProps = {
   image?: MediaImage | null;
   badge?: { tone: BadgeTone; label: string };
   rating?: { value: number; count?: number };
+  /** Shows the "Goreto Pick" tick after the title. */
+  pick?: boolean;
   /** Top-right action, e.g. a wishlist toggle. */
   wishlistAction?: ReactNode;
   /** Price-row action, e.g. an add-to-cart IconButton. */
@@ -32,6 +35,7 @@ export function ProductCard({
   image,
   badge,
   rating,
+  pick = false,
   wishlistAction,
   cartAction,
   layout = "vertical",
@@ -65,13 +69,15 @@ export function ProductCard({
           </Badge>
         ) : null}
 
-        <h3 className="text-body font-medium text-neutral-900">
+        <h3 className="flex items-start gap-1 text-body font-medium text-neutral-900">
           <Link
             href={href}
             className="line-clamp-2 after:absolute after:inset-0 after:rounded-lg focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-primary-500"
           >
             {title}
           </Link>
+          {/* Above the stretched link so its tooltip shows on hover. */}
+          {pick ? <PickBadge size={16} className="relative z-10 mt-0.5" /> : null}
         </h3>
 
         {rating ? <Rating value={rating.value} count={rating.count} /> : null}

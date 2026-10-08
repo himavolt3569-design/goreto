@@ -12,6 +12,7 @@ import { ArrowSquareOutIcon, XIcon } from "@/components/ui/icons";
 import { Input, fieldControlClasses } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
 import { createCategoryInlineAction, saveCategoryAction, type CreatedCategory } from "@/features/admin/actions/categories";
+import { EMPTY_CATEGORY_HERO } from "@/features/admin/catalog-forms";
 import type { CategoryFormValues, CategoryOption } from "@/features/admin/queries/catalog";
 import { categoryOptions } from "@/features/catalog/category-options";
 import { cn } from "@/lib/utils/cn";
@@ -30,7 +31,7 @@ import { NameSlugFields } from "./slug-field";
 
 const NO_ERRORS: Record<string, string> = {};
 
-const EMPTY_VALUES: CategoryFormValues = { title: "", slug: "", parentId: "", description: "", imagePath: "", isActive: true, sortOrder: 0 };
+const EMPTY_VALUES: CategoryFormValues = { ...EMPTY_CATEGORY_HERO, title: "", slug: "", parentId: "", description: "", imagePath: "", isActive: true, sortOrder: 0 };
 
 /* ---------- Full page ---------- */
 
@@ -38,6 +39,7 @@ export type CategoryFormProps = {
   categoryId: string | null;
   values: CategoryFormValues;
   imageUrl: string | null;
+  heroImageUrl: string | null;
   /** Top-level categories this one may sit under (never itself). */
   parents: CategoryOption[];
   /** A category with subcategories must stay top-level. */
@@ -48,7 +50,7 @@ export type CategoryFormProps = {
   stagingId?: string;
 };
 
-export function CategoryForm({ categoryId, values, imageUrl, parents, hasChildren, saved, stagingId }: CategoryFormProps) {
+export function CategoryForm({ categoryId, values, imageUrl, heroImageUrl, parents, hasChildren, saved, stagingId }: CategoryFormProps) {
   const [state, formAction, pending] = useActionState(saveCategoryAction, null);
   const errors = (state && !state.ok && state.fieldErrors) || NO_ERRORS;
 
@@ -82,6 +84,13 @@ export function CategoryForm({ categoryId, values, imageUrl, parents, hasChildre
             error={errors.imagePath}
           />
         </FormSection>
+
+        <CategoryHeroSection
+          target={categoryId ? { ownerId: categoryId } : { stagingId: stagingId! }}
+          values={values}
+          imageUrl={heroImageUrl}
+          errors={errors}
+        />
       </div>
 
       <aside className="flex flex-col gap-6 xl:sticky xl:top-24">
@@ -109,6 +118,66 @@ export function CategoryForm({ categoryId, values, imageUrl, parents, hasChildre
         </Card>
       </aside>
     </form>
+  );
+}
+
+/* ---------- Category hero ---------- */
+
+/**
+ * The banner at the top of /categories/<slug>. Optional: without a hero image
+ * the page keeps its plain heading, so the text fields wait behind the image.
+ */
+function CategoryHeroSection({
+  target,
+  values,
+  imageUrl,
+  errors,
+}: {
+  target: { ownerId: string } | { stagingId: string };
+  values: CategoryFormValues;
+  imageUrl: string | null;
+  errors: Record<string, string>;
+}) {
+  const [hasImage, setHasImage] = useState(values.heroImagePath !== "");
+
+  return (
+    <FormSection
+      id="hero"
+      title="Category hero"
+      description="Optional banner at the top of this category's page. Without a hero image the page shows the plain heading."
+    >
+      <ImageField
+        kind="category"
+        target={target}
+        name="heroImagePath"
+        label="Hero image"
+        description="A wide photo works best, at least 1600 × 900 px."
+        defaultPath={values.heroImagePath}
+        defaultUrl={imageUrl}
+        aspect="wide"
+        error={errors.heroImagePath}
+        onPathChange={(path) => setHasImage(path !== "")}
+      />
+      <Field
+        label="Alt text"
+        required={hasImage}
+        error={errors.heroImageAlt}
+        hint="Describe the photo for people using screen readers, e.g. “Model in a red kurta”."
+      >
+        {(control) => <Input {...control} name="heroImageAlt" defaultValue={values.heroImageAlt} maxLength={200} disabled={!hasImage} />}
+      </Field>
+      <Field label="Eyebrow" error={errors.heroEyebrow} hint={`The small line above the title, e.g. "New season". Up to 40 characters.`}>
+        {(control) => <Input {...control} name="heroEyebrow" defaultValue={values.heroEyebrow} maxLength={40} />}
+      </Field>
+      <Field label="Hero title" error={errors.heroTitle} hint="Leave empty to use the category name. Up to 80 characters.">
+        {(control) => <Input {...control} name="heroTitle" defaultValue={values.heroTitle} maxLength={80} />}
+      </Field>
+      <Field label="Hero text" error={errors.heroText} hint="One or two sentences. Up to 240 characters.">
+        {(control) => (
+          <textarea {...control} name="heroText" defaultValue={values.heroText} rows={3} maxLength={240} className={cn(fieldControlClasses, "h-auto py-3")} />
+        )}
+      </Field>
+    </FormSection>
   );
 }
 

@@ -34,13 +34,16 @@ export async function saveCourierAction(_previous: ActionResult | null, formData
   const input = await authorizeAndParse("delivery.manage", courierFormSchema, formData);
   if (!input.ok) return input.result;
   const values = input.data;
-  // integration_mode stays as stored: API integrations aren't built (worklog §4.5).
+  // Daraz Express is the one API courier (prompts/goreto-daraz-courier.md); the rest are manual.
   const row = {
     name: values.title,
     slug: values.slug,
     support_phone: values.supportPhone,
     dispatch_whatsapp_e164: values.dispatchWhatsapp,
     website_url: values.websiteUrl,
+    tracking_url_template: values.trackingUrlTemplate,
+    integration_mode: values.darazApi ? ("api" as const) : ("manual" as const),
+    api_provider: values.darazApi ? "daraz" : null,
     is_active: values.isActive,
   };
   const db = adminDb();
@@ -85,6 +88,7 @@ export async function saveCourierServiceAction(_previous: ActionResult | null, f
     description: values.description,
     estimated_min_days: values.minDays,
     estimated_max_days: values.maxDays,
+    provider_option: values.providerOption,
     is_active: values.isActive,
   };
   const db = adminDb();

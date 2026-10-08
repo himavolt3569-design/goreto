@@ -3,6 +3,7 @@ import { productMediaImage } from "@/lib/media/storage";
 import type { Database, Json } from "@/types/database";
 import type {
   CategoryDetail,
+  CategoryHero,
   CategorySummary,
   CollectionDetail,
   CollectionSummary,
@@ -30,7 +31,17 @@ type Functions = Database["public"]["Functions"];
 
 export type CategoryRow = Pick<
   Tables["categories"]["Row"],
-  "id" | "parent_id" | "slug" | "title" | "description" | "image_path"
+  | "id"
+  | "parent_id"
+  | "slug"
+  | "title"
+  | "description"
+  | "image_path"
+  | "hero_image_path"
+  | "hero_image_alt"
+  | "hero_eyebrow"
+  | "hero_title"
+  | "hero_text"
 >;
 
 export type CardRow = Pick<
@@ -42,6 +53,7 @@ export type CardRow = Pick<
   | "base_price_paisa"
   | "is_bestseller"
   | "is_limited_edition"
+  | "is_sponsored"
   | "published_at"
 > & {
   product_media: Pick<Tables["product_media"]["Row"], "storage_path" | "alt_text">[];
@@ -159,6 +171,19 @@ export function toCategoryDetail(row: CategoryRow, index: CategoryIndex): Catego
     title: row.title,
     description: row.description,
     parent: parent ? { slug: parent.slug, title: parent.title } : null,
+    hero: toCategoryHero(row),
+  };
+}
+
+/** The banner exists only once staff upload a hero photo; an empty title falls back to the name. */
+export function toCategoryHero(row: CategoryRow): CategoryHero | null {
+  const image = productMediaImage(row.hero_image_path, row.hero_image_alt);
+  if (!image) return null;
+  return {
+    eyebrow: row.hero_eyebrow,
+    title: row.hero_title || row.title,
+    text: row.hero_text || row.description,
+    image,
   };
 }
 
@@ -190,6 +215,7 @@ export function toHomeProduct(row: CardRow, index: CategoryIndex): HomeProduct {
     categorySlug: index.rootOf(row.category_id)?.slug ?? "",
     pricePaisa: row.base_price_paisa,
     image: cover ? productMediaImage(cover.storage_path, cover.alt_text) : null,
+    isPick: row.is_sponsored,
   };
 }
 
@@ -274,6 +300,7 @@ export function toProductDetail(
     title: row.title,
     category: category ? { slug: category.slug, title: category.title } : { slug: "", title: "Shop" },
     badge: productBadge(row, now),
+    isPick: row.is_sponsored,
     rating: toRating(rating),
     shortDescription: row.short_description,
     description: row.description,

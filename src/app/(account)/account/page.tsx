@@ -105,6 +105,10 @@ export default async function AccountPage() {
               <dd className="break-all text-neutral-900">{profile.email ?? "No verified email yet"}</dd>
             </div>
           </dl>
+          <Link href="/account/profile" className={buttonClasses({ variant: "text", size: "md", className: "h-8 w-fit px-0" })}>
+            Manage profile
+            <ArrowRightIcon aria-hidden="true" size={ICON_SIZE_XS} weight={ICON_WEIGHT_OUTLINE} />
+          </Link>
           {profile.role !== "customer" ? (
             <Link href="/admin" className={buttonClasses({ variant: "primary", size: "md", className: "w-fit" })}>
               Open admin

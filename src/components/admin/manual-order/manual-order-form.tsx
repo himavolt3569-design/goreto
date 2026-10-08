@@ -9,11 +9,12 @@ import { NepalAddressFields } from "@/components/delivery/nepal-address-fields";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
-import { WarningCircleIcon, WhatsappLogoIcon } from "@/components/ui/icons";
+import { TruckIcon, WarningCircleIcon, WhatsappLogoIcon } from "@/components/ui/icons";
 import { ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
 import { fieldControlClasses, Input } from "@/components/ui/input";
 import { createManualOrderAction } from "@/features/admin/actions/manual-orders";
-import { emptyManualOrder, manualOrderSchema, type ManualOrder, type ManualOrderValues } from "@/features/admin/manual-order-forms";
+import { sendNewOrderAction, type SendOutcome } from "@/features/admin/actions/parcels";
+import { emptyManualOrder, manualOrderSchema, type ManualOrder, type ManualOrderFailure, type ManualOrderValues } from "@/features/admin/manual-order-forms";
 import type { OrderVariantOption } from "@/features/admin/queries/manual-orders";
 import type { LineIssue } from "@/features/checkout/errors";
 import { couponErrorMessage } from "@/features/checkout/errors";
@@ -26,27 +27,42 @@ import { CustomerSection } from "./customer-section";
 import { ItemsSection } from "./items-section";
 import { useManualOrderQuote } from "./use-manual-order-quote";
 
+export type SentOrder = Extract<SendOutcome, { ok: true }>;
+
+/** Send & track: save, accept and send in one click, then stay on the page. */
+export type SendMode = {
+  /** Delivery services whose courier is booked through the Daraz API. */
+  darazServiceIds: readonly string[];
+  usualWeightGrams: number | null;
+  onSent: (order: SentOrder) => void;
+};
+
 /**
  * New WhatsApp order (worklog §4.0): staff key in what the customer asked
  * for on WhatsApp. Every amount shown comes from admin_order_quote and is
  * recalculated by admin_create_order; payment is Cash on Delivery. The order
- * waits for acceptance unless WhatsApp auto-accept is on.
+ * waits for acceptance unless WhatsApp auto-accept is on. With `send`
+ * (Send & track) it is accepted, routed and booked on save instead.
  */
 export function ManualOrderForm({
   address,
   canLinkCustomer,
   autoAccept,
   codEnabled,
+  send,
 }: {
   address: NepalAddressData;
   canLinkCustomer: boolean;
   autoAccept: boolean;
   codEnabled: boolean;
+  send?: SendMode;
 }) {
   const [variants, setVariants] = useState<Record<string, OrderVariantOption>>({});
   const [lineIssues, setLineIssues] = useState<LineIssue[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [weight, setWeight] = useState("");
+  const [weightError, setWeightError] = useState<string | null>(null);
   const errorRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<ManualOrderValues, unknown, ManualOrder>({
@@ -85,25 +101,58 @@ export function ManualOrderForm({
   const couponRejected = quote?.coupon?.status === "rejected" ? quote.coupon : null;
   const canSubmit = codEnabled && items.length > 0 && !loading && !submitting && !overCodLimit && !couponRejected;
 
+  const selectedOption = options.find((option) => option.courierServiceId === courierServiceId) ?? null;
+  const darazSelected = Boolean(send && selectedOption && send.darazServiceIds.includes(selectedOption.courierServiceId));
+  // What the server books with when the weight is left empty: the products' total, then the usual weight.
+  const productGrams =
+    items.length > 0 && items.every((item) => variants[item.variantId]?.weightGrams)
+      ? items.reduce((sum, item) => sum + variants[item.variantId]!.weightGrams! * (Number.isFinite(item.quantity) ? item.quantity : 0), 0)
+      : null;
+  const autoGrams = productGrams ?? send?.usualWeightGrams ?? null;
+
   // Runs after the resolver validated the form; the action parses the raw values again.
   async function submit() {
     setSubmitError(null);
+    setWeightError(null);
     setSubmitting(true);
-    const result = await createManualOrderAction(form.getValues()).catch(() => ({
-      ok: false as const,
-      message: "The order couldn't be saved. Check your connection and try again.",
-    }));
-    // On success the action redirects to the new order.
+    const offline: ManualOrderFailure = { ok: false, message: "The order couldn't be saved. Check your connection and try again." };
+    const result = send
+      ? await sendNewOrderAction(form.getValues(), darazSelected ? weight : "").catch(() => offline)
+      : await createManualOrderAction(form.getValues()).catch(() => offline);
     setSubmitting(false);
+    if (result.ok) {
+      // Send & track stays on the page: show the result and start a fresh order.
+      if (send && "orderNumber" in result) {
+        send.onSent(result);
+        form.reset(emptyManualOrder());
+        setVariants({});
+        setLineIssues([]);
+        setWeight("");
+      }
+      return;
+    }
+    // On success the create action redirects to the new order.
     setSubmitError(result.message);
     if ("fieldErrors" in result && result.fieldErrors) {
       for (const [field, message] of Object.entries(result.fieldErrors)) {
         if (field in emptyManualOrder()) form.setError(field as keyof ManualOrderValues, { message });
+        if (field === "weightGrams") setWeightError(message);
       }
     }
     setLineIssues("lineIssues" in result && result.lineIssues ? result.lineIssues : []);
     refresh();
   }
+
+  const submitLabel = send ? `Save and send${selectedOption ? ` to ${selectedOption.courierName}` : ""}` : autoAccept ? "Create and accept order" : "Create order";
+  const submitNote = send
+    ? darazSelected
+      ? "Goreto accepts the order and books it with Daraz Express straight away."
+      : selectedOption
+        ? `Goreto accepts the order for ${selectedOption.courierName}. Then tap Send on WhatsApp to give them the details.`
+        : "Choose a delivery option to see who delivers it."
+    : autoAccept
+      ? "WhatsApp auto-accept is on: the order is accepted and a courier assigned as soon as it's saved."
+      : "The order is saved as Pending. Someone with order access accepts it before it goes to a courier.";
 
   return (
     <FormProvider {...form}>
@@ -164,6 +213,9 @@ export function ManualOrderForm({
                       <span className="text-body font-medium text-neutral-900">
                         {option.courierName} · {option.serviceName}
                       </span>
+                      {send?.darazServiceIds.includes(option.courierServiceId) ? (
+                        <span className="mt-1 w-fit rounded-full bg-primary-100 px-2 text-small font-medium text-primary-700">Books through Daraz Express</span>
+                      ) : null}
                       <span className="text-small text-neutral-500">{deliveryEstimate(option.estimatedMinDays, option.estimatedMaxDays)}</span>
                     </span>
                     <span className="text-body font-semibold tabular-nums text-neutral-900">{formatNpr(option.pricePaisa)}</span>
@@ -224,13 +276,47 @@ export function ManualOrderForm({
             {overCodLimit && quote?.codMaxOrderPaisa ? (
               <p className="text-small text-error-700">Cash on Delivery orders can be up to {formatNpr(quote.codMaxOrderPaisa)}.</p>
             ) : null}
-            <p className="text-small text-neutral-700">
-              {autoAccept
-                ? "WhatsApp auto-accept is on: the order is accepted and a courier assigned as soon as it's saved."
-                : "The order is saved as Pending. Someone with order access accepts it before it goes to a courier."}
-            </p>
-            <Button type="submit" size="lg" fullWidth loading={submitting} disabled={!canSubmit} leadingIcon={<WhatsappLogoIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />}>
-              {autoAccept ? "Create and accept order" : "Create order"}
+            {darazSelected ? (
+              <Field
+                label="Parcel weight (g)"
+                error={weightError ?? undefined}
+                hint={
+                  productGrams
+                    ? `Leave empty to use the product weights (${productGrams} g).`
+                    : autoGrams
+                      ? `Leave empty to use the usual parcel weight (${autoGrams} g).`
+                      : "Some items have no weight saved. Weigh the packed parcel."
+                }
+              >
+                {(control) => (
+                  <Input
+                    {...control}
+                    value={weight}
+                    onChange={(event) => setWeight(event.target.value)}
+                    inputMode="numeric"
+                    maxLength={6}
+                    autoComplete="off"
+                    placeholder={autoGrams ? `Auto: ${autoGrams} g` : "e.g. 500"}
+                  />
+                )}
+              </Field>
+            ) : null}
+            <p className="text-small text-neutral-700">{submitNote}</p>
+            <Button
+              type="submit"
+              size="lg"
+              fullWidth
+              loading={submitting}
+              disabled={!canSubmit}
+              leadingIcon={
+                send ? (
+                  <TruckIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                ) : (
+                  <WhatsappLogoIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                )
+              }
+            >
+              {submitLabel}
             </Button>
             {submitError ? (
               <div ref={errorRef} tabIndex={-1} role="alert" className="flex items-start gap-2 text-small text-error-700 outline-none">

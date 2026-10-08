@@ -32,7 +32,18 @@ const LEVELS = [
 
 type Editing = { service: CourierServiceValues | null } | null;
 
-export function CourierServices({ courierId, courierName, services }: { courierId: string; courierName: string; services: CourierServiceValues[] }) {
+export function CourierServices({
+  courierId,
+  courierName,
+  services,
+  darazApi = false,
+}: {
+  courierId: string;
+  courierName: string;
+  services: CourierServiceValues[];
+  /** Daraz couriers map each service to a Daraz delivery option. */
+  darazApi?: boolean;
+}) {
   const [editing, setEditing] = useState<Editing>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -128,6 +139,7 @@ export function CourierServices({ courierId, courierName, services }: { courierI
       {editing ? (
         <ServiceDialog
           courierId={courierId}
+          darazApi={darazApi}
           service={editing.service}
           onSaved={(saved) => {
             setEditing(null);
@@ -142,11 +154,13 @@ export function CourierServices({ courierId, courierName, services }: { courierI
 
 function ServiceDialog({
   courierId,
+  darazApi,
   service,
   onSaved,
   onClose,
 }: {
   courierId: string;
+  darazApi: boolean;
   service: CourierServiceValues | null;
   onSaved: (message: string) => void;
   onClose: () => void;
@@ -234,6 +248,21 @@ function ServiceDialog({
             <textarea {...control} name="description" defaultValue={service?.description ?? ""} rows={2} maxLength={200} className={cn(fieldControlClasses, "h-auto py-3")} />
           )}
         </Field>
+        {darazApi ? (
+          <Field label="Daraz delivery option" error={errors.providerOption} hint="What Goreto books with Daraz when a customer chooses this service.">
+            {(control) => (
+              <Select
+                {...control}
+                name="providerOption"
+                defaultValue={service?.providerOption ?? "standard"}
+                options={[
+                  { value: "standard", label: "Standard" },
+                  { value: "economy", label: "Economy" },
+                ]}
+              />
+            )}
+          </Field>
+        ) : null}
         <CheckboxField name="isActive" defaultChecked={service?.isActive ?? true} label="Offered at checkout" description="Only when the courier is active too." />
 
         {state && !state.ok ? <ActionMessage state={state} /> : null}

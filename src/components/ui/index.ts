@@ -11,6 +11,7 @@ export * from "./logo";
 export * from "./lookbook-card";
 export * from "./media-frame";
 export * from "./nav-item";
+export * from "./pick-badge";
 export * from "./product-card";
 export * from "./progress-bar";
 export * from "./quantity-stepper";

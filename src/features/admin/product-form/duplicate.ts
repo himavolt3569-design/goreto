@@ -57,6 +57,8 @@ export function duplicateValues(
     status: "draft",
     isFeatured: false,
     isBestseller: false,
+    // Sponsorship is a deal for one product; the copy starts without it.
+    isSponsored: false,
     variants: values.variants.map((variant) => ({ ...variant, id: null, sku: copySku(variant.sku, skus), initialStock: "0" })),
     collectionIds: linkCollections ? values.collectionIds : null,
   };

@@ -177,18 +177,18 @@ Use semantic state colors for success, warning, error, information, and limited 
 
 ## 3.2 Typography
 
-Use **Playfair Display** only for expressive display typography and **Inter** for interface text. Prefer `next/font` and do not load duplicate webfont implementations.
+Use **Poppins** for all text, both display and interface. It replaced Playfair Display and Inter on 2026-10-04 at the client's request; this table overrides the typefaces shown in the Design System image. Load it once through `next/font` (weights 400/500/600/700) and do not load duplicate webfont implementations. The `font-display` utility remains the semantic hook for display headings.
 
 | Style | Font | Size / Line Height | Weight | Intended use |
 |---|---|---:|---|---|
-| Display 1 | Playfair Display | `48 / 56` | Bold | Hero titles |
-| Display 2 | Playfair Display | `36 / 44` | Bold | Major section titles |
-| Heading 1 | Inter | `28 / 36` | Semibold | Product/page titles |
-| Heading 2 | Inter | `22 / 30` | Semibold | Card/section titles |
-| Heading 3 | Inter | `18 / 26` | Medium | Section labels |
-| Body Large | Inter | `16 / 24` | Regular | Lead/body copy |
-| Body | Inter | `14 / 20` | Regular | Supporting/interface text |
-| Small | Inter | `12 / 16` | Regular | Caption/meta text |
+| Display 1 | Poppins | `48 / 56` | Bold | Hero titles |
+| Display 2 | Poppins | `36 / 44` | Bold | Major section titles |
+| Heading 1 | Poppins | `28 / 36` | Semibold | Product/page titles |
+| Heading 2 | Poppins | `22 / 30` | Semibold | Card/section titles |
+| Heading 3 | Poppins | `18 / 26` | Medium | Section labels |
+| Body Large | Poppins | `16 / 24` | Regular | Lead/body copy |
+| Body | Poppins | `14 / 20` | Regular | Supporting/interface text |
+| Small | Poppins | `12 / 16` | Regular | Caption/meta text |
 
 Do not introduce another font unless the user replaces the design system.
 
@@ -245,7 +245,7 @@ Shared rules:
 
 - default radius: `12px`;
 - horizontal padding: `16px` for large/default, `12px` for medium/compact;
-- font: Inter Medium, usually `14-16px`;
+- font: Poppins Medium, usually `14-16px`;
 - icon gap: `8px`;
 - visible keyboard focus state;
 - disabled state must remain readable but clearly inactive.
@@ -760,7 +760,7 @@ Do not rely on hidden buttons for security. Enforce authorization in RLS and aga
 - `auth.protect()` in the proxy is authentication only. Server Actions and route handlers must re-check the session and database permissions themselves.
 - Use `<Show when="signed-in" | "signed-out">` (Core 3) for auth-dependent UI. Do not use `<Show>` for authorization.
 - In-page sign-in/sign-up triggers open Clerk **modals** (`SignInButton` / `SignUpButton` with `mode="modal"`) so shoppers stay on the page. The `/sign-in` and `/sign-up` pages exist only as fallbacks for protected-route redirects, direct links, and Clerk return flows. Do not link to them from in-page UI.
-- Theme Clerk components through `appearance` using the Goreto tokens: orange primary, Inter, 12px radius, neutral borders. Keep the theme in one module and do not restyle Clerk with ad-hoc CSS overrides.
+- Theme Clerk components through `appearance` using the Goreto tokens: orange primary, Poppins, 12px radius, neutral borders. Keep the theme in one module and do not restyle Clerk with ad-hoc CSS overrides.
 - `CLERK_SECRET_KEY` and `CLERK_WEBHOOK_SIGNING_SECRET` are server-only. Never expose the Supabase service-role key to a browser bundle.
 - Do not read or print `.env*` files. Use `clerk env pull` to refresh keys.
 

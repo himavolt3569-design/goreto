@@ -49,7 +49,7 @@ async function persistCategory(formData: FormData): Promise<Saved> {
   }
 
   const db = adminDb();
-  const current = id === null ? null : (await db.from("categories").select("slug, image_path").eq("id", id).maybeSingle()).data;
+  const current = id === null ? null : (await db.from("categories").select("slug, image_path, hero_image_path").eq("id", id).maybeSingle()).data;
   if (id !== null && !current) return { ok: false, result: NOT_UPDATED };
 
   const image = await resolveImageChange(
@@ -61,12 +61,26 @@ async function persistCategory(formData: FormData): Promise<Saved> {
   );
   if (!image.ok) return { ok: false, result: { ok: false, message: image.message, fieldErrors: { imagePath: image.message } } };
 
+  const hero = await resolveImageChange(
+    db,
+    "category",
+    id === null ? { stagingId: values.stagingId } : { recordId: id },
+    current?.hero_image_path ?? null,
+    values.heroImagePath,
+  );
+  if (!hero.ok) return { ok: false, result: { ok: false, message: hero.message, fieldErrors: { heroImagePath: hero.message } } };
+
   const row = {
     title: values.title,
     slug: values.slug,
     parent_id: values.parentId,
     description: values.description,
     image_path: image.path,
+    hero_image_path: hero.path,
+    hero_image_alt: hero.path ? values.heroImageAlt : "",
+    hero_eyebrow: values.heroEyebrow,
+    hero_title: values.heroTitle,
+    hero_text: values.heroText,
     is_active: values.isActive,
     sort_order: values.sortOrder,
   };
@@ -83,6 +97,7 @@ async function persistCategory(formData: FormData): Promise<Saved> {
   if (data.length !== 1) return { ok: false, result: NOT_UPDATED };
 
   await removeUploadedImage(db, "category", image.replaced);
+  await removeUploadedImage(db, "category", hero.replaced);
   revalidateCategory(current?.slug, values.slug);
   return { ok: true, created: null };
 }

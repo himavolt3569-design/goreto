@@ -10,6 +10,7 @@ import {
   SpeakerSlashIcon,
   StarIcon,
   WarningCircleIcon,
+  TruckIcon,
   WhatsappLogoIcon,
 } from "@/components/ui/icons";
 import { ICON_SIZE, ICON_SIZE_SM, ICON_WEIGHT_OUTLINE } from "@/components/ui/icon";
@@ -246,10 +247,16 @@ export function NotificationsMenu({
                 <span
                   className={cn(
                     "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full",
-                    item.kind === "order_auto_accepted" ? "bg-success-100 text-success-700" : "bg-primary-100 text-primary-700",
+                    item.kind === "order_auto_accepted"
+                      ? "bg-success-100 text-success-700"
+                      : item.kind === "courier_attention"
+                        ? "bg-warning-100 text-warning-700"
+                        : "bg-primary-100 text-primary-700",
                   )}
                 >
-                  {item.channel === "whatsapp" ? (
+                  {item.kind === "courier_attention" ? (
+                    <TruckIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                  ) : item.channel === "whatsapp" ? (
                     <WhatsappLogoIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
                   ) : (
                     <FileTextIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />

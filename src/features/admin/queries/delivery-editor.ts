@@ -26,9 +26,27 @@ export async function fetchDeliveryHistory(): Promise<DeliveryHistory> {
 
 /* ---------- Couriers ---------- */
 
-export type CourierFormValues = { title: string; slug: string; supportPhone: string; dispatchWhatsapp: string; websiteUrl: string; isActive: boolean };
+export type CourierFormValues = {
+  title: string;
+  slug: string;
+  supportPhone: string;
+  dispatchWhatsapp: string;
+  websiteUrl: string;
+  trackingUrlTemplate: string;
+  darazApi: boolean;
+  isActive: boolean;
+};
 
-export const EMPTY_COURIER_VALUES: CourierFormValues = { title: "", slug: "", supportPhone: "", dispatchWhatsapp: "", websiteUrl: "", isActive: true };
+export const EMPTY_COURIER_VALUES: CourierFormValues = {
+  title: "",
+  slug: "",
+  supportPhone: "",
+  dispatchWhatsapp: "",
+  websiteUrl: "",
+  trackingUrlTemplate: "",
+  darazApi: false,
+  isActive: true,
+};
 
 export type CourierServiceValues = {
   id: string;
@@ -38,6 +56,7 @@ export type CourierServiceValues = {
   description: string;
   minDays: number;
   maxDays: number;
+  providerOption: "standard" | "economy" | null;
   isActive: boolean;
   rateCount: number;
   /** Orders and shipments that used it: can't be deleted. */
@@ -58,7 +77,7 @@ export async function fetchCourierEditor(id: string): Promise<CourierEditorData 
     adminDb()
       .from("couriers")
       .select(
-        "id, name, slug, support_phone, dispatch_whatsapp_e164, website_url, integration_mode, is_active, updated_at, courier_services(id, name, service_code, service_level, description, estimated_min_days, estimated_max_days, is_active, delivery_rates(count))",
+        "id, name, slug, support_phone, dispatch_whatsapp_e164, website_url, tracking_url_template, integration_mode, api_provider, is_active, updated_at, courier_services(id, name, service_code, service_level, description, estimated_min_days, estimated_max_days, provider_option, is_active, delivery_rates(count))",
       )
       .eq("id", id)
       .order("name", { referencedTable: "courier_services" })
@@ -71,7 +90,16 @@ export async function fetchCourierEditor(id: string): Promise<CourierEditorData 
 
   return {
     id: row.id,
-    values: { title: row.name, slug: row.slug, supportPhone: row.support_phone ?? "", dispatchWhatsapp: row.dispatch_whatsapp_e164 ?? "", websiteUrl: row.website_url ?? "", isActive: row.is_active },
+    values: {
+      title: row.name,
+      slug: row.slug,
+      supportPhone: row.support_phone ?? "",
+      dispatchWhatsapp: row.dispatch_whatsapp_e164 ?? "",
+      websiteUrl: row.website_url ?? "",
+      trackingUrlTemplate: row.tracking_url_template ?? "",
+      darazApi: row.api_provider === "daraz",
+      isActive: row.is_active,
+    },
     integrationMode: row.integration_mode,
     services: row.courier_services.map((service) => ({
       id: service.id,
@@ -81,6 +109,7 @@ export async function fetchCourierEditor(id: string): Promise<CourierEditorData 
       description: service.description,
       minDays: service.estimated_min_days,
       maxDays: service.estimated_max_days,
+      providerOption: service.provider_option === "standard" || service.provider_option === "economy" ? service.provider_option : null,
       isActive: service.is_active,
       rateCount: service.delivery_rates[0]?.count ?? 0,
       useCount: history.services.get(service.id) ?? 0,

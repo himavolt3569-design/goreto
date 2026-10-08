@@ -10,9 +10,9 @@ import { CheckboxField, SaveCard, useEditorForm } from "./editor-parts";
 import { NameSlugFields } from "./slug-field";
 
 /*
- * Add/Edit courier (admin phase 3). Every courier is manual for now: staff
- * record each tracking update. API keys would be server secrets, never
- * stored here (AGENTS §11.7).
+ * Add/Edit courier (admin phase 3). Couriers are manual (staff record each
+ * tracking update) unless booked through the Daraz Express API, whose keys
+ * are server secrets and never stored here (AGENTS §11.7).
  */
 
 export function CourierForm({
@@ -62,6 +62,15 @@ export function CourierForm({
             <Field label="Website" error={errors.websiteUrl} hint="Must start with https://">
               {(control) => <Input {...control} name="websiteUrl" type="url" defaultValue={values.websiteUrl} autoComplete="off" placeholder="https://" />}
             </Field>
+            <Field
+              label="Tracking link for customers"
+              error={errors.trackingUrlTemplate}
+              hint="Optional. The courier's tracking page with {tracking} where the number goes, e.g. https://example.com/track?no={tracking}"
+            >
+              {(control) => (
+                <Input {...control} name="trackingUrlTemplate" type="url" defaultValue={values.trackingUrlTemplate} autoComplete="off" placeholder="https://…{tracking}" />
+              )}
+            </Field>
           </div>
         </FormSection>
       </div>
@@ -73,7 +82,12 @@ export function CourierForm({
           label="Active"
           description="Turning a courier off hides all its services at checkout."
         />
-        <p className="text-small text-neutral-500">Tracking: manual. Staff record each shipment update from the order page.</p>
+        <CheckboxField
+          name="darazApi"
+          defaultChecked={values.darazApi}
+          label="Booked through the Daraz Express API"
+          description="Orders with this courier are booked, labelled and tracked from the Daraz Express panel. Leave off for other couriers: staff record their tracking by hand."
+        />
       </SaveCard>
     </form>
   );

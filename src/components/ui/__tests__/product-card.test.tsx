@@ -5,6 +5,14 @@ import { IconButton } from "../icon-button";
 import { ProductCard } from "../product-card";
 
 describe("ProductCard", () => {
+  it("shows the Goreto Pick tick only for picks, never the word sponsored", () => {
+    const { rerender, container } = render(<ProductCard title="Canvas Tote" href="/products/canvas-tote" pricePaisa={99900} pick />);
+    expect(screen.getByRole("img", { name: "Goreto Pick" })).toHaveAttribute("title", "Goreto Pick");
+    expect(container.textContent?.toLowerCase()).not.toContain("sponsor");
+    rerender(<ProductCard title="Canvas Tote" href="/products/canvas-tote" pricePaisa={99900} />);
+    expect(screen.queryByRole("img", { name: "Goreto Pick" })).toBeNull();
+  });
+
   it("renders title link, formatted price, badge and rating", () => {
     render(
       <ProductCard

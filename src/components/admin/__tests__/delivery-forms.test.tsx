@@ -166,6 +166,7 @@ describe("CourierServices", () => {
     description: "",
     minDays: 1,
     maxDays: 2,
+    providerOption: null,
     isActive: true,
     rateCount: 2,
     useCount: 10,

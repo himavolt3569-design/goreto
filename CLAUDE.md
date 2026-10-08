@@ -36,6 +36,7 @@ Playwright is not installed yet, so no E2E suite exists.
 - `npm run db:types` regenerates `src/types/database.ts` from the hosted project and needs `SUPABASE_ACCESS_TOKEN`. Never hand-edit that file.
 - `npm run seed:generate` rebuilds the deterministic `supabase/seed.ndjson`. `seed:load` and `seed:purge` apply or remove it, and they are guarded by `GORETO_DATA_ENV=development`.
 - `npm run owner:bootstrap` promotes a Clerk user to owner.
+- `npm run daraz:mock` runs a local stand-in for the Daraz courier API on port 4010 (set `DARAZ_API_URL=http://localhost:4010` plus any `DARAZ_APP_KEY`/`DARAZ_APP_SECRET` in `.env.local`). `npm run daraz:locations -- --file <csv> --dry-run` loads Daraz's Nepal location IDs.
 
 Supabase Cloud grants `anon`/`authenticated` access to every new table and function by default. Each migration must revoke and grant explicitly, following `20260925050144_harden_grants.sql`. The PGlite harness (`tests/db/harness.ts`) reproduces these permissive defaults, so a missing revoke fails the tests.
 
@@ -45,6 +46,7 @@ The live site is https://goreto-kappa.vercel.app. Vercel deploys production **on
 
 - Production uses its own Supabase project, `goreto-prod` (no seed), and its own Clerk app, "Goreto Live". Their values live in the untracked `.env.production.local` in the main checkout. The npm scripts load `.env.local`, so they always target **dev**. To reach prod, run a script with `node --env-file=.env.production.local ...`, and do a `--dry-run` before any push.
 - To release: apply migrations to prod first, then merge `feat/design-system-homepage` into `production`. Never seed prod.
+- A local `npm run build` loads `.env.production.local`, so prerendering queries **prod**. Run it after prod has the branch's migrations, or load `.env.local` into `process.env` first to build against dev: in Git Bash, `set -a; . ./.env.local; set +a; npx next build` (`node --env-file` breaks Next's build workers).
 - `src/config/features.ts` hides links to unbuilt pages in production builds. When a feature ships, delete its flag rather than flipping it.
 
 ## Architecture
@@ -53,7 +55,7 @@ The live site is https://goreto-kappa.vercel.app. Vercel deploys production **on
 
 - `public.ts` is anonymous and never calls `auth()`. It serves storefront catalog reads, so those pages stay cacheable (ISR plus the `CATALOG_CACHE_TAG` tag).
 - `server.ts` (`getUserSupabase`) passes the Clerk session token through `accessToken`, so RLS sees the user. Calling it makes the route dynamic. Use it for account and admin work.
-- `admin.ts` holds the service role. Its only allowed importer is `src/lib/auth/profile-sync.ts`, and `boundaries.test.ts` enforces that. Do not add importers.
+- `admin.ts` holds the service role. Its only allowed importers are `src/lib/auth/profile-sync.ts` (Clerk webhook) and `src/lib/courier/provider-sync.ts` (courier webhook, scheduled sync, auto-booking: no user session), and `boundaries.test.ts` enforces that. Do not add importers.
 
 **Identity → authorization chain.** Clerk `sub` maps to `profiles.clerk_user_id`, which SQL helpers (`current_profile_id()`, `is_owner()`, `has_permission()`) resolve inside RLS. `src/lib/auth/profile.ts` provides `getCurrentProfile`, `requireProfile`, `authorize`, `requirePermission` and `requireOwner`, and lazily upserts the profile when the Clerk webhook (`src/app/api/webhooks/clerk`) has not run yet.
 
@@ -73,5 +75,7 @@ The live site is https://goreto-kappa.vercel.app. Vercel deploys production **on
 - Primitives live in `src/components/ui/`. The dev-only `/design-system` page shows them.
 - Icons come from the curated deep imports in `src/components/ui/icons.ts`. Add new icons there. Importing from the Phosphor barrel slows tests roughly 40×.
 - Money is integer paisa. Format it with `formatNpr` from `src/lib/money`.
+
+**Daraz Express courier** (`docs/couriers/daraz.md`, `prompts/goreto-daraz-courier.md`): the API client, signing, payloads, status map and shared booking flow live in `src/lib/courier/daraz/`. Staff actions are in `src/features/admin/actions/daraz.ts`, which uses the user client and `admin_*` RPCs. The webhook is `api/courier/webhooks/daraz` and the cron is `api/cron/courier-sync`; both go through `provider-sync.ts` and the `courier_*` RPCs, which only the service role can execute. Never give preview or dev the live Daraz keys.
 
 `scripts/` are TypeScript files that Node runs directly with type stripping. Each script folder has its own `package.json` with `"type": "module"`.

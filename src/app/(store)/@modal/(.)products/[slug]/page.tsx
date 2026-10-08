@@ -33,6 +33,7 @@ export default async function QuickViewPage({ params }: { params: Promise<{ slug
         slug: product.slug,
         title: product.title,
         badge: product.badge,
+        isPick: product.isPick,
         rating: product.rating,
         shortDescription: product.shortDescription,
         basePricePaisa: product.basePricePaisa,

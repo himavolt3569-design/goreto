@@ -2,7 +2,8 @@ import { HomeMotion } from "@/components/motion/home-motion";
 import { CategoryRail } from "@/components/store/home/category-rail";
 import { CollectionCarousel } from "@/components/store/home/collection-carousel";
 import { FeaturedProducts } from "@/components/store/home/featured-products";
-import { Hero } from "@/components/store/home/hero";
+import { GoretoPicks } from "@/components/store/home/goreto-picks";
+import { Hero, HeroTrustStrip } from "@/components/store/home/hero";
 import { HowItWorks } from "@/components/store/home/how-it-works";
 import { Newsletter } from "@/components/store/home/newsletter";
 import { Testimonials } from "@/components/store/home/testimonials";
@@ -13,11 +14,13 @@ import { getHomepageData } from "@/features/catalog/homepage";
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const { categories, featuredProducts, collections, testimonials } = await getHomepageData();
+  const { categories, featuredProducts, picks, collections, testimonials } = await getHomepageData();
 
   return (
     <HomeMotion>
       <Hero />
+
+      <HeroTrustStrip />
 
       <CategoryRail categories={categories} />
 
@@ -38,6 +41,8 @@ export default async function HomePage() {
           }
         />
       </section>
+
+      <GoretoPicks products={picks} />
 
       {collections.length > 0 ? (
         <section

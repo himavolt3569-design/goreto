@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BackLink, PageHeader, Panel, TableScroll, Thumb, tableClasses, tdClasses, thClasses, theadRowClasses, numericClasses } from "@/components/admin/admin-ui";
 import { CourierHandoffPanel } from "@/components/admin/courier-handoff-panel";
+import { DarazShipmentPanel } from "@/components/admin/daraz-shipment-panel";
 import { OrderActions } from "@/components/admin/order-actions";
 import { OrderChannelPill, PaymentStatusPill, SHIPMENT_LABELS, ShipmentStatusPill } from "@/components/admin/status-pills";
 import { CheckIcon } from "@/components/ui/icons";
@@ -19,7 +20,10 @@ import {
   fetchStoreName,
   type OrderDetail,
 } from "@/features/admin/queries/orders";
+import { bookingAccount, fetchBookingContext, fetchDarazSettings, fetchSupportCases } from "@/features/admin/queries/daraz";
 import { buildCourierMessage, whatsappLink } from "@/features/orders/courier-handoff";
+import { darazConfig, isLiveDaraz } from "@/lib/courier/daraz/config";
+import { addressDetails } from "@/lib/courier/daraz/payloads";
 import { formatNpr } from "@/lib/money/format";
 import { cn } from "@/lib/utils/cn";
 
@@ -68,12 +72,20 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
 
   const shipment = order.shipment;
   const courier = shipment?.couriers ?? null;
-  const showHandoff = canHandOffToCourier(order.status) && courier !== null;
-  const [acceptPreview, staffNames, storeName] = await Promise.all([
+  // Daraz Express is booked through its API; every other courier gets the WhatsApp handoff.
+  const darazCourier = courier?.api_provider === "daraz";
+  const showHandoff = canHandOffToCourier(order.status) && courier !== null && !darazCourier;
+  const darazGateway = darazCourier ? darazConfig() : null;
+  const [acceptPreview, staffNames, storeName, daraz] = await Promise.all([
     canWrite && canAccept(order.status) ? fetchAcceptPreview(order.id) : Promise.resolve(null),
     fetchStaffNames([order.created_by, order.accepted_by, order.canceled_by, order.handoff?.last_sent_by]),
     showHandoff ? fetchStoreName() : Promise.resolve(""),
+    darazCourier
+      ? Promise.all([fetchBookingContext(order.id), canWrite ? fetchDarazSettings() : Promise.resolve(null), fetchSupportCases(1, order.id)])
+      : Promise.resolve(null),
   ]);
+  const darazAccount = daraz && canWrite ? bookingAccount(daraz[1]) : null;
+  const darazSetupMissing = darazAccount && !darazAccount.ok ? darazAccount.missing : [];
   const staffName = (id: string | null | undefined) => (id ? (staffNames.get(id) ?? "a former staff member") : null);
 
   const canViewCustomer = canAccess(profile, "customers.read") && order.user_id !== null;
@@ -248,6 +260,36 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/orde
                 currentCourierId={shipment?.couriers?.id ?? null}
                 currentTracking={shipment?.tracking_number ?? null}
                 acceptPreview={acceptPreview}
+                apiCourier={darazCourier}
+                apiBooked={Boolean(daraz?.[0]?.shipment?.packageCode)}
+              />
+            </Panel>
+          ) : null}
+
+          {darazCourier && daraz?.[0] ? (
+            <Panel title="Daraz Express" description="Booked and tracked through the Daraz Logistics API." bodyClassName="px-6 pb-6">
+              <DarazShipmentPanel
+                orderId={order.id}
+                orderNumber={order.order_number}
+                bookable={canHandOffToCourier(order.status)}
+                configured={darazGateway !== null}
+                liveGateway={darazGateway ? isLiveDaraz(darazGateway) : true}
+                setupMissing={darazSetupMissing}
+                setupHref={canAccess(profile, "delivery.manage") ? "/admin/daraz?tab=setup" : null}
+                canWrite={canWrite}
+                shipment={daraz[0].shipment}
+                suggestedWeightGrams={daraz[0].suggestedWeightGrams}
+                usualWeightGrams={daraz[1]?.default_weight_grams ?? null}
+                defaultOption={daraz[1]?.default_delivery_option === "economy" ? "economy" : "standard"}
+                defaultOpenBox={daraz[1]?.default_open_box ?? false}
+                boxPresets={daraz[1]?.box_presets ?? []}
+                mappedLocation={daraz[0].order.darazAddressId !== null}
+                recipient={{
+                  name: daraz[0].order.address.recipientName,
+                  phoneE164: daraz[0].order.address.phoneE164,
+                  details: addressDetails(daraz[0].order.address),
+                }}
+                supportCases={daraz[2].rows.map((item) => ({ caseId: item.case_id, subject: item.subject, status: item.status }))}
               />
             </Panel>
           ) : null}

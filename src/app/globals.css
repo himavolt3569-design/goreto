@@ -60,9 +60,10 @@
 
   /* ---------- Typography ---------- */
   --font-sans:
-    var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    var(--font-poppins), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji";
-  --font-display: var(--font-playfair), ui-serif, Georgia, serif;
+  /* One family everywhere (client decision 2026-10-04); font-display stays as the semantic hook for display headings. */
+  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 
   --text-display-1: 3rem;
   --text-display-1--line-height: 3.5rem;

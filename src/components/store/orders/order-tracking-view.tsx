@@ -273,12 +273,21 @@ export function OrderTrackingView({
                     <span className="text-body text-neutral-700">Not assigned yet</span>
                   )}
                 </div>
-                {courier.phone ? (
-                  <a href={`tel:${courier.phone}`} className={buttonClasses({ variant: "secondary", size: "md" })}>
-                    <PhoneIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
-                    Call Courier
-                  </a>
-                ) : null}
+                <div className="flex flex-col gap-2">
+                  {courier.trackingUrl ? (
+                    <a href={courier.trackingUrl} target="_blank" rel="noopener noreferrer" className={buttonClasses({ variant: "primary", size: "md" })}>
+                      <TruckIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                      Track on {courier.name}
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ) : null}
+                  {courier.phone ? (
+                    <a href={`tel:${courier.phone}`} className={buttonClasses({ variant: "secondary", size: "md" })}>
+                      <PhoneIcon aria-hidden="true" size={ICON_SIZE_SM} weight={ICON_WEIGHT_OUTLINE} />
+                      Call Courier
+                    </a>
+                  ) : null}
+                </div>
               </div>
             </OrderPanel>
           ) : null}

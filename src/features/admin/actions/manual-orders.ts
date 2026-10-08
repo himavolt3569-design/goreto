@@ -5,8 +5,9 @@ import { z } from "zod";
 import { GENERIC_FAILURE } from "@/features/checkout/errors";
 import { parseCheckoutQuote, type CheckoutQuote } from "@/features/checkout/quote";
 import { cartItemsSchema } from "@/features/checkout/schemas";
-import type { Database } from "@/types/database";
+import { scheduleAutoBooking } from "@/lib/courier/auto-book";
 import { authorizeAdmin, deniedResult } from "../auth";
+import { insertManualOrder } from "../manual-order-create";
 import { manualOrderFailure, manualOrderSchema, type ManualOrderFailure, type ManualOrderValues } from "../manual-order-forms";
 import { fieldErrors } from "../schemas";
 import {
@@ -82,36 +83,8 @@ export async function createManualOrderAction(input: ManualOrderValues): Promise
     const errors = fieldErrors(parsed.error);
     return { ok: false, message: errors.items ?? "Check the highlighted fields.", fieldErrors: errors };
   }
-  const order = parsed.data;
-
-  // customer_id and the WhatsApp number are nullable in SQL; the generated type can't say so.
-  const { data, error } = await adminDb().rpc("admin_create_order", {
-    p_items: order.items.map((item) => ({ variant_id: item.variantId, quantity: item.quantity })),
-    p_contact: { name: order.fullName, email: order.email, phone_e164: order.phone },
-    p_address: {
-      province_code: order.provinceCode,
-      district_code: order.districtCode,
-      municipality_code: order.municipalityCode,
-      ward: order.ward,
-      street_landmark: order.streetLandmark,
-      postal_code: order.postalCode || null,
-    },
-    p_courier_service_id: order.courierServiceId,
-    p_coupon_code: order.couponCode,
-    p_customer_note: order.note,
-    p_customer_id: order.customerId,
-    p_whatsapp_e164: order.whatsappE164,
-  } as Database["public"]["Functions"]["admin_create_order"]["Args"]);
-  if (error) {
-    const failure = manualOrderFailure(error);
-    if (failure.message === GENERIC_FAILURE) console.error("admin_create_order failed", error.code);
-    return failure;
-  }
-
-  const created = z.object({ order_number: z.string().regex(/^[A-Z]{2,4}[0-9]{6,14}$/) }).safeParse(data);
-  if (!created.success) {
-    console.error("admin_create_order returned an unexpected payload");
-    return { ok: false, message: GENERIC_FAILURE };
-  }
-  redirect(`/admin/orders/${created.data.order_number}`);
+  const created = await insertManualOrder(parsed.data);
+  if (!created.ok) return created;
+  scheduleAutoBooking();
+  redirect(`/admin/orders/${created.orderNumber}`);
 }

@@ -13,19 +13,22 @@ import type {
 
 export const FIXED_NOW = Date.parse("2026-09-24T06:15:00.000Z");
 
+const NO_HERO = { hero_image_path: null, hero_image_alt: "", hero_eyebrow: "", hero_title: "", hero_text: "" } as const;
+
 export const categoryRows: CategoryRow[] = [
   { id: "c-jewelry", parent_id: null, slug: "jewelry", title: "Jewelry", description: "Everyday gold and silver.", image_path: "categories/jewelry.jpg" },
   { id: "c-bags", parent_id: null, slug: "bags", title: "Bags", description: "Totes and handbags.", image_path: "categories/bags.jpg" },
   { id: "c-hats", parent_id: null, slug: "hats", title: "Hats", description: "Beanies and fedoras.", image_path: null },
   { id: "c-earrings", parent_id: "c-jewelry", slug: "earrings", title: "Earrings", description: "Studs, hoops and jhumkas.", image_path: "categories/earrings.jpg" },
   { id: "c-jhumkas", parent_id: "c-earrings", slug: "jhumkas", title: "Jhumkas", description: "Bell-shaped drops.", image_path: null },
-];
+].map((row) => ({ ...NO_HERO, ...row }));
 
 function card(overrides: Partial<CardRow> & Pick<CardRow, "id" | "slug" | "title" | "category_id">): CardRow {
   return {
     base_price_paisa: 249900,
     is_bestseller: false,
     is_limited_edition: false,
+    is_sponsored: false,
     published_at: "2025-10-01T05:00:00.000Z",
     product_media: [{ storage_path: `products/${overrides.slug}/01.jpg`, alt_text: `${overrides.title} photo` }],
     ...overrides,
@@ -36,7 +39,7 @@ export const cardRows: CardRow[] = [
   card({ id: "p-pearl", slug: "pearl-drop-earrings", title: "Pearl Drop Earrings", category_id: "c-earrings", is_bestseller: true }),
   card({ id: "p-bracelet", slug: "minimal-gold-bracelet", title: "Minimal Gold Bracelet", category_id: "c-jewelry", base_price_paisa: 179900 }),
   card({ id: "p-jhumka", slug: "silver-jhumka", title: "Silver Jhumka", category_id: "c-jhumkas", base_price_paisa: 129900, product_media: [] }),
-  card({ id: "p-tote", slug: "canvas-tote", title: "Canvas Tote", category_id: "c-bags", base_price_paisa: 99900 }),
+  card({ id: "p-tote", slug: "canvas-tote", title: "Canvas Tote", category_id: "c-bags", base_price_paisa: 99900, is_sponsored: true }),
   card({ id: "p-fedora", slug: "felt-fedora", title: "Felt Fedora", category_id: "c-hats" }),
 ];
 
@@ -53,6 +56,7 @@ export const detailRow: DetailRow = {
   base_price_paisa: 249900,
   is_bestseller: true,
   is_limited_edition: false,
+  is_sponsored: false,
   published_at: "2025-10-01T05:00:00.000Z",
   short_description: "Freshwater pearls on gold-plated hooks.",
   description: "Hand-set freshwater pearls.",

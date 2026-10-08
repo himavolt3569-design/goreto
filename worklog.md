@@ -1,6 +1,6 @@
 # Goreto.store — Work Log
 
-_Last updated: 2026-10-04 · Live since 2026-10-04: https://goreto-kappa.vercel.app (branch `production`)_
+_Last updated: 2026-10-06 · Live since 2026-10-04: https://goreto-kappa.vercel.app (branch `production`)_
 
 Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the migrations, the code in `src/`, `scripts/` and `tests/`, and a fresh run of the checks below.
 
@@ -166,6 +166,43 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
 - Menus and the date picker share the popover styles.
 - A follow-up review fix keeps unsaved edits in the product form, handles stale variants, and defers the chart-window form submit until the Select commits.
 
+### Phase 11 — Poppins, smaller hero, category heroes, sponsored products (2026-10-04, `goreto-poppins-heroes-sponsors.md`)
+- **Poppins** replaces Inter and Playfair Display everywhere: storefront, admin, Clerk and `/design-system`. AGENTS.md §3.2 now names Poppins.
+- The product page's short description drops to 14/20. The homepage hero is now 280px (it was 560px), and its trust row is a strip below it.
+- **Category heroes**: an optional banner on `/categories/<slug>` (image, eyebrow, title, text) edited in the category form's "Category hero" section. Migration `category_heroes`.
+- **Sponsored products**: a "Sponsored" checkbox and toggles in admin. Shoppers see a blue "Goreto Pick" tick on cards, the quick view and the product page, plus a homepage "Goreto Picks" section. Migration `product_sponsored`.
+- Both migrations are applied on **dev**, not yet on prod.
+
+### Phase 12 — Shorter product form (2026-10-04, `goreto-admin-product-form-compact.md`)
+- Add and Edit product now open on one **Essentials** card: name, category, price, compare-at price, stock (for a product without options), short description and photos.
+- Everything else is in folded sections with one-line summaries: Description & specifications, Options & variants, Badges/tags/collections, and Advanced (URL slug, low-stock alert, SKU, weight).
+- On save, any section with an error opens and shows "N to fix".
+- Products without options no longer show the variants table.
+- The status picker is a compact three-way switch. Below `xl`, the status/save panel sticks to the bottom of the screen.
+- UI only: same fields, schema and save action.
+
+### Phase 13 — Daraz Express (DEX) courier API (2026-10-06/07, `goreto-daraz-courier.md`, branch `feat/daraz-courier`)
+- Client decision 2026-10-06: Daraz Express is booked and tracked through the Daraz Logistics API (EPIS). This reverses "no courier API integrations" (§4.0) for Daraz only; other couriers keep the WhatsApp handoff. Scope is the DEX courier only, with no Daraz marketplace listing.
+- Docs for the Daraz meeting: `docs/couriers/daraz-meeting-brief.md` (client handout: accounts, what to give and get, questions, money flow, what "dashboard" means), `docs/couriers/daraz.md` (API reference, status map, runbook, go-live checklist), `docs/couriers/daraz-workflow.svg` (the app form's workflow diagram).
+- Migrations `20261007090000_daraz_courier`, `20261007100000_daraz_courier_ops` and `20261007110000_daraz_tracking_autobook` are applied to **dev only**.
+- Order page: a Daraz Express panel to book (box, weight, option, fee estimate), print the label (PDF/ZPL), mark ready to ship, refresh tracking, edit delivery details, cancel and rebook, choose re-attempt or return, view proof of delivery live, and open a support case.
+- **Sales › Daraz Express** dashboard with seven tabs: Overview, Shipments (bulk book, merged labels, bulk ready-to-ship and refresh), Needs action, COD settlements, Support cases (XSpace), Activity (API log with trace IDs) and Setup.
+- Tracking sync from Daraz history: a signed webhook (fast ack, idempotent inbox), a daily cron plus optional `pg_cron`, and a refresh when an order is opened. The order moves forward only along legal steps, and failures notify staff instead of canceling.
+- Customers get a "Track on {courier}" link (courier `tracking_url_template`). Courier fees and payouts stay staff-only.
+- Optional auto-booking on accept. A dev mock gateway (`npm run daraz:mock`) and an end-to-end contract test. A location importer (`npm run daraz:locations`).
+
+### Phase 14 — Send & track and Autopilot (2026-10-07, `goreto-send-and-track.md`, branch `feat/daraz-courier`)
+- Client request: the Daraz flow took about six screens per parcel. It's now one page and one optional switch. Client guide: `docs/couriers/send-and-track.md`.
+- **Sales › Send & track** (`/admin/parcels`, first item in Sales):
+  - **New order** opens the WhatsApp order form. **Save and send to {courier}** creates the order, accepts it with the routing rule's courier (the purchased service's courier, then the fallback), then books Daraz on the spot, or shows **Send on WhatsApp** for other couriers. A step that fails leaves the order saved and says which step.
+  - One list for every courier, with a four-step progress bar, the latest tracking event and **one next-step button** per row: Accept & send, Book with Daraz, **Print label & call pickup** (label and ready-to-ship in one click), Try again or return, Send on WhatsApp.
+  - Search by order number, phone, name or tracking number. Stale Daraz parcels refresh when the page opens.
+- **Autopilot** card (owner, or `settings.manage` + `delivery.manage`): one switch over auto-accept (website and WhatsApp), courier mode `auto` and Daraz auto-book, with a readiness checklist. It shows **Partly on** when the switches were changed one by one.
+- **Usual parcel weight** (`courier_provider_accounts.default_weight_grams`, migration `20261007120000_parcel_default_weight`, **dev only**): booking falls back to it when products have no weight. Also used by auto-book, bulk book and the order page's Book dialog.
+- Refactor: Daraz staff steps moved to the `server-only` `src/features/admin/daraz-staff.ts`; order creation to `manual-order-create.ts`. `/admin/orders/new`, the order-page panel and the Daraz dashboard are unchanged.
+- Quick actions gain "Send a parcel". The Daraz Express nav icon is now a van, so it's easy to tell apart from Send & track.
+- Follow-up: delivery options that book through Daraz show "Books through Daraz Express". On dev, the Daraz API courier (seed "Nepal Can Move", switched by hand during testing) was renamed to **Daraz Express** (`docs/couriers/daraz-qa.md` Q8). Resume notes: the end of `prompts/goreto-send-and-track.md`.
+
 ---
 
 ## 4. Remaining work
@@ -186,7 +223,7 @@ Sources: git history (24 commits), `AGENTS.md`, all 13 files in `prompts/`, the 
 | --- | --- |
 | Channels | **WhatsApp only** for now. Instagram, Facebook and TikTok are out of scope. |
 | Intake | **Manual entry.** Staff key in the WhatsApp order in the admin panel. No WhatsApp Business / Meta API integration for now. |
-| Couriers | **Any Nepali courier.** The flow must be courier-agnostic, and there are **no courier API integrations**. |
+| Couriers | **Any Nepali courier.** The flow must be courier-agnostic. No courier API integrations, **except Daraz Express** (client decision 2026-10-06, Phase 13), which is booked and tracked through its API. |
 | Courier on accept | **Both modes, and the client chooses:** auto-assign (the courier is picked automatically on accept) or manual (staff pick the courier while accepting). |
 
 **What already exists to build on:**
@@ -272,10 +309,10 @@ The two options work together: click-to-send covers the handoff now, and the por
 - [x] **Product quick view** (§4.3) (2026-09-28, `goreto-discovery-2-quick-view.md`): intercepted `/products/[slug]` in a `@modal` slot of the store layout. Every storefront product card (and its bag icon) opens a native-`<dialog>` quick view with the variant picker, Add to Cart and Buy Now; the URL is the canonical product page, so reload/share/new tab open the full page, and Back/Forward close and reopen it. "View full details" does a full load. Data reads through `CATALOG_CACHE_TAG`, so admin edits reach it at once.
 - [x] **Collections** (2026-09-29, `goreto-discovery-3-collections.md`, no migration): `/collections` lists live collections (active and in their schedule window) with active-product counts; `/collections/[slug]` shows the banner (shared with the homepage carousel) and products in the curated admin order, with the category sort control and quick view. Ended, off or unknown collections return 404. Admin saves revalidate both.
 - [ ] `/offers` page.
-- [ ] Reviews on the product page: a list and a write form. "(N reviews)" is plain text today.
+- [x] **Reviews on the product page** (2026-10-06, `goreto-account-3-reviews-profile.md`, migration `product_reviews`): "Customer reviews" with the average, a 5 → 1 breakdown, the latest 4 and "See all"; `/products/[slug]/reviews` (10 per page, `?page=`); "(N reviews)" jumps to the section. **Verified buyers only** (client decision): `submit_review` derives the delivered order item in SQL, and direct inserts now need one too.
 
 ### 4.3 Customer account area (§4.9)
-Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses ✅ → 3. reviews + profile & security.
+Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishlist (with the storefront heart) + addresses ✅ → 3. reviews + profile & security ✅.
 - [x] **Phase 1** (2026-10-01, `goreto-account-1-orders-billing.md`, migration `account_reads`): grouped account nav (sidebar from `lg`, scrollable pill row below), `loading`/`error` states; overview with profile card, stat cards (total orders, in progress, billed to date with pending COD as a hint) and the latest 3 orders; `/account/orders` (10 per page); `/account/orders/[orderNumber]` reusing the tracking view without the tracking secret, so only your own signed-in orders open; `/account/tracking` (latest 50 events); `/account/billing` (billed = collected only, pending COD separate, per-order breakdown). `account_summary()` and `account_tracking_events()` filter on the caller's own profile, so owners and staff see only their personal orders.
 - [x] Overview stat cards: total orders, orders in progress, total billed to date.
 - [x] `/account/orders` (paginated) and `/account/orders/[orderNumber]` (detail plus timeline).
@@ -283,9 +320,9 @@ Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishl
 - [x] **Phase 2** (2026-10-02, `goreto-account-2-wishlist-addresses.md`, migration `account_addresses_wishlist`): the storefront heart (cards, product page, quick view) saves and removes through Server Actions, with saved state loaded in the browser from `GET /api/account/wishlist` so storefront pages stay cached; signed out it opens the sign-in modal and saves after sign-in. `/account/wishlist` shows live price and stock, Add to Cart for single-variant products, Choose options otherwise, and "No longer available" for hidden products. `/account/addresses` (+ `new`, `[id]/edit`) with one default kept by `account_save_address` / `account_set_default_address` / `account_delete_address` (deleting the default promotes the newest). Caps: 10 addresses, 200 wishlist items (triggers).
 - [x] `/account/wishlist`, with the storefront heart.
 - [x] `/account/addresses`, including a default address for checkout (checkout already prefilled the default).
-- [ ] `/account/reviews`, showing moderation status.
+- [x] `/account/reviews` (2026-10-06): "Ready to review" (delivered products not yet reviewed), and your reviews marked Awaiting approval, Published or Not published (the staff note is never shown), with Edit (back to moderation) and Delete. Write and edit at `/account/reviews/[slug]`.
 - [x] `/account/billing`: billed total = collected orders only. Pending COD is shown separately and totals are computed in SQL.
-- [ ] `/account/profile/[[...rest]]`: Clerk `<UserProfile />`, themed.
+- [x] `/account/profile/[[...rest]]` (2026-10-06): Clerk `<UserProfile />` in the account shell, themed from `clerk-appearance.ts`. New nav group **Profile**: Reviews, Profile & security.
 - [x] Grouped account navigation, plus empty, loading and error states (phase 1 sections; later phases add theirs).
 
 ### 4.4 AR / virtual try-on (§14)
@@ -308,7 +345,9 @@ Three phases: 1. shell + overview + orders + tracking + billing ✅ → 2. wishl
 - [x] Orphaned-upload cleanup: panels on `/admin/media` and `/admin/ar` delete unreferenced admin uploads older than 24 hours. It's a button, not a scheduled job; a cron route needs deployment first (2026-09-27).
 - [x] "Duplicate product": copies into a draft with `(copy)`, a free slug, `-COPY` SKUs, zero stock and copied photos, but no AR assets (2026-09-27).
 - [x] **Bulk add products** at `/admin/products/bulk`: short cards with "Add another product" at the end, created one by one (failed ones stay editable for Retry). Each product can have **7 photos + 3 videos** (MP4/WebM ≤ 50 MB), enforced in the UI, server and a DB trigger. Videos play in the storefront gallery after the photos; covers stay photo-only (2026-10-04, `goreto-admin-bulk-add-products.md`, migration `product_media_videos`). Applied on dev; follow-up fixes in PR #21.
-- [ ] Courier webhooks `api/courier/webhooks/[provider]`. **Not planned:** the client ruled out courier API integrations (§4.0).
+- [x] Courier webhook `api/courier/webhooks/daraz` and scheduled sync `api/cron/courier-sync` (Phase 13). Other couriers have no API and stay manual.
+- [ ] Daraz Express go-live: Daraz's answers (status list, phone format, booking call, solution codes, R-codes), prod migrations, keys and setup. See `docs/couriers/daraz.md` §13 and `docs/releasing.md` § Daraz Express.
+- [ ] Daraz Express: signed-in browser pass of the order panel and dashboard (mock gateway), and a first real test parcel.
 - [ ] Optional: mirror `role` into Clerk `publicMetadata`, written by the server only.
 
 ### 4.6 Content, legal and static pages
@@ -321,6 +360,7 @@ Several footer and nav links return a 404 today.
 - [ ] Full Nepal administrative dataset: all 753 local levels, from a verified source, in `src/data/nepal/` (§15.5). The seed has only 76.
 
 ### 4.8 Quality, tooling and deployment
+- [x] **New Supabase account** (2026-10-06, `goreto-supabase-account-migration.md`): `goreto-dev` (`jkjrfgictvpolvohgwcg`) and `goreto-prod` (`etfcgwvdshhcxkrkytne`), Mumbai. Both have every migration and Clerk third-party auth, and the owner is bootstrapped on both; dev is seeded. Vercel Production and Preview are switched and production is redeployed. Fresh start: no data was copied. The old projects are untouched and unused.
 - [ ] Playwright E2E with `@clerk/testing` for the 11 journeys in §23.4. Playwright isn't installed. Browser checks so far used throwaway scratchpad scripts.
 - [ ] Prettier. It isn't configured.
 - [ ] `README.md` is still the create-next-app boilerplate.
@@ -336,12 +376,16 @@ Several footer and nav links return a 404 today.
 
 ## 5. Needs your decision or action
 
+- **Daraz Express (Phase 13):** after the Daraz meeting, fill in `docs/couriers/daraz-meeting-brief.md` §5 with Daraz's answers and put them in Admin › Daraz Express › Setup. Live keys go on Vercel **Production only**; preview and dev use the mock. Decide on the webhook certificate (Daraz requires OV/EV; ours is DV) and, if Daraz requires fixed IPs, on Vercel Static IPs (about $100 a month). Release steps: `docs/releasing.md` § Daraz Express.
+- **Send & track and Autopilot (Phase 14):** a signed-in browser pass is still to do (steps in `prompts/goreto-send-and-track.md`). Autopilot accepts every new order automatically when on; it's off until the owner turns it on. Set a usual parcel weight before relying on Daraz auto-booking. The migration `20261007120000_parcel_default_weight` goes to prod with the other Daraz migrations.
 - **WhatsApp order flow (§4.0):** built on `feat/whatsapp-orders`. Before relying on it: add each courier's dispatch WhatsApp number (Delivery → Couriers), choose the courier mode, default courier and auto-accept switches (Settings), and give the right staff `orders.write`. The signed-in browser pass is still to do. The courier portal (automatic handoff, adds a `courier` role) is the next phase.
 - **Production store setup (client):** before taking orders, add at least one courier + service, delivery zone and rate, support email/phone and the dispatch municipality (`/admin/settings`), and real products. Checkout offers no delivery option without them.
 - **AR wording on the live homepage:** the hero copy and "How it works" still describe AR try-on (no links). Decide whether to reword until `/try-on` ships.
 - **Seed AR rows have no files (dev only):** `/admin/ar` flags them "No file uploaded". Production has no seed, so this no longer blocks launch.
 - **Returns policy wording:** "7-day returns" was taken from the reference. See the `TODO(owner)` in `src/config/site.ts`.
 - **Social links:** Instagram, YouTube and Pinterest URLs in `src/config/site.ts` are empty, so the footer icons don't show.
+- **Sponsored products are not disclosed to shoppers:** at the client's request the tick reads "Goreto Pick" and never "Sponsored". Undisclosed paid placement may count as misleading advertising under Nepal's Consumer Protection Act 2075. The wording is one constant (`PICK_LABEL` in `src/components/ui/pick-badge.tsx`).
+- **Release Phases 11–12 and account phase 3:** the new `goreto-prod` already has every migration (through `product_reviews`), so `feat/poppins-heroes-sponsors` and `feat/account-reviews-profile` can be merged to `production` without a database step.
 - **Orange contrast:** white on `#F97316` and orange text on white measure about 2.8:1, below WCAG AA for body text. The reference colours were kept as-is. This was raised in the design-system prompt and hasn't been decided yet.
 - **Store support email and phone:** they're empty in `store_settings`. You can set them in `/admin/settings`.
 - **Clerk webhook:** configured for production (Goreto Live → `https://goreto-kappa.vercel.app/api/webhooks/clerk`, secret in Vercel). The dev app still has no endpoint or `CLERK_WEBHOOK_SIGNING_SECRET` in `.env.local`; the lazy profile upsert covers dev.

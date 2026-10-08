@@ -21,7 +21,7 @@ export function PageHeader({
   title: string;
   description?: ReactNode;
   actions?: ReactNode;
-  /** Playfair display title, as on the dashboard reference. */
+  /** Display title, as on the dashboard reference. */
   display?: boolean;
   eyebrow?: ReactNode;
 }) {
